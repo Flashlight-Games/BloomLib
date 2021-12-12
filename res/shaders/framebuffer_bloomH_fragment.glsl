@@ -20,11 +20,10 @@ void main()
     vec4 offset_color;
 
     if(strength > 0 && size > 0)    
+        if(texture(uTexture,vTextureCoords).a == 0)
         for(int i = -size; i <= size; i++){
-            for(int j = -size; j <= size; j++){
-                offset_color = brightFilter(texture(uTexture,vTextureCoords + vec2(tex_offset.x * i,tex_offset.y * j)),0.95);
-                sum+= vec4(offset_color.rgb * offset_color.a * 1 / (size * size) / (6/strength),1);
-            }
+            offset_color = brightFilter(texture(uTexture,vTextureCoords + vec2(tex_offset.x * i,0)),0.95);
+            sum+= vec4(offset_color.rgb * 1 / (size),offset_color.a * 1 / (size) * 0.9 * strength);
         }
     color = texture(uTexture,vTextureCoords) + sum;
 }

@@ -154,15 +154,16 @@ int main()
     shader.uniformMat4(shader.getUniformId("view"),view_matrix);
     shader.uniformMat4(shader.getUniformId("projection"),projection_matrix);
 
-    Framebuffer fb = Framebuffer(windowWidth,windowHeight);
-    fb.setShader("res/shaders/framebuffer_bloom_fragment.glsl");
-    fb.fbShader.uniformInt(fb.fbShader.getUniformId("uTexture"),fb.fbTexture);
+    Framebuffer fbH = Framebuffer(windowWidth,windowHeight);
+    fbH.setShader("res/shaders/framebuffer_bloomH_fragment.glsl");
+    fbH.fbShader.uniformInt(fbH.fbShader.getUniformId("uTexture"),fbH.fbTexture);
 
     float PosX = 0;
     
     int bloomStrength = 1;
     int bloomSize = 32;
 
+    // glClearColor(0.21,0.21,0.21,1);
     while(!glfwWindowShouldClose(window)) // GAME LOOP
     {
         PosX+= sin(glfwGetTime())*0.75;
@@ -170,11 +171,12 @@ int main()
 
         // BINDING TARGET FRAMEBUFFER
         
-        fb.use(true);
-        glClearColor(0.21,0.21,0.21,1);
+        fbH.use(true);
+        
 
-        fb.fbShader.uniformInt(fb.fbShader.getUniformId("size"),bloomSize);
-        fb.fbShader.uniformInt(fb.fbShader.getUniformId("strength"),bloomStrength);
+        fbH.fbShader.use();
+        fbH.fbShader.uniformInt(fbH.fbShader.getUniformId("size"),bloomSize);
+        fbH.fbShader.uniformInt(fbH.fbShader.getUniformId("strength"),bloomStrength);
 
         // RENDER //
         float time = glfwGetTime();
@@ -202,9 +204,9 @@ int main()
 
         // SCREEN FRAMEBUFFER RENDER
         bindDefaultFramebuffer(true);
-        fb.fbShader.use();
-        setTextureAtLocation(GL_TEXTURE0,fb.fbTexture,fb.fbShader.getUniformId("uTexture"));
-        fb.draw();
+        fbH.fbShader.use();
+        setTextureAtLocation(GL_TEXTURE0,fbH.fbTexture,fbH.fbShader.getUniformId("uTexture"));
+        fbH.draw();
         
         // IMGUI
         ImGui_ImplOpenGL3_NewFrame();
