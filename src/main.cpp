@@ -1,17 +1,22 @@
+#include "dearImGui/imgui.h"
+#include "dearImGui/imgui_impl_glfw.h"
+#include "dearImGui/imgui_impl_opengl3.h"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include <iostream>
-
-#include <math.h>
-
-#include "shaders/shaders.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "STBI/stb_image.h"
 
 #include <GLM/glm.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>
+
+
+#include <iostream>
+#include <math.h>
+#include <string>
+
+#include "shaders/shaders.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "STBI/stb_image.h"
 
 #include "framebuffers/framebuffers.h"
 
@@ -65,6 +70,13 @@ int main()
     glEnable(GL_CULL_FACE);
     glEnable(GL_MULTISAMPLE);
     
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO &io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window,true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
     // PROCESSING //
     uint32_t vao;
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
@@ -105,7 +117,8 @@ int main()
     glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,7*sizeof(float),((void*)(5*sizeof(float))));
     glEnableVertexAttribArray(2);
 
-    Shader shader = Shader("res/shaders/newfile_vertex.glsl","res/shaders/newfile_fragment.glsl");
+    // Shader shader = Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/testing_textures/textureshader_fragment.glsl");
+    Shader shader = Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/plain_fragment.glsl");
     shader.use();
     float uColorUni = shader.getUniformId("uColor");
     float uTextureUni = shader.getUniformId("uTexture");
@@ -118,7 +131,6 @@ int main()
         glGenTextures(1,&texture);
         glActiveTexture(GL_TEXTURE0 + 0);
         glBindTexture(GL_TEXTURE_2D,texture);
-        std::cout << channels << "\n";
         if(channels == 4)
             glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,image); // ENABLE alpha IF 4 CHANNEL IMAGE
         else{
@@ -143,12 +155,13 @@ int main()
     shader.uniformMat4(shader.getUniformId("projection"),projection_matrix);
 
     Framebuffer fb = Framebuffer(windowWidth,windowHeight);
-    fb.setShader("res/shaders/framebufferMulti_fragment.glsl");
-    Framebuffer fb2 = Framebuffer(windowWidth,windowHeight);    
+    fb.setShader("res/shaders/framebuffer_bloom_fragment.glsl");
     fb.fbShader.uniformInt(fb.fbShader.getUniformId("uTexture"),fb.fbTexture);
-    fb.fbShader.uniformInt(fb.fbShader.getUniformId("uTextureTwo"),fb2.fbTexture);
-    
+
     float PosX = 0;
+    
+    int bloomStrength = 1;
+    int bloomSize = 32;
 
     while(!glfwWindowShouldClose(window)) // GAME LOOP
     {
@@ -156,8 +169,12 @@ int main()
         glfwPollEvents(); processInput(window);
 
         // BINDING TARGET FRAMEBUFFER
+        
         fb.use(true);
         glClearColor(0.21,0.21,0.21,1);
+
+        fb.fbShader.uniformInt(fb.fbShader.getUniformId("size"),bloomSize);
+        fb.fbShader.uniformInt(fb.fbShader.getUniformId("strength"),bloomStrength);
 
         // RENDER //
         float time = glfwGetTime();
@@ -175,8 +192,6 @@ int main()
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
 
-        fb2.use(true);
-
         model_matrix = glm::mat4(1.0);
         model_matrix           = glm::translate(model_matrix,glm::vec3(240.0f+PosX,100.0f,0.0f));
         model_matrix           = glm::rotate(model_matrix,(float)glm::radians((float)PosX),glm::vec3(0.0f,0.0f,1.0f));
@@ -185,14 +200,27 @@ int main()
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
         // END RENDER //
 
-        // REAL FRAMEBUFFER RENDER
+        // SCREEN FRAMEBUFFER RENDER
         bindDefaultFramebuffer(true);
-
         fb.fbShader.use();
         setTextureAtLocation(GL_TEXTURE0,fb.fbTexture,fb.fbShader.getUniformId("uTexture"));
-        setTextureAtLocation(GL_TEXTURE1,fb2.fbTexture,fb.fbShader.getUniformId("uTextureTwo"));
         fb.draw();
         
+        // IMGUI
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::Begin("Demo window");
+        ImGui::Text("Hello World! %s",std::to_string(((int)time)).c_str());
+        ImGui::SliderInt("Bloom Strength",&bloomStrength,0,6);
+        ImGui::SliderInt("Bloom Size",&bloomSize,0,64);
+        ImGui::End();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        // Rendering pipeline end
         glfwSwapBuffers(window); // Render buffer to screen
     }
 

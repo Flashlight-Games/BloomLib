@@ -12,11 +12,11 @@ endif
 appname = app
 
 
-main: src/main.cpp $(wildcard src/**/*.cpp)
-	g++ -std=c++11 -I include/ -L lib/ $^ src/glad.cpp  -$(targetLib) -o build/$(appname).$(targetType)
+build/$(appname).$(targetType): src/main.cpp $(wildcard src/**/*.cpp) $(wildcard include/**/*.cpp)
+	g++ -std=c++11 -I include/ -L lib/ $^ src/glad.cpp   -$(targetLib) -o build/$(appname).$(targetType)
 
 run:
-	make main
+	make build/$(appname).$(targetType)
 	$(runCmd)
 
 #--------------
