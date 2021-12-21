@@ -155,25 +155,22 @@ int main()
     shader.uniformMat4(shader.getUniformId("projection"),projection_matrix);
 
     Framebuffer fbH = Framebuffer(windowWidth,windowHeight);
-    fbH.setShader("res/shaders/framebuffer_bloomH_fragment.glsl");
+    fbH.setShader("src/shaders/framebuffer/framebuffer_bloomH_fragment.glsl");
     fbH.fbShader.uniformInt(fbH.fbShader.getUniformId("uTexture"),fbH.fbTexture);
 
     float PosX = 0;
     
     int bloomStrength = 1;
-    int bloomSize = 32;
+    int bloomSize = 24;
 
-    // glClearColor(0.21,0.21,0.21,1);
+    glClearColor(0.21,0.21,0.21,1);
     while(!glfwWindowShouldClose(window)) // GAME LOOP
     {
         PosX+= sin(glfwGetTime())*0.75;
         glfwPollEvents(); processInput(window);
 
-        // BINDING TARGET FRAMEBUFFER
-        
+        // BINDING bloomH FRAMEBUFFER
         fbH.use(true);
-        
-
         fbH.fbShader.use();
         fbH.fbShader.uniformInt(fbH.fbShader.getUniformId("size"),bloomSize);
         fbH.fbShader.uniformInt(fbH.fbShader.getUniformId("strength"),bloomStrength);
@@ -195,7 +192,7 @@ int main()
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
 
         model_matrix = glm::mat4(1.0);
-        model_matrix           = glm::translate(model_matrix,glm::vec3(240.0f+PosX,100.0f,0.0f));
+        model_matrix           = glm::translate(model_matrix,glm::vec3(240.0f,100.0f,0.0f));
         model_matrix           = glm::rotate(model_matrix,(float)glm::radians((float)PosX),glm::vec3(0.0f,0.0f,1.0f));
         model_matrix           = glm::scale(model_matrix,glm::vec3(1.0f,1.0f,1.0f));
         shader.uniformMat4(shader.getUniformId("model"),model_matrix);
@@ -204,8 +201,6 @@ int main()
 
         // SCREEN FRAMEBUFFER RENDER
         bindDefaultFramebuffer(true);
-        fbH.fbShader.use();
-        setTextureAtLocation(GL_TEXTURE0,fbH.fbTexture,fbH.fbShader.getUniformId("uTexture"));
         fbH.draw();
         
         // IMGUI
