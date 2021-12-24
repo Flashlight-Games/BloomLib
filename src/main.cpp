@@ -56,10 +56,14 @@ int main()
     std::cout << "GL Version " <<  glGetString(GL_VERSION) << std::endl; // Requires GL Context
     stbi_set_flip_vertically_on_load(true);
 
+
+    int upscaling_amount = windowWidth/64; // HOW PIXELISED IS THE SCENE -> screenWidth / targetPixels
+
+
     glm::mat4 projection_matrix = glm::mat4(1.0f);
     float nearClip = -1000;
     float farClip = 1000;
-    projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, nearClip, farClip); // ORTHO PROJECTION
+    projection_matrix = glm::ortho(0.0f, (float)windowWidth*upscaling_amount, 0.0f, (float)windowHeight*upscaling_amount, nearClip, farClip); // ORTHO PROJECTION
 
     glm::mat4 view_matrix = glm::mat4(1.0f);
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, -1.0f, 0.0f)); 
@@ -68,7 +72,7 @@ int main()
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_CULL_FACE);
-    glEnable(GL_MULTISAMPLE);
+    // glEnable(GL_MULTISAMPLE);
     
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -154,14 +158,16 @@ int main()
     shader.uniformMat4(shader.getUniformId("view"),view_matrix);
     shader.uniformMat4(shader.getUniformId("projection"),projection_matrix);
 
-    Framebuffer fbH = Framebuffer(windowWidth,windowHeight);
-    fbH.setShader("src/shaders/framebuffer/framebuffer_bloomH_fragment.glsl");
-    fbH.fbShader.uniformInt(fbH.fbShader.getUniformId("uTexture"),fbH.fbTexture);
+    Framebuffer fb_pixels = Framebuffer(windowWidth/upscaling_amount,windowHeight/upscaling_amount);
+    fb_pixels.setShader("src/shaders/framebuffer/framebuffer_fragment.glsl");
+    fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("uTexture"),fb_pixels.fbTexture);
 
     float PosX = 0;
     
     int bloomStrength = 1;
     int bloomSize = 24;
+
+    int boxPos = 240;
 
     glClearColor(0.21,0.21,0.21,1);
     while(!glfwWindowShouldClose(window)) // GAME LOOP
@@ -170,10 +176,10 @@ int main()
         glfwPollEvents(); processInput(window);
 
         // BINDING bloomH FRAMEBUFFER
-        fbH.use(true);
-        fbH.fbShader.use();
-        fbH.fbShader.uniformInt(fbH.fbShader.getUniformId("size"),bloomSize);
-        fbH.fbShader.uniformInt(fbH.fbShader.getUniformId("strength"),bloomStrength);
+        fb_pixels.use(true);
+        fb_pixels.fbShader.use();
+        fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("size"),bloomSize);
+        fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("strength"),bloomStrength);
 
         // RENDER //
         float time = glfwGetTime();
@@ -192,7 +198,7 @@ int main()
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
 
         model_matrix = glm::mat4(1.0);
-        model_matrix           = glm::translate(model_matrix,glm::vec3(240.0f,100.0f,0.0f));
+        model_matrix           = glm::translate(model_matrix,glm::vec3((float)boxPos,100.0f,0.0f));
         model_matrix           = glm::rotate(model_matrix,(float)glm::radians((float)PosX),glm::vec3(0.0f,0.0f,1.0f));
         model_matrix           = glm::scale(model_matrix,glm::vec3(1.0f,1.0f,1.0f));
         shader.uniformMat4(shader.getUniformId("model"),model_matrix);
@@ -201,18 +207,22 @@ int main()
 
         // SCREEN FRAMEBUFFER RENDER
         bindDefaultFramebuffer(true);
-        fbH.draw();
+        fb_pixels.draw();
         
         // IMGUI
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("Demo window");
-        ImGui::Text("Hello World! %s",std::to_string(((int)time)).c_str());
-        ImGui::SliderInt("Bloom Strength",&bloomStrength,0,6);
-        ImGui::SliderInt("Bloom Size",&bloomSize,0,64);
-        ImGui::End();
+        {
+            ImGui::Begin("Demo window");
+                ImGui::Text("Hello World! %s",std::to_string(((int)time)).c_str());
+                ImGui::SliderInt("Bloom Strength",&bloomStrength,0,6);
+                ImGui::SliderInt("Bloom Size",&bloomSize,0,64);
+
+                ImGui::SliderInt("Box Pos",&boxPos,0,windowWidth);
+            ImGui::End();
+        }
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
