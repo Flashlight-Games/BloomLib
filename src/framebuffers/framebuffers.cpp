@@ -1,6 +1,9 @@
 #include "framebuffers.h"
 
-Framebuffer::Framebuffer(int width,int height){
+Framebuffer::Framebuffer(int width,int height,bool linear_scaling){
+
+    this->width = width;
+    this->height = height;
 
     // FRAMEBUFFER CREATION
     glGenVertexArrays(1,&fbVao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
@@ -33,10 +36,13 @@ Framebuffer::Framebuffer(int width,int height){
     glGenTextures(1,&fbTexture);
     glBindTexture(GL_TEXTURE_2D,fbTexture);
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,NULL);
-    // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // INTERPOLATION SCALING
-    // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // INTERPOLATION SCALING
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); // EXACT SCALING
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); // EXACT SCALING
+    if(linear_scaling){
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // INTERPOLATION SCALING
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // INTERPOLATION SCALING
+    } else {
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); // EXACT SCALING
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); // EXACT SCALING
+    }
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
@@ -55,6 +61,10 @@ Framebuffer::Framebuffer(int width,int height){
     glBindFramebuffer(GL_FRAMEBUFFER,0); // BIND RENDER BUFFER
 };
 void Framebuffer::use(bool clear){
+
+    // DISABLE glViewport for faster performance
+    glViewport(0, 0, this->width, this->height); // Change viewport size for correct texture
+
     glBindFramebuffer(GL_FRAMEBUFFER,fbo);
     if(clear){
         glClear(GL_COLOR_BUFFER_BIT);
@@ -72,7 +82,10 @@ void Framebuffer::setShader(const char* fragment_source){
     fbShader = Shader("src/shaders/framebuffer/framebuffer_vertex.glsl",fragment_source);
 };
 
-void bindDefaultFramebuffer(bool clear){
+void bindDefaultFramebuffer(bool clear,int width, int height){
+    if(width, height > 0)
+        glViewport(0, 0, width, height);
+        
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     if(clear){
         glClear(GL_COLOR_BUFFER_BIT);

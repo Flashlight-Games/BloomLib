@@ -13,11 +13,14 @@ class Framebuffer{
     uint32_t fbTexture;
     uint32_t rbo;
 
-    Framebuffer(int width,int height);
+    uint16_t width;
+    uint16_t height;
+
+    Framebuffer(int width,int height,bool linear_scaling = true);
     void use(bool clear);
     void draw();
 
     void setShader(const char* fragment_source);
 };
 
-void bindDefaultFramebuffer(bool clear);
+void bindDefaultFramebuffer(bool clear,int width = -1, int height = -1);

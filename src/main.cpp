@@ -63,7 +63,7 @@ int main()
     glm::mat4 projection_matrix = glm::mat4(1.0f);
     float nearClip = -1000;
     float farClip = 1000;
-    projection_matrix = glm::ortho(0.0f, (float)windowWidth*upscaling_amount, 0.0f, (float)windowHeight*upscaling_amount, nearClip, farClip); // ORTHO PROJECTION
+    projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, nearClip, farClip); // ORTHO PROJECTION
 
     glm::mat4 view_matrix = glm::mat4(1.0f);
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, -1.0f, 0.0f)); 
@@ -158,7 +158,7 @@ int main()
     shader.uniformMat4(shader.getUniformId("view"),view_matrix);
     shader.uniformMat4(shader.getUniformId("projection"),projection_matrix);
 
-    Framebuffer fb_pixels = Framebuffer(windowWidth/upscaling_amount,windowHeight/upscaling_amount);
+    Framebuffer fb_pixels = Framebuffer(64,48,false);
     fb_pixels.setShader("src/shaders/framebuffer/framebuffer_fragment.glsl");
     fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("uTexture"),fb_pixels.fbTexture);
 
@@ -206,7 +206,7 @@ int main()
         // END RENDER //
 
         // SCREEN FRAMEBUFFER RENDER
-        bindDefaultFramebuffer(true);
+        bindDefaultFramebuffer(true,windowWidth,windowHeight);
         fb_pixels.draw();
         
         // IMGUI
