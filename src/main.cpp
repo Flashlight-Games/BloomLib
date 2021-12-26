@@ -23,8 +23,10 @@
 
 #include "framebuffers/framebuffers.h" // FRAMEBUFFERS
 
+int offsetX = 0;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); } // Resize viewport with window
-void processInput(GLFWwindow* window) { if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS == GLFW_PRESS) {glfwSetWindowShouldClose(window,true);} } // Close window
+void processInput(GLFWwindow* window) { if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS == GLFW_PRESS) {glfwSetWindowShouldClose(window,true);} else if(glfwGetKey(window,GLFW_KEY_O) == GLFW_PRESS == GLFW_PRESS) {offsetX++;} } // Close window
 
 int main()
 { 
@@ -39,6 +41,7 @@ int main()
     #endif
 
     uint16_t windowWidth = 800; uint16_t windowHeight = 600;
+    uint16_t pixel_windowWidth = 64; uint16_t pixel_windowHeight = 48;
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // Set window not resizable
     GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Window", NULL, NULL);
     if (window == NULL)
@@ -59,14 +62,10 @@ int main()
     std::cout << "GL Version " <<  glGetString(GL_VERSION) << std::endl; // Requires GL Context
     stbi_set_flip_vertically_on_load(true);
 
-
-    int upscaling_amount = windowWidth/64; // HOW PIXELISED IS THE SCENE -> screenWidth / targetPixels
-
-
     glm::mat4 projection_matrix = glm::mat4(1.0f);
     float nearClip = -1000;
     float farClip = 1000;
-    projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, nearClip, farClip); // ORTHO PROJECTION
+    projection_matrix = glm::ortho(0.0f, (float)pixel_windowHeight, 0.0f, (float)pixel_windowHeight, nearClip, farClip); // ORTHO PROJECTION
 
     glm::mat4 view_matrix = glm::mat4(1.0f);
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, -1.0f, 0.0f)); 
@@ -75,7 +74,7 @@ int main()
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_CULL_FACE);
-    // glEnable(GL_MULTISAMPLE); // ENABLE ANTI-ALIASING
+    glDisable(GL_MULTISAMPLE); // ENABLE ANTI-ALIASING
     
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -89,12 +88,13 @@ int main()
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
     glBindVertexArray(vao);
 
+    float multiplier = 0.05;
     float verts[] = {
         // POSITION    COLOR    Texture
-        -100, -100,    1,1,1,      0,0,
-        100, -100,     1,1,1,      1,0,
-        100, 100,      1,1,1,      1,1,
-        -100,100,       1,1,1,      0,1
+        -160*multiplier, -160*multiplier,    1,1,1,      0,0,
+        160*multiplier, -160*multiplier,     1,1,1,      1,0,
+        160*multiplier, 160*multiplier,      1,1,1,      1,1,
+        -160*multiplier,160*multiplier,       1,1,1,      0,1
     };
 
     int indices[] = {
@@ -125,13 +125,13 @@ int main()
     glEnableVertexAttribArray(2);
 
     // Shader shader = Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/testing_textures/textureshader_fragment.glsl");
-    Shader shader = Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/plain_fragment.glsl");
+    Shader shader = Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/testing_textures/textureshader_fragment.glsl");
     shader.use();
     float uColorUni = shader.getUniformId("uColor");
     float uTextureUni = shader.getUniformId("uTexture");
 
     int width, height, channels;
-    const char* source = "res/textures/window.png";
+    const char* source = "res/textures/detailTest16Line.png";
     unsigned char* image = stbi_load(source,&width,&height,&channels,0);
     uint32_t texture;
     if(image) {
@@ -144,6 +144,11 @@ int main()
             glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,image); // REGULAR RGB IMAGE
         }
         glGenerateMipmap(GL_TEXTURE_2D);
+
+        // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // INTERPOLATION SCALING
+        // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // INTERPOLATION SCALING
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); // EXACT SCALING
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); // EXACT SCALING
     }
     else{
         std::cout << "Failed to load resource [ " << source << " ]\n";
@@ -153,7 +158,7 @@ int main()
 
     // EXAMPLE MODEL MATRIX
     glm::mat4 model_matrix = glm::mat4(1.0);
-    model_matrix           = glm::translate(model_matrix,glm::vec3(240.0f,200.0f,0.0f));
+    model_matrix           = glm::translate(model_matrix,glm::vec3(8.0f,100.0f,0.0f));
     model_matrix           = glm::rotate(model_matrix,(float)glm::radians((float)0),glm::vec3(0.0f,0.0f,1.0f));
     model_matrix           = glm::scale(model_matrix,glm::vec3(1.0f,1.0f,1.0f));
     shader.uniformMat4(shader.getUniformId("model"),model_matrix);
@@ -161,7 +166,7 @@ int main()
     shader.uniformMat4(shader.getUniformId("view"),view_matrix);
     shader.uniformMat4(shader.getUniformId("projection"),projection_matrix);
 
-    Framebuffer fb_pixels = Framebuffer(64,48,false);
+    Framebuffer fb_pixels = Framebuffer(pixel_windowWidth,pixel_windowHeight,false);
     fb_pixels.setShader("src/shaders/framebuffer/framebuffer_fragment.glsl");
     fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("uTexture"),fb_pixels.fbTexture);
 
@@ -170,7 +175,8 @@ int main()
     int bloomStrength = 1;
     int bloomSize = 24;
 
-    int boxPos = 240;
+    int boxPosX = 240;
+    int boxPosY = 240;
 
     glClearColor(0.21,0.21,0.21,1);
     while(!glfwWindowShouldClose(window)) // GAME LOOP
@@ -191,7 +197,7 @@ int main()
         setTextureAtLocation(GL_TEXTURE0,texture); shader.uniformInt(uTextureUni,0);
 
         model_matrix = glm::mat4(1.0);
-        model_matrix           = glm::translate(model_matrix,glm::vec3(240.0f,200.0f,0.0f));
+        model_matrix           = glm::translate(model_matrix,glm::vec3(8.0f,100.0f,0.0f));
         model_matrix           = glm::rotate(model_matrix,(float)glm::radians((float)0),glm::vec3(0.0f,0.0f,1.0f));
         model_matrix           = glm::scale(model_matrix,glm::vec3(1.0f,1.0f,1.0f));
         shader.uniformMat4(shader.getUniformId("model"),model_matrix);
@@ -201,8 +207,8 @@ int main()
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
 
         model_matrix = glm::mat4(1.0);
-        model_matrix           = glm::translate(model_matrix,glm::vec3((float)boxPos,100.0f,0.0f));
-        model_matrix           = glm::rotate(model_matrix,(float)glm::radians((float)PosX),glm::vec3(0.0f,0.0f,1.0f));
+        model_matrix           = glm::translate(model_matrix,glm::vec3((float)boxPosX+offsetX,boxPosY,0.0f));
+        model_matrix           = glm::rotate(model_matrix,(float)sin(time),glm::vec3(0.0f,0.0f,1.0f));
         model_matrix           = glm::scale(model_matrix,glm::vec3(1.0f,1.0f,1.0f));
         shader.uniformMat4(shader.getUniformId("model"),model_matrix);
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
@@ -223,9 +229,10 @@ int main()
                 ImGui::SliderInt("Bloom Strength",&bloomStrength,0,6);
                 ImGui::SliderInt("Bloom Size",&bloomSize,0,64);
 
-                ImGui::SliderInt("Box Pos",&boxPos,0,windowWidth);
+                ImGui::SliderInt("Box PosX",&boxPosX,0,pixel_windowWidth);
+                ImGui::SliderInt("Box PosY",&boxPosY,0,pixel_windowHeight);
 
-                ImGui::Image((void*)(intptr_t)texture, ImVec2(width,height));
+                ImGui::Image((void*)(intptr_t)fb_pixels.fbTexture, ImVec2(fb_pixels.width,fb_pixels.height));
             ImGui::End();
         }
 

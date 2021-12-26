@@ -83,9 +83,8 @@ void Framebuffer::setShader(const char* fragment_source){
 };
 
 void bindDefaultFramebuffer(bool clear,int width, int height){
-    if(width, height > 0)
+    if(width && height)
         glViewport(0, 0, width, height);
-        
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     if(clear){
         glClear(GL_COLOR_BUFFER_BIT);
