@@ -1,11 +1,11 @@
-#include "dearImGui/imgui.h"
+#include "dearImGui/imgui.h" // UI
 #include "dearImGui/imgui_impl_glfw.h"
 #include "dearImGui/imgui_impl_opengl3.h"
 
-#include <glad/glad.h>
+#include <glad/glad.h> // OPENGL
 #include <GLFW/glfw3.h>
 
-#include <GLM/glm.hpp>
+#include <GLM/glm.hpp> // MATRICES
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>
 
@@ -14,11 +14,14 @@
 #include <math.h>
 #include <string>
 
-#include "shaders/shaders.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "STBI/stb_image.h"
+#include "shaders/shaders.h" // SHADERS
 
-#include "framebuffers/framebuffers.h"
+#define STB_IMAGE_IMPLEMENTATION // TEXTURES
+#include "STBI/stb_image.h"
+#define STB_TRUETYPE_IMPLEMENTATION // Fonts
+#include "STBTT/stb_truetype.h"
+
+#include "framebuffers/framebuffers.h" // FRAMEBUFFERS
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); } // Resize viewport with window
 void processInput(GLFWwindow* window) { if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS == GLFW_PRESS) {glfwSetWindowShouldClose(window,true);} } // Close window
@@ -72,7 +75,7 @@ int main()
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_CULL_FACE);
-    // glEnable(GL_MULTISAMPLE);
+    // glEnable(GL_MULTISAMPLE); // ENABLE ANTI-ALIASING
     
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -118,7 +121,7 @@ int main()
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,7*sizeof(float),((void*)(2*sizeof(float)))); // Color
     glEnableVertexAttribArray(1);
 
-    glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,7*sizeof(float),((void*)(5*sizeof(float))));
+    glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,7*sizeof(float),((void*)(5*sizeof(float)))); // Texture
     glEnableVertexAttribArray(2);
 
     // Shader shader = Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/testing_textures/textureshader_fragment.glsl");
@@ -216,11 +219,13 @@ int main()
 
         {
             ImGui::Begin("Demo window");
-                ImGui::Text("Hello World! %s",std::to_string(((int)time)).c_str());
+                ImGui::TextColored(ImVec4(1,0.5,0,1),"Hello World! %s",std::to_string(((int)time)).c_str());
                 ImGui::SliderInt("Bloom Strength",&bloomStrength,0,6);
                 ImGui::SliderInt("Bloom Size",&bloomSize,0,64);
 
                 ImGui::SliderInt("Box Pos",&boxPos,0,windowWidth);
+
+                ImGui::Image((void*)(intptr_t)texture, ImVec2(width,height));
             ImGui::End();
         }
 
