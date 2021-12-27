@@ -23,10 +23,20 @@
 
 #include "framebuffers/framebuffers.h" // FRAMEBUFFERS
 
+#include <chrono> // Time
+
 int offsetX = 0;
+bool locked = false;
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) { glViewport(0, 0, width, height); } // Resize viewport with window
-void processInput(GLFWwindow* window) { if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS == GLFW_PRESS) {glfwSetWindowShouldClose(window,true);} else if(glfwGetKey(window,GLFW_KEY_O) == GLFW_PRESS == GLFW_PRESS) {offsetX++;} } // Close window
+void processInput(GLFWwindow* window) { 
+    if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS) 
+        {glfwSetWindowShouldClose(window,true);} 
+    else if(glfwGetKey(window,GLFW_KEY_O) == GLFW_PRESS)
+        {offsetX++;} 
+    locked = glfwGetKey(window,GLFW_KEY_L) == GLFW_PRESS;
+    } // Close window
 
 int main()
 { 
@@ -65,7 +75,7 @@ int main()
     glm::mat4 projection_matrix = glm::mat4(1.0f);
     float nearClip = -1000;
     float farClip = 1000;
-    projection_matrix = glm::ortho(0.0f, (float)pixel_windowHeight, 0.0f, (float)pixel_windowHeight, nearClip, farClip); // ORTHO PROJECTION
+    projection_matrix = glm::ortho(0.0f, (float)pixel_windowHeight, 0.0f, (float)pixel_windowHeight, nearClip, farClip); // ORTHO PROJECTION, window size you want to render at
 
     glm::mat4 view_matrix = glm::mat4(1.0f);
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, -1.0f, 0.0f)); 
@@ -75,6 +85,7 @@ int main()
 
     glEnable(GL_CULL_FACE);
     glDisable(GL_MULTISAMPLE); // ENABLE ANTI-ALIASING
+    glfwSwapInterval(0); // DISABLE VSYNC
     
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -170,31 +181,37 @@ int main()
     fb_pixels.setShader("src/shaders/framebuffer/framebuffer_fragment.glsl");
     fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("uTexture"),fb_pixels.fbTexture);
 
-    float PosX = 0;
-    
-    int bloomStrength = 1;
-    int bloomSize = 24;
-
-    int boxPosX = 240;
-    int boxPosY = 240;
+    int boxPosX = 0;
+    int boxPosY = 0;
+    float time = 0;
 
     glClearColor(0.21,0.21,0.21,1);
+
+    auto beginTime = std::chrono::system_clock::now();
+    auto currentTime = beginTime;
+    std::chrono::duration<double> render_duration;
+    std::chrono::duration<double> transform_duration;
+    std::chrono::duration<double> imGui_duration;
+    std::chrono::duration<double> frameBuffer_duration;
+    std::chrono::duration<double> bufferSwap_duration;
     while(!glfwWindowShouldClose(window)) // GAME LOOP
     {
-        PosX+= sin(glfwGetTime())*0.75;
+        beginTime = std::chrono::system_clock::now(); // Check begin time
+        currentTime = std::chrono::system_clock::now();
         glfwPollEvents(); processInput(window);
 
-        // BINDING bloomH FRAMEBUFFER
+        // BINDING FRAMEBUFFER
         fb_pixels.use(true);
         fb_pixels.fbShader.use();
-        fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("size"),bloomSize);
-        fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("strength"),bloomStrength);
 
         // RENDER //
-        float time = glfwGetTime();
+        if(!locked)
+            time = glfwGetTime() / 6;
         shader.use();
-        shader.uniformFloat(uColorUni,sin(time));
+        shader.uniformFloat(uColorUni,1);
         setTextureAtLocation(GL_TEXTURE0,texture); shader.uniformInt(uTextureUni,0);
+
+        
 
         model_matrix = glm::mat4(1.0);
         model_matrix           = glm::translate(model_matrix,glm::vec3(8.0f,100.0f,0.0f));
@@ -214,10 +231,16 @@ int main()
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
         // END RENDER //
 
+        transform_duration = std::chrono::system_clock::now()-currentTime;
+        currentTime = std::chrono::system_clock::now();
+
         // SCREEN FRAMEBUFFER RENDER
         bindDefaultFramebuffer(true,windowWidth,windowHeight);
         fb_pixels.draw();
         
+        frameBuffer_duration = std::chrono::system_clock::now()-currentTime;
+        currentTime = std::chrono::system_clock::now();
+
         // IMGUI
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -226,12 +249,14 @@ int main()
         {
             ImGui::Begin("Demo window");
                 ImGui::TextColored(ImVec4(1,0.5,0,1),"Hello World! %s",std::to_string(((int)time)).c_str());
-                ImGui::SliderInt("Bloom Strength",&bloomStrength,0,6);
-                ImGui::SliderInt("Bloom Size",&bloomSize,0,64);
 
                 ImGui::SliderInt("Box PosX",&boxPosX,0,pixel_windowWidth);
                 ImGui::SliderInt("Box PosY",&boxPosY,0,pixel_windowHeight);
-
+                ImGui::ProgressBar(transform_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Transform");
+                ImGui::ProgressBar(frameBuffer_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Framebuffer");
+                ImGui::ProgressBar(imGui_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"ImGui");
+                ImGui::ProgressBar(bufferSwap_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"BufferSwap");
+                
                 ImGui::Image((void*)(intptr_t)fb_pixels.fbTexture, ImVec2(fb_pixels.width,fb_pixels.height));
             ImGui::End();
         }
@@ -239,8 +264,16 @@ int main()
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+        imGui_duration = std::chrono::system_clock::now()-currentTime;
+        currentTime = std::chrono::system_clock::now();
+
         // Rendering pipeline end
         glfwSwapBuffers(window); // Render buffer to screen
+
+        bufferSwap_duration = std::chrono::system_clock::now()-currentTime;
+        render_duration = std::chrono::system_clock::now()-beginTime;
+        currentTime = std::chrono::system_clock::now();
+        
     }
 
 
