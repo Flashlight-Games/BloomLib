@@ -5,15 +5,9 @@
 using namespace Bloom;
 
 Text::Text(const char* path, float size){
-    this->path = path; this->size = std::max((int)size,128);
+    this->path = path; this->size = size;
 
-    bitsize = 128;
-    if(size > 64)
-        bitsize = 1024;
-    else if(size > 32)
-        bitsize = 512;
-    else if(size > 16 )
-        bitsize = 256;
+    bitsize = size*6;
 
     unsigned char temp_bitmap[bitsize*bitsize];
 
@@ -21,7 +15,7 @@ Text::Text(const char* path, float size){
     stbtt_BakeFontBitmap(ttf_buffer,0, size, temp_bitmap,bitsize,bitsize, 32,96, char_data);
 
     texture = Texture2D(temp_bitmap,glm::vec2(bitsize,bitsize),GL_RED,true);
-
+    std::cout << "FontSize - " << sizeof(temp_bitmap) << " -> " << sizeof(temp_bitmap) / 1000000.0f << "\n";
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
     glBindVertexArray(vao);
 
@@ -62,18 +56,21 @@ void Text::Print(glm::vec2 position, std::string text,glm::vec2 screen_size, glm
     float x = position[0];
     float y = position[1];
     while (*ctext) {
-        if (*ctext >= 32 && *ctext < 127) {
+        if(*ctext == '\n'){
+            position[1]-=size/1.5;
+            x = position[0];}
+        else if (*ctext >= 32 && *ctext < 127) {
             stbtt_aligned_quad q;
             stbtt_GetBakedQuad(char_data, bitsize,bitsize, *ctext-32, &x,&y,&q,1);
 
             float newVerts[24] = {
-                // POSITION                                                                                                               Texture
-                (-screen_size[0] + q.x1+position[0]) / screen_size[0], (-screen_size[1] + (y-q.y1)+position[1]+size) / screen_size[1],          q.s1,q.t1,
-                (-screen_size[0] + q.x1+position[0]) / screen_size[0], (-screen_size[1] + q.y1-q.y0+(y-q.y1)+position[1]+size) / screen_size[1],           q.s1,q.t0,
-                (-screen_size[0] + q.x0+position[0]) / screen_size[0], (-screen_size[1] + q.y1-q.y0+(y-q.y1)+position[1]+size) / screen_size[1],           q.s0,q.t0,
-                (-screen_size[0] + q.x0+position[0]) / screen_size[0], (-screen_size[1] + (y-q.y1)+position[1]+size) / screen_size[1],         q.s0,q.t1,
-                
+                // POSITION                                                                                                                            Texture
+                (-screen_size[0] + q.x1+position[0]) / screen_size[0], (-screen_size[1] + (y-q.y1)+position[1]*2) / screen_size[1],                      q.s1,q.t1,
+                (-screen_size[0] + q.x1+position[0]) / screen_size[0], (-screen_size[1] + q.y1-q.y0+(y-q.y1)+position[1]*2) / screen_size[1],            q.s1,q.t0,
+                (-screen_size[0] + q.x0+position[0]) / screen_size[0], (-screen_size[1] + q.y1-q.y0+(y-q.y1)+position[1]*2) / screen_size[1],            q.s0,q.t0,
+                (-screen_size[0] + q.x0+position[0]) / screen_size[0], (-screen_size[1] + (y-q.y1)+position[1]*2) / screen_size[1],                      q.s0,q.t1,
             };
+            std::cout << q.y0 <<","<<q.y1 << '\n';
             glBufferData(GL_ARRAY_BUFFER,sizeof(newVerts),&newVerts,GL_STATIC_DRAW);
             glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
         }

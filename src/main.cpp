@@ -222,7 +222,7 @@ int main()
         currentTime = std::chrono::system_clock::now();
 
         // Text
-        fontTesting.Print(glm::vec2(boxPosX*windowWidth/pixel_windowWidth,windowHeight/2),"A\nB\nC\nD",glm::vec2(windowWidth,windowHeight),glm::vec4(0,1,0,1));
+        fontTesting.Print(glm::vec2(0*windowWidth/pixel_windowWidth,boxPosY*windowHeight/pixel_windowHeight),"Waawwaw",glm::vec2(windowWidth,windowHeight),glm::vec4(0,1,0,1));
         font_duration = std::chrono::system_clock::now()-currentTime;
         currentTime = std::chrono::system_clock::now();
 
