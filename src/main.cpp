@@ -163,7 +163,7 @@ int main()
 
     glClearColor(0.21,0.21,0.21,1);
 
-    const char* fontPath = "res/fonts/Roboto-Thin.ttf"; //A
+    const char* fontPath = "res/fonts/Roboto-Thin.ttf";
     Bloom::Text fontTesting = Bloom::Text(fontPath,128);
 
     auto beginTime = std::chrono::system_clock::now();
@@ -222,7 +222,7 @@ int main()
         currentTime = std::chrono::system_clock::now();
 
         // Text
-        fontTesting.Print(glm::vec2(0*windowWidth/pixel_windowWidth,boxPosY*windowHeight/pixel_windowHeight),"Waawwaw",glm::vec2(windowWidth,windowHeight),glm::vec4(0,1,0,1));
+        fontTesting.Print(glm::vec2(0*windowWidth/pixel_windowWidth,boxPosY*windowHeight/pixel_windowHeight),"I don't\nknow if this text's\nspacing is correct...",glm::vec2(windowWidth,windowHeight),glm::vec4(0,1,0,1));
         font_duration = std::chrono::system_clock::now()-currentTime;
         currentTime = std::chrono::system_clock::now();
 
@@ -233,7 +233,7 @@ int main()
 
         {
             ImGui::Begin("Demo window");
-                ImGui::TextColored(ImVec4(1,0.5,0,1),"Hello World! %s",std::to_string(((int)time)).c_str());
+                ImGui::TextColored(ImVec4(1,0.5,0,1),"Hello world %s",std::to_string(((int)time)).c_str());
 
                 ImGui::SliderInt("Box PosX",&boxPosX,0,pixel_windowWidth);
                 ImGui::SliderInt("Box PosY",&boxPosY,0,pixel_windowHeight);

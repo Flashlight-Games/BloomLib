@@ -13,7 +13,7 @@
 namespace Bloom{
     class Text{
         public:
-        Text(const char* path, float size);
+        Text(const char* path, float size,float spacing = -0.5);
         void Print(glm::vec2 position, std::string text,glm::vec2 screen_size,glm::vec4 color = glm::vec4(1,1,1,1));
 
         const char* getPath(){return path;};
@@ -32,6 +32,7 @@ namespace Bloom{
         GLuint vbo;
         GLuint ebo;
         GLuint bitsize;
+        float spacing = 1.9;
         Shader qShader = Shader("src/shaders/font/font_vertex.glsl","src/shaders/font/font_fragment.glsl");
         int indices[6] = {
             0,1,2,

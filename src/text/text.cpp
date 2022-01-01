@@ -4,8 +4,8 @@
 
 using namespace Bloom;
 
-Text::Text(const char* path, float size){
-    this->path = path; this->size = size;
+Text::Text(const char* path, float size,float spacing){
+    this->path = path; this->size = size;this->spacing = 2 - spacing;
 
     bitsize = size*6;
 
@@ -57,7 +57,7 @@ void Text::Print(glm::vec2 position, std::string text,glm::vec2 screen_size, glm
     float y = position[1];
     while (*ctext) {
         if(*ctext == '\n'){
-            position[1]-=size/1.5;
+            position[1]-=size/spacing;
             x = position[0];}
         else if (*ctext >= 32 && *ctext < 127) {
             stbtt_aligned_quad q;
@@ -70,7 +70,6 @@ void Text::Print(glm::vec2 position, std::string text,glm::vec2 screen_size, glm
                 (-screen_size[0] + q.x0+position[0]) / screen_size[0], (-screen_size[1] + q.y1-q.y0+(y-q.y1)+position[1]*2) / screen_size[1],            q.s0,q.t0,
                 (-screen_size[0] + q.x0+position[0]) / screen_size[0], (-screen_size[1] + (y-q.y1)+position[1]*2) / screen_size[1],                      q.s0,q.t1,
             };
-            std::cout << q.y0 <<","<<q.y1 << '\n';
             glBufferData(GL_ARRAY_BUFFER,sizeof(newVerts),&newVerts,GL_STATIC_DRAW);
             glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
         }
