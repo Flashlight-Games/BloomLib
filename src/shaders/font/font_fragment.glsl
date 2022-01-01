@@ -7,7 +7,10 @@ in vec3 vertexPosi;
 out vec4 color;
 uniform sampler2D uTexture;
 
+uniform vec4 uColor;
+
 void main()
 {
-    color = vec4(vertexPosi.x,vertexPosi.y,0,1);
+    color = vec4(1,1,1,texture(uTexture,vTextureCoords).x) * uColor;
+    // color = uColor;
 }

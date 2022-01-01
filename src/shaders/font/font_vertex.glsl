@@ -5,6 +5,8 @@ layout (location = 1) in vec2 textureCoords;
 out vec2 vTextureCoords;
 out vec3 vertexPosi;
 
+uniform mat4 projection;
+
 void main()
 {
    gl_Position = vec4(vertexPos.x,vertexPos.y,0.0, 1.0);

@@ -1,5 +1,7 @@
 {
     "files.associations": {
+        "*.h": "cpp",
+        "*.PRG": "gcode",
         "string": "cpp",
         "iosfwd": "cpp",
         "iostream": "cpp",
@@ -78,7 +80,8 @@
         "codecvt": "cpp",
         "fstream": "cpp",
         "iomanip": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "filesystem": "cpp"
     },
     "cmake.configureOnOpen": false
 }

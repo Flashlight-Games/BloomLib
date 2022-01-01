@@ -5,13 +5,22 @@
 using namespace Bloom;
 
 Text::Text(const char* path, float size){
-    this->path = path; this->size = size;
-    std::cout<< ttf_buffer <<"\n";
-    fread(ttf_buffer, 1, 1<<20, fopen("res/fonts/alagard.ttf", "rb"));
-    stbtt_BakeFontBitmap(ttf_buffer,0, size, temp_bitmap,256,256, 32,96, char_data);
-    std::cout<< ttf_buffer <<"\n";
+    this->path = path; this->size = std::max((int)size,128);
 
-    texture = Texture2D(temp_bitmap,glm::vec2(256,256),GL_RED,true);
+    bitsize = 128;
+    if(size > 64)
+        bitsize = 1024;
+    else if(size > 32)
+        bitsize = 512;
+    else if(size > 16 )
+        bitsize = 256;
+
+    unsigned char temp_bitmap[bitsize*bitsize];
+
+    fread(ttf_buffer, 1, 1<<20, fopen(path, "rb"));
+    stbtt_BakeFontBitmap(ttf_buffer,0, size, temp_bitmap,bitsize,bitsize, 32,96, char_data);
+
+    texture = Texture2D(temp_bitmap,glm::vec2(bitsize,bitsize),GL_RED,true);
 
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
     glBindVertexArray(vao);
@@ -42,31 +51,33 @@ Text::Text(const char* path, float size){
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),&indices,GL_STATIC_DRAW);
 }
 
-void Text::Print(float x, float y, std::string text){
+void Text::Print(glm::vec2 position, std::string text,glm::vec2 screen_size, glm::vec4 color){
     const char* ctext = text.c_str();
     texture.bind();
     qShader.use();
-    glBindVertexArray(vao);
-    glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
-    // while (*ctext) {
-    //     if (*ctext >= 32 && *ctext < 127) {
-    //         stbtt_aligned_quad q;
-    //         stbtt_GetBakedQuad(char_data, 256,256, *ctext-32, &x,&y,&q,1);
+    qShader.uniformVec4(qShader.getUniformId("uColor"),color);
 
-    //         float newVerts[24] = {
-    //         // POSITION    Texture
-    //             q.x0, q.y0,         q.s0,q.t0,
-    //             q.x1, q.y0,          q.s1,q.t0,
-    //             q.x1, q.y1,           q.s1,q.t1,
-    //             q.x0, q.y1,           q.s0,q.t1,
-    //             q.x0, q.y0,         q.s0,q.t0,
-    //             q.x1, q.y1,           q.s1,q.t1,
-    //         };
-    //         // glBufferData(GL_ARRAY_BUFFER,sizeof(newVerts),&newVerts,GL_STATIC_DRAW);
-    //         glDrawArrays(GL_TRIANGLES,0,6);
-    //         std::cout << (q.x0) << "\n";
-    //     }
-    //     ++ctext;
-    // }
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER,vbo);
+    float x = position[0];
+    float y = position[1];
+    while (*ctext) {
+        if (*ctext >= 32 && *ctext < 127) {
+            stbtt_aligned_quad q;
+            stbtt_GetBakedQuad(char_data, bitsize,bitsize, *ctext-32, &x,&y,&q,1);
+
+            float newVerts[24] = {
+                // POSITION                                                                                                               Texture
+                (-screen_size[0] + q.x1+position[0]) / screen_size[0], (-screen_size[1] + (y-q.y1)+position[1]+size) / screen_size[1],          q.s1,q.t1,
+                (-screen_size[0] + q.x1+position[0]) / screen_size[0], (-screen_size[1] + q.y1-q.y0+(y-q.y1)+position[1]+size) / screen_size[1],           q.s1,q.t0,
+                (-screen_size[0] + q.x0+position[0]) / screen_size[0], (-screen_size[1] + q.y1-q.y0+(y-q.y1)+position[1]+size) / screen_size[1],           q.s0,q.t0,
+                (-screen_size[0] + q.x0+position[0]) / screen_size[0], (-screen_size[1] + (y-q.y1)+position[1]+size) / screen_size[1],         q.s0,q.t1,
+                
+            };
+            glBufferData(GL_ARRAY_BUFFER,sizeof(newVerts),&newVerts,GL_STATIC_DRAW);
+            glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
+        }
+        ++ctext;
+    }
     
 }

@@ -15,13 +15,11 @@
 #include <string>
 
 #include "shaders/shaders.h" // SHADERS
-
-#define STB_IMAGE_IMPLEMENTATION // TEXTURES
-#include "STBI/stb_image.h"
-#define STB_TRUETYPE_IMPLEMENTATION // Fonts
-#include "STBTT/stb_truetype.h"
-
+#include "text/text.h" // FONTS
 #include "framebuffers/framebuffers.h" // FRAMEBUFFERS
+#include "textures/textures.h" // TEXTURES
+
+
 
 #include <chrono> // Time
 
@@ -72,10 +70,10 @@ int main()
     std::cout << "GL Version " <<  glGetString(GL_VERSION) << std::endl; // Requires GL Context
     stbi_set_flip_vertically_on_load(true);
 
-    glm::mat4 projection_matrix = glm::mat4(1.0f);
     float nearClip = -1000;
     float farClip = 1000;
-    projection_matrix = glm::ortho(0.0f, (float)pixel_windowHeight, 0.0f, (float)pixel_windowHeight, nearClip, farClip); // ORTHO PROJECTION, window size you want to render at
+    glm::mat4 pixel_projection_matrix = glm::ortho(0.0f, (float)pixel_windowWidth, 0.0f, (float)pixel_windowHeight, nearClip, farClip); // ORTHO PROJECTION, window size you want to render at
+    glm::mat4 window_projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, nearClip, farClip); // ORTHO PROJECTION, window size you want to render at
 
     glm::mat4 view_matrix = glm::mat4(1.0f);
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, -1.0f, 0.0f)); 
@@ -83,9 +81,9 @@ int main()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-    glEnable(GL_CULL_FACE);
+    glDisable(GL_CULL_FACE); // Enable Double Sided Polygons
     glDisable(GL_MULTISAMPLE); // ENABLE ANTI-ALIASING
-    glfwSwapInterval(0); // DISABLE VSYNC
+    // glfwSwapInterval(0); // DISABLE VSYNC
     
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -136,35 +134,12 @@ int main()
     glEnableVertexAttribArray(2);
 
     // Shader shader = Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/testing_textures/textureshader_fragment.glsl");
-    Shader shader = Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/testing_textures/textureshader_fragment.glsl");
+    Bloom::Shader shader = Bloom::Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/testing_textures/textureshader_fragment.glsl");
     shader.use();
     float uColorUni = shader.getUniformId("uColor");
     float uTextureUni = shader.getUniformId("uTexture");
 
-    int width, height, channels;
-    const char* source = "res/textures/detailTest16Line.png";
-    unsigned char* image = stbi_load(source,&width,&height,&channels,0);
-    uint32_t texture;
-    if(image) {
-        glGenTextures(1,&texture);
-        glActiveTexture(GL_TEXTURE0 + 0);
-        glBindTexture(GL_TEXTURE_2D,texture);
-        if(channels == 4)
-            glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,image); // ENABLE alpha IF 4 CHANNEL IMAGE
-        else{
-            glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,image); // REGULAR RGB IMAGE
-        }
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // INTERPOLATION SCALING
-        // glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // INTERPOLATION SCALING
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); // EXACT SCALING
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); // EXACT SCALING
-    }
-    else{
-        std::cout << "Failed to load resource [ " << source << " ]\n";
-    }
-    stbi_image_free(image);
+    Bloom::Texture2D testing_texture = Bloom::Texture2D("res/textures/detailTest16Border.png",false);
 
 
     // EXAMPLE MODEL MATRIX
@@ -175,11 +150,12 @@ int main()
     shader.uniformMat4(shader.getUniformId("model"),model_matrix);
 
     shader.uniformMat4(shader.getUniformId("view"),view_matrix);
-    shader.uniformMat4(shader.getUniformId("projection"),projection_matrix);
+    shader.uniformMat4(shader.getUniformId("projection"),pixel_projection_matrix);
 
-    Framebuffer fb_pixels = Framebuffer(pixel_windowWidth,pixel_windowHeight,false);
+    Bloom::Framebuffer fb_pixels = Bloom::Framebuffer(pixel_windowWidth,pixel_windowHeight,false);
     fb_pixels.setShader("src/shaders/framebuffer/framebuffer_fragment.glsl");
-    fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("uTexture"),fb_pixels.fbTexture);
+    fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("uTexture"),fb_pixels.getTexture().getID());
+
 
     int boxPosX = 0;
     int boxPosY = 0;
@@ -187,10 +163,14 @@ int main()
 
     glClearColor(0.21,0.21,0.21,1);
 
+    const char* fontPath = "res/fonts/Roboto-Thin.ttf"; //A
+    Bloom::Text fontTesting = Bloom::Text(fontPath,128);
+
     auto beginTime = std::chrono::system_clock::now();
     auto currentTime = beginTime;
     std::chrono::duration<double> render_duration;
     std::chrono::duration<double> transform_duration;
+    std::chrono::duration<double> font_duration;
     std::chrono::duration<double> imGui_duration;
     std::chrono::duration<double> frameBuffer_duration;
     std::chrono::duration<double> bufferSwap_duration;
@@ -206,10 +186,10 @@ int main()
 
         // RENDER //
         if(!locked)
-            time = glfwGetTime() / 6;
+            time = glfwGetTime();
         shader.use();
         shader.uniformFloat(uColorUni,1);
-        setTextureAtLocation(GL_TEXTURE0,texture); shader.uniformInt(uTextureUni,0);
+        setTextureAtLocation(GL_TEXTURE0,testing_texture.getID()); shader.uniformInt(uTextureUni,0);
 
         
 
@@ -219,7 +199,7 @@ int main()
         model_matrix           = glm::scale(model_matrix,glm::vec3(1.0f,1.0f,1.0f));
         shader.uniformMat4(shader.getUniformId("model"),model_matrix);
 
-        glBindTexture(GL_TEXTURE_2D,texture);
+        testing_texture.bind();
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
 
@@ -229,16 +209,21 @@ int main()
         model_matrix           = glm::scale(model_matrix,glm::vec3(1.0f,1.0f,1.0f));
         shader.uniformMat4(shader.getUniformId("model"),model_matrix);
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
-        // END RENDER //
 
         transform_duration = std::chrono::system_clock::now()-currentTime;
         currentTime = std::chrono::system_clock::now();
+        // END RENDER //
 
         // SCREEN FRAMEBUFFER RENDER
         bindDefaultFramebuffer(true,windowWidth,windowHeight);
         fb_pixels.draw();
         
         frameBuffer_duration = std::chrono::system_clock::now()-currentTime;
+        currentTime = std::chrono::system_clock::now();
+
+        // Text
+        fontTesting.Print(glm::vec2(boxPosX*windowWidth/pixel_windowWidth,windowHeight/2),"A\nB\nC\nD",glm::vec2(windowWidth,windowHeight),glm::vec4(0,1,0,1));
+        font_duration = std::chrono::system_clock::now()-currentTime;
         currentTime = std::chrono::system_clock::now();
 
         // IMGUI
@@ -255,9 +240,12 @@ int main()
                 ImGui::ProgressBar(transform_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Transform");
                 ImGui::ProgressBar(frameBuffer_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Framebuffer");
                 ImGui::ProgressBar(imGui_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"ImGui");
+                ImGui::ProgressBar(font_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Font");
+
                 ImGui::ProgressBar(bufferSwap_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"BufferSwap");
                 
-                ImGui::Image((void*)(intptr_t)fb_pixels.fbTexture, ImVec2(fb_pixels.width,fb_pixels.height));
+                ImGui::Image((void*)(intptr_t)fb_pixels.getTexture().getID(), ImVec2(fb_pixels.getTexture().getSize()[0],fb_pixels.getTexture().getSize()[1]));
+                ImGui::Image((void*)(intptr_t)fontTesting.getTexture().getID(), ImVec2(fontTesting.getTexture().getSize()[0],fontTesting.getTexture().getSize()[1]));
             ImGui::End();
         }
 

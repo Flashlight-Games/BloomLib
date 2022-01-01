@@ -14,7 +14,7 @@ namespace Bloom{
     class Text{
         public:
         Text(const char* path, float size);
-        void Print(float x, float y, std::string text);
+        void Print(glm::vec2 position, std::string text,glm::vec2 screen_size,glm::vec4 color = glm::vec4(1,1,1,1));
 
         const char* getPath(){return path;};
         float getSize(){return size;};
@@ -25,15 +25,14 @@ namespace Bloom{
         float size;
 
         unsigned char ttf_buffer[1<<20];
-        unsigned char temp_bitmap[256*256];
 
         stbtt_bakedchar char_data[96]; // all characters
         Texture2D texture = NULL;
         GLuint vao;
         GLuint vbo;
         GLuint ebo;
+        GLuint bitsize;
         Shader qShader = Shader("src/shaders/font/font_vertex.glsl","src/shaders/font/font_fragment.glsl");
-
         int indices[6] = {
             0,1,2,
             0,2,3

@@ -1,5 +1,7 @@
 #include "framebuffers.h"
 
+using namespace Bloom;
+
 Framebuffer::Framebuffer(int width,int height,bool linear_scaling){
 
     this->width = width;
@@ -33,20 +35,9 @@ Framebuffer::Framebuffer(int width,int height,bool linear_scaling){
     glGenFramebuffers(1,&fbo);
     glBindFramebuffer(GL_FRAMEBUFFER,fbo);
 
-    glGenTextures(1,&fbTexture);
-    glBindTexture(GL_TEXTURE_2D,fbTexture);
-    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,NULL);
-    if(linear_scaling){
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // INTERPOLATION SCALING
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // INTERPOLATION SCALING
-    } else {
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); // EXACT SCALING
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); // EXACT SCALING
-    }
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    fbTexture = Texture2D(NULL,glm::vec2(width,height),GL_RGBA,linear_scaling);
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,fbTexture,0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,fbTexture.getID(),0);
     glBindTexture(GL_TEXTURE_2D,0);
 
     glGenRenderbuffers(1,&rbo);
@@ -74,7 +65,7 @@ void Framebuffer::draw(){
     glClear(GL_COLOR_BUFFER_BIT);
     fbShader.use();
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,fbTexture);
+    fbTexture.bind();
     glBindVertexArray(fbVao);
     glDrawArrays(GL_TRIANGLES,0,6);
 };

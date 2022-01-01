@@ -1,5 +1,7 @@
 #include "shaders.h"
 
+using namespace Bloom;
+
 Shader::Shader(const char* vertex_source, const char* fragment_source){
     // LOADING
     std::string vertexReadData;
@@ -66,6 +68,9 @@ void Shader::uniformFloat(int id,float value) const {
     };
 void Shader::uniformInt(int id,int value) const {
     glUniform1i(id,value);
+};
+void Shader::uniformVec4(int id,glm::vec4 value) const {
+    glUniform4f(id,value.r,value.g,value.b,value.a);
 };
 void Shader::uniformBool(int id,bool value) const {
     glUniform1i(id,(int)value);

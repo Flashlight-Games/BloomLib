@@ -1,26 +1,46 @@
+#ifndef BLOOM_FRAMEBUFFERS
+#define BLOOM_FRAMEBUFFERS
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
 #include "../shaders/shaders.h"
 
-class Framebuffer{
-    public:
-    uint32_t fbVao;
-    uint32_t fbVbo;
-    Shader fbShader = Shader("src/shaders/framebuffer/framebuffer_vertex.glsl","src/shaders/framebuffer/framebuffer_fragment.glsl");
-    uint32_t fbo;
-    uint32_t fbTexture;
-    uint32_t rbo;
+#include "../textures/textures.h"
 
-    uint16_t width;
-    uint16_t height;
+namespace Bloom{
+    class Framebuffer{
+        public:
+        
+        Shader fbShader = Shader("src/shaders/framebuffer/framebuffer_vertex.glsl","src/shaders/framebuffer/framebuffer_fragment.glsl");
+        Framebuffer(int width,int height,bool linear_scaling = true);
+        void use(bool clear);
+        void draw();
 
-    Framebuffer(int width,int height,bool linear_scaling = true);
-    void use(bool clear);
-    void draw();
+        uint16_t getWidth(){return width;};
+        uint16_t getHeight(){return height;};
+        uint16_t getVBO(){return fbVbo;};
+        uint16_t getVBA(){return fbVao;};
+        uint16_t getFBO(){return fbo;};
+        Texture2D getTexture(){return fbTexture;};
+        uint16_t getRBO(){return rbo;};
 
-    void setShader(const char* fragment_source);
-};
+        void setShader(const char* fragment_source);
+
+        private:
+        uint16_t width;
+        uint16_t height;
+
+        uint32_t fbVao;
+        uint32_t fbVbo;
+
+        uint32_t fbo;
+        Texture2D fbTexture = NULL;
+        uint32_t rbo;
+    };
+}
 
 void bindDefaultFramebuffer(bool clear,int width = -1, int height = -1);
+
+#endif
