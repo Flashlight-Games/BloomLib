@@ -32,3 +32,6 @@ namespace Bloom{
 glm::vec2 getTextureDimensions(GLuint textureID,GLuint mipLevel = 0);
 
 #endif
+
+// To Display in ImGui
+// ImGui::Image((void*)(intptr_t)fb_pixels.getTexture().getID(), ImVec2(fb_pixels.getTexture().getSize()[0],fb_pixels.getTexture().getSize()[1]));
