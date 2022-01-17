@@ -18,6 +18,7 @@
 #include "text/text.h" // FONTS
 #include "framebuffers/framebuffers.h" // FRAMEBUFFERS
 #include "textures/textures.h" // TEXTURES
+#include "sprite/sprite.h" // SPRITES
 
 
 
@@ -93,73 +94,17 @@ int main()
     ImGui_ImplOpenGL3_Init("#version 330");
 
     // PROCESSING //
-    uint32_t vao;
-    glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
-    glBindVertexArray(vao);
-
-    float multiplier = 0.05;
-    float verts[] = {
-        // POSITION    COLOR    Texture
-        -160*multiplier, -160*multiplier,    1,1,1,      0,0,
-        160*multiplier, -160*multiplier,     1,1,1,      1,0,
-        160*multiplier, 160*multiplier,      1,1,1,      1,1,
-        -160*multiplier,160*multiplier,       1,1,1,      0,1
-    };
-
-    int indices[] = {
-        0,1,2,
-        0,2,3
-    };
-
-
-    uint32_t vbo; // Vertex buffer objects store verts on the GPU
-    glGenBuffers(1,&vbo); // Set vbo id
-    glBindBuffer(GL_ARRAY_BUFFER,vbo); // bind the vbo as an array buffer
-    glBufferData(GL_ARRAY_BUFFER,sizeof(verts),&verts,GL_STATIC_DRAW);
-   
-
-    uint32_t ebo; // elemt array buffer tells the gpu what indices to connect
-    glGenBuffers(1,&ebo); // Set ebo id
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo); // bind the ebo as an element array buffer
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),&indices,GL_STATIC_DRAW);
-
-
-    glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,7*sizeof(float),((void*)(0*sizeof(float)))); // Position
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,7*sizeof(float),((void*)(2*sizeof(float)))); // Color
-    glEnableVertexAttribArray(1);
-
-    glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,7*sizeof(float),((void*)(5*sizeof(float)))); // Texture
-    glEnableVertexAttribArray(2);
-
-    // Shader shader = Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/testing_textures/textureshader_fragment.glsl");
-    Bloom::Shader shader = Bloom::Shader("res/shaders/testing_textures/textureshader_vertex.glsl","res/shaders/testing_textures/textureshader_fragment.glsl");
-    shader.use();
-    float uColorUni = shader.getUniformId("uColor");
-    float uTextureUni = shader.getUniformId("uTexture");
-
-    Bloom::Texture2D testing_texture = Bloom::Texture2D("res/textures/detailTest16Border.png",false);
-
-
-    // EXAMPLE MODEL MATRIX
-    glm::mat4 model_matrix = glm::mat4(1.0);
-    model_matrix           = glm::translate(model_matrix,glm::vec3(8.0f,100.0f,0.0f));
-    model_matrix           = glm::rotate(model_matrix,(float)glm::radians((float)0),glm::vec3(0.0f,0.0f,1.0f));
-    model_matrix           = glm::scale(model_matrix,glm::vec3(1.0f,1.0f,1.0f));
-    shader.uniformMat4(shader.getUniformId("model"),model_matrix);
-
-    shader.uniformMat4(shader.getUniformId("view"),view_matrix);
-    shader.uniformMat4(shader.getUniformId("projection"),pixel_projection_matrix);
-
     Bloom::Framebuffer fb_pixels = Bloom::Framebuffer(pixel_windowWidth,pixel_windowHeight,false);
     fb_pixels.setShader("src/shaders/framebuffer/framebuffer_fragment.glsl");
     fb_pixels.fbShader.uniformInt(fb_pixels.fbShader.getUniformId("uTexture"),fb_pixels.getTexture().getID());
-
+    
 
     int boxPosX = 0;
     int boxPosY = 0;
     float time = 0;
+
+    Bloom::Sprite spritetest = Bloom::Sprite("res/textures/detailTest16Line.png",1,view_matrix,pixel_projection_matrix);
+
 
     glClearColor(0.21,0.21,0.21,1);
 
@@ -174,6 +119,7 @@ int main()
     std::chrono::duration<double> imGui_duration;
     std::chrono::duration<double> frameBuffer_duration;
     std::chrono::duration<double> bufferSwap_duration;
+
     while(!glfwWindowShouldClose(window)) // GAME LOOP
     {
         beginTime = std::chrono::system_clock::now(); // Check begin time
@@ -187,28 +133,10 @@ int main()
         // RENDER //
         if(!locked)
             time = glfwGetTime();
-        shader.use();
-        shader.uniformFloat(uColorUni,1);
-        setTextureAtLocation(GL_TEXTURE0,testing_texture.getID()); shader.uniformInt(uTextureUni,0);
 
-        
-
-        model_matrix = glm::mat4(1.0);
-        model_matrix           = glm::translate(model_matrix,glm::vec3(8.0f,100.0f,0.0f));
-        model_matrix           = glm::rotate(model_matrix,(float)glm::radians((float)0),glm::vec3(0.0f,0.0f,1.0f));
-        model_matrix           = glm::scale(model_matrix,glm::vec3(1.0f,1.0f,1.0f));
-        shader.uniformMat4(shader.getUniformId("model"),model_matrix);
-
-        testing_texture.bind();
-        glBindVertexArray(vao);
-        glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
-
-        model_matrix = glm::mat4(1.0);
-        model_matrix           = glm::translate(model_matrix,glm::vec3((float)boxPosX+offsetX,boxPosY,0.0f));
-        model_matrix           = glm::rotate(model_matrix,(float)sin(time),glm::vec3(0.0f,0.0f,1.0f));
-        model_matrix           = glm::scale(model_matrix,glm::vec3(1.0f,1.0f,1.0f));
-        shader.uniformMat4(shader.getUniformId("model"),model_matrix);
-        glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
+        spritetest.SetLocation(glm::vec2(boxPosX,boxPosY));
+        spritetest.SetRotation(sin(time)*180);
+        spritetest.Draw();
 
         transform_duration = std::chrono::system_clock::now()-currentTime;
         currentTime = std::chrono::system_clock::now();
@@ -232,20 +160,20 @@ int main()
         ImGui::NewFrame();
 
         {
-            ImGui::Begin("Demo window");
-                ImGui::TextColored(ImVec4(1,0.5,0,1),"Hello world %s",std::to_string(((int)time)).c_str());
-
+            ImGui::Begin("Control window");
+                ImGui::TextColored(ImVec4(1,0.5,0,1),"Time is %s",std::to_string(((int)time)).c_str());
                 ImGui::SliderInt("Box PosX",&boxPosX,0,pixel_windowWidth);
                 ImGui::SliderInt("Box PosY",&boxPosY,0,pixel_windowHeight);
+            ImGui::End();
+        
+            ImGui::Begin("Performance window");
                 ImGui::ProgressBar(transform_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Transform");
                 ImGui::ProgressBar(frameBuffer_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Framebuffer");
                 ImGui::ProgressBar(imGui_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"ImGui");
                 ImGui::ProgressBar(font_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Font");
 
                 ImGui::ProgressBar(bufferSwap_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"BufferSwap");
-                
-                ImGui::Image((void*)(intptr_t)fb_pixels.getTexture().getID(), ImVec2(fb_pixels.getTexture().getSize()[0],fb_pixels.getTexture().getSize()[1]));
-                ImGui::Image((void*)(intptr_t)fontTesting.getTexture().getID(), ImVec2(fontTesting.getTexture().getSize()[0],fontTesting.getTexture().getSize()[1]));
+                // ImGui::Image((void*)(intptr_t)fb_pixels.getTexture().getID(), ImVec2(fb_pixels.getTexture().getSize()[0],fb_pixels.getTexture().getSize()[1]));
             ImGui::End();
         }
 
