@@ -1,3 +1,6 @@
+#ifndef SPRITE
+#define SPRITE
+
 #include <glad/glad.h> // OPENGL
 #include <GLFW/glfw3.h>
 
@@ -15,7 +18,7 @@
 namespace Bloom{
     class Sprite{
         public:
-        Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix, float origin_top = 0.5, float origin_left = 0.5);
+        Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5,0.5),glm::vec2 size = glm::vec2(1,1),glm::vec2 textureUVScale = glm::vec2(1,1),glm::vec2 textureUVOffset = glm::vec2(0,0));
         void Draw();
 
         void SetLocation(glm::vec2 location){transformation[0] = location[0];transformation[1] = location[1];UpdateLocation();};
@@ -32,8 +35,14 @@ namespace Bloom{
         transformation[2]=rotation;
         transformation[3] = scale[0];transformation[4] = scale[1];};
 
+        void SetUVOffset(glm::vec2 offset);
+
         private:
         void UpdateLocation();
+
+        glm::vec2 UVoffset;
+        glm::vec2 UVscale;
+        glm::vec2 Origin;
 
         uint32_t vao;
         int ppp = 2; // pixels per pixel ( detail level )
@@ -59,3 +68,5 @@ namespace Bloom{
         float uTextureUni;
     };
 }
+
+#endif

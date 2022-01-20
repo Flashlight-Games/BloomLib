@@ -2,22 +2,23 @@
 
 using namespace Bloom;
 
-Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix, float origin_top, float origin_left){
+Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin,glm::vec2 size,glm::vec2 textureUVScale,glm::vec2 textureUVOffset){
     this->ppp=pixels_per_pixel;
+    this->UVoffset=textureUVOffset; this->UVscale = textureUVScale;this->Origin = origin;
 
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
     glBindVertexArray(vao);
 
     this->texture = Bloom::Texture2D(texture_path,false);
 
-    float xScale = (this->texture.getSize()[0]*ppp); // Sprite width 
-    float yScale = (this->texture.getSize()[1]*ppp); // Sprite width 
+    float xScale = (this->texture.getSize()[0]*ppp*size[0]); // Sprite width 
+    float yScale = (this->texture.getSize()[1]*ppp*size[1]); // Sprite width 
     float verts[] = {
-        // POSITION                                                     COLOR    Texture
-        (origin_left-1)*xScale,     (origin_top-1)*yScale,      1,1,1,      0,0,
-        (origin_left)*xScale, (origin_top-1)*yScale,            1,1,1,      1,0,
-        (origin_left)*xScale, (origin_top)*yScale,              1,1,1,      1,1,
-        (origin_left-1)*xScale,     (origin_top)*yScale,        1,1,1,      0,1
+        // POSITION                                             COLOR       Texture
+        (origin[0]-1)*xScale,     (origin[1]-1)*yScale,      1,1,1,      textureUVOffset[0],textureUVOffset[1],
+        (origin[0])*xScale, (origin[1]-1)*yScale,            1,1,1,      textureUVOffset[0]+textureUVScale[0],textureUVOffset[1],
+        (origin[0])*xScale, (origin[1])*yScale,              1,1,1,      textureUVOffset[0]+textureUVScale[0],textureUVOffset[1]+textureUVScale[1],
+        (origin[0]-1)*xScale,     (origin[1])*yScale,        1,1,1,      textureUVOffset[0],textureUVOffset[1]+textureUVScale[1]
     };
 
     glGenBuffers(1,&vbo); // Set vbo id
@@ -68,4 +69,18 @@ void Sprite::Draw(){
     this->texture.bind();
     glBindVertexArray(this->vao);
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
+}
+
+void Sprite::SetUVOffset(glm::vec2 offset){
+    float xScale = (this->texture.getSize()[0]*ppp*UVscale[0]); // Sprite width 
+    float yScale = (this->texture.getSize()[1]*ppp*UVscale[1]); // Sprite width 
+    float verts[] = {
+        // POSITION                                             COLOR       Texture
+        (Origin[0]-1)*xScale,     (Origin[1]-1)*yScale,      1,1,1,      offset[0],offset[1],
+        (Origin[0])*xScale, (Origin[1]-1)*yScale,            1,1,1,      offset[0]+UVscale[0],offset[1],
+        (Origin[0])*xScale, (Origin[1])*yScale,              1,1,1,      offset[0]+UVscale[0],offset[1]+UVscale[1],
+        (Origin[0]-1)*xScale,     (Origin[1])*yScale,        1,1,1,      offset[0],offset[1]+UVscale[1]
+    };
+    glBindBuffer(GL_ARRAY_BUFFER,vbo); // bind the vbo as an array buffer
+    glBufferData(GL_ARRAY_BUFFER,sizeof(verts),&verts,GL_STATIC_DRAW);
 }

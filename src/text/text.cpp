@@ -15,7 +15,6 @@ Text::Text(const char* path, float size,float spacing){
     stbtt_BakeFontBitmap(ttf_buffer,0, size, temp_bitmap,bitsize,bitsize, 32,96, char_data);
 
     texture = Texture2D(temp_bitmap,glm::vec2(bitsize,bitsize),GL_RED,true);
-    std::cout << "FontSize - " << sizeof(temp_bitmap) << " -> " << sizeof(temp_bitmap) / 1000000.0f << "\n";
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
     glBindVertexArray(vao);
 

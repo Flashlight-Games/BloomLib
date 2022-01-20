@@ -19,6 +19,7 @@
 #include "framebuffers/framebuffers.h" // FRAMEBUFFERS
 #include "textures/textures.h" // TEXTURES
 #include "sprite/sprite.h" // SPRITES
+#include "sprite/spritesheet.h" // SPRITES
 
 
 
@@ -104,7 +105,7 @@ int main()
     float time = 0;
 
     Bloom::Sprite spritetest = Bloom::Sprite("res/textures/detailTest16Line.png",1,view_matrix,pixel_projection_matrix);
-
+    Bloom::Spritesheet sheettest = Bloom::Spritesheet("res/textures/2x8_SpritesheetTest.png",1,glm::vec2(2,8),view_matrix,pixel_projection_matrix);
 
     glClearColor(0.21,0.21,0.21,1);
 
@@ -120,8 +121,11 @@ int main()
     std::chrono::duration<double> frameBuffer_duration;
     std::chrono::duration<double> bufferSwap_duration;
 
+
+    int fps = ImGui::GetIO().Framerate;
     while(!glfwWindowShouldClose(window)) // GAME LOOP
     {
+        fps = ImGui::GetIO().Framerate;
         beginTime = std::chrono::system_clock::now(); // Check begin time
         currentTime = std::chrono::system_clock::now();
         glfwPollEvents(); processInput(window);
@@ -137,6 +141,9 @@ int main()
         spritetest.SetLocation(glm::vec2(boxPosX,boxPosY));
         spritetest.SetRotation(sin(time)*180);
         spritetest.Draw();
+
+        sheettest.Draw();
+        sheettest.TimedAdvance(0.1);
 
         transform_duration = std::chrono::system_clock::now()-currentTime;
         currentTime = std::chrono::system_clock::now();
@@ -173,6 +180,7 @@ int main()
                 ImGui::ProgressBar(font_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Font");
 
                 ImGui::ProgressBar(bufferSwap_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"BufferSwap");
+                ImGui::TextColored(ImVec4(1,1,0,1),"%s FPS",std::to_string(fps).c_str());
             ImGui::End();
         }
 
