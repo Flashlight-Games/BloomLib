@@ -12,6 +12,7 @@
 namespace Bloom{
     class Shader{
         public:
+        Shader(){};
         Shader(const char* vertex_source, const char* fragment_source);
 
         void use() const;
