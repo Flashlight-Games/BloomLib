@@ -10,8 +10,11 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height); // Resize viewport with window
 };
 
-Renderer::Renderer(glm::vec2 window_size,glm::vec2 pixel_size,std::string windowName,bool resizeable,
+Renderer::Renderer(glm::vec2 window_size,glm::vec2 pixel_size,void (*mainLoop)(), void (*inputLoop)(), void (*uiLoop)(),std::string windowName,bool resizeable,
 bool borderless,bool maximised, bool transparent){
+
+    this->MainLoop = mainLoop; this->InputLoop = inputLoop; this->UILoop = uiLoop;
+
     // INITIALIZATION
     glfwInit(); 
     
@@ -79,34 +82,13 @@ bool borderless,bool maximised, bool transparent){
 
 }
 
-void Renderer::InputLoop(){}
-
-void Renderer::MainLoop(){}
-
-void Renderer::UILoop()
-{
-        // ImGui::Begin("Control window");
-            // ImGui::TextColored(ImVec4(1,0.5,0,1),"Time is %s",std::to_string(((int)time)).c_str());
-            // ImGui::SliderInt("Box PosX",&boxPosX,0,bloom.GetPixelSize()[0]);
-            // ImGui::SliderInt("Box PosY",&boxPosY,0,bloom.GetPixelSize()[1]);
-        // ImGui::End();
-    
-        // ImGui::Begin("Performance window");
-        //     ImGui::ProgressBar(transform_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Transform");
-        //     ImGui::ProgressBar(frameBuffer_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Framebuffer");
-        //     ImGui::ProgressBar(imGui_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"ImGui");
-        //     ImGui::ProgressBar(font_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Font");
-
-        //     ImGui::ProgressBar(bufferSwap_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"BufferSwap");
-        //     ImGui::TextColored(ImVec4(1,1,0,1),"%s FPS",std::to_string(bloom.GetFPS()).c_str());
-        // ImGui::End();
-}
-
 void Renderer::Update(){
     this->fps = ImGui::GetIO().Framerate;
 
     glfwSwapBuffers(window); // Render buffer to screen
-    glfwPollEvents(); this->InputLoop();  
+    glfwPollEvents(); 
+    if(InputLoop != nullptr)
+        this->InputLoop();
 
     if(!locked)
             time = glfwGetTime();
@@ -115,7 +97,8 @@ void Renderer::Update(){
     fb_pixels->use(true);
     fb_pixels->fbShader.use();
 
-    this->MainLoop();
+    if(MainLoop != nullptr)
+        this->MainLoop();
 
     bindDefaultFramebuffer(true,pixelSize[0],pixelSize[1]);
     fb_pixels->draw();
@@ -123,7 +106,8 @@ void Renderer::Update(){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    UILoop();
+    if(UILoop != nullptr)
+        UILoop();
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
