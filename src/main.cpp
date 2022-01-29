@@ -5,18 +5,26 @@
 #include <string>
 #include <chrono>
 
-#include "../Game/engine.h"
+#include "renderer/renderer.h"
 
 int main()
 { 
-    Game::Engine reality = Game::Engine();
+    Bloom::Renderer bloom = Bloom::Renderer(
+        glm::vec2(800,600), // WINDOW SIZE
+        glm::vec2(64,48),   // PIXEL SIZE
+        "Bloom",            // WINDOW NAME
+        false,              // RESIZEABLE
+        true,               // BORDERLESS
+        false,              // MAXIMISED
+        true                // TRANSPARENT
+        );
 
     int boxPosX = 0;
     int boxPosY = 0;
     float time = 0;
 
-    Bloom::Sprite spritetest = Bloom::Sprite("res/textures/detailTest16Line.png",1,reality.GetRenderer().getViewMatrix(),reality.GetRenderer().getPixelProjectionMatrix());
-    Bloom::Spritesheet sheettest = Bloom::Spritesheet("res/textures/2x8_SpritesheetTest.png",1,glm::vec2(2,8),reality.GetRenderer().getViewMatrix(),reality.GetRenderer().getPixelProjectionMatrix());
+    Bloom::Sprite spritetest = Bloom::Sprite("res/textures/detailTest16Line.png",1,bloom.getViewMatrix(),bloom.getPixelProjectionMatrix());
+    Bloom::Spritesheet sheettest = Bloom::Spritesheet("res/textures/2x8_SpritesheetTest.png",1,glm::vec2(2,8),bloom.getViewMatrix(),bloom.getPixelProjectionMatrix());
 
     glClearColor(0.21,0.21,0.21,0.5);
 
@@ -50,9 +58,9 @@ int main()
     render_duration = std::chrono::system_clock::now()-beginTime;
     currentTime = std::chrono::system_clock::now();
 
-    while(!glfwWindowShouldClose(reality.GetRenderer().GetWindow())) // GAME LOOP
+    while(!glfwWindowShouldClose(bloom.GetWindow())) // GAME LOOP
     {
-        reality.Update();
+        bloom.Update();
 
         // SPRITE
         // spritetest.SetLocation(glm::vec2(boxPosX,boxPosY));
@@ -68,6 +76,7 @@ int main()
         // font_duration = std::chrono::system_clock::now()-currentTime;
         // currentTime = std::chrono::system_clock::now();
     }
+
 
     glfwTerminate();
     return 0;

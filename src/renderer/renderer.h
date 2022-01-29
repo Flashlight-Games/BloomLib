@@ -10,14 +10,16 @@
 #include <chrono> // Time
 
 #include "../modules.h"
-#include "../../Game/engine.h"
 
 namespace Bloom{
     class Renderer{
         public:
-        Renderer(glm::vec2 window_size,glm::vec2 pixel_size,void (*mainLoop)(), void (*inputLoop)(), void (*uiLoop)(),std::string windowName = "Bloom",bool resizeable = false,bool borderless = false,bool maximised = false, bool transparent = false);
+        Renderer(glm::vec2 window_size,glm::vec2 pixel_size,std::string windowName = "Bloom",bool resizeable = false,bool borderless = false,bool maximised = false, bool transparent = false);
         void Update();
 
+        void InputLoop(); // OVERRIDE
+        void MainLoop();  // OVERRIDE
+        void UILoop(); // OVERRIDE
 
         float GetTime();
         int GetFPS();
@@ -49,10 +51,6 @@ namespace Bloom{
         glm::mat4 pixelProjection;
 
         Bloom::Framebuffer* fb_pixels;
-
-        void (*InputLoop)() = nullptr;
-        void (*MainLoop)() = nullptr;
-        void (*UILoop)() = nullptr;
     };
 }
 
