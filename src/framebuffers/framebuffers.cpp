@@ -2,8 +2,6 @@
 
 using namespace Bloom;
 
-Framebuffer::Framebuffer(){}
-
 Framebuffer::Framebuffer(int width,int height,bool linear_scaling){
 
     this->width = width;

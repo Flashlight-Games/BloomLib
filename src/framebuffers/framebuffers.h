@@ -14,7 +14,6 @@ namespace Bloom{
         public:
         
         Shader fbShader = Shader("src/shaders/framebuffer/framebuffer_vertex.glsl","src/shaders/framebuffer/framebuffer_fragment.glsl");
-        Framebuffer();
         Framebuffer(int width,int height,bool linear_scaling = true);
         void use(bool clear);
         void draw();
