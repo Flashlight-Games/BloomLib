@@ -23,5 +23,6 @@
 #include "textures/textures.h" // TEXTURES
 #include "sprite/sprite.h" // SPRITES
 #include "sprite/spritesheet.h" // SPRITES
+#include "collision/collision.h" // COLLISION BOXES
 
 #endif

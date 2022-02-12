@@ -39,6 +39,8 @@ namespace Bloom{
 
         void SetUVOffset(glm::vec2 offset);
 
+        Bloom::Texture2D GetTexture(){return texture;};
+
         private:
         void UpdateLocation();
 

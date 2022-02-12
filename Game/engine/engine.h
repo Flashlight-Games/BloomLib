@@ -35,11 +35,15 @@ namespace Game{
         bool isLocked = false;                                              // TIME IS LOCKED
 
         // GAME DATA
-        Bloom::Sprite* spritetest;
-        Bloom::Spritesheet* sheettest;
+        Bloom::Sprite* BoxA;
+        Bloom::Sprite* BoxB;
 
-        int boxPosX = 0;
-        int boxPosY = 0;
+        PhysX::collisionBox* CBoxA;
+        PhysX::collisionBox* CBoxB;
+
+        int ABoxPos[2] = {0,0};
+        int BBoxPos[2] = {0,0};
+        int Rots[2] = {0,0};
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING

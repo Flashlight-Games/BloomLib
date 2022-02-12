@@ -81,10 +81,15 @@ int Engine::Init(){
 int Engine::Begin(){
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, -1.0f, 0.0f)); 
 
-    auto tmp_sprite = Bloom::Sprite("res/textures/detailTest16Line.png",1,view_matrix,pixel_projection_matrix);
-    spritetest = &tmp_sprite;
-    auto tmp_sheet = Bloom::Spritesheet("res/textures/2x8_SpritesheetTest.png",1,glm::vec2(2,8),view_matrix,pixel_projection_matrix);
-    sheettest = &tmp_sheet;
+    auto tmp_spriteA = Bloom::Sprite("res/textures/detailTest16Border.png",1,view_matrix,pixel_projection_matrix);
+    BoxA = &tmp_spriteA;
+    auto tmp_spriteB = Bloom::Sprite("res/textures/detailTest16Border.png",1,view_matrix,pixel_projection_matrix);
+    BoxB = &tmp_spriteB;
+
+    auto tmp_boxA = PhysX::collisionBox("Box",BoxA->GetLocation(),BoxA->GetScale() * BoxA->GetTexture().getSize());
+    CBoxA = &tmp_boxA;
+    auto tmp_boxB = PhysX::collisionBox("Box",BoxB->GetLocation(),BoxB->GetScale() * BoxB->GetTexture().getSize());
+    CBoxB = &tmp_boxB;
 
     glClearColor(0.21,0.21,0.21,1);
 
@@ -92,7 +97,6 @@ int Engine::Begin(){
     while (retval == 0){
         retval = GameLoop();
     }
-
     return retval;
 }
 
@@ -111,13 +115,19 @@ int Engine::GameLoop(){
     (*fb_pixels).use(true);
 
     //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-
-    (*spritetest).SetLocation(glm::vec2(boxPosX,boxPosY));
-    (*spritetest).SetRotation(sin(time)*180);
-    (*spritetest).Draw();
 
-    (*sheettest).Draw();
-    (*sheettest).TimedAdvance(0.1);
+    BoxA->SetLocation(glm::vec2(ABoxPos[0],ABoxPos[1])); BoxA->SetRotation(Rots[0]);
+    CBoxA->setLocation(BoxA->GetLocation()); CBoxA->setRotation(Rots[0]);
+    BoxA->Draw();
+
+    BoxB->SetLocation(glm::vec2(BBoxPos[0],BBoxPos[1])); BoxB->SetRotation(Rots[1]);
+    CBoxB->setLocation(BoxB->GetLocation()); CBoxB->setRotation(Rots[1]);
+    BoxB->Draw();
     
+    if(CBoxA->check(*CBoxB))
+        std::cout << "Colliding!\n";
+    else
+        std::cout << "Not Colliding\n";
     //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-
     (*fb_pixels).drawToDefault(windowWidth,windowHeight);
 
@@ -131,8 +141,9 @@ int Engine::UILoop(){
 
     ImGui::Begin("Control window");
         ImGui::TextColored(ImVec4(1,0.5,0,1),"Time is %s",std::to_string(((int)time)).c_str());
-        ImGui::SliderInt("Box PosX",&boxPosX,0,pixel_windowWidth);
-        ImGui::SliderInt("Box PosY",&boxPosY,0,pixel_windowHeight);
+        ImGui::SliderInt2("A Box Pos",ABoxPos,0,pixel_windowWidth);
+        ImGui::SliderInt2("B Box Pos",BBoxPos,0,pixel_windowWidth);
+        ImGui::SliderInt2("Rotations",Rots,-360,360);
     ImGui::End();
 
     ImGui::Begin("Performance window");

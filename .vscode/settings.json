@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.h": "cpp",
+        "*.glsl": "plaintext",
         "*.PRG": "gcode",
         "string": "cpp",
         "iosfwd": "cpp",
@@ -81,7 +82,23 @@
         "fstream": "cpp",
         "iomanip": "cpp",
         "stack": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "list": "cpp",
+        "xfacet": "cpp",
+        "xhash": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xlocbuf": "cpp",
+        "xlocinfo": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xlocnum": "cpp",
+        "xloctime": "cpp",
+        "xmemory": "cpp",
+        "xstddef": "cpp",
+        "xstring": "cpp",
+        "xtr1common": "cpp",
+        "xutility": "cpp"
     },
     "cmake.configureOnOpen": false
 }
