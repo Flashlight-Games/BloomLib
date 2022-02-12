@@ -12,11 +12,13 @@
 namespace Bloom{
     class Framebuffer{
         public:
+        Framebuffer(int width,int height,bool linear_scaling = true);
+        // Framebuffer(){};
         
         Shader fbShader = Shader("src/shaders/framebuffer/framebuffer_vertex.glsl","src/shaders/framebuffer/framebuffer_fragment.glsl");
-        Framebuffer(int width,int height,bool linear_scaling = true);
         void use(bool clear);
         void draw();
+        void drawToDefault(int w, int h);
 
         uint16_t getWidth(){return width;};
         uint16_t getHeight(){return height;};
@@ -27,6 +29,7 @@ namespace Bloom{
         uint16_t getRBO(){return rbo;};
 
         void setShader(const char* fragment_source);
+        void setTextureUniform(const char* uniform);
 
         private:
         uint16_t width;

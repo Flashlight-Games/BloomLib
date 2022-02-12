@@ -3,7 +3,6 @@
 using namespace Bloom;
 
 Framebuffer::Framebuffer(int width,int height,bool linear_scaling){
-
     this->width = width;
     this->height = height;
 
@@ -24,7 +23,6 @@ Framebuffer::Framebuffer(int width,int height,bool linear_scaling){
     glGenBuffers(1,&fbVbo); // Set vbo id
     glBindBuffer(GL_ARRAY_BUFFER,fbVbo); // bind the vbo as an array buffer
     glBufferData(GL_ARRAY_BUFFER,sizeof(fbVerts),&fbVerts,GL_STATIC_DRAW);
-
 
     glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,4*sizeof(float),((void*)(0*sizeof(float)))); // Position
     glEnableVertexAttribArray(0);
@@ -60,6 +58,8 @@ void Framebuffer::use(bool clear){
     if(clear){
         glClear(GL_COLOR_BUFFER_BIT);
     }
+
+    fbShader.use();
 };
 void Framebuffer::draw(){
     glClear(GL_COLOR_BUFFER_BIT);
@@ -69,8 +69,17 @@ void Framebuffer::draw(){
     glBindVertexArray(fbVao);
     glDrawArrays(GL_TRIANGLES,0,6);
 };
+
+void Framebuffer::drawToDefault(int w, int h){
+    bindDefaultFramebuffer(true,w,h); draw();
+}
+
 void Framebuffer::setShader(const char* fragment_source){
     fbShader = Shader("src/shaders/framebuffer/framebuffer_vertex.glsl",fragment_source);
+};
+
+void Framebuffer::setTextureUniform(const char* uniform){
+    fbShader.uniformInt(fbShader.getUniformId(uniform),getTexture().getID());
 };
 
 void bindDefaultFramebuffer(bool clear,int width, int height){
@@ -81,4 +90,5 @@ void bindDefaultFramebuffer(bool clear,int width, int height){
         glClear(GL_COLOR_BUFFER_BIT);
     }
 };
+
 

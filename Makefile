@@ -12,7 +12,7 @@ endif
 appname = app
 
 
-build/$(appname).$(targetType): src/main.cpp $(wildcard src/**/*.cpp) $(wildcard include/**/*.cpp)
+build/$(appname).$(targetType): src/main.cpp $(wildcard src/**/*.cpp) $(wildcard Game/**/*.cpp) $(wildcard include/**/*.cpp)
 	g++ -std=c++11 -I include/ -L lib/ $^ src/glad.cpp   -$(targetLib) -o build/$(appname).$(targetType)
 
 run:
