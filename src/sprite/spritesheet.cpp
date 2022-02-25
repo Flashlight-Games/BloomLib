@@ -4,7 +4,7 @@ using namespace Bloom;
 
 Spritesheet::Spritesheet(const char* texture_path,int pixels_per_pixel,glm::vec2 tiling, glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin){
     this->tiling = tiling;
-    this->sprite = Sprite(texture_path,pixels_per_pixel,view_matrix,pixel_projection_matrix,origin,glm::vec2(1,1) / tiling,glm::vec2(1,1) / tiling);
+    this->sprite = Sprite(texture_path,pixels_per_pixel,view_matrix,pixel_projection_matrix,origin,glm::vec2(1,1),glm::vec2(1,1) / tiling);
 }
 
 void Spritesheet::Draw(){

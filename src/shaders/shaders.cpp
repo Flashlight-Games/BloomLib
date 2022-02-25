@@ -81,6 +81,8 @@ int Shader::getUniformId(const char* name) const{
 void Shader::uniformMat4(int id,glm::mat4 value) const {
     glUniformMatrix4fv(id,1,GL_FALSE,glm::value_ptr(value));
 }
+
+
 void setTextureAtLocation(GLenum location, GLuint texture, int uniformID){
     glActiveTexture(location);
     glBindTexture(GL_TEXTURE_2D,texture);

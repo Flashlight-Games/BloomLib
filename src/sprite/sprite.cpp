@@ -6,15 +6,18 @@ Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_mat
     this->ppp=pixels_per_pixel;
     this->UVoffset=textureUVOffset; this->UVscale = textureUVScale;this->Origin = origin;
 
+    transformation[3] = size[0];transformation[4] = size[1];
+
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
     glBindVertexArray(vao);
 
     this->texture = Bloom::Texture2D(texture_path,false);
 
-    float xScale = (this->texture.getSize()[0]*ppp*size[0]); // Sprite width 
-    float yScale = (this->texture.getSize()[1]*ppp*size[1]); // Sprite width 
+    float xScale = (this->texture.getSize()[0]*ppp); // Sprite width 
+    float yScale = (this->texture.getSize()[1]*ppp); // Sprite width 
+
     float verts[] = {
-        // POSITION                                             COLOR       Texture
+        // POSITION                                          COLOR       Texture
         (origin[0]-1)*xScale,     (origin[1]-1)*yScale,      1,1,1,      textureUVOffset[0],textureUVOffset[1],
         (origin[0])*xScale, (origin[1]-1)*yScale,            1,1,1,      textureUVOffset[0]+textureUVScale[0],textureUVOffset[1],
         (origin[0])*xScale, (origin[1])*yScale,              1,1,1,      textureUVOffset[0]+textureUVScale[0],textureUVOffset[1]+textureUVScale[1],

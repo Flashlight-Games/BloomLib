@@ -30,6 +30,9 @@ namespace Bloom{
         int TimedAdvance(float duration,int step = 1);
         void SetIdx(int idx);
 
+        Sprite* GetSprite(){return &sprite;};
+        glm::vec2 GetTiling(){return tiling;};
+
         private:
         Sprite sprite = Sprite("",1,glm::mat4(),glm::mat4());;
         glm::vec2 tiling;

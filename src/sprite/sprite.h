@@ -40,6 +40,9 @@ namespace Bloom{
         void SetUVOffset(glm::vec2 offset);
 
         Bloom::Texture2D GetTexture(){return texture;};
+        Bloom::Shader GetShader(){return shader;};
+        glm::mat4 GetModelMatrix(){return model_matrix;};
+
 
         private:
         void UpdateLocation();

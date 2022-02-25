@@ -44,6 +44,8 @@ namespace Game{
         int ABoxPos[2] = {0,0};
         int BBoxPos[2] = {0,0};
         int Rots[2] = {0,0};
+
+        float aHighlight = 0;
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING
