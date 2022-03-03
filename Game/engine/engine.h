@@ -41,6 +41,9 @@ namespace Game{
         PhysX::collisionBox* CBoxA;
         PhysX::collisionBox* CBoxB;
 
+        Bloom::Bone* BoneA;
+        Bloom::Bone* BoneB;
+
         int ABoxPos[2] = {0,0};
         int BBoxPos[2] = {0,0};
         int Rots[2] = {0,0};

@@ -81,17 +81,22 @@ int Engine::Init(){
 int Engine::Begin(){
     view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, -1.0f, 0.0f)); 
 
-    auto tmp_spriteA = Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0.5),glm::vec2(1,1));
+    auto tmp_spriteA = Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0),glm::vec2(1,1));
     // auto tmp_spriteA = Bloom::Spritesheet("res/textures/detailTest16Border.png",1,glm::vec2(2,1),view_matrix,pixel_projection_matrix);
     BoxA = &tmp_spriteA;
-    auto tmp_spriteB = Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0,0),glm::vec2(1,1));
+    auto tmp_spriteB = Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0),glm::vec2(1,1));
     BoxB = &tmp_spriteB;
 
     // auto tmp_boxA = PhysX::collisionBox("Box",BoxA->GetSprite()->GetLocation(),BoxA->GetSprite()->GetScale() * BoxA->GetSprite()->GetTexture().getSize() / BoxA->GetTiling());
-    auto tmp_boxA = PhysX::collisionBox("Box",BoxA->GetLocation(),BoxA->GetScale() * BoxA->GetTexture().getSize(),0,glm::vec2(0.5,0.5));
+    auto tmp_boxA = PhysX::collisionBox("Box",BoxA->GetLocation(),BoxA->GetScale() * BoxA->GetTexture().getSize(),0,glm::vec2(0.5,0));
     CBoxA = &tmp_boxA;
-    auto tmp_boxB = PhysX::collisionBox("Box",BoxB->GetLocation(),BoxB->GetScale() * BoxB->GetTexture().getSize(),0,glm::vec2(0,0));
+    auto tmp_boxB = PhysX::collisionBox("Box",BoxB->GetLocation(),BoxB->GetScale() * BoxB->GetTexture().getSize(),0,glm::vec2(0.5,0));
     CBoxB = &tmp_boxB;
+
+    auto tmp_boneA = Bloom::Bone(NULL,8);
+    BoneA = &tmp_boneA;
+    auto tmp_boneB = Bloom::Bone(BoneA,8);
+    BoneB = &tmp_boneB;
 
     glClearColor(0.21,0.21,0.21,1);
 
@@ -119,21 +124,23 @@ int Engine::GameLoop(){
     //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-
 
     // BoxA->GetSprite()->SetLocation(glm::vec2(ABoxPos[0],ABoxPos[1])); BoxA->GetSprite()->SetRotation(Rots[0]);
-    // CBoxA->setLocation(BoxA->GetSprite()->GetLocation()); CBoxA->setRotation(Rots[0]);
-    BoxA->SetLocation(glm::vec2(ABoxPos[0],ABoxPos[1])); BoxA->SetRotation(Rots[0]);
-    CBoxA->setRotation(Rots[0]); CBoxA->setLocation(BoxA->GetLocation());
+    BoneA->SetLocation(glm::vec2(ABoxPos[0],ABoxPos[1])); BoneA->SetRotation(Rots[0]);
+    BoxA->SetLocation(BoneA->GetLocation()); BoxA->SetRotation(BoneA->GetRotation());
+    CBoxA->setRotation(BoneA->GetRotation()); CBoxA->setLocation(BoxA->GetLocation());
     BoxA->Draw();
 
-    BoxB->SetLocation(glm::vec2(BBoxPos[0],BBoxPos[1])); BoxB->SetRotation(Rots[1]);
-    CBoxB->setRotation(Rots[1]); CBoxB->setLocation(BoxB->GetLocation());
+    BoneB->SetRotation(Rots[0]);
+    BoxB->SetLocation(BoneB->GetLocation()); BoxB->SetRotation(BoneB->GetRotation());
+    CBoxB->setRotation(BoxB->GetRotation()); CBoxB->setLocation(BoxB->GetLocation());
     BoxB->Draw();
-    
+
     if(CBoxA->check(*CBoxB))
         aHighlight+=(0-aHighlight)*0.1;
     else
         aHighlight+=(1-aHighlight)*0.1;
 
-    BoxA->GetShader().uniformVec4(BoxA->GetShader().getUniformId("uColor"),glm::vec4(1,aHighlight,aHighlight,1));
+    // BoxA->GetShader().uniformVec4(BoxA->GetShader().getUniformId("uColor"),glm::vec4(1,aHighlight,aHighlight,1));
+    BoxA->GetShader().uniformVec4(BoxA->GetShader().getUniformId("uColor"),glm::vec4(0,0.5,1,1));
 
     //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-
     (*fb_pixels).drawToDefault(windowWidth,windowHeight);
