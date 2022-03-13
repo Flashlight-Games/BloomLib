@@ -14,5 +14,8 @@ void Bloom::Bone::updateTransform(){
 }
 
 glm::vec2 Bloom::Bone::GetEndLocation(){
-    return glm::vec2(location[0]+length*cos((rotation-90)*(PI/180)),location[1]+length*sin((rotation-90)*(PI/180)));
+    int offset = 0;
+    if(this->Parent != NULL)
+        offset = Parent->GetRotation();
+    return glm::vec2(location[0] + length*cos((offset + rotation-90)*(PI/180)),location[1] + length*sin((offset + rotation-90)*(PI/180)));
 }

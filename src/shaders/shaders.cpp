@@ -64,7 +64,7 @@ void Shader::use() const {
     glUseProgram(programID);
 }
 void Shader::uniformFloat(int id,float value) const {
-        glUniform1f(id,value);
+    glUniform1f(id,value);
     };
 void Shader::uniformInt(int id,int value) const {
     glUniform1i(id,value);

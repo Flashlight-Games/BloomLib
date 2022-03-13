@@ -86,6 +86,8 @@ int Engine::Begin(){
     BoxA = &tmp_spriteA;
     auto tmp_spriteB = Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0),glm::vec2(1,1));
     BoxB = &tmp_spriteB;
+    auto tmp_spriteC = Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0),glm::vec2(1,1));
+    BoxC = &tmp_spriteC;
 
     // auto tmp_boxA = PhysX::collisionBox("Box",BoxA->GetSprite()->GetLocation(),BoxA->GetSprite()->GetScale() * BoxA->GetSprite()->GetTexture().getSize() / BoxA->GetTiling());
     auto tmp_boxA = PhysX::collisionBox("Box",BoxA->GetLocation(),BoxA->GetScale() * BoxA->GetTexture().getSize(),0,glm::vec2(0.5,0));
@@ -97,6 +99,10 @@ int Engine::Begin(){
     BoneA = &tmp_boneA;
     auto tmp_boneB = Bloom::Bone(BoneA,8);
     BoneB = &tmp_boneB;
+    auto tmp_boneC = Bloom::Bone(BoneB,8);
+    BoneC = &tmp_boneC;
+    auto tmp_boneD = Bloom::Bone(BoneC,8);
+    BoneD = &tmp_boneD;
 
     glClearColor(0.21,0.21,0.21,1);
 
@@ -134,13 +140,22 @@ int Engine::GameLoop(){
     CBoxB->setRotation(BoxB->GetRotation()); CBoxB->setLocation(BoxB->GetLocation());
     BoxB->Draw();
 
+    BoneC->SetRotation(Rots[0]);
+    BoxC->SetLocation(BoneC->GetLocation()); BoxC->SetRotation(BoneC->GetRotation());
+    BoxC->Draw();
+
     if(CBoxA->check(*CBoxB))
         aHighlight+=(0-aHighlight)*0.1;
     else
         aHighlight+=(1-aHighlight)*0.1;
 
     // BoxA->GetShader().uniformVec4(BoxA->GetShader().getUniformId("uColor"),glm::vec4(1,aHighlight,aHighlight,1));
+    BoxA->GetShader().use();
     BoxA->GetShader().uniformVec4(BoxA->GetShader().getUniformId("uColor"),glm::vec4(0,0.5,1,1));
+    BoxB->GetShader().use();
+    BoxB->GetShader().uniformVec4(BoxB->GetShader().getUniformId("uColor"),glm::vec4(0,1,0.5,1));
+    BoxC->GetShader().use();
+    BoxC->GetShader().uniformVec4(BoxC->GetShader().getUniformId("uColor"),glm::vec4(1,0.5,0,1));
 
     //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-
     (*fb_pixels).drawToDefault(windowWidth,windowHeight);

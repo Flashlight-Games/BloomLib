@@ -37,12 +37,14 @@ namespace Game{
         // GAME DATA
         Bloom::Sprite* BoxA;
         Bloom::Sprite* BoxB;
+        Bloom::Sprite* BoxC;
 
         PhysX::collisionBox* CBoxA;
         PhysX::collisionBox* CBoxB;
 
         Bloom::Bone* BoneA;
         Bloom::Bone* BoneB;
+        Bloom::Bone* BoneC;
 
         int ABoxPos[2] = {0,0};
         int BBoxPos[2] = {0,0};
