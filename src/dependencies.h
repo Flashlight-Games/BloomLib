@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <math.h>
+#include <vector>
 #include <string>
 
 #include "shaders/shaders.h" // SHADERS

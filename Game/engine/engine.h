@@ -35,16 +35,12 @@ namespace Game{
         bool isLocked = false;                                              // TIME IS LOCKED
 
         // GAME DATA
-        Bloom::Sprite* BoxA;
-        Bloom::Sprite* BoxB;
-        Bloom::Sprite* BoxC;
+        int joints = 8;
+        std::vector<Bloom::Sprite*> boxes;
+        std::vector<Bloom::Bone*> bones;
 
         PhysX::collisionBox* CBoxA;
         PhysX::collisionBox* CBoxB;
-
-        Bloom::Bone* BoneA;
-        Bloom::Bone* BoneB;
-        Bloom::Bone* BoneC;
 
         int ABoxPos[2] = {0,0};
         int BBoxPos[2] = {0,0};
