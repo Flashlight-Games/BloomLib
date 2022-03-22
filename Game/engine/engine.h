@@ -35,9 +35,9 @@ namespace Game{
         bool isLocked = false;                                              // TIME IS LOCKED
 
         // GAME DATA
-        int joints = 8;
+        int joints = 2;
         std::vector<Bloom::Sprite*> boxes;
-        std::vector<Bloom::Bone*> bones;
+        std::vector<Bloom::Bone*> bones = Bloom::Bone::Bones(joints,8);
 
         PhysX::collisionBox* CBoxA;
         PhysX::collisionBox* CBoxB;

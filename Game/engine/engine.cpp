@@ -86,12 +86,6 @@ int Engine::Begin(){
     // auto tmp_boxB = PhysX::collisionBox("Box",BoxB->GetLocation(),BoxB->GetScale() * BoxB->GetTexture().getSize(),0,glm::vec2(0.5,0));
     // CBoxB = &tmp_boxB;
 
-    Bloom::Bone* lBone = NULL;
-    for(int i = 0; i < joints; i++){
-        auto tmp_bone = new Bloom::Bone(lBone,8);
-        bones.push_back(tmp_bone);
-        lBone = tmp_bone;
-    }
     for(int i = 0; i < joints; i++){
         auto tmp_box = new Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0),glm::vec2(1,1));
         boxes.push_back(tmp_box);
