@@ -8,7 +8,7 @@ Texture2D::Texture2D(const void* data,glm::vec2 size,int format,bool linear_scal
 
     glGenTextures(1, &this->id);
     glBindTexture(GL_TEXTURE_2D, this->id);
-    glTexImage2D(GL_TEXTURE_2D, 0, format, size[0],size[1], 0, format, GL_UNSIGNED_BYTE,data);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, size[0],size[1], 0, GL_RGBA, GL_UNSIGNED_BYTE,data);
 
     if(linear_scaling){
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

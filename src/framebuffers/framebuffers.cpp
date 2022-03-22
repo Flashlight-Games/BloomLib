@@ -2,7 +2,7 @@
 
 using namespace Bloom;
 
-Framebuffer::Framebuffer(int width,int height,bool linear_scaling){
+Framebuffer::Framebuffer(int width,int height,bool linear_scaling,bool HDR){
     this->width = width;
     this->height = height;
 
@@ -33,7 +33,10 @@ Framebuffer::Framebuffer(int width,int height,bool linear_scaling){
     glGenFramebuffers(1,&fbo);
     glBindFramebuffer(GL_FRAMEBUFFER,fbo);
 
-    fbTexture = Texture2D(NULL,glm::vec2(width,height),GL_RGBA,linear_scaling);
+    if(!HDR)
+        fbTexture = Texture2D(NULL,glm::vec2(width,height),GL_RGBA,linear_scaling);
+    else
+        fbTexture = Texture2D(NULL,glm::vec2(width,height),GL_RGBA16F,linear_scaling);
 
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,fbTexture.getID(),0);
     glBindTexture(GL_TEXTURE_2D,0);
@@ -48,6 +51,7 @@ Framebuffer::Framebuffer(int width,int height,bool linear_scaling){
         std::cout << "ERROR : GL_FRAMEBUFFER NOT COMPLETE!\n";
 
     glBindFramebuffer(GL_FRAMEBUFFER,0); // BIND RENDER BUFFER
+    setTextureUniform("uTexture");
 };
 void Framebuffer::use(bool clear){
 
