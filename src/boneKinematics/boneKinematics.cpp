@@ -12,8 +12,7 @@ void Bloom::BoneKinematics::twoBoneIK(Bloom::Bone* parent, glm::vec2 end_effecto
     float c_angle =  -atan((parent->GetLocation().x - end_effector.x)/(parent->GetLocation().y - end_effector.y)) * 180 / PI;
     float c_distance = sqrt(pow(parent->GetLocation().x - end_effector.x,2) + pow(parent->GetLocation().y - end_effector.y,2));
 
-    if(c_distance > parent->GetLength() + parent->GetChild()->GetLength())
-        c_distance = parent->GetLength() + parent->GetChild()->GetLength();
+    c_distance = std::min((float)(parent->GetLength() + parent->GetChild()->GetLength()),c_distance);
 
     if((parent->GetLocation().y - end_effector.y) < 0){
         c_angle += 180;
