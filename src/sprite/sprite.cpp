@@ -54,6 +54,8 @@ Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_mat
     shader.uniformMat4(shader.getUniformId("model"),model_matrix);
     shader.uniformMat4(shader.getUniformId("view"),view_matrix);
     shader.uniformMat4(shader.getUniformId("projection"),pixel_projection_matrix);
+
+    this->view_matrix = &view_matrix;
 };
 
 void Sprite::UpdateLocation(){
@@ -63,11 +65,12 @@ void Sprite::UpdateLocation(){
     model_matrix           = glm::scale(model_matrix,glm::vec3(this->transformation[3],this->transformation[4],1.0f));
 }
 
-void Sprite::Draw(){
+void Sprite::Draw(glm::mat4 view_matrix){
     shader.use();
     shader.uniformFloat(uColorUni,1);
     setTextureAtLocation(GL_TEXTURE0,this->texture.getID()); shader.uniformInt(this->uTextureUni,0);
     shader.uniformMat4(shader.getUniformId("model"),model_matrix);
+    shader.uniformMat4(shader.getUniformId("view"),(view_matrix));
 
     this->texture.bind();
     glBindVertexArray(this->vao);

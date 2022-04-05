@@ -7,8 +7,8 @@ Spritesheet::Spritesheet(const char* texture_path,int pixels_per_pixel,glm::vec2
     this->sprite = Sprite(texture_path,pixels_per_pixel,view_matrix,pixel_projection_matrix,origin,glm::vec2(1,1),glm::vec2(1,1) / tiling);
 }
 
-void Spritesheet::Draw(){
-    this->sprite.Draw();
+void Spritesheet::Draw(glm::mat4 view_matrix){
+    this->sprite.Draw(view_matrix);
 }
 
 int Spritesheet::Advance(int step){

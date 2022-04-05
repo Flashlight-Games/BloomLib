@@ -69,7 +69,7 @@ int Engine::Init(){
     // CREATE PROJ MATRICES
     pixel_projection_matrix = glm::ortho(0.0f, (float)pixel_windowWidth, 0.0f, (float)pixel_windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
     window_projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
-    view_matrix = glm::mat4(1.0f);
+    view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)); 
 
     auto tmp_pixels = Bloom::Framebuffer(pixel_windowWidth,pixel_windowHeight,false);
     tmp_pixels.setTextureUniform("uTexture");
@@ -79,20 +79,8 @@ int Engine::Init(){
 }
 
 int Engine::Begin(){
-    view_matrix = glm::translate(view_matrix, glm::vec3(0.0f, -1.0f, 0.0f)); 
-
-    // auto tmp_boxA = PhysX::collisionBox("Box",BoxA->GetLocation(),BoxA->GetScale() * BoxA->GetTexture().getSize(),0,glm::vec2(0.5,0));
-    // CBoxA = &tmp_boxA;
-    // auto tmp_boxB = PhysX::collisionBox("Box",BoxB->GetLocation(),BoxB->GetScale() * BoxB->GetTexture().getSize(),0,glm::vec2(0.5,0));
-    // CBoxB = &tmp_boxB;
-
-    auto tmp_e_box = Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0),glm::vec2(1,1));
+    auto tmp_e_box = Bloom::Sprite("res/textures/detailTest16.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0),glm::vec2(0.25,0.25));
     endBox = &tmp_e_box;
-
-    for(int i = 0; i < joints; i++){
-        auto tmp_box = new Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0),glm::vec2(1,1));
-        boxes.push_back(tmp_box);
-    }
 
     glClearColor(0.21,0.21,0.21,1);
 
@@ -104,6 +92,8 @@ int Engine::Begin(){
 }
 
 int Engine::GameLoop(){
+    view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-ABoxPos[0], -ABoxPos[1], 0));
+
     if(glfwWindowShouldClose(window)) // END IF SHOULD CLOSE
         return -2;
 
@@ -122,28 +112,7 @@ int Engine::GameLoop(){
     endBox->SetLocation(glm::vec2(BBoxPos[0],BBoxPos[1]));
     endBox->GetShader().use();
     endBox->GetShader().uniformVec4(endBox->GetShader().getUniformId("uColor"),glm::vec4(1,0.5,0,1));
-    endBox->Draw();
-
-    bones.at(0)->SetLocation(glm::vec2(ABoxPos[0],ABoxPos[1])); bones.at(0)->SetRotation(Rots[0]);
-
-    Bloom::BoneKinematics::twoBoneIK(bones.at(0),glm::vec2(BBoxPos[0],BBoxPos[1]),true);
-
-    for(auto i = 0; i < joints; i++){
-        // bones.at(i)->SetRotation(Rots[0]);
-        // Bloom::ForwardKinematics::forwardKinematics(bones.at(i));
-        boxes.at(i)->SetLocation(bones.at(i)->GetLocation()); boxes.at(i)->SetRotation(bones.at(i)->GetRotation());
-        boxes.at(i)->Draw();
-    }
-
-    // if(CBoxA->check(*CBoxB))
-    //     aHighlight+=(0-aHighlight)*0.1;
-    // else
-    //     aHighlight+=(1-aHighlight)*0.1;
-
-    for(float i = 0; i < joints; i++){
-        boxes.at(i)->GetShader().use();
-        boxes.at(i)->GetShader().uniformVec4(boxes.at(i)->GetShader().getUniformId("uColor"),glm::vec4((i/joints),0.0,1-(i/joints),1));
-    }
+    endBox->Draw(view_matrix);
 
     //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-
     (*fb_pixels).drawToDefault(windowWidth,windowHeight);
@@ -160,7 +129,7 @@ int Engine::UILoop(){
         ImGui::TextColored(ImVec4(1,0.5,0,1),"Time is %s",std::to_string(((int)time)).c_str());
         ImGui::SliderInt2("A Box Pos",ABoxPos,0,pixel_windowWidth);
         ImGui::SliderInt2("B Box Pos",BBoxPos,0,pixel_windowWidth);
-        ImGui::SliderInt2("Rotations",Rots,-360,360);
+        // ImGui::SliderInt2("Rotations",Rots,-360,360);
     ImGui::End();
 
     ImGui::Begin("Performance window");
