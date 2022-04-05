@@ -38,6 +38,8 @@ namespace Game{
         int joints = 2;
         std::vector<Bloom::Sprite*> boxes;
         std::vector<Bloom::Bone*> bones = Bloom::Bone::Bones(joints,8);
+        // Bloom::TwoBoneIK ik = Bloom::TwoBoneIK(bones.at(0),bones.at(1));
+        Bloom::Sprite* endBox;
 
         PhysX::collisionBox* CBoxA;
         PhysX::collisionBox* CBoxB;

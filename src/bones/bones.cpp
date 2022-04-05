@@ -6,13 +6,6 @@ Bloom::Bone::Bone(Bone* parent,int16_t length){
         parent->SetChild(this);
 }
 
-void Bloom::Bone::updateTransform(){
-    if(this->Child != NULL){
-        this->Child->SetLocation(GetEndLocation());
-        this->Child->updateTransform();
-    }
-}
-
 glm::vec2 Bloom::Bone::GetEndLocation(){
     int offset = 0;
     if(this->Parent != NULL)

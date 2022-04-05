@@ -86,6 +86,9 @@ int Engine::Begin(){
     // auto tmp_boxB = PhysX::collisionBox("Box",BoxB->GetLocation(),BoxB->GetScale() * BoxB->GetTexture().getSize(),0,glm::vec2(0.5,0));
     // CBoxB = &tmp_boxB;
 
+    auto tmp_e_box = Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0),glm::vec2(1,1));
+    endBox = &tmp_e_box;
+
     for(int i = 0; i < joints; i++){
         auto tmp_box = new Bloom::Sprite("res/textures/vLine.png",1,view_matrix,pixel_projection_matrix,glm::vec2(0.5,0),glm::vec2(1,1));
         boxes.push_back(tmp_box);
@@ -116,12 +119,19 @@ int Engine::GameLoop(){
 
     //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-
 
+    endBox->SetLocation(glm::vec2(BBoxPos[0],BBoxPos[1]));
+    endBox->GetShader().use();
+    endBox->GetShader().uniformVec4(endBox->GetShader().getUniformId("uColor"),glm::vec4(1,0.5,0,1));
+    endBox->Draw();
+
     bones.at(0)->SetLocation(glm::vec2(ABoxPos[0],ABoxPos[1])); bones.at(0)->SetRotation(Rots[0]);
 
+    Bloom::BoneKinematics::twoBoneIK(bones.at(0),glm::vec2(BBoxPos[0],BBoxPos[1]),true);
+
     for(auto i = 0; i < joints; i++){
-        bones.at(i)->SetRotation(Rots[0]);
+        // bones.at(i)->SetRotation(Rots[0]);
+        // Bloom::ForwardKinematics::forwardKinematics(bones.at(i));
         boxes.at(i)->SetLocation(bones.at(i)->GetLocation()); boxes.at(i)->SetRotation(bones.at(i)->GetRotation());
-        // CBoxA->setRotation(bones.at(i)->GetRotation()); CBoxA->setLocation(bones.at(i)->GetLocation());
         boxes.at(i)->Draw();
     }
 

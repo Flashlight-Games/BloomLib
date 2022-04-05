@@ -26,5 +26,6 @@
 #include "sprite/spritesheet.h" // SPRITES
 #include "collision/collision.h" // COLLISION BOXES
 #include "bones/bones.h" // BONE SYSTEM
+#include "boneKinematics/boneKinematics.h" // BONE KINEMATICS
 
 #endif
