@@ -92,7 +92,7 @@ int Engine::Begin(){
 }
 
 int Engine::GameLoop(){
-    view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(-ABoxPos[0], -ABoxPos[1], 0));
+    view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
 
     if(glfwWindowShouldClose(window)) // END IF SHOULD CLOSE
         return -2;
@@ -101,8 +101,7 @@ int Engine::GameLoop(){
     fps = ImGui::GetIO().Framerate;
     glfwPollEvents(); InputLoop(window);
     if(!isLocked)
-            time = glfwGetTime();
-
+        time = glfwGetTime();
 
     // BINDING AND CLEARING PIXEL FRAMEBUFFER
     (*fb_pixels).use(true);
@@ -129,16 +128,9 @@ int Engine::UILoop(){
         ImGui::TextColored(ImVec4(1,0.5,0,1),"Time is %s",std::to_string(((int)time)).c_str());
         ImGui::SliderInt2("A Box Pos",ABoxPos,0,pixel_windowWidth);
         ImGui::SliderInt2("B Box Pos",BBoxPos,0,pixel_windowWidth);
-        // ImGui::SliderInt2("Rotations",Rots,-360,360);
     ImGui::End();
 
     ImGui::Begin("Performance window");
-    // //     ImGui::ProgressBar(transform_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Transform");
-    // //     ImGui::ProgressBar(frameBuffer_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Framebuffer");
-    // //     ImGui::ProgressBar(imGui_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"ImGui");
-    // //     ImGui::ProgressBar(font_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"Font");
-
-    // //     ImGui::ProgressBar(bufferSwap_duration.count() / render_duration.count(),ImVec2(ImGui::GetWindowSize()[0]-30,30),"BufferSwap");
         ImGui::TextColored(ImVec4(1,1,0,1),"%s FPS",std::to_string(fps).c_str());
     ImGui::End();
     return EndLoop();
