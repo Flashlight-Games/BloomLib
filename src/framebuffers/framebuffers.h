@@ -15,7 +15,7 @@ namespace Bloom{
         Framebuffer(int width,int height,bool linear_scaling = true, bool HDR = false);
         // Framebuffer(){};
         
-        Shader fbShader = Shader("src/shaders/framebuffer/framebuffer_vertex.glsl","src/shaders/framebuffer/framebuffer_fragment.glsl");
+        Shader fbShader = Shader("res/shaders/framebuffer/framebuffer_vertex.glsl","res/shaders/framebuffer/framebuffer_fragment.glsl");
         void use(bool clear);
         void draw();
         void drawToDefault(int w, int h);
@@ -25,7 +25,7 @@ namespace Bloom{
         uint16_t getVBO(){return fbVbo;};
         uint16_t getVBA(){return fbVao;};
         uint16_t getFBO(){return fbo;};
-        Texture2D getTexture(){return fbTexture;};
+        Texture2D* getTexture(){return fbTexture;};
         uint16_t getRBO(){return rbo;};
 
         void setShader(const char* fragment_source);
@@ -39,7 +39,7 @@ namespace Bloom{
         uint32_t fbVbo;
 
         uint32_t fbo;
-        Texture2D fbTexture = NULL;
+        Texture2D* fbTexture;
         uint32_t rbo;
     };
 }

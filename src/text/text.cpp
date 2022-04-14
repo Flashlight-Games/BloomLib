@@ -4,12 +4,12 @@
 
 using namespace Bloom;
 
-Text::Text(const char* path, float size,float spacing){
+Text::Text(const char* path,float size, float spacing){
     this->path = path; this->size = size;this->spacing = 2 - spacing;
 
     bitsize = size*6;
 
-    unsigned char temp_bitmap[bitsize*bitsize];
+    unsigned char temp_bitmap[256* 256];
 
     fread(ttf_buffer, 1, 1<<20, fopen(path, "rb"));
     stbtt_BakeFontBitmap(ttf_buffer,0, size, temp_bitmap,bitsize,bitsize, 32,96, char_data);

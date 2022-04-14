@@ -33,7 +33,7 @@ namespace Bloom{
         GLuint ebo;
         GLuint bitsize;
         float spacing = 1.9;
-        Shader qShader = Shader("src/shaders/font/font_vertex.glsl","src/shaders/font/font_fragment.glsl");
+        Shader qShader = Shader("res/shaders/font/font_vertex.glsl","res/shaders/font/font_fragment.glsl");
         int indices[6] = {
             0,1,2,
             0,2,3

@@ -39,7 +39,7 @@ namespace Bloom{
 
             void SetUVOffset(glm::vec2 offset);
 
-            Bloom::Texture2D GetTexture(){return texture;};
+            Bloom::Texture2D* GetTexture(){return texture;};
             Bloom::Shader GetShader(){return shader;};
             glm::mat4 GetModelMatrix(){return model_matrix;};
 
@@ -67,8 +67,8 @@ namespace Bloom{
 
             uint32_t vbo; // Vertex buffer objects store verts on the GPU
             uint32_t ebo; // elemt array buffer tells the gpu what indices to connect
-            Bloom::Shader shader = Bloom::Shader("src/sprite/shaders/spriteshader_vertex.glsl","src/sprite/shaders/spriteshader_fragment.glsl");
-            Bloom::Texture2D texture = nullptr;
+            Bloom::Shader shader = Bloom::Shader("res/shaders/sprite/spriteshader_vertex.glsl","res/shaders/sprite/spriteshader_fragment.glsl");
+            Bloom::Texture2D* texture;
             glm::mat4 model_matrix;
             glm::mat4* view_matrix;
 

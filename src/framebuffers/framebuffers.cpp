@@ -34,11 +34,11 @@ Framebuffer::Framebuffer(int width,int height,bool linear_scaling,bool HDR){
     glBindFramebuffer(GL_FRAMEBUFFER,fbo);
 
     if(!HDR)
-        fbTexture = Texture2D(NULL,glm::vec2(width,height),GL_RGBA,linear_scaling);
+        fbTexture = new Texture2D(NULL,glm::vec2(width,height),GL_RGBA,linear_scaling);
     else
-        fbTexture = Texture2D(NULL,glm::vec2(width,height),GL_RGBA16F,linear_scaling);
+        fbTexture = new Texture2D(NULL,glm::vec2(width,height),GL_RGBA16F,linear_scaling);
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,fbTexture.getID(),0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,fbTexture->getID(),0);
     glBindTexture(GL_TEXTURE_2D,0);
 
     glGenRenderbuffers(1,&rbo);
@@ -48,7 +48,7 @@ Framebuffer::Framebuffer(int width,int height,bool linear_scaling,bool HDR){
     glBindRenderbuffer(GL_RENDERBUFFER,0);
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "ERROR : GL_FRAMEBUFFER NOT COMPLETE!\n";
+        throw std::runtime_error("GL_FRAMEBUFFER NOT COMPLETE!");
 
     glBindFramebuffer(GL_FRAMEBUFFER,0); // BIND RENDER BUFFER
     setTextureUniform("uTexture");
@@ -69,7 +69,7 @@ void Framebuffer::draw(){
     glClear(GL_COLOR_BUFFER_BIT);
     fbShader.use();
     glActiveTexture(GL_TEXTURE0);
-    fbTexture.bind();
+    fbTexture->bind();
     glBindVertexArray(fbVao);
     glDrawArrays(GL_TRIANGLES,0,6);
 };
@@ -79,11 +79,11 @@ void Framebuffer::drawToDefault(int w, int h){
 }
 
 void Framebuffer::setShader(const char* fragment_source){
-    fbShader = Shader("src/shaders/framebuffer/framebuffer_vertex.glsl",fragment_source);
+    fbShader = Shader("res/shaders/framebuffer/framebuffer_vertex.glsl",fragment_source);
 };
 
 void Framebuffer::setTextureUniform(const char* uniform){
-    fbShader.uniformInt(fbShader.getUniformId(uniform),getTexture().getID());
+    fbShader.uniformInt(fbShader.getUniformId(uniform),getTexture()->getID());
 };
 
 void bindDefaultFramebuffer(bool clear,int width, int height){

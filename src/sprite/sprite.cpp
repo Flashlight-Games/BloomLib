@@ -11,10 +11,10 @@ Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_mat
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
     glBindVertexArray(vao);
 
-    this->texture = Bloom::Texture2D(texture_path,false);
+    this->texture = new Bloom::Texture2D(texture_path,false);
 
-    float xScale = (this->texture.getSize()[0]*ppp); // Sprite width 
-    float yScale = (this->texture.getSize()[1]*ppp); // Sprite width 
+    float xScale = (this->texture->getSize()[0]*ppp); // Sprite width 
+    float yScale = (this->texture->getSize()[1]*ppp); // Sprite width 
 
     float verts[] = {
         // POSITION                                          COLOR       Texture
@@ -68,18 +68,18 @@ void Sprite::UpdateLocation(){
 void Sprite::Draw(glm::mat4 view_matrix){
     shader.use();
     shader.uniformFloat(uColorUni,1);
-    setTextureAtLocation(GL_TEXTURE0,this->texture.getID()); shader.uniformInt(this->uTextureUni,0);
+    setTextureAtLocation(GL_TEXTURE0,this->texture->getID()); shader.uniformInt(this->uTextureUni,0);
     shader.uniformMat4(shader.getUniformId("model"),model_matrix);
     shader.uniformMat4(shader.getUniformId("view"),(view_matrix));
 
-    this->texture.bind();
+    this->texture->bind();
     glBindVertexArray(this->vao);
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
 }
 
 void Sprite::SetUVOffset(glm::vec2 offset){
-    float xScale = (this->texture.getSize()[0]*ppp*UVscale[0]); // Sprite width 
-    float yScale = (this->texture.getSize()[1]*ppp*UVscale[1]); // Sprite width 
+    float xScale = (this->texture->getSize()[0]*ppp*UVscale[0]); // Sprite width 
+    float yScale = (this->texture->getSize()[1]*ppp*UVscale[1]); // Sprite width 
     float verts[] = {
         // POSITION                                             COLOR       Texture
         (Origin[0]-1)*xScale,     (Origin[1]-1)*yScale,      1,1,1,      offset[0],offset[1],

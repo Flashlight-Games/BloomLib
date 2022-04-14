@@ -15,7 +15,8 @@ Shader::Shader(const char* vertex_source, const char* fragment_source){
                 vertexReadData += currChar;}
         vertexFile.close();}
     else{
-        std::cout << "FAILED TO LOAD VERTEX SHADER\n";
+        std::string errmsg = "FAILED TO LOAD VERTEX SHADER FROM "; errmsg.append(vertex_source);
+        throw std::runtime_error(errmsg);
     }
 
     std::ifstream fragmentFile(fragment_source); // OPEN FRAGMENT FILE
@@ -26,7 +27,8 @@ Shader::Shader(const char* vertex_source, const char* fragment_source){
                 fragmentReadData += currChar;}
         fragmentFile.close(); }
     else{
-        std::cout << "FAILED TO LOAD FRAGMENT SHADER\n";
+        std::string errmsg = "FAILED TO LOAD FRAGMENT SHADER FROM "; errmsg.append(fragment_source);
+        throw std::runtime_error(errmsg);
     }
 
     //COMPILING
@@ -41,14 +43,14 @@ Shader::Shader(const char* vertex_source, const char* fragment_source){
     glCompileShader(vertexID);
 
     glGetShaderiv(vertexID, GL_COMPILE_STATUS,&success);
-    if(!success) {glGetShaderInfoLog(vertexID,512,NULL,info); std::cout << "VERTEX SHADER COMPILE: " << info << std::endl;}
+    if (!success) { glGetShaderInfoLog(vertexID, 512, NULL, info); std::string errmsg = "VERTEX SHADER COMPILE ERROR: "; errmsg.append(info); throw std::runtime_error(errmsg); }
 
     fragmentID = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentID,1,&fragmentData,NULL);
     glCompileShader(fragmentID);
 
     glGetShaderiv(fragmentID, GL_COMPILE_STATUS,&success);
-    if(!success) {glGetShaderInfoLog(fragmentID,512,NULL,info); std::cout << "FRAGMENT SHADER COMPILE: " << info << std::endl;}
+    if(!success) {glGetShaderInfoLog(fragmentID,512,NULL,info); std::string errmsg = "FRAGMENT SHADER COMPILE ERROR: "; errmsg.append(info); throw std::runtime_error(errmsg);}
 
     //ATTACHING
     programID = glCreateProgram();
@@ -57,7 +59,7 @@ Shader::Shader(const char* vertex_source, const char* fragment_source){
     glLinkProgram(programID);
 
     glGetProgramiv(programID, GL_LINK_STATUS,&success);
-    if(!success) {glGetProgramInfoLog(programID,512,NULL,info); std::cout << "SHADER PROGRAM LINK: " << info << std::endl;}
+    if(!success) {glGetProgramInfoLog(programID,512,NULL,info); std::string errmsg = "SHADER PROGRAM LINK ERROR: "; errmsg.append(info); throw std::runtime_error(errmsg);}
     glDeleteShader(fragmentID);glDeleteShader(vertexID);
 };
 void Shader::use() const {
