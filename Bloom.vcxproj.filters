@@ -515,6 +515,27 @@
     <Image Include="res\textures\window.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Game\resources\characters\debug\dummy\full.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Game\resources\characters\debug\dummy\headface.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Game\resources\characters\debug\dummy\headhair.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Game\resources\characters\debug\dummy\lowerbody.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Game\resources\characters\debug\dummy\lowerjoint.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Game\resources\characters\debug\dummy\upperbody.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Game\resources\characters\debug\dummy\upperjoint.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\boneKinematics\boneKinematics.cpp">
