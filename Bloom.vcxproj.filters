@@ -515,25 +515,25 @@
     <Image Include="res\textures\window.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Game\resources\characters\debug\dummy\full.png">
+    <Image Include="res\debug\dummy\full.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Game\resources\characters\debug\dummy\headface.png">
+    <Image Include="res\debug\dummy\headface.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Game\resources\characters\debug\dummy\headhair.png">
+    <Image Include="res\debug\dummy\headhair.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Game\resources\characters\debug\dummy\lowerbody.png">
+    <Image Include="res\debug\dummy\lowerbody.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Game\resources\characters\debug\dummy\lowerjoint.png">
+    <Image Include="res\debug\dummy\lowerjoint.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Game\resources\characters\debug\dummy\upperbody.png">
+    <Image Include="res\debug\dummy\upperbody.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Game\resources\characters\debug\dummy\upperjoint.png">
+    <Image Include="res\debug\dummy\upperjoint.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -571,7 +571,7 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game\engine\engine.cpp">
+    <ClCompile Include="src\engine\engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\dearImGui\imgui.cpp">
@@ -596,6 +596,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\GLM\detail\glm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Testing\App_Testing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -630,7 +633,7 @@
     <ClInclude Include="src\dependencies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game\engine\engine.h">
+    <ClInclude Include="src\engine\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\dearImGui\imconfig.h">
@@ -1522,6 +1525,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\STBTT\stb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Testing\App_Testing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,21 +6,34 @@
 namespace Game{
     class Engine{
         public:
-            Engine(bool init){if(init){Init();};};
+            Engine(bool init = false){if(init){Init();};};
+            int Run() { return Init(); };
+            
+            glm::mat4 GetWindowProjectionMatrix() { return window_projection_matrix; };
+            glm::mat4 GetPixelProjectionMatrix() { return pixel_projection_matrix; };
+            glm::mat4 GetViewMatrix() { return view_matrix; };
 
+            glm::vec2 GetWindowSize() { return glm::vec2(windowWidth, windowHeight); };
+            glm::vec2 GetPixelWindowSize() { return glm::vec2(pixel_windowWidth, pixel_windowHeight); };
+
+            int GetFPS() { return fps; };
+            float GetTime() { return time; };
+        private:
             // EVENTS
             int Init();
-            int Begin();
+            int Prep_Begin();
+            virtual void Begin();
 
             // LOOPS
-            int GameLoop();
-            int UILoop();
+            int Prep_GameLoop();
+            virtual void GameLoop();
+            int Prep_UILoop();
+            virtual void UILoop();
 
-            // BACKEND
-            void InputLoop(GLFWwindow* window); 
+            // BACK
+            void InputLoop();
             int EndLoop();
-            
-        private:
+
             glm::mat4 window_projection_matrix;                                 // PROJECTION MATRIX FOR WINDOW
             glm::mat4 pixel_projection_matrix;                                  // PROJECTION MATRIX FOR PIXELS
             glm::mat4 view_matrix;                                              // CAMERA VIEW MATRIX
@@ -34,14 +47,6 @@ namespace Game{
             int fps = 0;                                                        // FRAMES PER SECOND
             float time = 0;                                                     // APP TIME
             bool isLocked = false;                                              // TIME IS LOCKED
-
-
-            // GAME DATA
-            Bloom::Sprite* endBox;
-
-            int ABoxPos[2] = {0,0};
-            int BBoxPos[2] = {0,0};
-            int Rots[2] = {0,0};
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING

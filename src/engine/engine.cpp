@@ -8,7 +8,7 @@ void Game::ResizeLoop(GLFWwindow* window, int width, int height){
 }
 
 // BACKEND
-void Engine::InputLoop(GLFWwindow* window){
+void Engine::InputLoop(){
     if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS) 
         {glfwSetWindowShouldClose(window,true);} 
     // locked = glfwGetKey(window,GLFW_KEY_L) == GLFW_PRESS;
@@ -38,7 +38,6 @@ int Engine::Init(){
         if (window == NULL)
         {
             throw std::runtime_error("Failed to create GLFW window");
-            glfwTerminate();
             return -1;
         }
         glfwSetFramebufferSizeCallback(window, ResizeLoop);  
@@ -76,81 +75,70 @@ int Engine::Init(){
         tmp_pixels->setTextureUniform("uTexture");
 
         fb_pixels = tmp_pixels;
+
+        glClearColor(0.21, 0.21, 0.21, 1.0f); // Set Background Color
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;
+        glfwTerminate();
+        return -1;
     }
-    return Begin();
+    return Prep_Begin();
 }
 
-int Engine::Begin(){
+int Engine::Prep_Begin(){
     try {
-        Bloom::Sprite* tmp_e_box = new Bloom::Sprite("res/textures/detailTest16.png", 1, view_matrix, pixel_projection_matrix, glm::vec2(0.5, 0), glm::vec2(0.25, 0.25));
-        endBox = tmp_e_box;
-
-        glClearColor(0.21, 0.21, 0.21, 1);
+        Begin();
     }
     catch (const std::exception& ex) {
             std::cout << "Encountered Bloom Exception during Beginning : " << ex.what() << std::endl;
+            glfwTerminate();
+            return -1;
     }
 
     int retval = 0;
     while (retval == 0){
-        retval = GameLoop();
+        retval = Prep_GameLoop();
     }
     return retval;
 }
 
-int Engine::GameLoop(){
+int Engine::Prep_GameLoop(){
     try {
-        view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+        view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); // SET CAMERA POSITION
 
         if (glfwWindowShouldClose(window)) // END IF SHOULD CLOSE
             return -2;
 
         // PREPARE LOOP
         fps = ImGui::GetIO().Framerate;
-        glfwPollEvents(); InputLoop(window);
+        glfwPollEvents(); InputLoop();
         if (!isLocked)
             time = glfwGetTime();
 
         // BINDING AND CLEARING PIXEL FRAMEBUFFER
         (*fb_pixels).use(true);
 
-        //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-
-
-        endBox->SetLocation(glm::vec2(BBoxPos[0], BBoxPos[1]));
-        endBox->GetShader().use();
-        endBox->GetShader().uniformVec4(endBox->GetShader().getUniformId("uColor"), glm::vec4(1, 0.5, 0, 1));
-        endBox->Draw(view_matrix);
-
-        //-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-//-
+        GameLoop(); // ACTUAL GAME CODE
+        
         (*fb_pixels).drawToDefault(windowWidth, windowHeight);
     }
     catch (const std::exception& ex) {
             std::cout << "Encountered Bloom Exception during GameLoop : " << ex.what() << std::endl;
+            glfwTerminate();
+            return -1;
     }
-    return UILoop();
+    return Prep_UILoop();
 }
 
-int Engine::UILoop(){
+int Engine::Prep_UILoop(){
     try {
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        ImGui::Begin("Control window");
-            ImGui::TextColored(ImVec4(1,0.5,0,1),"Time is %s",std::to_string(((int)time)).c_str());
-            ImGui::SliderInt2("A Box Pos",ABoxPos,0,pixel_windowWidth);
-            ImGui::SliderInt2("B Box Pos",BBoxPos,0,pixel_windowWidth);
-        ImGui::End();
-
-        ImGui::Begin("Performance window");
-            ImGui::TextColored(ImVec4(1,1,0,1),"%s FPS",std::to_string(fps).c_str());
-        ImGui::End();
+        UILoop();
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during UILoop : " << ex.what() << std::endl;
+        glfwTerminate();
+        return -1;
     }
     return EndLoop();
 }
@@ -165,6 +153,25 @@ int Engine::EndLoop(){
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during EndLoop : " << ex.what() << std::endl;
+        glfwTerminate();
+        return -1;
     }
     return 0;
+}
+
+
+
+void Engine::Begin() {
+    std::string errmsg = "Please define application method 'Begin'";
+    throw std::runtime_error(errmsg);
+}
+
+void Engine::UILoop() {
+    std::string errmsg = "Please define application method 'UILoop'";
+    throw std::runtime_error(errmsg);
+}
+
+void Engine::GameLoop() {
+    std::string errmsg = "Please define application method 'GameLoop'";
+    throw std::runtime_error(errmsg);
 }

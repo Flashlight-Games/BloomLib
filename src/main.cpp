@@ -1,9 +1,7 @@
-#include "../Game/engine/engine.h"
+#include "../Application/Testing/App_Testing.h"
 
 int main()
 { 
-    Game::Engine Engine = Game::Engine(true);
-
-    glfwTerminate();
-    return 0;
+    Application::Testing App = Application::Testing();
+    return App.Run();
 }
