@@ -291,6 +291,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Testing\App_Testing.cpp" />
+    <ClCompile Include="Application\Testing\main.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="include\dearImGui\imgui.cpp" />
     <ClCompile Include="include\dearImGui\imgui_demo.cpp" />
@@ -305,7 +306,6 @@
     <ClCompile Include="src\collision\collision.cpp" />
     <ClCompile Include="src\framebuffers\framebuffers.cpp" />
     <ClCompile Include="src\glad.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\shaders\shaders.cpp" />
     <ClCompile Include="src\sprite\sprite.cpp" />
     <ClCompile Include="src\sprite\spritesheet.cpp" />
