@@ -133,6 +133,9 @@ int Engine::Prep_GameLoop(){
 
 int Engine::Prep_UILoop(){
     try {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
         UILoop();
     }
     catch (const std::exception& ex) {

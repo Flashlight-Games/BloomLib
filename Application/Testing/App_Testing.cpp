@@ -8,10 +8,6 @@ void Testing::Begin() {
 }
 
 void Testing::UILoop() {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
     ImGui::Begin("Control window");
     ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "Time is %s", std::to_string((int)GetTime()).c_str());
     ImGui::SliderInt2("A Box Pos", ABoxPos, 0, GetPixelWindowSize().x);
