@@ -2,17 +2,22 @@
 
 using namespace Game;
 
+
 // GLFW RESIZE
 void Game::ResizeLoop(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
 }
 
 // BACKEND
-void Engine::InputLoop(){
-    if(glfwGetKey(window,GLFW_KEY_ESCAPE) == GLFW_PRESS) 
-        {glfwSetWindowShouldClose(window,true);} 
-    // locked = glfwGetKey(window,GLFW_KEY_L) == GLFW_PRESS;
-} // Close window
+void Engine::Prep_InputLoop(){
+    try {
+        InputLoop();
+    }
+    catch (const std::exception& ex) {
+        std::cout << "Encountered Bloom Exception during InputLoop : " << ex.what() << std::endl;
+        glfwTerminate();
+    }
+}
 
 // EVENTS
 int Engine::Init(){
@@ -32,7 +37,7 @@ int Engine::Init(){
         glfwWindowHint(GLFW_FLOATING,                GLFW_FALSE);
         glfwWindowHint(GLFW_MAXIMIZED,               GLFW_FALSE);
         glfwWindowHint(GLFW_CENTER_CURSOR,           GLFW_FALSE);
-        glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_FALSE);
+        glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
     
         window = glfwCreateWindow(windowWidth, windowHeight, "Window", NULL, NULL);
         if (window == NULL)
@@ -75,15 +80,13 @@ int Engine::Init(){
         tmp_pixels->setTextureUniform("uTexture");
 
         fb_pixels = tmp_pixels;
-
-        glClearColor(0.21, 0.21, 0.21, 1.0f); // Set Background Color
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;
         glfwTerminate();
         return -1;
     }
-    return Prep_Begin();
+    return 0;
 }
 
 int Engine::Prep_Begin(){
@@ -95,12 +98,7 @@ int Engine::Prep_Begin(){
             glfwTerminate();
             return -1;
     }
-
-    int retval = 0;
-    while (retval == 0){
-        retval = Prep_GameLoop();
-    }
-    return retval;
+    return 0;
 }
 
 int Engine::Prep_GameLoop(){
@@ -112,9 +110,14 @@ int Engine::Prep_GameLoop(){
 
         // PREPARE LOOP
         fps = ImGui::GetIO().Framerate;
-        glfwPollEvents(); InputLoop();
+        glfwPollEvents(); Prep_InputLoop();
         if (!isLocked)
             time = glfwGetTime();
+
+        double temp_cursor_position_x;
+        double temp_cursor_position_y;
+        glfwGetCursorPos(window, &temp_cursor_position_x, &temp_cursor_position_y);
+        cursor_position = glm::vec2(temp_cursor_position_x / (windowWidth / (float)pixel_windowWidth), pixel_windowHeight - temp_cursor_position_y / (windowHeight / (float)pixel_windowHeight) );
 
         // BINDING AND CLEARING PIXEL FRAMEBUFFER
         (*fb_pixels).use(true);
@@ -128,7 +131,7 @@ int Engine::Prep_GameLoop(){
             glfwTerminate();
             return -1;
     }
-    return Prep_UILoop();
+    return 0;
 }
 
 int Engine::Prep_UILoop(){
@@ -143,7 +146,7 @@ int Engine::Prep_UILoop(){
         glfwTerminate();
         return -1;
     }
-    return EndLoop();
+    return 0;
 }
 
 int Engine::EndLoop(){
@@ -177,4 +180,9 @@ void Engine::UILoop() {
 void Engine::GameLoop() {
     std::string errmsg = "Please define application method 'GameLoop'";
     throw std::runtime_error(errmsg);
+}
+
+void Engine::InputLoop() {
+    /*if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);*/
 }

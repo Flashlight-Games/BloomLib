@@ -13,12 +13,12 @@
 namespace Bloom{
     class Text{
         public:
-        Text(const char* path, float size,float spacing = -0.5);
+        Text(const char* path,float spacing = -0.5);
         void Print(glm::vec2 position, std::string text,glm::vec2 screen_size,glm::vec4 color = glm::vec4(1,1,1,1));
 
         const char* getPath(){return path;};
         float getSize(){return size;};
-        Texture2D getTexture(){return texture;};
+        Texture2D* getTexture(){return texture;};
 
         private:
         const char* path;
@@ -27,7 +27,7 @@ namespace Bloom{
         unsigned char ttf_buffer[1<<20];
 
         stbtt_bakedchar char_data[96]; // all characters
-        Texture2D texture = NULL;
+        Texture2D* texture;
         GLuint vao;
         GLuint vbo;
         GLuint ebo;

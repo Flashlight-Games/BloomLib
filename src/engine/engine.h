@@ -6,8 +6,24 @@
 namespace Game{
     class Engine{
         public:
-            Engine(bool init = false){if(init){Init();};};
-            int Run() { return Init(); };
+            Engine(bool init = false){if(init){Run();};};
+            int Run() { 
+                int retval = 0;
+                retval = Init();
+                retval = Prep_Begin();
+
+                while (retval == 0) {
+                    retval = Prep_GameLoop();
+                    if (retval != 0)
+                        return retval;
+                    retval = Prep_UILoop();
+                    if (retval != 0)
+                        return retval;
+                    retval = EndLoop();
+                }
+
+                return retval;
+            };
             
             glm::mat4 GetWindowProjectionMatrix() { return window_projection_matrix; };
             glm::mat4 GetPixelProjectionMatrix() { return pixel_projection_matrix; };
@@ -18,6 +34,9 @@ namespace Game{
 
             int GetFPS() { return fps; };
             float GetTime() { return time; };
+            GLFWwindow* GetWindow() { return window; };
+            glm::vec2 GetCursorPosition() { return cursor_position; };
+
         private:
             // EVENTS
             int Init();
@@ -29,17 +48,17 @@ namespace Game{
             virtual void GameLoop();
             int Prep_UILoop();
             virtual void UILoop();
-
+            void Prep_InputLoop();
+            virtual void InputLoop();
             // BACK
-            void InputLoop();
             int EndLoop();
 
             glm::mat4 window_projection_matrix;                                 // PROJECTION MATRIX FOR WINDOW
             glm::mat4 pixel_projection_matrix;                                  // PROJECTION MATRIX FOR PIXELS
             glm::mat4 view_matrix;                                              // CAMERA VIEW MATRIX
 
-            uint16_t windowWidth = 800; uint16_t windowHeight = 600;            // WINDOW SIZE
-            uint16_t pixel_windowWidth = 64; uint16_t pixel_windowHeight = 48;  // PIXEL SIZE
+            uint16_t windowWidth = 1280; uint16_t windowHeight = 960;            // WINDOW SIZE
+            uint16_t pixel_windowWidth = 64*3; uint16_t pixel_windowHeight = 48*3;  // PIXEL SIZE
 
 
             Bloom::Framebuffer* fb_pixels;                                      // PIXEL FRAMEBUFFER
@@ -47,6 +66,8 @@ namespace Game{
             int fps = 0;                                                        // FRAMES PER SECOND
             float time = 0;                                                     // APP TIME
             bool isLocked = false;                                              // TIME IS LOCKED
+
+            glm::vec2 cursor_position = glm::vec2(0, 0);                        // CURSOR POSITION
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING

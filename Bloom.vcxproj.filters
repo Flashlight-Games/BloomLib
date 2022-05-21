@@ -536,6 +536,9 @@
     <Image Include="res\debug\dummy\upperjoint.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\rect16.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\boneKinematics\boneKinematics.cpp">
@@ -599,6 +602,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application\Testing\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Boxer\App_Boxer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Boxer\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1528,6 +1537,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\Testing\App_Testing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Boxer\App_Boxer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

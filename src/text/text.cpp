@@ -4,17 +4,17 @@
 
 using namespace Bloom;
 
-Text::Text(const char* path,float size, float spacing){
-    this->path = path; this->size = size;this->spacing = 2 - spacing;
+Text::Text(const char* path, float spacing){
+    std::cout << path << "\n";
+    this->path = path; this->size = 32;this->spacing = 2 - spacing;
+    bitsize = 512;
 
-    bitsize = size*6;
-
-    unsigned char temp_bitmap[256* 256];
-
+    unsigned char* temp_bitmap = new unsigned char[bitsize* bitsize];
     fread(ttf_buffer, 1, 1<<20, fopen(path, "rb"));
-    stbtt_BakeFontBitmap(ttf_buffer,0, size, temp_bitmap,bitsize,bitsize, 32,96, char_data);
+    stbtt_BakeFontBitmap(ttf_buffer,0, size, temp_bitmap, bitsize, bitsize, 32,96, char_data);
 
-    texture = Texture2D(temp_bitmap,glm::vec2(bitsize,bitsize),GL_RED,true);
+    texture = new Texture2D(temp_bitmap, glm::vec2(bitsize, bitsize), GL_RED, false);
+   
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
     glBindVertexArray(vao);
 
@@ -46,7 +46,7 @@ Text::Text(const char* path,float size, float spacing){
 
 void Text::Print(glm::vec2 position, std::string text,glm::vec2 screen_size, glm::vec4 color){
     const char* ctext = text.c_str();
-    texture.bind();
+    texture->bind();
     qShader.use();
     qShader.uniformVec4(qShader.getUniformId("uColor"),color);
 
@@ -60,7 +60,7 @@ void Text::Print(glm::vec2 position, std::string text,glm::vec2 screen_size, glm
             x = position[0];}
         else if (*ctext >= 32 && *ctext < 127) {
             stbtt_aligned_quad q;
-            stbtt_GetBakedQuad(char_data, bitsize,bitsize, *ctext-32, &x,&y,&q,1);
+            stbtt_GetBakedQuad(char_data, bitsize, bitsize, *ctext-32, &x,&y,&q,1);
 
             float newVerts[24] = {
                 // POSITION                                                                                                                            Texture
