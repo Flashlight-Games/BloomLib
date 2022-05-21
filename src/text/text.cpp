@@ -4,16 +4,18 @@
 
 using namespace Bloom;
 
-Text::Text(const char* path, float spacing){
+Text::Text(const char* path, glm::mat4 view_matrix, glm::mat4 projection_matrix, float spacing) {
     std::cout << path << "\n";
-    this->path = path; this->size = 32;this->spacing = 2 - spacing;
+    this->path = path; this->resolution = 32; this->spacing = 2 - spacing; this->view_matrix = &view_matrix; this->projection_matrix = &projection_matrix;
     bitsize = 512;
 
     unsigned char* temp_bitmap = new unsigned char[bitsize* bitsize];
     fread(ttf_buffer, 1, 1<<20, fopen(path, "rb"));
-    stbtt_BakeFontBitmap(ttf_buffer,0, size, temp_bitmap, bitsize, bitsize, 32,96, char_data);
 
-    texture = new Texture2D(temp_bitmap, glm::vec2(bitsize, bitsize), GL_RED, false);
+    stbtt_InitFont(&font, ttf_buffer, stbtt_GetFontOffsetForIndex(ttf_buffer, 0));
+
+    stbtt_BakeFontBitmap(ttf_buffer,0, resolution , temp_bitmap, bitsize, bitsize, 32,96, char_data);
+    texture = new Texture2D(temp_bitmap, glm::vec2(bitsize, bitsize), GL_RED, true);
    
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
     glBindVertexArray(vao);
@@ -44,31 +46,46 @@ Text::Text(const char* path, float spacing){
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),&indices,GL_STATIC_DRAW);
 }
 
-void Text::Print(glm::vec2 position, std::string text,glm::vec2 screen_size, glm::vec4 color){
+void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 screen_size, glm::vec4 color){
     const char* ctext = text.c_str();
     texture->bind();
     qShader.use();
-    qShader.uniformVec4(qShader.getUniformId("uColor"),color);
+    
+
+    glm::mat4 model_matrix = glm::mat4(1.0);
+    model_matrix = glm::translate(model_matrix, glm::vec3(2*position.x/screen_size.x, 2 * position.y / screen_size.y, 0.0f));
+    //model_matrix = glm::rotate(model_matrix, (float)glm::radians(0.0), glm::vec3(0.0f, 0.0f, 1.0f));
+    model_matrix = glm::scale(model_matrix, glm::vec3(size, size, 1.0f));
+
+    qShader.uniformVec4(qShader.getUniformId("uColor"), color);
+    qShader.uniformMat4(qShader.getUniformId("model"), model_matrix);
+    qShader.uniformMat4(qShader.getUniformId("view"), *view_matrix);
+    qShader.uniformMat4(qShader.getUniformId("projection"), *projection_matrix);
 
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER,vbo);
-    float x = position[0];
-    float y = position[1];
+    float x = 0;
+    float y = 0;
+
+    float originalX = x;
+    float originalY = y;
+
     while (*ctext) {
         if(*ctext == '\n'){
-            position[1]-=size/spacing;
-            x = position[0];}
+            originalY-=resolution/spacing;
+            x = originalX;}
         else if (*ctext >= 32 && *ctext < 127) {
             stbtt_aligned_quad q;
             stbtt_GetBakedQuad(char_data, bitsize, bitsize, *ctext-32, &x,&y,&q,1);
 
             float newVerts[24] = {
-                // POSITION                                                                                                                            Texture
-                (-screen_size[0] + q.x1+position[0]) / screen_size[0], (-screen_size[1] + (y-q.y1)+position[1]*2) / screen_size[1],                      q.s1,q.t1,
-                (-screen_size[0] + q.x1+position[0]) / screen_size[0], (-screen_size[1] + q.y1-q.y0+(y-q.y1)+position[1]*2) / screen_size[1],            q.s1,q.t0,
-                (-screen_size[0] + q.x0+position[0]) / screen_size[0], (-screen_size[1] + q.y1-q.y0+(y-q.y1)+position[1]*2) / screen_size[1],            q.s0,q.t0,
-                (-screen_size[0] + q.x0+position[0]) / screen_size[0], (-screen_size[1] + (y-q.y1)+position[1]*2) / screen_size[1],                      q.s0,q.t1,
+                // POSITION                                                                                                                              Texture
+                (q.x1) / screen_size[0], ((y-q.y1)) / screen_size[1],                      q.s1,q.t1,
+                (q.x1) / screen_size[0], (q.y1-q.y0+(y-q.y1)) / screen_size[1],            q.s1,q.t0,
+                (q.x0) / screen_size[0], (q.y1-q.y0+(y-q.y1)) / screen_size[1],            q.s0,q.t0,
+                (q.x0) / screen_size[0], ((y-q.y1)) / screen_size[1],                      q.s0,q.t1,
             };
+            
             glBufferData(GL_ARRAY_BUFFER,sizeof(newVerts),&newVerts,GL_STATIC_DRAW);
             glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
         }

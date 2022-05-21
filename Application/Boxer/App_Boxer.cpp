@@ -3,12 +3,15 @@
 
 using namespace Application;
 
+float scale = 1;
+float pos[2] = {0,5};
+
 void Boxer::Begin() {
     Bloom::Sprite* tmp_e_box = new Bloom::Sprite("res/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
     endBox = tmp_e_box;
 
     const char* fontPath = "C:/Windows/Fonts/arial.ttf";
-    timer = new Bloom::Text(fontPath, 16);
+    timer = new Bloom::Text(fontPath,GetViewMatrix(),GetWindowProjectionMatrix());
     
     std::cout << "size: " << sizeof(*timer) << "\n";
     glClearColor(0.0, 0.0, 0.0, 1.0f); // Set Background Color
@@ -23,10 +26,12 @@ void Boxer::UILoop() {
 
     ImGui::Begin("Performance window");
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS", std::to_string(GetFPS()).c_str());
-    ImGui::Image((void*)timer->getTexture()->getID(), ImVec2(512, 512));
+    ImGui::Image((void*)timer->GetTexture()->getID(), ImVec2(512, 512));
+    ImGui::SliderFloat("Font Scale", &scale, 0,2);
+    ImGui::SliderFloat2("Screen Pos", pos, 0, GetPixelWindowSize().x);
     ImGui::End();
 
-    timer->Print(glm::vec2(0.1, 960/2), "A B C", GetWindowSize());
+    timer->Print(glm::vec2(pos[0], pos[1]), "A B C", scale, GetWindowSize());
 }
 
 void Boxer::GameLoop() {
