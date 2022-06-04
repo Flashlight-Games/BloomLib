@@ -28,6 +28,8 @@ namespace Bloom{
         Texture2D* getTexture(){return fbTexture;};
         uint16_t getRBO(){return rbo;};
 
+        Bloom::Shader GetShader() { return fbShader; };
+
         void setShader(const char* fragment_source);
         void setTextureUniform(const char* uniform);
 

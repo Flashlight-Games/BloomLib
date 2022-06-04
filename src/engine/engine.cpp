@@ -37,7 +37,7 @@ int Engine::Init(){
         glfwWindowHint(GLFW_FLOATING,                GLFW_FALSE);
         glfwWindowHint(GLFW_MAXIMIZED,               GLFW_FALSE);
         glfwWindowHint(GLFW_CENTER_CURSOR,           GLFW_FALSE);
-        glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
+        glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_FALSE);
     
         window = glfwCreateWindow(windowWidth, windowHeight, "Window", NULL, NULL);
         if (window == NULL)
@@ -60,9 +60,9 @@ int Engine::Init(){
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-        glDisable(GL_CULL_FACE);    // Enable Double Sided Polygons
-        glDisable(GL_MULTISAMPLE);  // ENABLE ANTI-ALIASING
-        glfwSwapInterval(true);     // Enble VSYNC
+        glDisable(GL_CULL_FACE);            // Enable Double Sided Polygons
+        glDisable(GL_MULTISAMPLE);          // ENABLE ANTI-ALIASING
+        glfwSwapInterval(true);      // Enble VSYNC
     
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -120,11 +120,8 @@ int Engine::Prep_GameLoop(){
         cursor_position = glm::vec2(temp_cursor_position_x / (windowWidth / (float)pixel_windowWidth), pixel_windowHeight - temp_cursor_position_y / (windowHeight / (float)pixel_windowHeight) );
 
         // BINDING AND CLEARING PIXEL FRAMEBUFFER
-        (*fb_pixels).use(true);
-
+        bindDefaultFramebuffer(true);
         GameLoop(); // ACTUAL GAME CODE
-        
-        (*fb_pixels).drawToDefault(windowWidth, windowHeight);
     }
     catch (const std::exception& ex) {
             std::cout << "Encountered Bloom Exception during GameLoop : " << ex.what() << std::endl;
@@ -185,4 +182,9 @@ void Engine::GameLoop() {
 void Engine::InputLoop() {
     /*if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);*/
+}
+
+float Utils::Distance2D(glm::vec2 A, glm::vec2 B)
+{
+    return std::sqrt(std::pow(A.x - B.x, 2) + std::pow(A.y - B.y, 2));
 }

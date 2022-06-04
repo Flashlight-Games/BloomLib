@@ -54,6 +54,7 @@
     <Font Include="res\fonts\Roboto\Roboto-ThinItalic.ttf">
       <Filter>Resource Files</Filter>
     </Font>
+    <Font Include="res\fonts\PressStart\PressStart.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bloom.aps">
@@ -480,6 +481,7 @@
     <None Include="res\shaders\testing_textures\textureshader_fragment.glsl" />
     <None Include="res\shaders\testing_textures\textureshader_vertex.glsl" />
     <None Include="imgui.ini" />
+    <None Include="Application\Boxer\shaders\framebuffer_move_circle.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\2x8_SpritesheetTest.png">
@@ -608,6 +610,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application\Boxer\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Boxer\Player\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Boxer\Enemy\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1540,6 +1548,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\Boxer\App_Boxer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Boxer\Player\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Boxer\Enemy\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -11,6 +11,7 @@ uniform vec4 uColor;
 
 void main()
 {
-    color = vec4(1,1,1,texture(uTexture,vTextureCoords).x) * uColor;
+    float value = texture(uTexture,vTextureCoords).x;
+    color = vec4(value,value,value,value) * uColor;
     //color = uColor;
 }

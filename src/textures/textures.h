@@ -10,12 +10,19 @@
 
 #include "STBI/stb_image.h"
 
+#include "dearImGui/imgui.h"
+#include "dearImGui/imgui_impl_glfw.h"
+#include "dearImGui/imgui_impl_opengl3.h"
+
 namespace Bloom{
     class Texture2D{
         public:
         Texture2D(const char* path,bool linear_scaling = true);
         Texture2D(const void* data,glm::vec2 size,int format = GL_RGBA,bool linear_scaling = true);
         Texture2D();
+        void ImGui(float scale = 1) {
+            ImGui::Image((void*)getID(), ImVec2(getSize().x * scale, getSize().y * scale));
+        };
 
         void bind();
 

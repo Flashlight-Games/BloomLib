@@ -1,6 +1,9 @@
 #ifndef DEPS
 #define DEPS
 
+//#define T template <typename T>
+# define PI 3.14159265358979323846
+
 #include "dearImGui/imgui.h" // UI
 #include "dearImGui/imgui_impl_glfw.h"
 #include "dearImGui/imgui_impl_opengl3.h"
@@ -28,4 +31,6 @@
 #include "bones/bones.h" // BONE SYSTEM
 #include "boneKinematics/boneKinematics.h" // BONE KINEMATICS
 
+
+#include "engine/engine.h" // ENGINE
 #endif

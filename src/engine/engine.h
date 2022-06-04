@@ -36,6 +36,10 @@ namespace Game{
             float GetTime() { return time; };
             GLFWwindow* GetWindow() { return window; };
             glm::vec2 GetCursorPosition() { return cursor_position; };
+            glm::vec2 GetScale() { return GetWindowSize() / GetPixelWindowSize(); };
+
+            void EnablePixels() { (*fb_pixels).use(true); };
+            void DrawPixels() { (*fb_pixels).drawToDefault(windowWidth, windowHeight); bindDefaultFramebuffer(false, windowWidth, windowHeight); };
 
         private:
             // EVENTS
@@ -57,8 +61,8 @@ namespace Game{
             glm::mat4 pixel_projection_matrix;                                  // PROJECTION MATRIX FOR PIXELS
             glm::mat4 view_matrix;                                              // CAMERA VIEW MATRIX
 
-            uint16_t windowWidth = 1280; uint16_t windowHeight = 960;            // WINDOW SIZE
-            uint16_t pixel_windowWidth = 64*3; uint16_t pixel_windowHeight = 48*3;  // PIXEL SIZE
+            uint16_t windowWidth = 960; uint16_t windowHeight = 960;            // WINDOW SIZE
+            uint16_t pixel_windowWidth = 64*3; uint16_t pixel_windowHeight = 64*3;  // PIXEL SIZE
 
 
             Bloom::Framebuffer* fb_pixels;                                      // PIXEL FRAMEBUFFER
@@ -71,6 +75,14 @@ namespace Game{
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING
+}
+
+namespace Utils {
+    template <typename T> T Lerp(T A, T B, float percentage) {
+        return A + (B - A) * percentage;
+    }
+
+    float Distance2D(glm::vec2 A, glm::vec2 B);
 }
 
 #endif

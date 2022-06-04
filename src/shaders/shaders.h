@@ -21,6 +21,8 @@ namespace Bloom{
         void uniformInt(const int id,int value) const;
         void uniformBool(const int id,bool value) const;
         void uniformMat4(const int id,glm::mat4 value) const;
+        void uniformVec2(int id, glm::vec2 value) const;
+        void uniformVec3(int id, glm::vec3 value) const;
         void uniformVec4(int id,glm::vec4 value) const;
 
         int getProgramID(){return programID;};

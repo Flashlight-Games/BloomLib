@@ -4,10 +4,9 @@
 
 using namespace Bloom;
 
-Text::Text(const char* path, glm::mat4 view_matrix, glm::mat4 projection_matrix, float spacing) {
-    std::cout << path << "\n";
-    this->path = path; this->resolution = 32; this->spacing = 2 - spacing; this->view_matrix = &view_matrix; this->projection_matrix = &projection_matrix;
-    bitsize = 512;
+Text::Text(const char* path, glm::mat4 view_matrix, glm::mat4 projection_matrix, float spacing, uint16_t resolution) {
+    this->path = path; this->resolution = resolution; this->spacing = 2 - spacing; this->view_matrix = &view_matrix; this->projection_matrix = &projection_matrix; this->scale = (resolution / 128.0f);
+    bitsize = scale *1024;
 
     unsigned char* temp_bitmap = new unsigned char[bitsize* bitsize];
     fread(ttf_buffer, 1, 1<<20, fopen(path, "rb"));
@@ -50,6 +49,10 @@ void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 scr
     const char* ctext = text.c_str();
     texture->bind();
     qShader.use();
+
+    position.x -= screen_size.x/2;
+    position.y -= screen_size.y / 2;
+    size = size / scale;
     
 
     glm::mat4 model_matrix = glm::mat4(1.0);
@@ -72,7 +75,7 @@ void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 scr
 
     while (*ctext) {
         if(*ctext == '\n'){
-            originalY-=resolution/spacing;
+            y-=resolution/spacing;
             x = originalX;}
         else if (*ctext >= 32 && *ctext < 127) {
             stbtt_aligned_quad q;

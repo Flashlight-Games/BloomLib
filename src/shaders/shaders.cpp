@@ -71,6 +71,12 @@ void Shader::uniformFloat(int id,float value) const {
 void Shader::uniformInt(int id,int value) const {
     glUniform1i(id,value);
 };
+void Shader::uniformVec2(int id, glm::vec2 value) const {
+    glUniform2f(id, value.x, value.y);
+};
+void Shader::uniformVec3(int id, glm::vec3 value) const {
+    glUniform3f(id, value.r, value.g, value.b);
+};
 void Shader::uniformVec4(int id,glm::vec4 value) const {
     glUniform4f(id,value.r,value.g,value.b,value.a);
 };

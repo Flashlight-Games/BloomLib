@@ -13,7 +13,7 @@
 namespace Bloom{
     class Text{
         public:
-        Text(const char* path,glm::mat4 view_matrix, glm::mat4 projection_matrix,float spacing = -0.5);
+        Text(const char* path,glm::mat4 view_matrix, glm::mat4 projection_matrix,float spacing = -0.5, uint16_t resolution = 128);
         void Print(glm::vec2 position, std::string text,float size,glm::vec2 screen_size,glm::vec4 color = glm::vec4(1,1,1,1));
         
         const char* GetPath(){return path;};
@@ -41,6 +41,7 @@ namespace Bloom{
         };
         glm::mat4* view_matrix;
         glm::mat4* projection_matrix;
+        float scale = 1;
     };
 }
 #endif

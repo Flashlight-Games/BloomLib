@@ -14,6 +14,9 @@
     <Font Include="res\fonts\Alagard\alagard.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
     </Font>
+    <Font Include="res\fonts\PressStart\PressStart.ttf">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </Font>
     <Font Include="res\fonts\Roboto\Roboto-Black.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
     </Font>
@@ -52,6 +55,7 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Application\Boxer\shaders\framebuffer_move_circle.glsl" />
     <None Include="Bloom.aps" />
     <None Include="glfw3.dll">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -279,7 +283,9 @@
     <Image Include="res\textures\grass.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
     </Image>
-    <Image Include="res\textures\rect16.png" />
+    <Image Include="res\textures\rect16.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </Image>
     <Image Include="res\textures\vLine.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
     </Image>
@@ -291,8 +297,15 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="res\**\*.*">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="Application\Boxer\App_Boxer.cpp" />
+    <ClCompile Include="Application\Boxer\Enemy\Enemy.cpp" />
     <ClCompile Include="Application\Boxer\main.cpp" />
+    <ClCompile Include="Application\Boxer\Player\Player.cpp" />
     <ClCompile Include="Application\Testing\App_Testing.cpp" />
     <ClCompile Include="Application\Testing\main.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
@@ -317,6 +330,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Boxer\App_Boxer.h" />
+    <ClInclude Include="Application\Boxer\Enemy\Enemy.h" />
+    <ClInclude Include="Application\Boxer\Player\Player.h" />
     <ClInclude Include="Application\Testing\App_Testing.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="include\dearImGui\imconfig.h" />
