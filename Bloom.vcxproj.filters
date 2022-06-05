@@ -481,7 +481,7 @@
     <None Include="res\shaders\testing_textures\textureshader_fragment.glsl" />
     <None Include="res\shaders\testing_textures\textureshader_vertex.glsl" />
     <None Include="imgui.ini" />
-    <None Include="Application\Boxer\shaders\framebuffer_move_circle.glsl" />
+    <None Include="res\app_boxer\shaders\framebuffer_move_circle.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\2x8_SpritesheetTest.png">

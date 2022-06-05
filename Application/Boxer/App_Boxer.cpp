@@ -4,19 +4,23 @@
 using namespace Application;
 
 void Boxer::Begin() {
+    srand(time(NULL)); // SEED RANDOM
+
     player = new Application::Player(this);
 
-    //const char* fontPath = "C:/Windows/Fonts/arial.ttf";
-    //const char* fontPath = "res/fonts/Alagard/alagard.ttf";
     const char* fontPath = "res/fonts/PressStart/PressStart.ttf";
     timer = new Bloom::Text(fontPath,GetViewMatrix(),GetWindowProjectionMatrix(),-0.5, 512);
 
+    protect = new Bloom::Sprite("res/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5, 0.5), glm::vec2(0.625*2));
+    protect->SetLocation(glm::vec2(GetPixelWindowSize().x / 2, GetPixelWindowSize().y / 2));
+
     move_circle_buffer = new Bloom::Framebuffer(GetPixelWindowSize().x, GetPixelWindowSize().y, false);
-    move_circle_buffer->setShader("Application/Boxer/shaders/framebuffer_move_circle.glsl");
+    move_circle_buffer->setShader("res/app_boxer/shaders/framebuffer_move_circle.glsl");
     
-    circle_data_uid = move_circle_buffer->GetShader().getUniformId("data");
-    circle_time_uid = move_circle_buffer->GetShader().getUniformId("time");
-    circle_position_uid = move_circle_buffer->GetShader().getUniformId("position");
+    circle_data_uid = move_circle_buffer->GetShader().getUniformId("uData");
+    circle_time_uid = move_circle_buffer->GetShader().getUniformId("uTime");
+    circle_position_uid = move_circle_buffer->GetShader().getUniformId("uPosition");
+    protect_color_uid = protect->GetShader().getUniformId("uColor");
 
     glClearColor(0.21, 0.21, 0.21, 1.0f); // Set Background Color
 }
@@ -32,7 +36,7 @@ void Boxer::UILoop() {
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS", std::to_string(GetFPS()).c_str());
     ImGui::End();
 
-    timer->Print(glm::vec2(50, 50), std::to_string((int)GetTime()), 1, GetWindowSize(),glm::vec4(0.15,0.15,0.15,1));
+    timer->Print(glm::vec2(50, 50), std::to_string((int)GetTime()), 1, GetWindowSize(),((int)GetTime() % 10 == 0 && GetTime() >= 10) ? glm::vec4(0.15, 0.15, 0.15, 1) : glm::vec4(0.15, 0.15, 0.15, 1));
     timer->Print(glm::vec2(10, GetWindowSize().y-25), ("FPS:" + std::to_string(GetFPS())).c_str(), 0.25, GetWindowSize(), glm::vec4(0.15, 0.15, 0.15, 1));
     timer->Print(glm::vec2(10, GetWindowSize().y - 50), ("VEL:" + std::to_string(player->GetVelocity())).c_str(), 0.25, GetWindowSize(), glm::vec4(0.15, 0.15, 0.15, 1));
 }
@@ -41,11 +45,16 @@ void Boxer::GameLoop() {
     EnablePixels();
 
     DrawBackground();
+
+    DrawProtect();
     DrawPlayer();
 
     if (ShouldSpawnEnemies()) {
         SpawnEnemies(EnemySpawnAmount());
     }
+
+    ProcessEnemies();
+    DrawEnemies();
 
     DrawPixels();
 }
@@ -73,7 +82,7 @@ void Boxer::DrawPlayer() {
 
 bool Boxer::ShouldSpawnEnemies() {
     bool time = (int)GetTime() % 10 == 0 && GetTime() >= 10;
-    if (!time && spawned_wave)
+    if (!time)
         spawned_wave = false;
     return time && !spawned_wave;
 }
@@ -83,6 +92,50 @@ int Boxer::EnemySpawnAmount() {
 }
 
 void Boxer::SpawnEnemies(int amount) {
-    std::cout << "SPAWNED " << amount << "\n";
+    int variation = 33;
+
+    for (int i = 0; i < amount; i++)
+    {
+        int spawn_radius = 72*(1+(float)i) + rand() % variation;
+        int angle = rand() % 360;
+        glm::vec2 position = glm::vec2(
+            (spawn_radius * cos(angle) + GetPixelWindowSize().x / 2),
+            (spawn_radius * sin(angle) + GetPixelWindowSize().x / 2));
+
+        enemies.push_back(new Application::Enemy(this, position));
+    }
     spawned_wave = true;
+}
+
+void Boxer::ProcessEnemies() {
+    for (size_t i = 0; i < enemies.size(); i++) {
+        enemies.at(i)->SetPosition(this);
+        if (Utils::Distance2D(enemies.at(i)->GetPosition(), glm::vec2(GetPixelWindowSize().x / 2, GetPixelWindowSize().y / 2)) < 10) {
+            Damage();
+            enemies.erase(enemies.begin() + i);
+        }
+    }
+}
+
+void Boxer::DrawEnemies() {
+    for (size_t i = 0; i < enemies.size(); i++) {
+        enemies.at(i)->Draw(this);
+    }
+}
+
+void Boxer::Damage() {
+    health -= 1;
+    if (health <= 0)
+        std::exit(0);
+    camera_location += glm::vec2(100, 100);
+    SetCameraLocation(camera_location);
+}
+
+void Boxer::DrawProtect() {
+    float rotation = GetTime() * 36;
+    protect->SetRotation(rotation);
+
+    protect->GetShader().use();
+    protect->GetShader().uniformVec4(protect_color_uid,Utils::Lerp(glm::vec4(0.9, 0.97, 1, 1),glm::vec4(0.1, 0.775, 1,1),(health/3.0)));
+    protect->Draw(GetViewMatrix());
 }

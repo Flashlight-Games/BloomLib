@@ -20,6 +20,7 @@
 #include <math.h>
 #include <vector>
 #include <string>
+#include <time.h>
 
 #include "shaders/shaders.h" // SHADERS
 #include "text/text.h" // FONTS

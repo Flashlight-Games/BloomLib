@@ -33,13 +33,14 @@ namespace Game{
             glm::vec2 GetPixelWindowSize() { return glm::vec2(pixel_windowWidth, pixel_windowHeight); };
 
             int GetFPS() { return fps; };
-            float GetTime() { return time; };
+            float GetTime() { return game_time; };
             GLFWwindow* GetWindow() { return window; };
             glm::vec2 GetCursorPosition() { return cursor_position; };
             glm::vec2 GetScale() { return GetWindowSize() / GetPixelWindowSize(); };
 
             void EnablePixels() { (*fb_pixels).use(true); };
             void DrawPixels() { (*fb_pixels).drawToDefault(windowWidth, windowHeight); bindDefaultFramebuffer(false, windowWidth, windowHeight); };
+            void SetCameraLocation(glm::vec2 location){ view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location.x, -1, location.y)); }
 
         private:
             // EVENTS
@@ -68,7 +69,7 @@ namespace Game{
             Bloom::Framebuffer* fb_pixels;                                      // PIXEL FRAMEBUFFER
             GLFWwindow* window;                                                 // APPLICATION WINDOW
             int fps = 0;                                                        // FRAMES PER SECOND
-            float time = 0;                                                     // APP TIME
+            float game_time = 0;                                                // APP TIME
             bool isLocked = false;                                              // TIME IS LOCKED
 
             glm::vec2 cursor_position = glm::vec2(0, 0);                        // CURSOR POSITION
@@ -83,6 +84,8 @@ namespace Utils {
     }
 
     float Distance2D(glm::vec2 A, glm::vec2 B);
+
+    glm::vec2 PointAtAngleAndDistance(float angle, float distance);
 }
 
 #endif

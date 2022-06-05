@@ -55,7 +55,9 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Application\Boxer\shaders\framebuffer_move_circle.glsl" />
+    <None Include="res\app_boxer\shaders\framebuffer_move_circle.glsl">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </None>
     <None Include="Bloom.aps" />
     <None Include="glfw3.dll">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>

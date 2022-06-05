@@ -112,7 +112,7 @@ int Engine::Prep_GameLoop(){
         fps = ImGui::GetIO().Framerate;
         glfwPollEvents(); Prep_InputLoop();
         if (!isLocked)
-            time = glfwGetTime();
+            game_time = glfwGetTime();
 
         double temp_cursor_position_x;
         double temp_cursor_position_y;
@@ -187,4 +187,8 @@ void Engine::InputLoop() {
 float Utils::Distance2D(glm::vec2 A, glm::vec2 B)
 {
     return std::sqrt(std::pow(A.x - B.x, 2) + std::pow(A.y - B.y, 2));
+}
+
+glm::vec2 Utils::PointAtAngleAndDistance(float angle, float distance) {
+    return glm::vec2(distance * cos(angle), (distance * sin(angle)));
 }
