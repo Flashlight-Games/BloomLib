@@ -1,7 +1,7 @@
 #include "engine.h"
 
 using namespace Game;
-
+using namespace nlohmann;
 
 // GLFW RESIZE
 void Game::ResizeLoop(GLFWwindow* window, int width, int height){
@@ -22,6 +22,12 @@ void Engine::Prep_InputLoop(){
 // EVENTS
 int Engine::Init(){
     try {
+        // CONFIGURATION
+        this->windowWidth = engine_config.resolution_window_size.x;
+        this->windowHeight = engine_config.resolution_window_size.y;
+        this->pixel_windowWidth = engine_config.resolution_pixels_size.x;
+        this->pixel_windowHeight = engine_config.resolution_pixels_size.y;
+
         // INITIALIZATION
         glfwInit(); 
     
@@ -32,12 +38,12 @@ int Engine::Init(){
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         #endif
 
-        glfwWindowHint(GLFW_RESIZABLE,               GLFW_FALSE);
-        glfwWindowHint(GLFW_DECORATED,               GLFW_TRUE); 
-        glfwWindowHint(GLFW_FLOATING,                GLFW_FALSE);
-        glfwWindowHint(GLFW_MAXIMIZED,               GLFW_FALSE);
-        glfwWindowHint(GLFW_CENTER_CURSOR,           GLFW_FALSE);
-        glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE,               engine_config.glfw_resizeable);
+        glfwWindowHint(GLFW_DECORATED,               engine_config.glfw_decorated);
+        glfwWindowHint(GLFW_FLOATING,                engine_config.glfw_topmost);
+        glfwWindowHint(GLFW_MAXIMIZED,               engine_config.glfw_maximized);
+        glfwWindowHint(GLFW_CENTER_CURSOR,           engine_config.glfw_center_cursor);
+        glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, engine_config.glfw_transparent);
     
         window = glfwCreateWindow(windowWidth, windowHeight, "Window", NULL, NULL);
         if (window == NULL)
@@ -60,9 +66,17 @@ int Engine::Init(){
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-        glDisable(GL_CULL_FACE);            // Enable Double Sided Polygons
-        glDisable(GL_MULTISAMPLE);          // ENABLE ANTI-ALIASING
-        glfwSwapInterval(true);      // Enble VSYNC
+        if(engine_config.rendering_face_culling)
+            glEnable(GL_CULL_FACE);            // Disable Double Sided Polygons
+        else
+            glDisable(GL_CULL_FACE);           // Enable Double Sided Polygons
+
+        if(engine_config.rendering_anti_aliasing)
+            glEnable(GL_MULTISAMPLE);          // ENABLE ANTI-ALIASING
+        else
+            glDisable(GL_MULTISAMPLE);          // Disable ANTI-ALIASING
+
+        glfwSwapInterval(engine_config.rendering_enable_vsync);    // Enble VSYNC
     
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -103,8 +117,6 @@ int Engine::Prep_Begin(){
 
 int Engine::Prep_GameLoop(){
     try {
-        view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)); // SET CAMERA POSITION
-
         if (glfwWindowShouldClose(window)) // END IF SHOULD CLOSE
             return -2;
 
@@ -113,6 +125,8 @@ int Engine::Prep_GameLoop(){
         glfwPollEvents(); Prep_InputLoop();
         if (!isLocked)
             game_time = glfwGetTime();
+        
+        frame_time = clock() - last_time;
 
         double temp_cursor_position_x;
         double temp_cursor_position_y;
@@ -122,6 +136,7 @@ int Engine::Prep_GameLoop(){
         // BINDING AND CLEARING PIXEL FRAMEBUFFER
         bindDefaultFramebuffer(true);
         GameLoop(); // ACTUAL GAME CODE
+        last_time = clock();
     }
     catch (const std::exception& ex) {
             std::cout << "Encountered Bloom Exception during GameLoop : " << ex.what() << std::endl;
@@ -162,8 +177,6 @@ int Engine::EndLoop(){
     return 0;
 }
 
-
-
 void Engine::Begin() {
     std::string errmsg = "Please define application method 'Begin'";
     throw std::runtime_error(errmsg);
@@ -191,4 +204,12 @@ float Utils::Distance2D(glm::vec2 A, glm::vec2 B)
 
 glm::vec2 Utils::PointAtAngleAndDistance(float angle, float distance) {
     return glm::vec2(distance * cos(angle), (distance * sin(angle)));
+}
+
+void Utils::SyncSleep(Game::Engine* app,int target_fps) {
+    std::this_thread::sleep_for(std::chrono::milliseconds((int)((1000.0 / target_fps) / 1.8)));
+}
+
+void Utils::SleepMS(int ms) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }

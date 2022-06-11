@@ -32,6 +32,9 @@ namespace Bloom{
             void SetScale(glm::vec2 scale){transformation[3] = scale[0];transformation[4] = scale[1];UpdateLocation();};
             glm::vec2 GetScale(){return glm::vec2(transformation[3],transformation[4]);};
 
+            glm::vec2 GetSize() { return GetScale() * GetTexture()->getSize(); };
+            glm::vec2 GetOrigin() { return Origin; };
+
             void SetTransform(glm::vec2 location, float rotation, glm::vec2 scale)
             {transformation[0] = location[0];transformation[1] = location[1];
             transformation[2]=rotation;

@@ -59,6 +59,7 @@ void Framebuffer::use(bool clear){
     glViewport(0, 0, this->width, this->height); // Change viewport size for correct texture
 
     glBindFramebuffer(GL_FRAMEBUFFER,fbo);
+
     if(clear){
         glClear(GL_COLOR_BUFFER_BIT);
     }
@@ -66,7 +67,6 @@ void Framebuffer::use(bool clear){
     fbShader.use();
 };
 void Framebuffer::draw(){
-    glClear(GL_COLOR_BUFFER_BIT);
     fbShader.use();
     glActiveTexture(GL_TEXTURE0);
     fbTexture->bind();

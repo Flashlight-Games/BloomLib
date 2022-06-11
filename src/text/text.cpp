@@ -45,7 +45,7 @@ Text::Text(const char* path, glm::mat4 view_matrix, glm::mat4 projection_matrix,
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),&indices,GL_STATIC_DRAW);
 }
 
-void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 screen_size, glm::vec4 color){
+void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 screen_size, glm::vec4 color,bool centered){
     const char* ctext = text.c_str();
     texture->bind();
     qShader.use();
@@ -67,27 +67,42 @@ void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 scr
 
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER,vbo);
+
+    glm::vec2 offsets = glm::vec2(0, 0);
+
+    if (centered) {
+        offsets = GetCenterOffset(text, size, screen_size);
+    }
+
     float x = 0;
     float y = 0;
+    float yOffset = offsets.y;
+
+    float xCounter = 0;
+    float xOffset = offsets.x;
 
     float originalX = x;
     float originalY = y;
 
     while (*ctext) {
-        if(*ctext == '\n'){
-            y-=resolution/spacing;
-            x = originalX;}
+        if (*ctext == '\n') {
+           /* yOffset -= (resolution / spacing) * scale;
+            xOffset -= xCounter; xCounter = 0;
+            */
+        }
         else if (*ctext >= 32 && *ctext < 127) {
             stbtt_aligned_quad q;
             stbtt_GetBakedQuad(char_data, bitsize, bitsize, *ctext-32, &x,&y,&q,1);
 
             float newVerts[24] = {
-                // POSITION                                                                                                                              Texture
-                (q.x1) / screen_size[0], ((y-q.y1)) / screen_size[1],                      q.s1,q.t1,
-                (q.x1) / screen_size[0], (q.y1-q.y0+(y-q.y1)) / screen_size[1],            q.s1,q.t0,
-                (q.x0) / screen_size[0], (q.y1-q.y0+(y-q.y1)) / screen_size[1],            q.s0,q.t0,
-                (q.x0) / screen_size[0], ((y-q.y1)) / screen_size[1],                      q.s0,q.t1,
+                // POSITION                                                                         Texture
+                (q.x1 + xOffset) / screen_size[0], ((y-q.y1)+ yOffset) / screen_size[1],                      q.s1,q.t1,
+                (q.x1 + xOffset) / screen_size[0], (q.y1-q.y0+(y-q.y1)+ yOffset) / screen_size[1],            q.s1,q.t0,
+                (q.x0 + xOffset) / screen_size[0], (q.y1-q.y0+(y-q.y1)+ yOffset) / screen_size[1],            q.s0,q.t0,
+                (q.x0 + xOffset) / screen_size[0], ((y-q.y1)+ yOffset) / screen_size[1],                      q.s0,q.t1,
             };
+
+            xCounter = std::max(q.x0, q.x1);
             
             glBufferData(GL_ARRAY_BUFFER,sizeof(newVerts),&newVerts,GL_STATIC_DRAW);
             glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
@@ -95,4 +110,37 @@ void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 scr
         ++ctext;
     }
     
+}
+
+glm::vec2 Text::GetCenterOffset(std::string text, float size, glm::vec2 screen_size) {
+    float leastX = 0; float mostX = 0;
+    float leastY = 0; float mostY = 0;
+
+    const char* ctext = text.c_str();
+
+    float x = 0;
+    float y = 0;
+
+    while (*ctext) {
+        stbtt_aligned_quad q;
+        stbtt_GetBakedQuad(char_data, bitsize, bitsize, *ctext - 32, &x, &y, &q, 1);
+
+        float newVerts[24] = {
+            // POSITION                                                                                                                              Texture
+            (q.x1) / screen_size[0], ((y - q.y1)) / screen_size[1],                      q.s1,q.t1,
+            (q.x1) / screen_size[0], (q.y1 - q.y0 + (y - q.y1)) / screen_size[1],            q.s1,q.t0,
+            (q.x0) / screen_size[0], (q.y1 - q.y0 + (y - q.y1)) / screen_size[1],            q.s0,q.t0,
+            (q.x0) / screen_size[0], ((y - q.y1)) / screen_size[1],                      q.s0,q.t1,
+        };
+
+        ++ctext;
+
+        leastX = std::min(leastX, std::min(q.x0, q.x1));
+        leastY = std::min(leastY, std::min(q.y0, q.y1));
+
+        mostX = std::max(leastX, std::max(q.x0, q.x1));
+        mostY = std::max(leastY, std::max(q.y0, q.y1));
+    }
+
+    return glm::vec2(-(std::abs(leastX - mostX) / 2), -(std::abs(leastY - mostY) / 2));
 }

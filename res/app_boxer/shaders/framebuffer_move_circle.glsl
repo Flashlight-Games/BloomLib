@@ -17,7 +17,10 @@ void main()
     color = vec4(0,0,0,1);
     float cdist = distance(gl_FragCoord.xy,uData.xy/2);
     if(cdist < uData.z+thickness && cdist > uData.z-0)
-        color = vec4(0.15,0.15,0.15,(1-distance(gl_FragCoord.xy,uPosition)/30)>0.5 ? 1 : 0.2);
+        if((1-distance(gl_FragCoord.xy,uPosition)/30)>0.5)
+            color = vec4(0.15,0.15,0.15,1);
+        else
+            color = vec4(0.19,0.19,0.19,1);
     else
-        color = vec4(texture(uTexture,vTextureCoords).xyz,0);
+        color = vec4(0.21,0.21,0.21,1);
 }

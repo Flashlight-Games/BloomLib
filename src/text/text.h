@@ -13,35 +13,37 @@
 namespace Bloom{
     class Text{
         public:
-        Text(const char* path,glm::mat4 view_matrix, glm::mat4 projection_matrix,float spacing = -0.5, uint16_t resolution = 128);
-        void Print(glm::vec2 position, std::string text,float size,glm::vec2 screen_size,glm::vec4 color = glm::vec4(1,1,1,1));
+            Text(const char* path,glm::mat4 view_matrix, glm::mat4 projection_matrix,float spacing = -0.5, uint16_t resolution = 128);
+            void Print(glm::vec2 position, std::string text,float size,glm::vec2 screen_size,glm::vec4 color = glm::vec4(1,1,1,1),bool centered = false);
         
-        const char* GetPath(){return path;};
-        float GetResolution(){return resolution;};
-        Texture2D* GetTexture(){return texture;};
+            const char* GetPath(){return path;};
+            float GetResolution(){return resolution;};
+            Texture2D* GetTexture(){return texture;};
 
         private:
-        const char* path;
-        float resolution;
+            glm::vec2 GetCenterOffset(std::string text, float size, glm::vec2 screen_size);
 
-        unsigned char ttf_buffer[1<<20];
+            const char* path;
+            float resolution;
 
-        stbtt_fontinfo font;
-        stbtt_bakedchar char_data[96]; // all characters
-        Texture2D* texture;
-        GLuint vao;
-        GLuint vbo;
-        GLuint ebo;
-        GLuint bitsize;
-        float spacing = 1.9;
-        Shader qShader = Shader("res/shaders/font/font_vertex.glsl","res/shaders/font/font_fragment.glsl");
-        int indices[6] = {
-            0,1,2,
-            0,2,3
-        };
-        glm::mat4* view_matrix;
-        glm::mat4* projection_matrix;
-        float scale = 1;
+            unsigned char ttf_buffer[1<<20];
+
+            stbtt_fontinfo font;
+            stbtt_bakedchar char_data[96]; // all characters
+            Texture2D* texture;
+            GLuint vao;
+            GLuint vbo;
+            GLuint ebo;
+            GLuint bitsize;
+            float spacing = 1.9;
+            Shader qShader = Shader("res/shaders/font/font_vertex.glsl","res/shaders/font/font_fragment.glsl");
+            int indices[6] = {
+                0,1,2,
+                0,2,3
+            };
+            glm::mat4* view_matrix;
+            glm::mat4* projection_matrix;
+            float scale = 1;
     };
 }
 #endif

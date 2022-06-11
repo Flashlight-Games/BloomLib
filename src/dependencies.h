@@ -8,6 +8,8 @@
 #include "dearImGui/imgui_impl_glfw.h"
 #include "dearImGui/imgui_impl_opengl3.h"
 
+#include "JSON/json.hpp" // JSON
+
 #include <glad/glad.h> // OPENGL
 #include <GLFW/glfw3.h>
 
@@ -21,6 +23,9 @@
 #include <vector>
 #include <string>
 #include <time.h>
+#include <chrono>
+#include <thread>
+#include <filesystem>
 
 #include "shaders/shaders.h" // SHADERS
 #include "text/text.h" // FONTS
@@ -31,7 +36,8 @@
 #include "collision/collision.h" // COLLISION BOXES
 #include "bones/bones.h" // BONE SYSTEM
 #include "boneKinematics/boneKinematics.h" // BONE KINEMATICS
-
+#include "shake/shake.h" // SCREEN SHAKE
 
 #include "engine/engine.h" // ENGINE
+
 #endif

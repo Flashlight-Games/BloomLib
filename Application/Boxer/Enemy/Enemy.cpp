@@ -6,15 +6,18 @@ Application::Enemy::Enemy(Game::Engine* app, glm::vec2 position)
 	box = tmp_e_box;
 
     this->position = position;
-    velocity = Utils::PointAtAngleAndDistance(atan2(app->GetPixelWindowSize().y / 2 - position.y, app->GetPixelWindowSize().x / 2 - position.x), speed);
-    velocity += glm::vec2(rand() % 3);
+    velocity = Utils::PointAtAngleAndDistance(atan2(app->GetPixelWindowSize().y / 2 - position.y, app->GetPixelWindowSize().x / 2 - position.x), speed );
+
+    collision_box = new PhysX::collisionBox("main", box);
 }
 
 void Application::Enemy::SetPosition(Game::Engine* app) {
-    glm::vec2 target_velocity = Utils::PointAtAngleAndDistance(atan2(app->GetPixelWindowSize().y / 2-position.y, app->GetPixelWindowSize().x / 2-position.x),speed);
-    velocity.x += (target_velocity.x - velocity.x) * acceleration; velocity.y += (target_velocity.y - velocity.y) * acceleration;
-
+    velocity = Utils::Lerp(velocity, Utils::PointAtAngleAndDistance(atan2(app->GetPixelWindowSize().y / 2 -position.y, app->GetPixelWindowSize().x / 2-position.x),speed),acceleration);
     position += velocity;
+
+    collision_box->setLocation(position);
+
+    box->SetRotation(glm::degrees(atan2(position.y - app->GetPixelWindowSize().y / 2, position.x - app->GetPixelWindowSize().x / 2)));
 }
 
 void Application::Enemy::Draw(Game::Engine* app)

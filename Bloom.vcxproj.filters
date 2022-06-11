@@ -482,6 +482,9 @@
     <None Include="res\shaders\testing_textures\textureshader_vertex.glsl" />
     <None Include="imgui.ini" />
     <None Include="res\app_boxer\shaders\framebuffer_move_circle.glsl" />
+    <None Include="res\app_boxer\shaders\framebuffer_wave.glsl" />
+    <None Include="res\app_boxer\shaders\framebuffer_transition_out.glsl" />
+    <None Include="res\app_boxer\shaders\framebuffer_transition_in.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\2x8_SpritesheetTest.png">
@@ -600,12 +603,6 @@
     <ClCompile Include="include\GLM\detail\glm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Testing\App_Testing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Testing\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Boxer\App_Boxer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -616,6 +613,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application\Boxer\Enemy\Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shake\shake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Boxer\Upgrade Health\UpgradeHealth.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Boxer\Upgrade Radius\UpgradeRadius.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1544,9 +1550,6 @@
     <ClInclude Include="include\STBTT\stb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Testing\App_Testing.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Boxer\App_Boxer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1554,6 +1557,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\Boxer\Enemy\Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shake\shake.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Boxer\Upgrade Health\UpgradeHealth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Boxer\Upgrade Radius\UpgradeRadius.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JSON\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

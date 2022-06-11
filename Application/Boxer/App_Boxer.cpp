@@ -1,5 +1,4 @@
 #include "App_Boxer.h"
-#include "../../src/engine/engine.h"
 
 using namespace Application;
 
@@ -16,13 +15,32 @@ void Boxer::Begin() {
 
     move_circle_buffer = new Bloom::Framebuffer(GetPixelWindowSize().x, GetPixelWindowSize().y, false);
     move_circle_buffer->setShader("res/app_boxer/shaders/framebuffer_move_circle.glsl");
-    
     circle_data_uid = move_circle_buffer->GetShader().getUniformId("uData");
     circle_time_uid = move_circle_buffer->GetShader().getUniformId("uTime");
     circle_position_uid = move_circle_buffer->GetShader().getUniformId("uPosition");
     protect_color_uid = protect->GetShader().getUniformId("uColor");
 
-    glClearColor(0.21, 0.21, 0.21, 1.0f); // Set Background Color
+
+    wave_buffer = new Bloom::Framebuffer(GetPixelWindowSize().x, GetPixelWindowSize().y, false);
+    wave_buffer->setShader("res/app_boxer/shaders/framebuffer_wave.glsl");
+    wave_radius_uid = wave_buffer->GetShader().getUniformId("uRadius");
+    wave_center_uid = wave_buffer->GetShader().getUniformId("uCenter");
+
+    transition_out_buffer = new Bloom::Framebuffer(GetWindowSize().x, GetWindowSize().y, false);
+    transition_out_buffer->setShader("res/app_boxer/shaders/framebuffer_transition_out.glsl");
+    transition_out_radius_uid = transition_out_buffer->GetShader().getUniformId("uRadius");
+    transition_out_center_uid = transition_out_buffer->GetShader().getUniformId("uCenter");
+    transition_out_color_uid = transition_out_buffer->GetShader().getUniformId("uColor");
+
+    transition_in_buffer = new Bloom::Framebuffer(GetWindowSize().x, GetWindowSize().y, false);
+    transition_in_buffer->setShader("res/app_boxer/shaders/framebuffer_transition_in.glsl");
+    transition_in_radius_uid = transition_in_buffer->GetShader().getUniformId("uRadius");
+    transition_in_center_uid = transition_in_buffer->GetShader().getUniformId("uCenter");
+    transition_in_color_uid = transition_in_buffer->GetShader().getUniformId("uColor");
+
+
+    enemy_thread = new std::thread(&Boxer::ProcessEnemies, this);
+    upgrade_thread = new std::thread(&Boxer::ProcessUpgrades, this);
 }
 
 void Boxer::UILoop() {
@@ -36,32 +54,100 @@ void Boxer::UILoop() {
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS", std::to_string(GetFPS()).c_str());
     ImGui::End();
 
-    timer->Print(glm::vec2(50, 50), std::to_string((int)GetTime()), 1, GetWindowSize(),((int)GetTime() % 10 == 0 && GetTime() >= 10) ? glm::vec4(0.15, 0.15, 0.15, 1) : glm::vec4(0.15, 0.15, 0.15, 1));
-    timer->Print(glm::vec2(10, GetWindowSize().y-25), ("FPS:" + std::to_string(GetFPS())).c_str(), 0.25, GetWindowSize(), glm::vec4(0.15, 0.15, 0.15, 1));
-    timer->Print(glm::vec2(10, GetWindowSize().y - 50), ("VEL:" + std::to_string(player->GetVelocity())).c_str(), 0.25, GetWindowSize(), glm::vec4(0.15, 0.15, 0.15, 1));
+
+    if (!in_menu) {
+        timer->Print(glm::vec2(50, 50), std::to_string((int)GetTime()), 1, GetWindowSize(), ((int)GetTime() % 10 == 0 && GetTime() >= 10) ? glm::vec4(0.15, 0.15, 0.15, 1) : glm::vec4(0.15, 0.15, 0.15, 1));
+        timer->Print(glm::vec2(10, GetWindowSize().y - 25), ("FPS:" + std::to_string(GetFPS())).c_str(), 0.25, GetWindowSize(), glm::vec4(0.15, 0.15, 0.15, 1));
+        timer->Print(glm::vec2(10, GetWindowSize().y - 50), ("VEL:" + std::to_string(player->GetSpeed())).c_str(), 0.25, GetWindowSize(), glm::vec4(0.15, 0.15, 0.15, 1));
+        timer->Print(glm::vec2(GetWindowSize().x / 2, GetWindowSize().y / 2), (std::to_string(health)).c_str(), 0.5, GetWindowSize(), glm::vec4(0.21, 0.21, 0.21, 1), true);
+    }
+    
+    if (health <= 0 ) {
+        in_menu = GetTime() >= transition_out_start_time + transition_out_duration;
+
+        transition_out_buffer->use(true);
+        timer->Print(glm::vec2(GetWindowSize().x / 2, GetWindowSize().y / 1.5), "GAME OVER", 1.5, GetWindowSize(), glm::vec4(0.21, 0.21, 0.21, 1), true);
+        timer->Print(glm::vec2(GetWindowSize().x / 2, GetWindowSize().y / 3), "SCORE : " + std::to_string((int)transition_out_start_time), 0.5, GetWindowSize(), glm::vec4(0.21, 0.21, 0.21, 1), true);
+        timer->Print(glm::vec2(GetWindowSize().x / 2, GetWindowSize().y / 5), "PRESS ESC TO QUIT", 0.33, GetWindowSize(), glm::vec4(0.21, 0.21, 0.21, 1), true);
+
+        if ((int)GetTime() % 2 == 0 && GetTime() > transition_out_start_time + transition_out_duration)
+            timer->Print(glm::vec2(GetWindowSize().x / 2, GetWindowSize().y / 2), "PRESS SPACE TO TRY AGAIN", 0.33, GetWindowSize(), glm::vec4(0.21, 0.21, 0.21, 1), true);
+
+        ProcessDeathMenu();
+    }
+    if(health > 0)
+    {
+        if (start_menu) {
+            transition_in_buffer->use(true);
+            timer->Print(glm::vec2(GetWindowSize().x / 2, GetWindowSize().y / 1.5), "TEST GAME", 1.5, GetWindowSize(), glm::vec4(0.21, 0.21, 0.21, 1), true);
+            timer->Print(glm::vec2(GetWindowSize().x / 2, GetWindowSize().y / 5), "PRESS ESC TO QUIT", 0.33, GetWindowSize(), glm::vec4(0.21, 0.21, 0.21, 1), true);
+
+            if ((int)GetTime() % 2 == 0 && GetTime() > transition_out_start_time + transition_out_duration)
+                timer->Print(glm::vec2(GetWindowSize().x / 2, GetWindowSize().y / 2), "PRESS SPACE TO START", 0.33, GetWindowSize(), glm::vec4(0.21, 0.21, 0.21, 1), true);
+        }
+        else {
+            transition_in_buffer->use(true);
+            glClear(GL_COLOR_BUFFER_BIT);
+        }
+
+
+        if (GetTime() > transition_in_start_time + transition_in_duration + 1 && transition_in_start_time != -1) {
+            start_menu = false;
+        }
+            
+
+        ProcessStartMenu();
+    }
 }
 
 void Boxer::GameLoop() {
     EnablePixels();
 
     DrawBackground();
+    ProcessCamera();
 
-    DrawProtect();
-    DrawPlayer();
+    if (!in_menu) {
+        DrawProtect();
+        DrawPlayer();
 
-    if (ShouldSpawnEnemies()) {
-        SpawnEnemies(EnemySpawnAmount());
+        ProcessWaveEffect();
+        wave_buffer->use(true);
+        DrawEnemies();
+
+        EnablePixels(false);
+        wave_buffer->draw();
+
+        if (ShouldSpawnEnemies()) {
+            SpawnEnemies(EnemySpawnAmount());
+        }
+
+        DrawUpgrades();
+
     }
-
-    ProcessEnemies();
-    DrawEnemies();
-
-    DrawPixels();
+    DrawPixelsToDefault();
 }
 
 void Boxer::InputLoop() {
-    if (glfwGetKey(GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(GetWindow(), true);
+    if (in_menu) {
+        if (glfwGetKey(GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+            glfwSetWindowShouldClose(GetWindow(), true);
+        if (glfwGetKey(GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
+            transition_in_start_time = GetTime();
+            glfwSetTime(0);
+
+            health = start_health;
+            last_hp = health;
+            in_menu = false;
+            if (hitShakeX != nullptr && hitShakeY != nullptr) {
+                hitShakeY->Stop();
+                hitShakeX->Stop();
+            }
+            EraseEnemies();
+            upgrade_health = nullptr;
+        }
+
+    }
+
 }
 
 
@@ -75,7 +161,11 @@ void Boxer::DrawBackground() {
 }
 
 void Boxer::DrawPlayer() {
-    player->SetPosition(this, move_radius);
+    player->SetMoveRadius(move_radius);
+
+    if(GetTime() > 1)
+        player->SetPosition(this);
+
     player->Draw(this);
 }
 
@@ -94,25 +184,60 @@ int Boxer::EnemySpawnAmount() {
 void Boxer::SpawnEnemies(int amount) {
     int variation = 33;
 
+    EraseEnemies();
+
     for (int i = 0; i < amount; i++)
     {
-        int spawn_radius = 72*(1+(float)i) + rand() % variation;
+        int spawn_radius = GetPixelWindowSize().x * (1 + (float)i / amount) + rand() % variation;
         int angle = rand() % 360;
         glm::vec2 position = glm::vec2(
             (spawn_radius * cos(angle) + GetPixelWindowSize().x / 2),
             (spawn_radius * sin(angle) + GetPixelWindowSize().x / 2));
 
         enemies.push_back(new Application::Enemy(this, position));
+
+        if (upgrade_health == nullptr && GetTime() >= 20) {
+            spawn_radius = 72 + rand() % variation;
+            angle = rand() % 360;
+            position = glm::vec2(
+                (spawn_radius * cos(angle) + GetPixelWindowSize().x / 2),
+                (spawn_radius * sin(angle) + GetPixelWindowSize().x / 2));
+
+            upgrade_health = new Application::Upgrade_Health(this, position);
+        }
+
+        if (last_hp <= health && upgrade_radius == nullptr && GetTime() >= 20) {
+            spawn_radius = 72 + rand() % variation;
+            angle = rand() % 360;
+            position = glm::vec2(
+                (spawn_radius * cos(angle) + GetPixelWindowSize().x / 2),
+                (spawn_radius * sin(angle) + GetPixelWindowSize().x / 2));
+
+            upgrade_radius = new Application::Upgrade_Radius(this, position);
+        }
     }
+
     spawned_wave = true;
 }
 
 void Boxer::ProcessEnemies() {
-    for (size_t i = 0; i < enemies.size(); i++) {
-        enemies.at(i)->SetPosition(this);
-        if (Utils::Distance2D(enemies.at(i)->GetPosition(), glm::vec2(GetPixelWindowSize().x / 2, GetPixelWindowSize().y / 2)) < 10) {
-            Damage();
-            enemies.erase(enemies.begin() + i);
+    while (true) {
+        Utils::SyncSleep(this);
+
+        for (size_t i = 0; i < enemies.size(); i++) {
+            enemies.at(i)->SetPosition(this);
+            if (Utils::Distance2D(enemies.at(i)->GetPosition(), glm::vec2(GetPixelWindowSize().x / 2, GetPixelWindowSize().y / 2)) < 10) {
+                Damage();
+                enemies.erase(enemies.begin() + i);
+            }
+
+            if (enemies.size() > i) {
+                if (enemies.at(i)->GetCollisionBox()->check(*player->GetCollisionBox())) {
+                    if (enemies.at(i) != nullptr) {
+                        enemies.at(i)->SetVelocity(enemies.at(i)->GetVelocity() + (player->GetVelocity() * glm::vec2(0.6)));
+                    }
+                }
+            }
         }
     }
 }
@@ -124,11 +249,19 @@ void Boxer::DrawEnemies() {
 }
 
 void Boxer::Damage() {
-    health -= 1;
-    if (health <= 0)
-        std::exit(0);
-    camera_location += glm::vec2(100, 100);
-    SetCameraLocation(camera_location);
+    if (health > 0) {
+        health -= 1;
+
+        if (health <= 0 && !in_menu) {
+            upgrade_health == nullptr;
+            transition_out_start_time = GetTime();
+        }
+    }
+    
+    hitShakeY = new Bloom::Shake(12,4, 0.25,3);
+    hitShakeY->Start(GetTime());
+    hitShakeX = new Bloom::Shake(12, 4, 0.25,3);
+    hitShakeX->Start(GetTime());
 }
 
 void Boxer::DrawProtect() {
@@ -138,4 +271,95 @@ void Boxer::DrawProtect() {
     protect->GetShader().use();
     protect->GetShader().uniformVec4(protect_color_uid,Utils::Lerp(glm::vec4(0.9, 0.97, 1, 1),glm::vec4(0.1, 0.775, 1,1),(health/3.0)));
     protect->Draw(GetViewMatrix());
+}
+
+void Boxer::ProcessCamera() {
+    if (hitShakeY != nullptr && hitShakeX != nullptr) {
+        camera_location.y = hitShakeY->GetValue(GetTime());
+        camera_location.x = hitShakeX->GetValue(GetTime());
+    }
+    SetCameraLocation(camera_location);
+}
+
+void Boxer::DrawUpgrades() {
+    if (upgrade_health != nullptr) {
+        upgrade_health->Draw(this);
+    }
+
+    if (upgrade_radius!= nullptr) {
+        upgrade_radius->Draw(this);
+    }
+}
+
+void Boxer::ProcessUpgrades() {
+    while (true) {
+        Utils::SyncSleep(this);
+
+        if (upgrade_health != nullptr) {
+            upgrade_health->SetPosition(this);
+            if (Utils::Distance2D(upgrade_health->GetPosition(), glm::vec2(GetPixelWindowSize().x / 2, GetPixelWindowSize().y / 2)) < 10 && health > 0) {
+                last_hp = health;
+                health += 1;
+                upgrade_health = nullptr;
+            }
+        }
+
+        if (upgrade_radius != nullptr) {
+            upgrade_radius->SetPosition(this);
+            if (Utils::Distance2D(upgrade_radius->GetPosition(), glm::vec2(GetPixelWindowSize().x / 2, GetPixelWindowSize().y / 2)) < 10) {
+                move_radius += 5;
+                upgrade_radius = nullptr;
+            }
+        }
+    }
+}
+
+void Boxer::ProcessWaveEffect() {
+    float time = ((GetTime()) - (int)GetTime()) + (int)GetTime() % 10;
+    float start = 9.75; float duration = 0.25;
+    float radius = Utils::Lerp(0.0, (std::sqrt(2) * std::max(GetPixelWindowSize().x, GetPixelWindowSize().y) * 0.5), (time - start) / duration);
+    wave_buffer->GetShader().use();
+    wave_buffer->GetShader().uniformVec2(wave_center_uid, GetPixelWindowSize() / glm::vec2(2));
+    wave_buffer->GetShader().uniformFloat(wave_radius_uid,radius);
+    if(radius > 10)
+        for (int i = 0; i < enemies.size(); i++)
+        {
+            if (Utils::Distance2D(enemies.at(i)->GetPosition(), GetPixelWindowSize() / glm::vec2(2)) <= radius)
+                enemies.erase(enemies.begin() + i);
+        }
+    
+}
+
+void Boxer::ProcessDeathMenu() {
+    transition_out_buffer->GetShader().use();
+    transition_out_buffer->GetShader().uniformVec2(transition_out_center_uid, GetWindowSize() / glm::vec2(2));
+    transition_out_buffer->GetShader().uniformFloat(transition_out_radius_uid, Utils::Lerp(0.0, (std::sqrt(2) * std::max(GetWindowSize().x, GetWindowSize().y) * 0.5), (GetTime()- transition_out_start_time) / (transition_out_duration)));
+    transition_out_buffer->GetShader().uniformVec3(transition_out_color_uid, glm::vec3(Utils::Lerp(glm::vec4(0.9, 0.97, 1, 1), glm::vec4(0.1, 0.775, 1, 1), (health / 3.0))));
+
+    bindDefaultFramebuffer(false);
+    transition_out_buffer->draw();
+}
+
+void Boxer::ProcessStartMenu() {
+    transition_in_buffer->GetShader().use();
+    transition_in_buffer->GetShader().uniformVec2(transition_in_center_uid, GetWindowSize() / glm::vec2(2));
+    if (transition_in_start_time == -1)
+        transition_in_buffer->GetShader().uniformFloat(transition_in_radius_uid, 0);
+    else
+        transition_in_buffer->GetShader().uniformFloat(transition_in_radius_uid, Utils::Lerp(0.0, (std::sqrt(2) * std::max(GetWindowSize().x, GetWindowSize().y) * 0.5), GetTime() / (transition_in_duration)));
+
+    if(start_menu)
+        transition_in_buffer->GetShader().uniformVec3(transition_in_color_uid, glm::vec3(Utils::Lerp(glm::vec4(0.9, 0.97, 1, 1), glm::vec4(0.1, 0.775, 1, 1), (health / 3.0))));
+    else
+        transition_in_buffer->GetShader().uniformVec3(transition_in_color_uid, glm::vec3(0.9, 0.97, 1));
+
+    bindDefaultFramebuffer(false);
+    transition_in_buffer->draw();
+}
+
+void Boxer::EraseEnemies() {
+    for (int i = 0; i < enemies.size(); i++)
+    {
+        enemies.erase(enemies.begin());
+    }
 }

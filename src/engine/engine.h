@@ -4,9 +4,25 @@
 #include "../src/dependencies.h"
 
 namespace Game{
+    struct configuration {
+        glm::vec2 resolution_window_size = glm::vec2(420, 420);
+        glm::vec2 resolution_pixels_size = glm::vec2(64, 64);
+
+        bool glfw_resizeable = false;
+        bool glfw_decorated = true;
+        bool glfw_topmost = false;
+        bool glfw_maximized = false;
+        bool glfw_center_cursor = false;
+        bool glfw_transparent = false;
+
+        bool rendering_face_culling = false;
+        bool rendering_anti_aliasing = false;
+        bool rendering_enable_vsync = true;
+    };
+
     class Engine{
         public:
-            Engine(bool init = false){if(init){Run();};};
+            Engine(configuration config, bool init = false) { this->engine_config = config; if (init) { Run(); }; };
             int Run() { 
                 int retval = 0;
                 retval = Init();
@@ -38,9 +54,13 @@ namespace Game{
             glm::vec2 GetCursorPosition() { return cursor_position; };
             glm::vec2 GetScale() { return GetWindowSize() / GetPixelWindowSize(); };
 
-            void EnablePixels() { (*fb_pixels).use(true); };
-            void DrawPixels() { (*fb_pixels).drawToDefault(windowWidth, windowHeight); bindDefaultFramebuffer(false, windowWidth, windowHeight); };
-            void SetCameraLocation(glm::vec2 location){ view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location.x, -1, location.y)); }
+            void EnablePixels(bool clear = true) { (*fb_pixels).use(clear); };
+            void DrawPixelsToDefault() { (*fb_pixels).drawToDefault(windowWidth, windowHeight); bindDefaultFramebuffer(false, windowWidth, windowHeight); };
+            void DrawPixels() { (*fb_pixels).draw(); };
+            void SetCameraLocation(glm::vec2 location){ view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location.x, location.y, -1)); }
+
+            double GetFrameTime() { return frame_time; };
+            double GetGameSpeed() { return GetFrameTime() / 1000.0; };
 
         private:
             // EVENTS
@@ -73,6 +93,11 @@ namespace Game{
             bool isLocked = false;                                              // TIME IS LOCKED
 
             glm::vec2 cursor_position = glm::vec2(0, 0);                        // CURSOR POSITION
+
+            double last_time = 0;                                               // TIME AT LAST FRAME
+            double frame_time = 0;                                              // DELTA TIME BETWEEN FRAMES
+
+            configuration engine_config;
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING
@@ -81,11 +106,14 @@ namespace Game{
 namespace Utils {
     template <typename T> T Lerp(T A, T B, float percentage) {
         return A + (B - A) * percentage;
-    }
+    };
 
     float Distance2D(glm::vec2 A, glm::vec2 B);
 
     glm::vec2 PointAtAngleAndDistance(float angle, float distance);
+
+    void SyncSleep(Game::Engine* app, int target_fps = 60);
+    void SleepMS(int ms);
 }
 
 #endif
