@@ -45,7 +45,7 @@ int Engine::Init(){
         glfwWindowHint(GLFW_CENTER_CURSOR,           engine_config.glfw_center_cursor);
         glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, engine_config.glfw_transparent);
     
-        window = glfwCreateWindow(windowWidth, windowHeight, "Window", NULL, NULL);
+        window = glfwCreateWindow(windowWidth, windowHeight, engine_config.window_name.c_str(), NULL, NULL);
         if (window == NULL)
         {
             throw std::runtime_error("Failed to create GLFW window");

@@ -38,7 +38,7 @@ Framebuffer::Framebuffer(int width,int height,bool linear_scaling,bool HDR){
     else 
         fbTexture = new Texture2D(NULL, glm::vec2(width, height), GL_RGBA16F, linear_scaling);
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,fbTexture->getID(),0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,fbTexture->GetID(),0);
     glBindTexture(GL_TEXTURE_2D,0);
 
     glGenRenderbuffers(1,&rbo);
@@ -83,8 +83,8 @@ void Framebuffer::setShader(const char* fragment_source){
 };
 
 void Framebuffer::setTextureUniform(const char* uniform){
-    fbShader.uniformInt(fbShader.getUniformId(uniform),getTexture()->getID());
-};
+    fbShader.uniformInt(fbShader.getUniformId(uniform),getTexture()->GetID());
+}
 
 void bindDefaultFramebuffer(bool clear,int width, int height){
     if(width && height)
@@ -94,5 +94,3 @@ void bindDefaultFramebuffer(bool clear,int width, int height){
         glClear(GL_COLOR_BUFFER_BIT);
     }
 };
-
-

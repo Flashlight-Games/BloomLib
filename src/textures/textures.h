@@ -14,26 +14,29 @@
 #include "dearImGui/imgui_impl_glfw.h"
 #include "dearImGui/imgui_impl_opengl3.h"
 
+#include <vector>
+#include <iostream>
+
 namespace Bloom{
     class Texture2D{
         public:
-        Texture2D(const char* path,bool linear_scaling = true);
-        Texture2D(const void* data,glm::vec2 size,int format = GL_RGBA,bool linear_scaling = true);
-        Texture2D();
-        void ImGui(float scale = 1) {
-            ImGui::Image((void*)getID(), ImVec2(getSize().x * scale, getSize().y * scale));
-        };
+            Texture2D(const char* path,bool linear_scaling = true);
+            Texture2D(const void* data,glm::vec2 size,int format = GL_RGBA,bool linear_scaling = true);
+            Texture2D();
+            void ImGui(float scale = 1) {
+                ImGui::Image((void*)GetID(), ImVec2(GetSize().x * scale, GetSize().y * scale));
+            };
 
-        void bind();
+            void bind();
 
-        glm::vec2 getSize(){return size;};
-        GLuint getID(){return id;};
-        
+            const glm::vec2 GetSize(){return size;};
+            GLuint GetID(){return id;};
 
         private:
-        const char* path;
-        glm::vec2 size;
-        GLuint id;
+            const char* path;
+            glm::vec2 size;
+            GLuint id;
+            int format = GL_RGBA;
     };    
 }
 

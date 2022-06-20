@@ -18,6 +18,8 @@ namespace Game{
         bool rendering_face_culling = false;
         bool rendering_anti_aliasing = false;
         bool rendering_enable_vsync = true;
+
+        std::string window_name = "Bloom";
     };
 
     class Engine{

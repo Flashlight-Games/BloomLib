@@ -46,7 +46,8 @@ namespace Application{
 
             Bloom::Sprite* protect;
 
-            int move_radius = 30;
+            int start_radius = 30;
+            int move_radius = start_radius;
 
             Bloom::Framebuffer* move_circle_buffer;
             int circle_data_uid;

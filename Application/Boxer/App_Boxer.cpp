@@ -135,6 +135,7 @@ void Boxer::InputLoop() {
             transition_in_start_time = GetTime();
             glfwSetTime(0);
 
+            move_radius = start_radius;
             health = start_health;
             last_hp = health;
             in_menu = false;
@@ -146,6 +147,10 @@ void Boxer::InputLoop() {
             upgrade_health = nullptr;
         }
 
+    }
+
+    if (glfwGetKey(GetWindow(), GLFW_KEY_G) == GLFW_PRESS) {
+        move_circle_buffer->use(false);
     }
 
 }
@@ -168,7 +173,6 @@ void Boxer::DrawPlayer() {
 
     player->Draw(this);
 }
-
 
 bool Boxer::ShouldSpawnEnemies() {
     bool time = (int)GetTime() % 10 == 0 && GetTime() >= 10;

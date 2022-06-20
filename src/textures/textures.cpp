@@ -5,6 +5,7 @@ using namespace Bloom;
 
 Texture2D::Texture2D(const void* data,glm::vec2 size,int format,bool linear_scaling){
     this->size = size;
+    this->format = format;
 
     glGenTextures(1, &this->id);
     glBindTexture(GL_TEXTURE_2D, this->id);
@@ -21,7 +22,7 @@ Texture2D::Texture2D(const void* data,glm::vec2 size,int format,bool linear_scal
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-};
+}
 
 Texture2D::Texture2D(const char* path,bool linear_scaling){
     this->path = path;
@@ -55,11 +56,11 @@ Texture2D::Texture2D(const char* path,bool linear_scaling){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 
     stbi_image_free(image);
-};
+}
 
 void Texture2D::bind(){
     glBindTexture(GL_TEXTURE_2D,id);
-};
+}
 
 glm::vec2 getTextureDimensions(GLuint textureID, GLuint mipLevel){
     int w, h;
@@ -67,4 +68,4 @@ glm::vec2 getTextureDimensions(GLuint textureID, GLuint mipLevel){
     glGetTexLevelParameteriv(GL_TEXTURE_2D, mipLevel, GL_TEXTURE_WIDTH, &w);
     glGetTexLevelParameteriv(GL_TEXTURE_2D, mipLevel, GL_TEXTURE_HEIGHT, &h);
     return glm::vec2(w,h);
-};
+}

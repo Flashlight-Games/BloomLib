@@ -31,7 +31,7 @@ void Application::Player::SetPosition(Game::Engine* app) {
 
 void Application::Player::Trail(Game::Engine* app) {
     while (true){
-        Utils::SyncSleep(app);
+        Utils::SyncSleep(app,300);
 
 
         this->past_positions[(sizeof this->past_positions / sizeof this->past_positions[0]) - 1] = glm::vec2((int)position[0], (int)position[1]);
