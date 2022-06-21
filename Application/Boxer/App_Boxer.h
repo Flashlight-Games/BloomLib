@@ -99,6 +99,10 @@ namespace Application{
             SoLoud::Wav* sound_health;
             SoLoud::Wav* sound_radius;
             SoLoud::Wav* sound_explosion;
+            SoLoud::Wav* sound_menu;
+            SoLoud::Wav* sound_music;
+
+            int sound_music_id;
 
 	};
 }

@@ -66,6 +66,11 @@ namespace Game{
 
             int PlaySound(SoLoud::Wav* sample) { return soloud.play(*sample); };
             int PlaySound(SoLoud::Wav* sample, float pitch) { int id = soloud.play(*sample); soloud.setRelativePlaySpeed(id, pitch); return id; };
+            void StopSound(int id) { soloud.stop(id); };
+
+            int PlaySoundBackground(SoLoud::Wav* sample,float volume, bool looping) { int id = soloud.playBackground(*sample,volume); soloud.setLooping(id,looping); return id; };
+
+            void FadeVolume(int id,int target, int duration) { soloud.fadeVolume(id,target ,duration); };
             SoLoud::Soloud* GetSound() { return &soloud; };
 
         private:

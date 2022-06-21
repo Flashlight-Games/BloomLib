@@ -43,12 +43,16 @@ void Boxer::Begin() {
     sound_health = new SoLoud::Wav;
     sound_radius = new SoLoud::Wav;
     sound_explosion = new SoLoud::Wav;
+    sound_menu = new SoLoud::Wav;
+    sound_music = new SoLoud::Wav;
 
     sound_hit->load("res/app_boxer/sounds/hit.wav");
     sound_lose->load("res/app_boxer/sounds/lose.wav");
     sound_health->load("res/app_boxer/sounds/health.wav");
     sound_radius->load("res/app_boxer/sounds/radius.wav");
     sound_explosion->load("res/app_boxer/sounds/explosion.wav");
+    sound_menu->load("res/app_boxer/sounds/menu.wav");
+    sound_music->load("res/app_boxer/sounds/music.wav");
 
     enemy_thread = new std::thread(&Boxer::ProcessEnemies, this);
     upgrade_thread = new std::thread(&Boxer::ProcessUpgrades, this);
@@ -75,6 +79,10 @@ void Boxer::UILoop() {
     
     if (health <= 0 ) {
         in_menu = GetTime() >= transition_out_start_time + transition_out_duration;
+        if (in_menu)
+            StopSound(sound_music_id);
+        else
+            FadeVolume(sound_music_id, 0, transition_out_duration);
 
         transition_out_buffer->use(true);
         timer->Print(glm::vec2(GetWindowSize().x / 2, GetWindowSize().y / 1.5), "GAME OVER", 1.5, GetWindowSize(), glm::vec4(0.21, 0.21, 0.21, 1), true);
@@ -83,7 +91,7 @@ void Boxer::UILoop() {
 
         if ((int)GetTime() % 2 == 0 && GetTime() > transition_out_start_time + transition_out_duration)
             timer->Print(glm::vec2(GetWindowSize().x / 2, GetWindowSize().y / 2), "PRESS SPACE TO TRY AGAIN", 0.33, GetWindowSize(), glm::vec4(0.21, 0.21, 0.21, 1), true);
-
+        
         ProcessDeathMenu();
     }
     if(health > 0)
@@ -140,9 +148,13 @@ void Boxer::GameLoop() {
 
 void Boxer::InputLoop() {
     if (in_menu) {
-        if (glfwGetKey(GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        if (glfwGetKey(GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
             glfwSetWindowShouldClose(GetWindow(), true);
+            PlaySound(sound_menu);
+        }
         if (glfwGetKey(GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
+            PlaySound(sound_menu);
+            sound_music_id = PlaySoundBackground(sound_music,0.2,true);
             transition_in_start_time = GetTime();
             glfwSetTime(0);
 

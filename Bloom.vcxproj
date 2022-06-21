@@ -744,13 +744,27 @@
     <Library Include="lib\libglfw3dll.a" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="res\app_boxer\sounds\explosion.wav" />
-    <Media Include="res\app_boxer\sounds\health.wav" />
+    <Media Include="res\app_boxer\sounds\explosion.wav">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </Media>
+    <Media Include="res\app_boxer\sounds\health.wav">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </Media>
     <Media Include="res\app_boxer\sounds\hit.wav">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
     </Media>
-    <Media Include="res\app_boxer\sounds\lose.wav" />
-    <Media Include="res\app_boxer\sounds\radius.wav" />
+    <Media Include="res\app_boxer\sounds\lose.wav">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </Media>
+    <Media Include="res\app_boxer\sounds\menu.wav">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </Media>
+    <Media Include="res\app_boxer\sounds\music.wav">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </Media>
+    <Media Include="res\app_boxer\sounds\radius.wav">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </Media>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
