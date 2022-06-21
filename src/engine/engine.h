@@ -64,6 +64,10 @@ namespace Game{
             double GetFrameTime() { return frame_time; };
             double GetGameSpeed() { return GetFrameTime() / 1000.0; };
 
+            int PlaySound(SoLoud::Wav* sample) { return soloud.play(*sample); };
+            int PlaySound(SoLoud::Wav* sample, float pitch) { int id = soloud.play(*sample); soloud.setRelativePlaySpeed(id, pitch); return id; };
+            SoLoud::Soloud* GetSound() { return &soloud; };
+
         private:
             // EVENTS
             int Init();
@@ -86,6 +90,8 @@ namespace Game{
 
             uint16_t windowWidth = 960; uint16_t windowHeight = 960;            // WINDOW SIZE
             uint16_t pixel_windowWidth = 64*3; uint16_t pixel_windowHeight = 64*3;  // PIXEL SIZE
+
+            SoLoud::Soloud soloud;                                              // AUDIO MANAGER
 
 
             Bloom::Framebuffer* fb_pixels;                                      // PIXEL FRAMEBUFFER
@@ -116,6 +122,10 @@ namespace Utils {
 
     void SyncSleep(Game::Engine* app, int target_fps = 60);
     void SleepMS(int ms);
+
+    int RandInt(int min, int max);
+
+    float RandFloat(float min, float max);
 }
 
 #endif

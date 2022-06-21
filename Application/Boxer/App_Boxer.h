@@ -93,6 +93,13 @@ namespace Application{
             float transition_in_duration = 1.5;
 
             bool start_menu = true;
+
+            SoLoud::Wav* sound_hit;
+            SoLoud::Wav* sound_lose;
+            SoLoud::Wav* sound_health;
+            SoLoud::Wav* sound_radius;
+            SoLoud::Wav* sound_explosion;
+
 	};
 }
 

@@ -11,59 +11,59 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="res\fonts\Alagard\alagard.ttf">
+    <Font Include="res\engine\fonts\Alagard\alagard.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\PressStart\PressStart.ttf">
+    <Font Include="res\engine\fonts\PressStart\PressStart.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Black.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Black.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-BlackItalic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-BlackItalic.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Bold.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Bold.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-BoldItalic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-BoldItalic.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Italic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Italic.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Light.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Light.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-LightItalic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-LightItalic.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Medium.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Medium.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-MediumItalic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-MediumItalic.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Regular.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Regular.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Thin.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Thin.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-ThinItalic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-ThinItalic.ttf">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Font>
@@ -230,125 +230,97 @@
     <None Include="res\app_boxer\shaders\framebuffer_wave.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\basic\mvp_vertex.glsl">
+    <None Include="res\engine\shaders\basic\mvp_vertex.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\basic\plain_fragment.glsl">
+    <None Include="res\engine\shaders\basic\plain_fragment.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\font\font_fragment.glsl">
+    <None Include="res\engine\shaders\font\font_fragment.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\font\font_vertex.glsl">
+    <None Include="res\engine\shaders\font\font_vertex.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\framebuffer\framebuffer_fragment.glsl">
+    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\framebuffer\framebuffer_vertex.glsl">
+    <None Include="res\engine\shaders\framebuffer\framebuffer_vertex.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\sprite\spriteshader_fragment.glsl">
+    <None Include="res\engine\shaders\sprite\spriteshader_fragment.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\sprite\spriteshader_vertex.glsl">
+    <None Include="res\engine\shaders\sprite\spriteshader_vertex.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\testing_framebuffers\framebufferMulti_fragment.glsl">
+    <None Include="res\engine\shaders\testing_framebuffers\framebufferMulti_fragment.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\testing_textures\textureshader_fragment.glsl">
+    <None Include="res\engine\shaders\testing_textures\textureshader_fragment.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\shaders\testing_textures\textureshader_vertex.glsl">
+    <None Include="res\engine\shaders\testing_textures\textureshader_vertex.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\debug\dummy\full.png">
+    <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\debug\dummy\headface.png">
+    <Image Include="res\engine\textures\4x4_SpritesheetTest.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\debug\dummy\headhair.png">
+    <Image Include="res\engine\textures\8x2_SpritesheetTest.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\debug\dummy\lowerbody.png">
+    <Image Include="res\engine\textures\container.jpeg">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\debug\dummy\lowerjoint.png">
+    <Image Include="res\engine\textures\detailTest16.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\debug\dummy\upperbody.png">
+    <Image Include="res\engine\textures\detailTest16Border.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\debug\dummy\upperjoint.png">
+    <Image Include="res\engine\textures\detailTest16Line.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\textures\2x8_SpritesheetTest.png">
+    <Image Include="res\engine\textures\grass.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\textures\4x4_SpritesheetTest.png">
+    <Image Include="res\engine\textures\rect16.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\textures\8x2_SpritesheetTest.png">
+    <Image Include="res\engine\textures\vLine.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\textures\container.jpeg">
+    <Image Include="res\engine\textures\wall.jpeg">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\textures\detailTest16.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\textures\detailTest16Border.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\textures\detailTest16Line.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\textures\grass.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\textures\rect16.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\textures\vLine.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\textures\wall.jpeg">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\textures\window.png">
+    <Image Include="res\engine\textures\window.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </Image>
@@ -366,6 +338,30 @@
     <ClCompile Include="Application\Boxer\Player\Player.cpp" />
     <ClCompile Include="Application\Boxer\Upgrade Health\UpgradeHealth.cpp" />
     <ClCompile Include="Application\Boxer\Upgrade Radius\UpgradeRadius.cpp" />
+    <ClCompile Include="include\soloud\dr_impl.cpp" />
+    <ClCompile Include="include\soloud\soloud.cpp" />
+    <ClCompile Include="include\soloud\soloud_audiosource.cpp" />
+    <ClCompile Include="include\soloud\soloud_bus.cpp" />
+    <ClCompile Include="include\soloud\soloud_core_3d.cpp" />
+    <ClCompile Include="include\soloud\soloud_core_basicops.cpp" />
+    <ClCompile Include="include\soloud\soloud_core_faderops.cpp" />
+    <ClCompile Include="include\soloud\soloud_core_filterops.cpp" />
+    <ClCompile Include="include\soloud\soloud_core_getters.cpp" />
+    <ClCompile Include="include\soloud\soloud_core_setters.cpp" />
+    <ClCompile Include="include\soloud\soloud_core_voicegroup.cpp" />
+    <ClCompile Include="include\soloud\soloud_core_voiceops.cpp" />
+    <ClCompile Include="include\soloud\soloud_fader.cpp" />
+    <ClCompile Include="include\soloud\soloud_fft.cpp" />
+    <ClCompile Include="include\soloud\soloud_fft_lut.cpp" />
+    <ClCompile Include="include\soloud\soloud_file.cpp" />
+    <ClCompile Include="include\soloud\soloud_filter.cpp" />
+    <ClCompile Include="include\soloud\soloud_miniaudio.cpp" />
+    <ClCompile Include="include\soloud\soloud_misc.cpp" />
+    <ClCompile Include="include\soloud\soloud_queue.cpp" />
+    <ClCompile Include="include\soloud\soloud_thread.cpp" />
+    <ClCompile Include="include\soloud\soloud_wav.cpp" />
+    <ClCompile Include="include\soloud\soloud_wavstream.cpp" />
+    <ClCompile Include="include\soloud\stb_vorbis.c" />
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="include\dearImGui\imgui.cpp" />
     <ClCompile Include="include\dearImGui\imgui_demo.cpp" />
@@ -394,6 +390,46 @@
     <ClInclude Include="Application\Boxer\Upgrade Health\UpgradeHealth.h" />
     <ClInclude Include="Application\Boxer\Upgrade Radius\UpgradeRadius.h" />
     <ClInclude Include="include\JSON\json.hpp" />
+    <ClInclude Include="include\soloud\dr_flac.h" />
+    <ClInclude Include="include\soloud\dr_mp3.h" />
+    <ClInclude Include="include\soloud\dr_wav.h" />
+    <ClInclude Include="include\soloud\miniaudio.h" />
+    <ClInclude Include="include\soloud\soloud.h" />
+    <ClInclude Include="include\soloud\soloud_audiosource.h" />
+    <ClInclude Include="include\soloud\soloud_bassboostfilter.h" />
+    <ClInclude Include="include\soloud\soloud_biquadresonantfilter.h" />
+    <ClInclude Include="include\soloud\soloud_bus.h" />
+    <ClInclude Include="include\soloud\soloud_c.h" />
+    <ClInclude Include="include\soloud\soloud_dcremovalfilter.h" />
+    <ClInclude Include="include\soloud\soloud_echofilter.h" />
+    <ClInclude Include="include\soloud\soloud_error.h" />
+    <ClInclude Include="include\soloud\soloud_fader.h" />
+    <ClInclude Include="include\soloud\soloud_fft.h" />
+    <ClInclude Include="include\soloud\soloud_fftfilter.h" />
+    <ClInclude Include="include\soloud\soloud_file.h" />
+    <ClInclude Include="include\soloud\soloud_file_hack_off.h" />
+    <ClInclude Include="include\soloud\soloud_file_hack_on.h" />
+    <ClInclude Include="include\soloud\soloud_filter.h" />
+    <ClInclude Include="include\soloud\soloud_flangerfilter.h" />
+    <ClInclude Include="include\soloud\soloud_freeverbfilter.h" />
+    <ClInclude Include="include\soloud\soloud_internal.h" />
+    <ClInclude Include="include\soloud\soloud_lofifilter.h" />
+    <ClInclude Include="include\soloud\soloud_misc.h" />
+    <ClInclude Include="include\soloud\soloud_monotone.h" />
+    <ClInclude Include="include\soloud\soloud_noise.h" />
+    <ClInclude Include="include\soloud\soloud_openmpt.h" />
+    <ClInclude Include="include\soloud\soloud_queue.h" />
+    <ClInclude Include="include\soloud\soloud_robotizefilter.h" />
+    <ClInclude Include="include\soloud\soloud_sfxr.h" />
+    <ClInclude Include="include\soloud\soloud_speech.h" />
+    <ClInclude Include="include\soloud\soloud_tedsid.h" />
+    <ClInclude Include="include\soloud\soloud_thread.h" />
+    <ClInclude Include="include\soloud\soloud_vic.h" />
+    <ClInclude Include="include\soloud\soloud_vizsn.h" />
+    <ClInclude Include="include\soloud\soloud_wav.h" />
+    <ClInclude Include="include\soloud\soloud_waveshaperfilter.h" />
+    <ClInclude Include="include\soloud\soloud_wavstream.h" />
+    <ClInclude Include="include\soloud\stb_vorbis.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="include\dearImGui\imconfig.h" />
     <ClInclude Include="include\dearImGui\imgui.h" />
@@ -706,6 +742,15 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\libglfw3dll.a" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\app_boxer\sounds\explosion.wav" />
+    <Media Include="res\app_boxer\sounds\health.wav" />
+    <Media Include="res\app_boxer\sounds\hit.wav">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
+    </Media>
+    <Media Include="res\app_boxer\sounds\lose.wav" />
+    <Media Include="res\app_boxer\sounds\radius.wav" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

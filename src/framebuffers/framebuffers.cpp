@@ -79,7 +79,7 @@ void Framebuffer::drawToDefault(int w, int h){
 }
 
 void Framebuffer::setShader(const char* fragment_source){
-    fbShader = Shader("res/shaders/framebuffer/framebuffer_vertex.glsl",fragment_source);
+    fbShader = Shader("res/engine/shaders/framebuffer/framebuffer_vertex.glsl",fragment_source);
 };
 
 void Framebuffer::setTextureUniform(const char* uniform){

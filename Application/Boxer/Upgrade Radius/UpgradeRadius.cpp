@@ -2,7 +2,7 @@
 
 Application::Upgrade_Radius::Upgrade_Radius(Game::Engine* app, glm::vec2 position)
 {
-	Bloom::Sprite* tmp_e_box = new Bloom::Sprite("res/textures/rect16.png", 1, app->GetViewMatrix(), app->GetPixelProjectionMatrix(),glm::vec2(0.5,0.5),glm::vec2(0.3));
+	Bloom::Sprite* tmp_e_box = new Bloom::Sprite("res/engine/textures/rect16.png", 1, app->GetViewMatrix(), app->GetPixelProjectionMatrix(),glm::vec2(0.5,0.5),glm::vec2(0.3));
 	box = tmp_e_box;
 
     this->position = position;

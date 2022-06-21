@@ -15,46 +15,46 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="res\fonts\Alagard\alagard.ttf">
+    <Font Include="res\engine\fonts\Alagard\alagard.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Black.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Black.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-BlackItalic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-BlackItalic.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Bold.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Bold.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-BoldItalic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-BoldItalic.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Italic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Italic.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Light.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Light.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-LightItalic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-LightItalic.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Medium.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Medium.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-MediumItalic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-MediumItalic.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Regular.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Regular.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-Thin.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-Thin.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\Roboto\Roboto-ThinItalic.ttf">
+    <Font Include="res\engine\fonts\Roboto\Roboto-ThinItalic.ttf">
       <Filter>Resource Files</Filter>
     </Font>
-    <Font Include="res\fonts\PressStart\PressStart.ttf" />
+    <Font Include="res\engine\fonts\PressStart\PressStart.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bloom.aps">
@@ -469,17 +469,17 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="glfw3.dll" />
-    <None Include="res\shaders\basic\mvp_vertex.glsl" />
-    <None Include="res\shaders\basic\plain_fragment.glsl" />
-    <None Include="res\shaders\font\font_fragment.glsl" />
-    <None Include="res\shaders\font\font_vertex.glsl" />
-    <None Include="res\shaders\framebuffer\framebuffer_fragment.glsl" />
-    <None Include="res\shaders\framebuffer\framebuffer_vertex.glsl" />
-    <None Include="res\shaders\sprite\spriteshader_fragment.glsl" />
-    <None Include="res\shaders\sprite\spriteshader_vertex.glsl" />
-    <None Include="res\shaders\testing_framebuffers\framebufferMulti_fragment.glsl" />
-    <None Include="res\shaders\testing_textures\textureshader_fragment.glsl" />
-    <None Include="res\shaders\testing_textures\textureshader_vertex.glsl" />
+    <None Include="res\engine\shaders\basic\mvp_vertex.glsl" />
+    <None Include="res\engine\shaders\basic\plain_fragment.glsl" />
+    <None Include="res\engine\shaders\font\font_fragment.glsl" />
+    <None Include="res\engine\shaders\font\font_vertex.glsl" />
+    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment.glsl" />
+    <None Include="res\engine\shaders\framebuffer\framebuffer_vertex.glsl" />
+    <None Include="res\engine\shaders\sprite\spriteshader_fragment.glsl" />
+    <None Include="res\engine\shaders\sprite\spriteshader_vertex.glsl" />
+    <None Include="res\engine\shaders\testing_framebuffers\framebufferMulti_fragment.glsl" />
+    <None Include="res\engine\shaders\testing_textures\textureshader_fragment.glsl" />
+    <None Include="res\engine\shaders\testing_textures\textureshader_vertex.glsl" />
     <None Include="imgui.ini" />
     <None Include="res\app_boxer\shaders\framebuffer_move_circle.glsl" />
     <None Include="res\app_boxer\shaders\framebuffer_wave.glsl" />
@@ -487,61 +487,40 @@
     <None Include="res\app_boxer\shaders\framebuffer_transition_in.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\textures\2x8_SpritesheetTest.png">
+    <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\4x4_SpritesheetTest.png">
+    <Image Include="res\engine\textures\4x4_SpritesheetTest.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\8x2_SpritesheetTest.png">
+    <Image Include="res\engine\textures\8x2_SpritesheetTest.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\container.jpeg">
+    <Image Include="res\engine\textures\container.jpeg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\detailTest16.png">
+    <Image Include="res\engine\textures\detailTest16.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\detailTest16Border.png">
+    <Image Include="res\engine\textures\detailTest16Border.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\detailTest16Line.png">
+    <Image Include="res\engine\textures\detailTest16Line.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\grass.png">
+    <Image Include="res\engine\textures\grass.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\vLine.png">
+    <Image Include="res\engine\textures\vLine.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\wall.jpeg">
+    <Image Include="res\engine\textures\wall.jpeg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\textures\window.png">
+    <Image Include="res\engine\textures\window.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="res\debug\dummy\full.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\debug\dummy\headface.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\debug\dummy\headhair.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\debug\dummy\lowerbody.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\debug\dummy\lowerjoint.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\debug\dummy\upperbody.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\debug\dummy\upperjoint.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\rect16.png">
+    <Image Include="res\engine\textures\rect16.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -622,6 +601,78 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application\Boxer\Upgrade Radius\UpgradeRadius.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_queue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_misc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_filter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_fft_lut.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_fft.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_fader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_core_voiceops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_core_setters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_core_voicegroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_core_getters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_core_faderops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_core_filterops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_core_basicops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_core_3d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_audiosource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_bus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_miniaudio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\dr_impl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_wav.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_wavstream.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\stb_vorbis.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1571,8 +1622,145 @@
     <ClInclude Include="include\JSON\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\soloud\soloud_dcremovalfilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_audiosource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_bassboostfilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_biquadresonantfilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_bus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_c.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_echofilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_error.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_fader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_fft.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_fftfilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_file_hack_off.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_file_hack_on.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_filter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_flangerfilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_freeverbfilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_lofifilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_misc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_monotone.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_noise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_openmpt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_robotizefilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_sfxr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_speech.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_tedsid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_thread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_vic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_vizsn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_wav.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_waveshaperfilter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\soloud_wavstream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\miniaudio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\dr_flac.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\dr_mp3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\dr_wav.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\soloud\stb_vorbis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\libglfw3dll.a" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="res\app_boxer\sounds\hit.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\app_boxer\sounds\explosion.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\app_boxer\sounds\radius.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\app_boxer\sounds\health.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="res\app_boxer\sounds\lose.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

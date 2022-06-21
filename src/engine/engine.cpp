@@ -94,6 +94,8 @@ int Engine::Init(){
         tmp_pixels->setTextureUniform("uTexture");
 
         fb_pixels = tmp_pixels;
+
+        soloud.init();
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;
@@ -117,8 +119,11 @@ int Engine::Prep_Begin(){
 
 int Engine::Prep_GameLoop(){
     try {
-        if (glfwWindowShouldClose(window)) // END IF SHOULD CLOSE
+        if (glfwWindowShouldClose(window)){ // END IF SHOULD CLOSE
+            soloud.deinit();
+            glfwTerminate();
             return -2;
+        }
 
         // PREPARE LOOP
         fps = ImGui::GetIO().Framerate;
@@ -212,4 +217,12 @@ void Utils::SyncSleep(Game::Engine* app,int target_fps) {
 
 void Utils::SleepMS(int ms) {
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
+int Utils::RandInt(int min, int max) {
+    return int(Lerp(min, max, (rand() % 10) / 10.0));
+}
+
+float Utils::RandFloat(float min, float max) {
+    return Lerp(min, max, (rand() % 10) / 10.0);
 }

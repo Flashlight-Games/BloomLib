@@ -4,6 +4,10 @@
 //#define T template <typename T>
 # define PI 3.14159265358979323846
 
+
+#include "soloud/soloud.h" // SOUND
+#include "soloud/soloud_wav.h" // WAV FILES	
+
 #include "dearImGui/imgui.h" // UI
 #include "dearImGui/imgui_impl_glfw.h"
 #include "dearImGui/imgui_impl_opengl3.h"
@@ -16,7 +20,6 @@
 #include <GLM/glm.hpp> // MATRICES
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>
-
 
 #include <iostream>
 #include <math.h>

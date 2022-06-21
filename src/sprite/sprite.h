@@ -70,7 +70,7 @@ namespace Bloom{
 
             uint32_t vbo; // Vertex buffer objects store verts on the GPU
             uint32_t ebo; // elemt array buffer tells the gpu what indices to connect
-            Bloom::Shader shader = Bloom::Shader("res/shaders/sprite/spriteshader_vertex.glsl","res/shaders/sprite/spriteshader_fragment.glsl");
+            Bloom::Shader shader = Bloom::Shader("res/engine/shaders/sprite/spriteshader_vertex.glsl","res/engine/shaders/sprite/spriteshader_fragment.glsl");
             Bloom::Texture2D* texture;
             glm::mat4 model_matrix;
             glm::mat4* view_matrix;

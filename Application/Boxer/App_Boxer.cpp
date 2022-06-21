@@ -7,10 +7,10 @@ void Boxer::Begin() {
 
     player = new Application::Player(this);
 
-    const char* fontPath = "res/fonts/PressStart/PressStart.ttf";
+    const char* fontPath = "res/engine/fonts/PressStart/PressStart.ttf";
     timer = new Bloom::Text(fontPath,GetViewMatrix(),GetWindowProjectionMatrix(),-0.5, 512);
 
-    protect = new Bloom::Sprite("res/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5, 0.5), glm::vec2(0.625*2));
+    protect = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5, 0.5), glm::vec2(0.625*2));
     protect->SetLocation(glm::vec2(GetPixelWindowSize().x / 2, GetPixelWindowSize().y / 2));
 
     move_circle_buffer = new Bloom::Framebuffer(GetPixelWindowSize().x, GetPixelWindowSize().y, false);
@@ -38,6 +38,17 @@ void Boxer::Begin() {
     transition_in_center_uid = transition_in_buffer->GetShader().getUniformId("uCenter");
     transition_in_color_uid = transition_in_buffer->GetShader().getUniformId("uColor");
 
+    sound_hit = new SoLoud::Wav;
+    sound_lose = new SoLoud::Wav;
+    sound_health = new SoLoud::Wav;
+    sound_radius = new SoLoud::Wav;
+    sound_explosion = new SoLoud::Wav;
+
+    sound_hit->load("res/app_boxer/sounds/hit.wav");
+    sound_lose->load("res/app_boxer/sounds/lose.wav");
+    sound_health->load("res/app_boxer/sounds/health.wav");
+    sound_radius->load("res/app_boxer/sounds/radius.wav");
+    sound_explosion->load("res/app_boxer/sounds/explosion.wav");
 
     enemy_thread = new std::thread(&Boxer::ProcessEnemies, this);
     upgrade_thread = new std::thread(&Boxer::ProcessUpgrades, this);
@@ -239,6 +250,7 @@ void Boxer::ProcessEnemies() {
                 if (enemies.at(i)->GetCollisionBox()->check(*player->GetCollisionBox())) {
                     if (enemies.at(i) != nullptr) {
                         enemies.at(i)->SetVelocity(enemies.at(i)->GetVelocity() + (player->GetVelocity() * glm::vec2(0.6)));
+                        PlaySound(sound_hit, Utils::RandFloat(0.7, 1.3));
                     }
                 }
             }
@@ -254,9 +266,11 @@ void Boxer::DrawEnemies() {
 
 void Boxer::Damage() {
     if (health > 0) {
+        PlaySound(sound_explosion, Utils::RandFloat(0.9, 1.1));
         health -= 1;
 
         if (health <= 0 && !in_menu) {
+            PlaySound(sound_lose);
             upgrade_health == nullptr;
             transition_out_start_time = GetTime();
         }
@@ -305,6 +319,7 @@ void Boxer::ProcessUpgrades() {
                 last_hp = health;
                 health += 1;
                 upgrade_health = nullptr;
+                PlaySound(sound_health);
             }
         }
 
@@ -313,6 +328,7 @@ void Boxer::ProcessUpgrades() {
             if (Utils::Distance2D(upgrade_radius->GetPosition(), glm::vec2(GetPixelWindowSize().x / 2, GetPixelWindowSize().y / 2)) < 10) {
                 move_radius += 5;
                 upgrade_radius = nullptr;
+                PlaySound(sound_radius);
             }
         }
     }

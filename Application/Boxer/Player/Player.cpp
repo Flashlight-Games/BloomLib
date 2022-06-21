@@ -2,7 +2,7 @@
 
 Application::Player::Player(Game::Engine* app)
 {
-	Bloom::Sprite* tmp_e_box = new Bloom::Sprite("res/textures/rect16.png", 1, app->GetViewMatrix(), app->GetPixelProjectionMatrix(),glm::vec2(0.5,0.5),glm::vec2(0.1));
+	Bloom::Sprite* tmp_e_box = new Bloom::Sprite("res/engine/textures/rect16.png", 1, app->GetViewMatrix(), app->GetPixelProjectionMatrix(),glm::vec2(0.5,0.5),glm::vec2(0.1));
 	box = tmp_e_box;
 
     position.x = app->GetPixelWindowSize().x / 2; position.y = app->GetPixelWindowSize().y / 2;
