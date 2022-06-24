@@ -96,6 +96,8 @@ int Engine::Init(){
         fb_pixels = tmp_pixels;
 
         soloud.init();
+
+        glfwSetWindowUserPointer(GetWindow(), this);
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;

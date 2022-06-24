@@ -254,6 +254,8 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
     </None>
+    <None Include="res\engine\shaders\particle\particleshader_fragment.glsl" />
+    <None Include="res\engine\shaders\particle\particleshader_vertex.glsl" />
     <None Include="res\engine\shaders\sprite\spriteshader_fragment.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
@@ -335,6 +337,9 @@
     <ClCompile Include="Application\Boxer\App_Boxer.cpp" />
     <ClCompile Include="Application\Boxer\Enemy\Enemy.cpp" />
     <ClCompile Include="Application\Boxer\main.cpp" />
+    <ClCompile Include="Application\Boxer\Particle_Death\particle_death.cpp" />
+    <ClCompile Include="Application\Boxer\Particle_Hit\particle_hit.cpp" />
+    <ClCompile Include="Application\Boxer\Particle_Hurt\particle_hurt.cpp" />
     <ClCompile Include="Application\Boxer\Player\Player.cpp" />
     <ClCompile Include="Application\Boxer\Upgrade Health\UpgradeHealth.cpp" />
     <ClCompile Include="Application\Boxer\Upgrade Radius\UpgradeRadius.cpp" />
@@ -376,6 +381,7 @@
     <ClCompile Include="src\collision\collision.cpp" />
     <ClCompile Include="src\framebuffers\framebuffers.cpp" />
     <ClCompile Include="src\glad.cpp" />
+    <ClCompile Include="src\particles\particles.cpp" />
     <ClCompile Include="src\shaders\shaders.cpp" />
     <ClCompile Include="src\shake\shake.cpp" />
     <ClCompile Include="src\sprite\sprite.cpp" />
@@ -386,6 +392,9 @@
   <ItemGroup>
     <ClInclude Include="Application\Boxer\App_Boxer.h" />
     <ClInclude Include="Application\Boxer\Enemy\Enemy.h" />
+    <ClInclude Include="Application\Boxer\Particle_Death\particle_death.h" />
+    <ClInclude Include="Application\Boxer\Particle_Hit\particle_hit.h" />
+    <ClInclude Include="Application\Boxer\Particle_Hurt\particle_hurt.h" />
     <ClInclude Include="Application\Boxer\Player\Player.h" />
     <ClInclude Include="Application\Boxer\Upgrade Health\UpgradeHealth.h" />
     <ClInclude Include="Application\Boxer\Upgrade Radius\UpgradeRadius.h" />
@@ -733,6 +742,7 @@
     <ClInclude Include="src\collision\collision.h" />
     <ClInclude Include="src\dependencies.h" />
     <ClInclude Include="src\framebuffers\framebuffers.h" />
+    <ClInclude Include="src\particles\particles.h" />
     <ClInclude Include="src\shaders\shaders.h" />
     <ClInclude Include="src\shake\shake.h" />
     <ClInclude Include="src\sprite\sprite.h" />

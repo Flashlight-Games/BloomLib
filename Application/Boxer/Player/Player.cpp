@@ -52,21 +52,21 @@ void Application::Player::Draw(Game::Engine* app)
         {
             box->SetLocation(Utils::Lerp(past_positions[i], past_positions[i + 1], p / dist));
 
-            box->GetShader().use();
-            box->GetShader().uniformVec4(box->GetShader().getUniformId("uColor"), glm::vec4(Utils::Lerp(trailColor, playerColor, i / (float)(sizeof past_positions / sizeof past_positions[0])), i / (float)(sizeof past_positions / sizeof past_positions[0])));
+            box->GetShader()->use();
+            box->GetShader()->uniformVec4(box->GetShader()->getUniformId("uColor"), glm::vec4(Utils::Lerp(trailColor, playerColor, i / (float)(sizeof past_positions / sizeof past_positions[0])), i / (float)(sizeof past_positions / sizeof past_positions[0])));
             box->Draw(app->GetViewMatrix());
         }
 
         box->SetLocation(past_positions[i]);
 
-        box->GetShader().use();
-        box->GetShader().uniformVec4(box->GetShader().getUniformId("uColor"), glm::vec4(Utils::Lerp(trailColor, playerColor, i / (float)(sizeof past_positions / sizeof past_positions[0])), i / (float)(sizeof past_positions / sizeof past_positions[0])));
+        box->GetShader()->use();
+        box->GetShader()->uniformVec4(box->GetShader()->getUniformId("uColor"), glm::vec4(Utils::Lerp(trailColor, playerColor, i / (float)(sizeof past_positions / sizeof past_positions[0])), i / (float)(sizeof past_positions / sizeof past_positions[0])));
         box->Draw(app->GetViewMatrix());
     };
 
     box->SetLocation(glm::vec2((int)position[0], (int)position[1]));
 
-    box->GetShader().use();
-    box->GetShader().uniformVec4(box->GetShader().getUniformId("uColor"), glm::vec4(playerColor, 1));
+    box->GetShader()->use();
+    box->GetShader()->uniformVec4(box->GetShader()->getUniformId("uColor"), glm::vec4(playerColor, 1));
     box->Draw(app->GetViewMatrix());
 }

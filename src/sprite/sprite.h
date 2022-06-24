@@ -22,6 +22,7 @@ namespace Bloom{
             Sprite(){};
             Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5,0.5),glm::vec2 size = glm::vec2(1,1),glm::vec2 textureUVScale = glm::vec2(1,1),glm::vec2 textureUVOffset = glm::vec2(0,0));
             void Draw(glm::mat4 view_matrix);
+            void DrawInstanced(glm::mat4 view_matrix, int amount);
 
             void SetLocation(glm::vec2 location){transformation[0] = location[0];transformation[1] = location[1];UpdateLocation();};
             glm::vec2 GetLocation(){return glm::vec2(transformation[0],transformation[1]);};
@@ -43,9 +44,19 @@ namespace Bloom{
             void SetUVOffset(glm::vec2 offset);
 
             Bloom::Texture2D* GetTexture(){return texture;};
-            Bloom::Shader GetShader(){return shader;};
+            Bloom::Shader* GetShader(){return shader;};
             glm::mat4 GetModelMatrix(){return model_matrix;};
 
+            void SetShader(Bloom::Shader* new_shader, glm::mat4 view_matrix, glm::mat4 projection_matrix) {
+                this->shader = new_shader;
+
+                shader->use();
+                uColorUni = shader->getUniformId("uColor");
+                uTextureUni = shader->getUniformId("uTexture");
+
+                shader->uniformMat4(shader->getUniformId("view"), view_matrix);
+                shader->uniformMat4(shader->getUniformId("projection"), projection_matrix);
+            };
 
         private:
             void UpdateLocation();
@@ -70,7 +81,7 @@ namespace Bloom{
 
             uint32_t vbo; // Vertex buffer objects store verts on the GPU
             uint32_t ebo; // elemt array buffer tells the gpu what indices to connect
-            Bloom::Shader shader = Bloom::Shader("res/engine/shaders/sprite/spriteshader_vertex.glsl","res/engine/shaders/sprite/spriteshader_fragment.glsl");
+            Bloom::Shader* shader;
             Bloom::Texture2D* texture;
             glm::mat4 model_matrix;
             glm::mat4* view_matrix;

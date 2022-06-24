@@ -485,6 +485,8 @@
     <None Include="res\app_boxer\shaders\framebuffer_wave.glsl" />
     <None Include="res\app_boxer\shaders\framebuffer_transition_out.glsl" />
     <None Include="res\app_boxer\shaders\framebuffer_transition_in.glsl" />
+    <None Include="res\engine\shaders\particle\particleshader_fragment.glsl" />
+    <None Include="res\engine\shaders\particle\particleshader_vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
@@ -673,6 +675,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\soloud\stb_vorbis.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particles\particles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Boxer\Particle_Hit\particle_hit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Boxer\Particle_Death\particle_death.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Boxer\Particle_Hurt\particle_hurt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1740,6 +1754,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\soloud\stb_vorbis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particles\particles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Boxer\Particle_Hit\particle_hit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Boxer\Particle_Death\particle_death.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Boxer\Particle_Hurt\particle_hurt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

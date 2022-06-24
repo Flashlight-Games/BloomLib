@@ -24,7 +24,7 @@ void Application::Enemy::Draw(Game::Engine* app)
 {
     box->SetLocation(glm::vec2((int)position[0], (int)position[1]));
 
-    box->GetShader().use();
-    box->GetShader().uniformVec4(box->GetShader().getUniformId("uColor"), glm::vec4(enemyColor, 1));
+    box->GetShader()->use();
+    box->GetShader()->uniformVec4(box->GetShader()->getUniformId("uColor"), glm::vec4(enemyColor, 1));
     box->Draw(app->GetViewMatrix());
 }

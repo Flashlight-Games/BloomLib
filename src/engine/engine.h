@@ -73,6 +73,8 @@ namespace Game{
             void FadeVolume(int id,int target, int duration) { soloud.fadeVolume(id,target ,duration); };
             SoLoud::Soloud* GetSound() { return &soloud; };
 
+            //virtual void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+
         private:
             // EVENTS
             int Init();

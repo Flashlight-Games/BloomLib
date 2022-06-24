@@ -7,6 +7,10 @@
 #include "Upgrade Health/UpgradeHealth.h"
 #include "Upgrade Radius/UpgradeRadius.h"
 
+#include "Particle_Hit/particle_hit.h"
+#include "Particle_Death/particle_death.h"
+#include "Particle_Hurt/particle_hurt.h"
+
 namespace Application{
 	class Boxer : public Game::Engine {
         using Game::Engine::Engine;
@@ -16,6 +20,59 @@ namespace Application{
             void UILoop();
             void InputLoop();
 
+            bool GetInMenu() { return in_menu; };
+            
+            void ResetGame() {
+                PlaySound(sound_menu);
+                sound_music_id = PlaySoundBackground(sound_music, 0.2, true);
+                transition_in_start_time = GetTime();
+                EraseEnemies();
+                emitter_hit->Clear();
+
+                move_radius = start_radius;
+                health = start_health;
+                last_hp = health;
+                in_menu = false;
+                if (hitShakeX != nullptr && hitShakeY != nullptr) {
+                    hitShakeY->Stop();
+                    hitShakeX->Stop();
+                }
+                upgrade_health = nullptr;
+                glfwSetTime(0);
+            }
+
+            void CloseGame(GLFWwindow* window) {
+                glfwSetWindowShouldClose(window, true);
+                PlaySound(sound_menu);
+            }
+
+            void PlayEmitterHIT() {
+                auto particles = emitter_hit->Play(GetWindow(), GetTime(), player->GetPosition());
+                for (size_t i = 0; i < particles.size(); i++)
+                {
+                    particles.at(i)->SetInitialVelocity(player->GetVelocity() * glm::vec2(((rand() % 10 / 10.0)+0.6) * 25, ((rand() % 10 / 10.0)+0.6) * 25));
+                }
+            }
+
+            void PlayEmitterDEATH(Application::Enemy* enemy) {
+                auto particles = emitter_death->Play(GetWindow(), GetTime());
+                for (size_t i = 0; i < particles.size(); i++)
+                {
+                    particles.at(i)->SetLocation(enemy->GetPosition());
+                }
+            }
+
+            void PlayEmitterHURT() {
+                auto particles = emitter_hurt->Play(GetWindow(), GetTime());
+                for (size_t i = 0; i < particles.size(); i++)
+                {
+                    particles.at(i)->SetLocation(protect->GetLocation());
+                    particles.at(i)->SetColor(Utils::Lerp(glm::vec4(0.9, 0.97, 1, 1), glm::vec4(0, 0.75, 1, 1), (health / 3.0)));
+                    particles.at(i)->SetInitialVelocity(glm::vec2(Utils::RandFloat(-1,1.0)*100, Utils::RandFloat(-1, 1.0) * 100));
+                }
+            }
+
+            Application::Player* GetPlayer() { return player; };
         private:
             void DrawBackground();
             void DrawPlayer();
@@ -40,6 +97,8 @@ namespace Application{
 
             void ProcessDeathMenu();
             void ProcessStartMenu();
+
+            void UpdateEmitters();
 
             Application::Player* player;
             Bloom::Text* timer;
@@ -104,7 +163,9 @@ namespace Application{
 
             int sound_music_id;
 
+            Bloom::ParticleEmitter<Bloom::Particle_HIT>* emitter_hit;
+            Bloom::ParticleEmitter<Bloom::Particle_DEATH>* emitter_death;
+            Bloom::ParticleEmitter<Bloom::Particle_HURT>* emitter_hurt;
 	};
 }
-
 #endif // !BOXER

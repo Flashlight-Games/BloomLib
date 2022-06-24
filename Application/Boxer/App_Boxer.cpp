@@ -2,8 +2,27 @@
 
 using namespace Application;
 
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    Application::Boxer* app = static_cast<Application::Boxer*>(glfwGetWindowUserPointer(window));
+    if (app->GetInMenu()) {
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+            app->CloseGame(window);
+        }
+        if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+            app->ResetGame();
+        }
+    }
+    else {
+        if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+            // PASS
+        }
+    }
+}
+
+
 void Boxer::Begin() {
     srand(time(NULL)); // SEED RANDOM
+    glfwSetKeyCallback(GetWindow(), key_callback);
 
     player = new Application::Player(this);
 
@@ -18,7 +37,7 @@ void Boxer::Begin() {
     circle_data_uid = move_circle_buffer->GetShader().getUniformId("uData");
     circle_time_uid = move_circle_buffer->GetShader().getUniformId("uTime");
     circle_position_uid = move_circle_buffer->GetShader().getUniformId("uPosition");
-    protect_color_uid = protect->GetShader().getUniformId("uColor");
+    protect_color_uid = protect->GetShader()->getUniformId("uColor");
 
 
     wave_buffer = new Bloom::Framebuffer(GetPixelWindowSize().x, GetPixelWindowSize().y, false);
@@ -56,6 +75,10 @@ void Boxer::Begin() {
 
     enemy_thread = new std::thread(&Boxer::ProcessEnemies, this);
     upgrade_thread = new std::thread(&Boxer::ProcessUpgrades, this);
+
+    emitter_hit = new Bloom::ParticleEmitter<Bloom::Particle_HIT>(5,GetViewMatrix(),GetPixelProjectionMatrix());
+    emitter_death = new Bloom::ParticleEmitter<Bloom::Particle_DEATH>(10, GetViewMatrix(), GetPixelProjectionMatrix());
+    emitter_hurt = new Bloom::ParticleEmitter<Bloom::Particle_HURT>(50, GetViewMatrix(), GetPixelProjectionMatrix());
 }
 
 void Boxer::UILoop() {
@@ -142,43 +165,15 @@ void Boxer::GameLoop() {
 
         DrawUpgrades();
 
+        UpdateEmitters();
+
     }
     DrawPixelsToDefault();
 }
 
 void Boxer::InputLoop() {
-    if (in_menu) {
-        if (glfwGetKey(GetWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            glfwSetWindowShouldClose(GetWindow(), true);
-            PlaySound(sound_menu);
-        }
-        if (glfwGetKey(GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
-            PlaySound(sound_menu);
-            sound_music_id = PlaySoundBackground(sound_music,0.2,true);
-            transition_in_start_time = GetTime();
-            glfwSetTime(0);
-
-            move_radius = start_radius;
-            health = start_health;
-            last_hp = health;
-            in_menu = false;
-            if (hitShakeX != nullptr && hitShakeY != nullptr) {
-                hitShakeY->Stop();
-                hitShakeX->Stop();
-            }
-            EraseEnemies();
-            upgrade_health = nullptr;
-        }
-
-    }
-
-    if (glfwGetKey(GetWindow(), GLFW_KEY_G) == GLFW_PRESS) {
-        move_circle_buffer->use(false);
-    }
-
+    
 }
-
-
 
 void Boxer::DrawBackground() {
     move_circle_buffer->GetShader().use();
@@ -263,6 +258,7 @@ void Boxer::ProcessEnemies() {
                     if (enemies.at(i) != nullptr) {
                         enemies.at(i)->SetVelocity(enemies.at(i)->GetVelocity() + (player->GetVelocity() * glm::vec2(0.6)));
                         PlaySound(sound_hit, Utils::RandFloat(0.7, 1.3));
+                        PlayEmitterHIT();
                     }
                 }
             }
@@ -280,6 +276,7 @@ void Boxer::Damage() {
     if (health > 0) {
         PlaySound(sound_explosion, Utils::RandFloat(0.9, 1.1));
         health -= 1;
+        PlayEmitterHURT();
 
         if (health <= 0 && !in_menu) {
             PlaySound(sound_lose);
@@ -298,8 +295,8 @@ void Boxer::DrawProtect() {
     float rotation = GetTime() * 36;
     protect->SetRotation(rotation);
 
-    protect->GetShader().use();
-    protect->GetShader().uniformVec4(protect_color_uid,Utils::Lerp(glm::vec4(0.9, 0.97, 1, 1),glm::vec4(0.1, 0.775, 1,1),(health/3.0)));
+    protect->GetShader()->use();
+    protect->GetShader()->uniformVec4(protect_color_uid,Utils::Lerp(glm::vec4(0.9, 0.97, 1, 1),glm::vec4(0, 0.75, 1,1),(health/3.0)));
     protect->Draw(GetViewMatrix());
 }
 
@@ -356,8 +353,10 @@ void Boxer::ProcessWaveEffect() {
     if(radius > 10)
         for (int i = 0; i < enemies.size(); i++)
         {
-            if (Utils::Distance2D(enemies.at(i)->GetPosition(), GetPixelWindowSize() / glm::vec2(2)) <= radius)
+            if (Utils::Distance2D(enemies.at(i)->GetPosition(), GetPixelWindowSize() / glm::vec2(2)) <= radius) {
+                PlayEmitterDEATH(enemies.at(i));
                 enemies.erase(enemies.begin() + i);
+            }
         }
     
 }
@@ -394,4 +393,13 @@ void Boxer::EraseEnemies() {
     {
         enemies.erase(enemies.begin());
     }
+}
+
+void Boxer::UpdateEmitters() {
+    emitter_hit->Update(GetTime(), GetGameSpeed());
+    emitter_hit->Draw();
+    emitter_death->Update(GetTime(), GetGameSpeed());
+    emitter_death->Draw();
+    emitter_hurt->Update(GetTime(), GetGameSpeed());
+    emitter_hurt->Draw();
 }

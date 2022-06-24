@@ -40,6 +40,7 @@
 #include "bones/bones.h" // BONE SYSTEM
 #include "boneKinematics/boneKinematics.h" // BONE KINEMATICS
 #include "shake/shake.h" // SCREEN SHAKE
+#include "particles/particles.h" // PARTICLES
 
 #include "engine/engine.h" // ENGINE
 

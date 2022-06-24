@@ -20,7 +20,7 @@ namespace Application{
 		glm::vec2 position = glm::vec2(500,500);
 		glm::vec2 velocity = glm::vec2(0, 0);
 		float acceleration = 0.04;
-		glm::vec3 enemyColor = glm::vec3(1, 0.5, 0);
+		glm::vec3 enemyColor = glm::vec3(1, 0.25, 0);
 
 		float speed = 1;
 
