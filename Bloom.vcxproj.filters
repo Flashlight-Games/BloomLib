@@ -584,25 +584,7 @@
     <ClCompile Include="include\GLM\detail\glm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Boxer\App_Boxer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Boxer\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Boxer\Player\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Boxer\Enemy\Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\shake\shake.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Boxer\Upgrade Health\UpgradeHealth.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Boxer\Upgrade Radius\UpgradeRadius.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="include\soloud\soloud_thread.cpp">
@@ -680,13 +662,10 @@
     <ClCompile Include="src\particles\particles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Boxer\Particle_Hit\particle_hit.cpp">
+    <ClCompile Include="Application\Shooter\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Boxer\Particle_Death\particle_death.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Boxer\Particle_Hurt\particle_hurt.cpp">
+    <ClCompile Include="Application\Shooter\App_Shooter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1615,22 +1594,7 @@
     <ClInclude Include="include\STBTT\stb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Boxer\App_Boxer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Boxer\Player\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Boxer\Enemy\Enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\shake\shake.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Boxer\Upgrade Health\UpgradeHealth.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Boxer\Upgrade Radius\UpgradeRadius.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\JSON\json.hpp">
@@ -1759,13 +1723,7 @@
     <ClInclude Include="src\particles\particles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Boxer\Particle_Hit\particle_hit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Boxer\Particle_Death\particle_death.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Boxer\Particle_Hurt\particle_hurt.h">
+    <ClInclude Include="Application\Shooter\App_Shooter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

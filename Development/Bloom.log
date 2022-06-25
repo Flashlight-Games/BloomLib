@@ -1,44 +1,9 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  engine.cpp
+  App_Shooter.cpp
   The contents of <filesystem> are available only with C++17 or later.
 I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
 I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(54,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(55,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(73,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(26,65): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(27,66): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(28,71): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(29,72): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(131,29): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(134,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(209,21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(225,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(229,41): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(121,18): warning C4244: 'return': conversion from 'float' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(225): message : see reference to function template instantiation 'T Utils::Lerp<int>(T,T,float)' being compiled
-          with
-          [
-              T=int
-          ]
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
   Bloom.vcxproj -> I:\TomerSoftware\Code\BloomLib\Output\Development\Bloom.exe

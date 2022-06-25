@@ -1,4 +1,4 @@
-#include "App_Boxer.h"
+#include "App_Shooter.h"
 
 int main()
 {
@@ -8,6 +8,6 @@ int main()
     settings.rendering_enable_vsync = false; // For game to boxer correctly, disable vsync
     settings.window_name = "Test Game";
 
-    Application::Boxer App = Application::Boxer(settings);
+    Application::Shooter App = Application::Shooter(settings);
     return App.Run(); 
 }

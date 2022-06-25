@@ -434,15 +434,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Application\Boxer\App_Boxer.cpp" />
-    <ClCompile Include="Application\Boxer\Enemy\Enemy.cpp" />
-    <ClCompile Include="Application\Boxer\main.cpp" />
-    <ClCompile Include="Application\Boxer\Particle_Death\particle_death.cpp" />
-    <ClCompile Include="Application\Boxer\Particle_Hit\particle_hit.cpp" />
-    <ClCompile Include="Application\Boxer\Particle_Hurt\particle_hurt.cpp" />
-    <ClCompile Include="Application\Boxer\Player\Player.cpp" />
-    <ClCompile Include="Application\Boxer\Upgrade Health\UpgradeHealth.cpp" />
-    <ClCompile Include="Application\Boxer\Upgrade Radius\UpgradeRadius.cpp" />
+    <ClCompile Include="Application\Shooter\App_Shooter.cpp" />
+    <ClCompile Include="Application\Shooter\main.cpp" />
     <ClCompile Include="include\soloud\dr_impl.cpp" />
     <ClCompile Include="include\soloud\soloud.cpp" />
     <ClCompile Include="include\soloud\soloud_audiosource.cpp" />
@@ -490,14 +483,7 @@
     <ClCompile Include="src\text\text.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application\Boxer\App_Boxer.h" />
-    <ClInclude Include="Application\Boxer\Enemy\Enemy.h" />
-    <ClInclude Include="Application\Boxer\Particle_Death\particle_death.h" />
-    <ClInclude Include="Application\Boxer\Particle_Hit\particle_hit.h" />
-    <ClInclude Include="Application\Boxer\Particle_Hurt\particle_hurt.h" />
-    <ClInclude Include="Application\Boxer\Player\Player.h" />
-    <ClInclude Include="Application\Boxer\Upgrade Health\UpgradeHealth.h" />
-    <ClInclude Include="Application\Boxer\Upgrade Radius\UpgradeRadius.h" />
+    <ClInclude Include="Application\Shooter\App_Shooter.h" />
     <ClInclude Include="include\JSON\json.hpp" />
     <ClInclude Include="include\soloud\dr_flac.h" />
     <ClInclude Include="include\soloud\dr_mp3.h" />
