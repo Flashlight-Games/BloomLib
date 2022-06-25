@@ -39,6 +39,7 @@ namespace Application{
                 }
                 upgrade_health = nullptr;
                 glfwSetTime(0);
+                EraseEnemies();
             }
 
             void CloseGame(GLFWwindow* window) {

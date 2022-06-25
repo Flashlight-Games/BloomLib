@@ -88,10 +88,9 @@ void Boxer::UILoop() {
     ImGui::SliderFloat2("B Box Pos", BBoxPos, 0, GetPixelWindowSize().x);
     ImGui::End();*/
 
-    ImGui::Begin("Performance window");
+    /*ImGui::Begin("Performance window");
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS", std::to_string(GetFPS()).c_str());
-    ImGui::End();
-
+    ImGui::End();*/
 
     if (!in_menu) {
         timer->Print(glm::vec2(50, 50), std::to_string((int)GetTime()), 1, GetWindowSize(), ((int)GetTime() % 10 == 0 && GetTime() >= 10) ? glm::vec4(0.15, 0.15, 0.15, 1) : glm::vec4(0.15, 0.15, 0.15, 1));
