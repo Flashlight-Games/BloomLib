@@ -16,7 +16,7 @@
 namespace Bloom{
     class Particle {
     public:
-        Particle(GLFWwindow* window, int instance, float time,glm::vec2 initial_location = glm::vec2(0,0));
+        Particle(int instance, float time);
         virtual void Update(float Gametime, float Gamespeed);
 
         glm::vec2 GetLocation() { return location; };
@@ -42,8 +42,6 @@ namespace Bloom{
         float lifetime = 1;
         glm::vec4 color = glm::vec4(1);
         int id = 0;
-
-        glm::vec2 initial_velocity;
     };
 
     template <class T>
@@ -75,7 +73,8 @@ namespace Bloom{
 
             for (int i = 0; i < p_amount; i++)
             {
-                T* new_particle = new T(window, i + last_size, time, location);
+                T* new_particle = new T(i + last_size, time);
+                new_particle->SetLocation(location);
                 particles.push_back(new_particle);
                 new_particles.push_back(new_particle);
             }

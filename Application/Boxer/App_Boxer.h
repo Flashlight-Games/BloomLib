@@ -48,9 +48,10 @@ namespace Application{
             }
 
             void PlayEmitterHIT() {
-                auto particles = emitter_hit->Play(GetWindow(), GetTime(), player->GetPosition());
+                auto particles = emitter_hit->Play(GetWindow(), GetTime());
                 for (size_t i = 0; i < particles.size(); i++)
                 {
+                    particles.at(i)->SetLocation(player->GetPosition());
                     particles.at(i)->SetInitialVelocity(player->GetVelocity() * glm::vec2(((rand() % 10 / 10.0)+0.6) * 25, ((rand() % 10 / 10.0)+0.6) * 25));
                 }
             }

@@ -82,15 +82,15 @@ void Boxer::Begin() {
 }
 
 void Boxer::UILoop() {
-    /*ImGui::Begin("Control window");
-    ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "Time is %s", std::to_string((int)GetTime()).c_str());
-    ImGui::SliderFloat2("A Box Pos", ABoxPos, 0, GetPixelWindowSize().x);
-    ImGui::SliderFloat2("B Box Pos", BBoxPos, 0, GetPixelWindowSize().x);
-    ImGui::End();*/
+    if (Utils::isDevelopmentConfiguration()) {
+        /*ImGui::Begin("Control window");
+        ImGui::End();*/
 
-    /*ImGui::Begin("Performance window");
-    ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS", std::to_string(GetFPS()).c_str());
-    ImGui::End();*/
+        ImGui::Begin("Performance window");
+        ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "Time is %s", std::to_string((int)GetTime()).c_str());
+        ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS", std::to_string(GetFPS()).c_str());
+        ImGui::End();
+    }
 
     if (!in_menu) {
         timer->Print(glm::vec2(50, 50), std::to_string((int)GetTime()), 1, GetWindowSize(), ((int)GetTime() % 10 == 0 && GetTime() >= 10) ? glm::vec4(0.15, 0.15, 0.15, 1) : glm::vec4(0.15, 0.15, 0.15, 1));

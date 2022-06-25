@@ -60,7 +60,7 @@ int Engine::Init(){
             throw std::runtime_error("Failed to initialize GLAD");
             return -1;
         }    
-        std::cout << "GL Version " <<  glGetString(GL_VERSION) << std::endl; // Requires GL Context
+        std::cout << "GL Version " <<  glGetString(GL_VERSION) << " [Bloom " << ENGINE_CONFIGURATION << "]\n"; // Requires GL Context
         stbi_set_flip_vertically_on_load(true);
 
         glEnable(GL_BLEND);
@@ -228,3 +228,5 @@ int Utils::RandInt(int min, int max) {
 float Utils::RandFloat(float min, float max) {
     return Lerp(min, max, (rand() % 10) / 10.0);
 }
+
+bool Utils::isDevelopmentConfiguration() { return *ENGINE_CONFIGURATION == *"Development"; }

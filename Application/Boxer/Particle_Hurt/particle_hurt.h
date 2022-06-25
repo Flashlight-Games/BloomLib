@@ -18,7 +18,7 @@ namespace Bloom{
     class Particle_HURT : public Bloom::Particle {
         using Bloom::Particle::Particle;
     public:
-        Particle_HURT(GLFWwindow* window, int instance, float time,glm::vec2 initial_location = glm::vec2(0,0));
+        Particle_HURT(int instance, float time);
 
         void Update(float Gametime, float Gamespeed);
         void SetInitialVelocity(glm::vec2 t_velocity) { initial_velocity = t_velocity; };

@@ -1,6 +1,6 @@
 #include "particles.h"
 
-Bloom::Particle::Particle(GLFWwindow* window, int instance, float time, glm::vec2 initial_location)
+Bloom::Particle::Particle(int instance, float time)
 {
 	spawn_time = time;
 	id = instance;
@@ -8,7 +8,6 @@ Bloom::Particle::Particle(GLFWwindow* window, int instance, float time, glm::vec
 
 void Bloom::Particle::Update(float Gametime, float Gamespeed)
 {
-	this->location = location + this->initial_velocity * glm::vec2(Gamespeed);
 }
 
 glm::mat4 Bloom::Particle::GetTransformMatrix()

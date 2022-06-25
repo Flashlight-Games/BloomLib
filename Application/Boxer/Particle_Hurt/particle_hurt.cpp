@@ -1,7 +1,6 @@
 #include "particle_hurt.h"
 
-Bloom::Particle_HURT::Particle_HURT(GLFWwindow* window, int instance, float time, glm::vec2 initial_location) : Bloom::Particle::Particle(window,instance,time, initial_location) {
-	SetLocation(initial_location);
+Bloom::Particle_HURT::Particle_HURT(int instance, float time) : Bloom::Particle::Particle(instance,time) {
 	SetScale(glm::vec2(0.1));
 	SetLifetime(0.5);
 }

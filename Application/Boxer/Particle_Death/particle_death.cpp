@@ -1,7 +1,6 @@
 #include "particle_death.h"
 
-Bloom::Particle_DEATH::Particle_DEATH(GLFWwindow* window, int instance, float time, glm::vec2 initial_location) : Bloom::Particle::Particle(window,instance,time, initial_location) {
-	SetLocation(initial_location);
+Bloom::Particle_DEATH::Particle_DEATH(int instance, float time) : Bloom::Particle::Particle(instance,time) {
 	SetScale(glm::vec2(0.1));
 	SetLifetime(0.25);
 	SetColor(glm::vec4(1, 0.25, 0, 1));
