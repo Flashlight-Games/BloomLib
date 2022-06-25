@@ -14,6 +14,13 @@ namespace Application{
 
         private:
             Bloom::Text* text_pressstart;
+
+            Bloom::Sprite* sprite_block;
+            int block_color_uid = 0;
+            float block_color[3] = {1,1,1};
+
+            Bloom::Chromatic_Aberration* framebuffer_ca;
+            float ca_size = 0.01;
 	};
 }
 #endif

@@ -41,6 +41,7 @@
 #include "boneKinematics/boneKinematics.h" // BONE KINEMATICS
 #include "shake/shake.h" // SCREEN SHAKE
 #include "particles/particles.h" // PARTICLES
+#include "framebuffers/chromatic_aberration.h" // CHROMATIC ABERRATION
 
 #include "engine/engine.h" // ENGINE
 

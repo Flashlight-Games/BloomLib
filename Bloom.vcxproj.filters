@@ -481,12 +481,10 @@
     <None Include="res\engine\shaders\testing_textures\textureshader_fragment.glsl" />
     <None Include="res\engine\shaders\testing_textures\textureshader_vertex.glsl" />
     <None Include="imgui.ini" />
-    <None Include="res\app_boxer\shaders\framebuffer_move_circle.glsl" />
-    <None Include="res\app_boxer\shaders\framebuffer_wave.glsl" />
-    <None Include="res\app_boxer\shaders\framebuffer_transition_out.glsl" />
-    <None Include="res\app_boxer\shaders\framebuffer_transition_in.glsl" />
     <None Include="res\engine\shaders\particle\particleshader_fragment.glsl" />
     <None Include="res\engine\shaders\particle\particleshader_vertex.glsl" />
+    <None Include="src\framebuffers\chromatic_aberration.h" />
+    <None Include="res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
@@ -666,6 +664,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application\Shooter\App_Shooter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framebuffers\chromatic_aberration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1729,28 +1730,5 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\libglfw3dll.a" />
-  </ItemGroup>
-  <ItemGroup>
-    <Media Include="res\app_boxer\sounds\hit.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
-    <Media Include="res\app_boxer\sounds\explosion.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
-    <Media Include="res\app_boxer\sounds\radius.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
-    <Media Include="res\app_boxer\sounds\health.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
-    <Media Include="res\app_boxer\sounds\lose.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
-    <Media Include="res\app_boxer\sounds\menu.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
-    <Media Include="res\app_boxer\sounds\music.wav">
-      <Filter>Resource Files</Filter>
-    </Media>
   </ItemGroup>
 </Project>

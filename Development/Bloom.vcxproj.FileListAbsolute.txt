@@ -24,19 +24,8 @@ I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\textures\rect16.png
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\textures\vLine.png
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\textures\wall.jpeg
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\textures\window.png
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\sounds\explosion.wav
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\sounds\health.wav
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\sounds\hit.wav
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\sounds\lose.wav
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\sounds\menu.wav
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\sounds\music.wav
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\sounds\radius.wav
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\shaders\framebuffer_move_circle.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\glfw3.dll
 I:\TomerSoftware\Code\BloomLib\Output\Development\imgui.ini
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\shaders\framebuffer_transition_in.glsl
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\shaders\framebuffer_transition_out.glsl
-I:\TomerSoftware\Code\BloomLib\Output\Development\res\app_boxer\shaders\framebuffer_wave.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\basic\mvp_vertex.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\basic\plain_fragment.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\font\font_fragment.glsl
@@ -50,3 +39,4 @@ I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\sprite\spri
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\testing_framebuffers\framebufferMulti_fragment.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\testing_textures\textureshader_fragment.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\testing_textures\textureshader_vertex.glsl
+I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl

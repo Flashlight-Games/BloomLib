@@ -85,43 +85,10 @@
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\window.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\sounds\explosion.wav</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\sounds\health.wav</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\sounds\hit.wav</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\sounds\lose.wav</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\sounds\menu.wav</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\sounds\music.wav</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\sounds\radius.wav</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\shaders\framebuffer_move_circle.glsl</FullPath>
-    </ContentFile>
-    <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\glfw3.dll</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\imgui.ini</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\shaders\framebuffer_transition_in.glsl</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\shaders\framebuffer_transition_out.glsl</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\res\app_boxer\shaders\framebuffer_wave.glsl</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\basic\mvp_vertex.glsl</FullPath>
@@ -134,6 +101,9 @@
     </ContentFile>
     <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\font\font_vertex.glsl</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment.glsl</FullPath>

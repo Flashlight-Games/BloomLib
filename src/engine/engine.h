@@ -57,7 +57,7 @@ namespace Game{
             glm::vec2 GetScale() { return GetWindowSize() / GetPixelWindowSize(); };
 
             void EnablePixels(bool clear = true) { (*fb_pixels).use(clear); };
-            void DrawPixelsToDefault() { (*fb_pixels).drawToDefault(windowWidth, windowHeight); bindDefaultFramebuffer(false, windowWidth, windowHeight); };
+            void DrawPixelsToDefault() { (*fb_pixels).drawToDefault(glm::vec2(windowWidth, windowHeight)); bindDefaultFramebuffer(false, windowWidth, windowHeight); };
             void DrawPixels() { (*fb_pixels).draw(); };
             void SetCameraLocation(glm::vec2 location){ view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location.x, location.y, -1)); }
 
