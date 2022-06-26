@@ -61,8 +61,8 @@ namespace Game{
             void DrawPixels() { (*fb_pixels).draw(); };
             void SetCameraLocation(glm::vec2 location){ view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location.x, location.y, -1)); }
 
-            double GetFrameTime() { return frame_time; };
-            double GetGameSpeed() { return GetFrameTime() / 1000.0; };
+            double GetDeltaTime() { return frame_time; };
+            double GetGameSpeed() { return GetDeltaTime() / 1000.0; };
 
             int PlaySound(SoLoud::Wav* sample) { return soloud.play(*sample); };
             int PlaySound(SoLoud::Wav* sample, float pitch) { int id = soloud.play(*sample); soloud.setRelativePlaySpeed(id, pitch); return id; };
@@ -89,6 +89,8 @@ namespace Game{
             // BACK
             int EndLoop();
 
+            std::chrono::steady_clock::time_point GetHighResTime() { return std::chrono::high_resolution_clock::now(); };
+
             glm::mat4 window_projection_matrix;                                 // PROJECTION MATRIX FOR WINDOW
             glm::mat4 pixel_projection_matrix;                                  // PROJECTION MATRIX FOR PIXELS
             glm::mat4 view_matrix;                                              // CAMERA VIEW MATRIX
@@ -101,14 +103,14 @@ namespace Game{
 
             Bloom::Framebuffer* fb_pixels;                                      // PIXEL FRAMEBUFFER
             GLFWwindow* window;                                                 // APPLICATION WINDOW
-            int fps = 0;                                                        // FRAMES PER SECOND
+            float fps = 0;                                                      // FRAMES PER SECOND
             float game_time = 0;                                                // APP TIME
             bool isLocked = false;                                              // TIME IS LOCKED
 
             glm::vec2 cursor_position = glm::vec2(0, 0);                        // CURSOR POSITION
 
-            double last_time = 0;                                               // TIME AT LAST FRAME
-            double frame_time = 0;                                              // DELTA TIME BETWEEN FRAMES
+            std::chrono::steady_clock::time_point last_time = GetHighResTime(); // TIME AT LAST FRAME
+            double frame_time = 0.0;                                            // DELTA TIME BETWEEN FRAMES IN MS
 
             configuration engine_config;
     };

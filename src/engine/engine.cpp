@@ -128,12 +128,13 @@ int Engine::Prep_GameLoop(){
         }
 
         // PREPARE LOOP
-        fps = ImGui::GetIO().Framerate;
+        fps = 1000 / GetDeltaTime();
         glfwPollEvents(); Prep_InputLoop();
         if (!isLocked)
             game_time = glfwGetTime();
         
-        frame_time = clock() - last_time;
+        frame_time = std::chrono::duration<double>(GetHighResTime() - last_time).count() * 1000;
+        last_time = GetHighResTime();
 
         double temp_cursor_position_x;
         double temp_cursor_position_y;
@@ -143,7 +144,6 @@ int Engine::Prep_GameLoop(){
         // BINDING AND CLEARING PIXEL FRAMEBUFFER
         bindDefaultFramebuffer(true);
         GameLoop(); // ACTUAL GAME CODE
-        last_time = clock();
     }
     catch (const std::exception& ex) {
             std::cout << "Encountered Bloom Exception during GameLoop : " << ex.what() << std::endl;
