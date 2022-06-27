@@ -7,6 +7,7 @@ int main()
     settings.resolution_pixels_size = glm::vec2(192, 192);
     settings.rendering_enable_vsync = true; // For game to boxer correctly, disable vsync
     settings.window_name = "Test Game";
+    settings.glfw_transparent = true;
 
     Application::Shooter App = Application::Shooter(settings);
     return App.Run(); 

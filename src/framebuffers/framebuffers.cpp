@@ -74,8 +74,8 @@ void Framebuffer::draw(){
     glDrawArrays(GL_TRIANGLES,0,6);
 };
 
-void Framebuffer::drawToDefault(glm::vec2 window_size){
-    bindDefaultFramebuffer(true, window_size.x, window_size.y); draw();
+void Framebuffer::drawToDefault(glm::vec2 window_size, bool clear) {
+    bindDefaultFramebuffer(clear, window_size.x, window_size.y); draw();
 }
 
 void Framebuffer::setShader(const char* fragment_source){

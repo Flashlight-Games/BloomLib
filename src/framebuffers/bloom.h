@@ -17,7 +17,10 @@ namespace Bloom {
 		Framebuffer* bloom_f;
 		Framebuffer* bloom_h;
 		Framebuffer* bloom_v;
-		int size = 0;
+		int size = 10;
+
+		int h_size_uid;
+		int v_size_uid;
 	};
 }
 

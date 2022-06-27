@@ -18,7 +18,7 @@ namespace Bloom{
         Shader fbShader = Shader("res/engine/shaders/framebuffer/framebuffer_vertex.glsl","res/engine/shaders/framebuffer/framebuffer_fragment.glsl");
         void use(bool clear);
         virtual void draw();
-        virtual void drawToDefault(glm::vec2 window_size);
+        virtual void drawToDefault(glm::vec2 window_size,bool clear = true);
 
         uint16_t getWidth(){return width;};
         uint16_t getHeight(){return height;};

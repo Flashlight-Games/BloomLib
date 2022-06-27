@@ -20,7 +20,7 @@ void Shooter::Begin() {
 
     sprite_block = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
     sprite_block->SetLocation(GetPixelWindowSize() / glm::vec2(2));
-    sprite_block->SetRotation(45);
+    sprite_block->SetRotation(10);
 
     sprite_block->GetShader()->use();
     block_color_uid = sprite_block->GetShader()->getUniformId("uColor");
@@ -31,7 +31,7 @@ void Shooter::UILoop() {
         ImGui::Begin("Control window");
         ImGui::ColorPicker3("BLOCK COLOR",block_color);
         ImGui::DragFloat("CA SIZE", &ca_size,0.001,0.0,0.1);
-        ImGui::DragInt("BLOOM", &bloom_size, 1, 0.0, 10.0);
+        ImGui::DragInt("BLOOM", &bloom_size, 1, 0.0, 100.0);
         ImGui::End();
 
         ImGui::Begin("Performance window");
@@ -45,6 +45,7 @@ void Shooter::UILoop() {
 
 void Shooter::GameLoop() {
     EnablePixels();
+    
 
     sprite_block->GetShader()->use();
     sprite_block->GetShader()->uniformVec4(block_color_uid, glm::vec4(block_color[0], block_color[1], block_color[2], 1));
@@ -54,6 +55,8 @@ void Shooter::GameLoop() {
     framebuffer_bloom->Use(true);
     framebuffer_bloom->SetSize(bloom_size);
     DrawPixels();
+
+    //sprite_block->SetRotation((GetTime()/10.0)*360);
 
     framebuffer_bloom->DrawToDefault(GetWindowSize());
 }
