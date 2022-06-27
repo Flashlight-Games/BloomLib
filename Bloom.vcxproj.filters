@@ -526,6 +526,15 @@
     <Image Include="res\engine\textures\rect16.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\shaki\man.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\test\crystal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\test\ring.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\boneKinematics\boneKinematics.cpp">

@@ -18,9 +18,9 @@ void Shooter::Begin() {
 
     text_pressstart = new Bloom::Text("res/engine/fonts/PressStart/PressStart.ttf",GetViewMatrix(),GetWindowProjectionMatrix(),-0.5, 512);
 
-    sprite_block = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
+    sprite_block = new Bloom::Sprite("res/test/ring.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
     sprite_block->SetLocation(GetPixelWindowSize() / glm::vec2(2));
-    sprite_block->SetRotation(10);
+    sprite_block->SetRotation(0);
 
     sprite_block->GetShader()->use();
     block_color_uid = sprite_block->GetShader()->getUniformId("uColor");

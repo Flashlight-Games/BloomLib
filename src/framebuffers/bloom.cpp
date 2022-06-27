@@ -46,8 +46,10 @@ void Bloom::Bloom_Framebuffer::DrawToDefault(glm::vec2 window_size) {
 	bloom_v->use(true);
 	bloom_h->draw();
 
-	bloom_f->drawToDefault(window_size);
+	
+	
 	bloom_v->drawToDefault(window_size,false);
+	bloom_f->draw();
 	
 }
 
