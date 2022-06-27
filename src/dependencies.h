@@ -42,6 +42,7 @@
 #include "shake/shake.h" // SCREEN SHAKE
 #include "particles/particles.h" // PARTICLES
 #include "framebuffers/chromatic_aberration.h" // CHROMATIC ABERRATION
+#include "framebuffers/bloom.h" // BLOOM
 
 #include "engine/engine.h" // ENGINE
 

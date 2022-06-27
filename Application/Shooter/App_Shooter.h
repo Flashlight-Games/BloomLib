@@ -20,7 +20,10 @@ namespace Application{
             float block_color[3] = {1,1,1};
 
             Bloom::Chromatic_Aberration* framebuffer_ca;
-            float ca_size = 0.01;
+            float ca_size = 0.000;
+
+            Bloom::Bloom_Framebuffer* framebuffer_bloom;
+            int bloom_size = 0;
 	};
 }
 #endif

@@ -1,86 +1,15 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  App_Shooter.cpp
-  The contents of <filesystem> are available only with C++17 or later.
-I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(54,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(55,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(53,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(73,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.h(23,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(16,88): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+  bloom.cpp
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\bloom.cpp(15,15): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\bloom.cpp(27,57): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(16,69): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\bloom.cpp(27,42): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(32,59): warning C4305: 'argument': truncation from 'double' to 'float'
-  main.cpp
-  The contents of <filesystem> are available only with C++17 or later.
-I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(54,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(55,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(53,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(73,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.h(23,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-  collision.cpp
-  The contents of <filesystem> are available only with C++17 or later.
-I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(54,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(55,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(53,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(73,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\collision\collision.cpp(16,41): warning C4244: '=': conversion from 'float' to 'int16_t', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\collision\collision.cpp(24,49): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-  engine.cpp
-  The contents of <filesystem> are available only with C++17 or later.
-I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(54,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(55,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(53,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(73,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(26,65): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(27,66): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(28,71): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(29,72): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(131,20): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(134,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(209,21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(225,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(229,41): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(123,18): warning C4244: 'return': conversion from 'float' to 'T', possible loss of data
-          with
-          [
-              T=int
-          ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(225): message : see reference to function template instantiation 'T Utils::Lerp<int>(T,T,float)' being compiled
-          with
-          [
-              T=int
-          ]
-  Generating Code...
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
   Bloom.vcxproj -> I:\TomerSoftware\Code\BloomLib\Output\Development\Bloom.exe

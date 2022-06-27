@@ -14,6 +14,7 @@ void Shooter::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
 
     framebuffer_ca = new Bloom::Chromatic_Aberration(GetWindowSize().x, GetWindowSize().y);
+    framebuffer_bloom = new Bloom::Bloom_Framebuffer(GetWindowSize().x, GetWindowSize().y);
 
     text_pressstart = new Bloom::Text("res/engine/fonts/PressStart/PressStart.ttf",GetViewMatrix(),GetWindowProjectionMatrix(),-0.5, 512);
 
@@ -30,6 +31,7 @@ void Shooter::UILoop() {
         ImGui::Begin("Control window");
         ImGui::ColorPicker3("BLOCK COLOR",block_color);
         ImGui::DragFloat("CA SIZE", &ca_size,0.001,0.0,0.1);
+        ImGui::DragInt("BLOOM", &bloom_size, 1, 0.0, 10.0);
         ImGui::End();
 
         ImGui::Begin("Performance window");
@@ -49,11 +51,11 @@ void Shooter::GameLoop() {
     sprite_block->Draw(GetViewMatrix());
 
     
-    framebuffer_ca->use(true);
-    framebuffer_ca->SetSize(ca_size);
+    framebuffer_bloom->Use(true);
+    framebuffer_bloom->SetSize(bloom_size);
     DrawPixels();
 
-    framebuffer_ca->drawToDefault(GetWindowSize());
+    framebuffer_bloom->DrawToDefault(GetWindowSize());
 }
 
 void Shooter::InputLoop() {

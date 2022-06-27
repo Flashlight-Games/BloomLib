@@ -283,6 +283,15 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
     </None>
+    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_filter.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_horizontal.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_vertical.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl">
       <DeploymentContent>true</DeploymentContent>
     </None>
@@ -459,6 +468,7 @@
     <ClCompile Include="src\boneKinematics\boneKinematics.cpp" />
     <ClCompile Include="src\bones\bones.cpp" />
     <ClCompile Include="src\collision\collision.cpp" />
+    <ClCompile Include="src\framebuffers\bloom.cpp" />
     <ClCompile Include="src\framebuffers\chromatic_aberration.cpp" />
     <ClCompile Include="src\framebuffers\framebuffers.cpp" />
     <ClCompile Include="src\glad.cpp" />
@@ -815,6 +825,7 @@
     <ClInclude Include="src\bones\bones.h" />
     <ClInclude Include="src\collision\collision.h" />
     <ClInclude Include="src\dependencies.h" />
+    <ClInclude Include="src\framebuffers\bloom.h" />
     <ClInclude Include="src\framebuffers\framebuffers.h" />
     <ClInclude Include="src\particles\particles.h" />
     <ClInclude Include="src\shaders\shaders.h" />

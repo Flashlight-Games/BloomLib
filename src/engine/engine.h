@@ -135,6 +135,8 @@ namespace Utils {
     float RandFloat(float min, float max);
 
     bool isDevelopmentConfiguration();
+
+    void CopyFramebuffer(Bloom::Framebuffer* source, Bloom::Framebuffer* destination);
 }
 
 #endif

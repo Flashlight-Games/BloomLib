@@ -103,6 +103,15 @@
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\font\font_vertex.glsl</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_bloom_filter.glsl</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_bloom_horizontal.glsl</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_bloom_vertical.glsl</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl</FullPath>
     </ContentFile>
     <ContentFile>

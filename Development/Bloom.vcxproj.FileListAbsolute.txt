@@ -40,3 +40,6 @@ I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\testing_fra
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\testing_textures\textureshader_fragment.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\testing_textures\textureshader_vertex.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl
+I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\framebuffer\framebuffer_bloom_filter.glsl
+I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\framebuffer\framebuffer_bloom_horizontal.glsl
+I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\framebuffer\framebuffer_bloom_vertical.glsl

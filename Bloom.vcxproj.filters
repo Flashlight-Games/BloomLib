@@ -485,6 +485,9 @@
     <None Include="res\engine\shaders\particle\particleshader_vertex.glsl" />
     <None Include="src\framebuffers\chromatic_aberration.h" />
     <None Include="res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl" />
+    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_filter.glsl" />
+    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_horizontal.glsl" />
+    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_vertical.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
@@ -667,6 +670,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\framebuffers\chromatic_aberration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\framebuffers\bloom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1725,6 +1731,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\Shooter\App_Shooter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framebuffers\bloom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

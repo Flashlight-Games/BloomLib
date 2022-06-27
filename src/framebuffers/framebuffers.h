@@ -17,8 +17,8 @@ namespace Bloom{
         
         Shader fbShader = Shader("res/engine/shaders/framebuffer/framebuffer_vertex.glsl","res/engine/shaders/framebuffer/framebuffer_fragment.glsl");
         void use(bool clear);
-        void draw();
-        void drawToDefault(glm::vec2 window_size);
+        virtual void draw();
+        virtual void drawToDefault(glm::vec2 window_size);
 
         uint16_t getWidth(){return width;};
         uint16_t getHeight(){return height;};
@@ -26,6 +26,7 @@ namespace Bloom{
         uint16_t getVBA(){return fbVao;};
         uint16_t getFBO(){return fbo;};
         Texture2D* getTexture(){return fbTexture;};
+        void SetTexture(Texture2D* texture) { fbTexture = texture; };
         uint16_t getRBO(){return rbo;};
 
         Bloom::Shader GetShader() { return fbShader; };
