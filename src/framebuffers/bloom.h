@@ -13,14 +13,19 @@ namespace Bloom {
 		void Use(bool clear);
 		void Draw();
 		void DrawToDefault(glm::vec2 window_size);
+		void HTextureGUI() { return bloom_h->getTexture()->ImGui(); };
+		void VTextureGUI() { return bloom_v->getTexture()->ImGui(); };
 	private:
+		Framebuffer* bloom_o;
 		Framebuffer* bloom_f;
 		Framebuffer* bloom_h;
 		Framebuffer* bloom_v;
 		int size = 10;
 
-		int h_size_uid;
-		int v_size_uid;
+		int intensity_uid;
+
+		int mipLevels = -1;
+		std::vector<Bloom::Texture2D*> mips;
 	};
 }
 

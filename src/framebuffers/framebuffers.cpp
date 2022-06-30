@@ -33,10 +33,12 @@ Framebuffer::Framebuffer(int width,int height,bool linear_scaling,bool HDR){
     glGenFramebuffers(1,&fbo);
     glBindFramebuffer(GL_FRAMEBUFFER,fbo);
 
-    if(!HDR)
-        fbTexture = new Texture2D(NULL,glm::vec2(width,height),GL_RGBA,linear_scaling);
-    else 
+    if (!HDR) {
+        fbTexture = new Texture2D(NULL, glm::vec2(width, height), GL_RGBA, linear_scaling);
+    }
+    else {
         fbTexture = new Texture2D(NULL, glm::vec2(width, height), GL_RGBA16F, linear_scaling);
+    }
 
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,fbTexture->GetID(),0);
     glBindTexture(GL_TEXTURE_2D,0);
@@ -59,7 +61,8 @@ void Framebuffer::use(bool clear){
     glViewport(0, 0, this->width, this->height); // Change viewport size for correct texture
 
     glBindFramebuffer(GL_FRAMEBUFFER,fbo);
-
+    glActiveTexture(GL_TEXTURE0);
+    fbTexture->bind();
     if(clear){
         glClear(GL_COLOR_BUFFER_BIT);
     }

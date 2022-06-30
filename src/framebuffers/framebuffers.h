@@ -26,7 +26,12 @@ namespace Bloom{
         uint16_t getVBA(){return fbVao;};
         uint16_t getFBO(){return fbo;};
         Texture2D* getTexture(){return fbTexture;};
-        void SetTexture(Texture2D* texture) { fbTexture = texture; };
+        void SetTexture(Texture2D* texture) {
+            fbTexture = texture;
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fbTexture->GetID(), 0);
+            width = fbTexture->GetSize().x;
+            height = fbTexture->GetSize().y;
+        };
         uint16_t getRBO(){return rbo;};
 
         Bloom::Shader GetShader() { return fbShader; };

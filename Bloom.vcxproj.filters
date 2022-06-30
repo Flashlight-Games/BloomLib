@@ -485,9 +485,9 @@
     <None Include="res\engine\shaders\particle\particleshader_vertex.glsl" />
     <None Include="src\framebuffers\chromatic_aberration.h" />
     <None Include="res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl" />
-    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_filter.glsl" />
-    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_horizontal.glsl" />
-    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_vertical.glsl" />
+    <None Include="res\engine\shaders\framebuffer\framebuffer_downsample.glsl" />
+    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_clear.glsl" />
+    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_filter.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\engine\textures\2x8_SpritesheetTest.png">

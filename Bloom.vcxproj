@@ -283,13 +283,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
     </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_filter.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_horizontal.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_bloom_vertical.glsl">
+    <None Include="res\engine\shaders\framebuffer\framebuffer_downsample.glsl">
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl">
@@ -300,12 +294,20 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_clear.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_filter.glsl">
+      <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="res\engine\shaders\framebuffer\framebuffer_vertex.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
+      <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="res\engine\shaders\particle\particleshader_fragment.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
