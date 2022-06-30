@@ -12,6 +12,8 @@ void main()
     vec4 texColor = texture(uTexture,vTextureCoords);
     color = vec4(texColor) * uColor;
     float brightness = dot(color.rgb, vec3(0.2126, 0.7152, 0.0722));
+    if(color.a == 0)
+        discard;
     if(brightness <= 0.0)
         color = vec4(0.01,0.01,0.01,1);
 }

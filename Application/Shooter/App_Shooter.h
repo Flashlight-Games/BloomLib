@@ -17,7 +17,7 @@ namespace Application{
 
             Bloom::Sprite* sprite_block;
             int block_color_uid = 0;
-            float block_color[3] = {1,1,1};
+            float block_color[3] = {5,5,5};
 
             Bloom::Chromatic_Aberration* framebuffer_ca;
             float ca_size = 0.000;

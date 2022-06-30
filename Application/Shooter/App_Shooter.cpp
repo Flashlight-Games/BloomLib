@@ -18,7 +18,7 @@ void Shooter::Begin() {
 
     text_pressstart = new Bloom::Text("res/engine/fonts/PressStart/PressStart.ttf",GetViewMatrix(),GetWindowProjectionMatrix(),-0.5, 512);
 
-    sprite_block = new Bloom::Sprite("res/engine/textures/detailTest16Border.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
+    sprite_block = new Bloom::Sprite("res/test/ring.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
     sprite_block->SetLocation(GetPixelWindowSize() / glm::vec2(2));
     sprite_block->SetRotation(0);
 
@@ -33,7 +33,7 @@ void Shooter::UILoop() {
         ImGui::Begin("Control window");
         ImGui::ColorPicker3("BLOCK COLOR",block_color);
         ImGui::DragFloat("CA SIZE", &ca_size,0.001,0.0,0.1);
-        ImGui::DragInt("BLOOM", &bloom_size, 1, 0.0, 1000.0);
+        ImGui::DragInt("BLOOM", &bloom_size, 0.1, 0.0, 10);
         ImGui::End();
 
         ImGui::Begin("Performance window");
@@ -60,6 +60,10 @@ void Shooter::GameLoop() {
     //sprite_block->SetRotation((GetTime()/10.0)*360);
 
     framebuffer_bloom->DrawToDefault(GetWindowSize());
+
+    sprite_block->GetShader()->use();
+    sprite_block->GetShader()->uniformVec4(block_color_uid, glm::vec4(1, 1, 1, 1));
+    sprite_block->Draw(GetViewMatrix());
 }
 
 void Shooter::InputLoop() {
