@@ -25,9 +25,7 @@ Bloom::Bloom_Framebuffer::Bloom_Framebuffer(int width, int height){
 		this->mips.push_back(new Bloom::Texture2D(nullptr, glm::vec2(lastSizeX / 2, lastSizeY / 2)));
 		lastSizeX /= 2;
 		lastSizeY /= 2;
-		std::cout << counter << "\n";
 	}
-	
 }
 
 void Bloom::Bloom_Framebuffer::SetSize(float size) {
