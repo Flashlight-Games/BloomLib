@@ -11,7 +11,7 @@
 #include <GLM/gtc/type_ptr.hpp>
 
 #include <vector>
-#include "../sprite/sprite.h"
+#include "sprite/sprite.h"
 
 namespace Bloom{
     class Particle {
@@ -60,13 +60,6 @@ namespace Bloom{
             }
         };
         std::vector<T*> Play(GLFWwindow* window, float time,glm::vec2 location = glm::vec2(0,0)) {
-            if (particles.size() > 100) {
-                for (int i = 0; i < p_amount; i++)
-                {
-                    particles.erase(particles.begin());
-                }
-            }
-
             int last_size = particles.size();
             time = std::max(time, (float)0.0);
             std::vector<T*> new_particles;
@@ -80,16 +73,19 @@ namespace Bloom{
             }
             return new_particles;
         };
-        void Update(float Gametime, float Gamespeed) {
-            if (particles.size() > 0)
+        void Draw(float Gametime, float Gamespeed) {
+            if (particles.size() > 0) {
                 for (int i = 0; i < particles.size(); i++)
                 {
                     T* in = particles.at(i);
                     Particle* p = static_cast<Particle*>(in);
-                    p->Update(Gametime,Gamespeed);
+                    p->Update(Gametime, Gamespeed);
                     p_sprite->GetShader()->use();
-                    p_sprite->GetShader()->uniformMat4(p_sprite->GetShader()->getUniformId(("model[" + std::to_string(i) + "]").c_str()), p->GetTransformMatrix());
-                    p_sprite->GetShader()->uniformVec4(p_sprite->GetShader()->getUniformId(("color[" + std::to_string(i) + "]").c_str()), p->GetColor());
+                    p_sprite->GetShader()->uniformMat4(p_sprite->GetShader()->getUniformId(("model[" + std::to_string(i % 101) + "]").c_str()), p->GetTransformMatrix());
+                    p_sprite->GetShader()->uniformVec4(p_sprite->GetShader()->getUniformId(("color[" + std::to_string(i % 101) + "]").c_str()), p->GetColor());
+
+                    if(i > 0 && i % 101 == 100)
+                        p_sprite->DrawInstanced(p_view_matrix, (int)std::min((int)particles.size(), 100));
 
                     if (p->GetAge() > p->GetLifetime())
                         particles.erase(particles.begin() + i);
@@ -97,11 +93,11 @@ namespace Bloom{
                         p->SetAge(Gametime);
                     }
                 }
+                
+                p_sprite->DrawInstanced(p_view_matrix, (int)std::min((int)particles.size(), (int)particles.size() % 101));
+                
+            }
         };
-        void Draw() {
-            if (particles.size() > 0)
-                p_sprite->DrawInstanced(p_view_matrix,particles.size());
-        }
 
         void Clear() {
             particles.clear();

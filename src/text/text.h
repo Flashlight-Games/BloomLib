@@ -5,8 +5,8 @@
 #include <glad/glad.h> // OPENGL
 #include <GLFW/glfw3.h>
 
-#include "../textures/textures.h"
-#include "../shaders/shaders.h"
+#include "textures/textures.h"
+#include "shaders/shaders.h"
 
 #include <iostream>
 

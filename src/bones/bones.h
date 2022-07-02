@@ -1,7 +1,6 @@
 #ifndef BONES
 #define BONES
 
-// #include "../dependencies.h"
 #include <GLM/glm.hpp> // MATRICES
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>

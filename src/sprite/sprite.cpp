@@ -17,11 +17,11 @@ Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_mat
     float yScale = (this->texture->GetSize()[1]*ppp); // Sprite width 
 
     float verts[] = {
-        // POSITION                                          COLOR       Texture
-        (origin[0]-1)*xScale,     (origin[1]-1)*yScale,      1,1,1,      textureUVOffset[0],textureUVOffset[1],
-        (origin[0])*xScale, (origin[1]-1)*yScale,            1,1,1,      textureUVOffset[0]+textureUVScale[0],textureUVOffset[1],
+        // POSITION                                          COLOR       Texture                                                                   
+        (origin[0]-1)*xScale,     (origin[1]-1)*yScale,      1,1,1,      textureUVOffset[0],textureUVOffset[1],                                    
+        (origin[0])*xScale, (origin[1]-1)*yScale,            1,1,1,      textureUVOffset[0]+textureUVScale[0],textureUVOffset[1],                  
         (origin[0])*xScale, (origin[1])*yScale,              1,1,1,      textureUVOffset[0]+textureUVScale[0],textureUVOffset[1]+textureUVScale[1],
-        (origin[0]-1)*xScale,     (origin[1])*yScale,        1,1,1,      textureUVOffset[0],textureUVOffset[1]+textureUVScale[1]
+        (origin[0]-1)*xScale,     (origin[1])*yScale,        1,1,1,      textureUVOffset[0],textureUVOffset[1]+textureUVScale[1],                  
     };
 
     glGenBuffers(1,&vbo); // Set vbo id
@@ -33,14 +33,15 @@ Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_mat
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo); // bind the ebo as an element array buffer
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),&indices,GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,7*sizeof(float),((void*)(0*sizeof(float)))); // Position
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), ((void*)(0 * sizeof(float)))); // Position
 
-    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,7*sizeof(float),((void*)(2*sizeof(float)))); // Color
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), ((void*)(2 * sizeof(float)))); // Color
 
-    glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,7*sizeof(float),((void*)(5*sizeof(float)))); // Texture
     glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), ((void*)(5 * sizeof(float)))); // Texture
+
 
     SetShader(new Bloom::Shader("res/engine/shaders/sprite/spriteshader_vertex.glsl", "res/engine/shaders/sprite/spriteshader_fragment.glsl"),view_matrix,pixel_projection_matrix);
 
@@ -62,9 +63,11 @@ void Sprite::UpdateLocation(){
 void Sprite::Draw(glm::mat4 view_matrix){
     shader->use();
     shader->uniformFloat(uColorUni,1);
-    setTextureAtLocation(GL_TEXTURE0,this->texture->GetID()); shader->uniformInt(this->uTextureUni,0);
+    setTextureAtLocation(GL_TEXTURE0,this->texture->GetID()); shader->uniformInt(uTextureUni,0);
     shader->uniformMat4(shader->getUniformId("model"),model_matrix);
     shader->uniformMat4(shader->getUniformId("view"),(view_matrix));
+
+    UpdateLocation();
 
     this->texture->bind();
     glBindVertexArray(this->vao);
@@ -75,8 +78,10 @@ void Bloom::Sprite::DrawInstanced(glm::mat4 view_matrix,int amount)
 {
     shader->use();
     shader->uniformFloat(uColorUni, 1);
-    setTextureAtLocation(GL_TEXTURE0, this->texture->GetID()); shader->uniformInt(this->uTextureUni, 0);
+    setTextureAtLocation(GL_TEXTURE0, this->texture->GetID()); shader->uniformInt(uTextureUni, 0);
     shader->uniformMat4(shader->getUniformId("view"), (view_matrix));
+
+    UpdateLocation();
 
     this->texture->bind();
     glBindVertexArray(this->vao);

@@ -3,8 +3,8 @@
 
 #define PI 3.14159265358979323846   
 
-#include "../dependencies.h"
-#include "../sprite/sprite.h"
+#include "dependencies.h"
+#include "sprite/sprite.h"
 
 namespace PhysX
 {

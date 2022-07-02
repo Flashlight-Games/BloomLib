@@ -1,7 +1,8 @@
 #ifndef ENGINE
 #define ENGINE
 
-#include "../src/dependencies.h"
+#include "dependencies.h"
+#include "utils/utils.h"
 
 namespace Game{
     struct configuration {
@@ -62,7 +63,7 @@ namespace Game{
             void SetCameraLocation(glm::vec2 location){ view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location.x, location.y, -1)); }
 
             double GetDeltaTime() { return frame_time; };
-            double GetGameSpeed() { return GetDeltaTime() / 1000.0; };
+            double GetGameSpeed() { return GetDeltaTime() / 16.67; };
 
             int PlaySound(SoLoud::Wav* sample) { return soloud.play(*sample); };
             int PlaySound(SoLoud::Wav* sample, float pitch) { int id = soloud.play(*sample); soloud.setRelativePlaySpeed(id, pitch); return id; };
@@ -116,27 +117,6 @@ namespace Game{
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING
-}
-
-namespace Utils {
-    template <typename T> T Lerp(T A, T B, float percentage) {
-        return A + (B - A) * percentage;
-    };
-
-    float Distance2D(glm::vec2 A, glm::vec2 B);
-
-    glm::vec2 PointAtAngleAndDistance(float angle, float distance);
-
-    void SyncSleep(Game::Engine* app, int target_fps = 60);
-    void SleepMS(int ms);
-
-    int RandInt(int min, int max);
-
-    float RandFloat(float min, float max);
-
-    bool isDevelopmentConfiguration();
-
-    void CopyFramebuffer(Bloom::Framebuffer* source, Bloom::Framebuffer* destination);
 }
 
 #endif

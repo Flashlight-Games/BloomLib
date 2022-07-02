@@ -3,37 +3,40 @@
 using namespace Application;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    //Application::Boxer* app = static_cast<Application::Boxer*>(glfwGetWindowUserPointer(window));
+    Application::Shooter* app = static_cast<Application::Shooter*>(glfwGetWindowUserPointer(window));
         if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-            // PASS
+         //   app->GetEmmiter()->Play(app->GetWindow(),app->GetTime(),app->GetCursorPosition());
         }
 }
 
+void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
+    Application::Shooter* app = static_cast<Application::Shooter*>(glfwGetWindowUserPointer(window));
+    if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        app->GetChecker()->SetPosition(app->GetCursorPosition(),app->GetWindow(),app->GetTime());
+    }
+}
 
 void Shooter::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
-
-    framebuffer_ca = new Bloom::Chromatic_Aberration(GetWindowSize().x, GetWindowSize().y);
-    framebuffer_bloom = new Bloom::Bloom_Framebuffer(GetWindowSize().x, GetWindowSize().y);
+    glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
 
     text_pressstart = new Bloom::Text("res/engine/fonts/PressStart/PressStart.ttf",GetViewMatrix(),GetWindowProjectionMatrix(),-0.5, 512);
 
-    sprite_block = new Bloom::Sprite("res/test/ring.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
+    sprite_block = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
     sprite_block->SetLocation(GetPixelWindowSize() / glm::vec2(2));
     sprite_block->SetRotation(0);
 
     sprite_block->GetShader()->use();
     block_color_uid = sprite_block->GetShader()->getUniformId("uColor");
+
+    checker = new Application::Checker(25,GetViewMatrix(),GetPixelProjectionMatrix());
   
-    //glClearColor(0.21, 0.21, 0.21, 1);
 }
 
 void Shooter::UILoop() {
     if (Utils::isDevelopmentConfiguration()) {
         ImGui::Begin("Control window");
         ImGui::ColorPicker3("BLOCK COLOR",block_color);
-        ImGui::DragFloat("CA SIZE", &ca_size,0.001,0.0,0.1);
-        ImGui::DragInt("BLOOM", &bloom_size, 0.1, 0.0, 10);
         ImGui::End();
 
         ImGui::Begin("Performance window");
@@ -50,20 +53,12 @@ void Shooter::GameLoop() {
 
     sprite_block->GetShader()->use();
     sprite_block->GetShader()->uniformVec4(block_color_uid, glm::vec4(block_color[0], block_color[1], block_color[2], 1));
+    sprite_block->SetRotation((GetTime() / 10.0) * 360);
     sprite_block->Draw(GetViewMatrix());
 
-    
-    framebuffer_bloom->Use(true);
-    framebuffer_bloom->SetSize(bloom_size);
-    DrawPixels();
+    checker->Draw(GetTime(), GetGameSpeed());
 
-    //sprite_block->SetRotation((GetTime()/10.0)*360);
-
-    framebuffer_bloom->DrawToDefault(GetWindowSize());
-
-    sprite_block->GetShader()->use();
-    sprite_block->GetShader()->uniformVec4(block_color_uid, glm::vec4(1, 1, 1, 1));
-    sprite_block->Draw(GetViewMatrix());
+    DrawPixelsToDefault();
 }
 
 void Shooter::InputLoop() {

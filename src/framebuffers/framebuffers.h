@@ -5,9 +5,9 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
-#include "../shaders/shaders.h"
 
-#include "../textures/textures.h"
+#include "shaders/shaders.h"
+#include "textures/textures.h"
 
 namespace Bloom{
     class Framebuffer{

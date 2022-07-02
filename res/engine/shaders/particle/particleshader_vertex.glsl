@@ -6,8 +6,8 @@ layout (location = 2) in vec2 textureCoords;
 out vec4 vColor;
 out vec2 vTextureCoords;
 
-uniform mat4 model[100];
-uniform vec4 color[100];
+uniform mat4 model[128];
+uniform vec4 color[128];
 
 uniform mat4 view;
 uniform mat4 projection;

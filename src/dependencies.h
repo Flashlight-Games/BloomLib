@@ -44,6 +44,4 @@
 #include "framebuffers/chromatic_aberration.h" // CHROMATIC ABERRATION
 #include "framebuffers/bloom.h" // BLOOM
 
-#include "engine/engine.h" // ENGINE
-
 #endif

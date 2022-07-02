@@ -437,6 +437,7 @@
   <ItemGroup>
     <ClCompile Include="Application\Shooter\App_Shooter.cpp" />
     <ClCompile Include="Application\Shooter\main.cpp" />
+    <ClCompile Include="Application\Shooter\Checker\Checker.cpp" />
     <ClCompile Include="include\soloud\dr_impl.cpp" />
     <ClCompile Include="include\soloud\soloud.cpp" />
     <ClCompile Include="include\soloud\soloud_audiosource.cpp" />
@@ -484,9 +485,11 @@
     <ClCompile Include="src\sprite\spritesheet.cpp" />
     <ClCompile Include="src\textures\textures.cpp" />
     <ClCompile Include="src\text\text.cpp" />
+    <ClCompile Include="src\utils\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Shooter\App_Shooter.h" />
+    <ClInclude Include="Application\Shooter\Checker\Checker.h" />
     <ClInclude Include="include\JSON\json.hpp" />
     <ClInclude Include="include\soloud\dr_flac.h" />
     <ClInclude Include="include\soloud\dr_mp3.h" />
@@ -839,6 +842,7 @@
     <ClInclude Include="src\sprite\spritesheet.h" />
     <ClInclude Include="src\textures\textures.h" />
     <ClInclude Include="src\text\text.h" />
+    <ClInclude Include="src\utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\libglfw3dll.a" />
@@ -950,7 +954,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;ENGINE_CONFIGURATION="$(ConfigurationName)"</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\include;%(AdditionalIncludeDirectories);$(ProjectDir)\src;</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>Disabled</Optimization>
     </ClCompile>

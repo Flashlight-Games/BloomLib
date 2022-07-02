@@ -12,8 +12,8 @@
 #include <math.h>
 #include <string>
 
-#include "../shaders/shaders.h" // SHADERS
-#include "../textures/textures.h" // TEXTURES
+#include "shaders/shaders.h" // SHADERS
+#include "textures/textures.h" // TEXTURES
 
 namespace Bloom{
     class Sprite{
@@ -37,9 +37,12 @@ namespace Bloom{
             glm::vec2 GetOrigin() { return Origin; };
 
             void SetTransform(glm::vec2 location, float rotation, glm::vec2 scale)
-            {transformation[0] = location[0];transformation[1] = location[1];
-            transformation[2]=rotation;
-            transformation[3] = scale[0];transformation[4] = scale[1];};
+            {
+                transformation[0] = location[0]; transformation[1] = location[1];
+                transformation[2] = rotation;
+                transformation[3] = scale[0]; transformation[4] = scale[1];
+                UpdateLocation();
+            };
 
             void SetUVOffset(glm::vec2 offset);
 

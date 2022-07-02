@@ -1,7 +1,8 @@
 #ifndef APP
 #define APP
 
-#include "../../src/engine/engine.h"
+#include "engine/engine.h"
+#include "Checker/Checker.h"
 
 namespace Application{
 	class Shooter : public Game::Engine {
@@ -12,6 +13,7 @@ namespace Application{
             void UILoop();
             void InputLoop();
 
+            auto GetChecker() { return this->checker; };
         private:
             Bloom::Text* text_pressstart;
 
@@ -19,11 +21,7 @@ namespace Application{
             int block_color_uid = 0;
             float block_color[3] = {5,5,5};
 
-            Bloom::Chromatic_Aberration* framebuffer_ca;
-            float ca_size = 0.000;
-
-            Bloom::Bloom_Framebuffer* framebuffer_bloom;
-            int bloom_size = 0;
+            Application::Checker* checker;
 	};
 }
 #endif
