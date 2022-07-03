@@ -123,3 +123,10 @@ bool collisionBox::check(collisionBox other){
 
     return true;
 }
+
+bool PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end){
+    float height = (std::sqrt(std::pow(start.x - end.x, 2) + std::pow(start.y - end.y, 2)));
+    float angle = glm::degrees(atan2(start.y - end.y, start.x - end.x)) - 90;
+    collisionBox* box = new collisionBox(channel, start, glm::vec2(0.001, height), angle, glm::vec2(0.5, 0.0));
+    return box->check(*other);
+};

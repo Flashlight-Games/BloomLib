@@ -14,12 +14,15 @@ namespace Application{
             void InputLoop();
 
             auto GetChecker() { return this->checker; };
+            auto GetmainBox() { return this->mainBox; };
         private:
             Bloom::Text* text_pressstart;
 
             Bloom::Sprite* sprite_block;
             int block_color_uid = 0;
             float block_color[3] = {5,5,5};
+
+            PhysX::collisionBox* mainBox;
 
             Application::Checker* checker;
 	};

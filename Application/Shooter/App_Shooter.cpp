@@ -12,7 +12,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
     Application::Shooter* app = static_cast<Application::Shooter*>(glfwGetWindowUserPointer(window));
     if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        app->GetChecker()->SetPosition(app->GetCursorPosition(),app->GetWindow(),app->GetTime());
+        app->GetChecker()->SetPosition(app->GetCursorPosition(),app->GetWindow(),app->GetTime(),app->GetmainBox());
     }
 }
 
@@ -29,8 +29,9 @@ void Shooter::Begin() {
     sprite_block->GetShader()->use();
     block_color_uid = sprite_block->GetShader()->getUniformId("uColor");
 
+    mainBox = new PhysX::collisionBox("main", sprite_block);
+
     checker = new Application::Checker(25,GetViewMatrix(),GetPixelProjectionMatrix());
-  
 }
 
 void Shooter::UILoop() {
@@ -56,8 +57,11 @@ void Shooter::GameLoop() {
     sprite_block->SetRotation((GetTime() / 10.0) * 360);
     sprite_block->Draw(GetViewMatrix());
 
-    checker->Draw(GetTime(), GetGameSpeed());
+    mainBox->setLocation(sprite_block->GetLocation());
+    mainBox->setRotation(sprite_block->GetRotation());
+    mainBox->setScale(sprite_block->GetSize());
 
+    checker->Draw(GetTime(), GetGameSpeed());
     DrawPixelsToDefault();
 }
 

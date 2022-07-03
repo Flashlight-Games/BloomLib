@@ -5,6 +5,7 @@
 
 #include "dependencies.h"
 #include "sprite/sprite.h"
+#include "utils/utils.h"
 
 namespace PhysX
 {
@@ -36,6 +37,8 @@ namespace PhysX
 
         std::string channel;
     };
+
+    bool LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end);
 }
 
 #endif
