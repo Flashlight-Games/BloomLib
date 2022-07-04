@@ -17,18 +17,13 @@ I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(58,51): warning C4244: '=': c
 I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
 I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(54,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
 I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(74,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(35,22): warning C4018: '<': signed/unsigned mismatch
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(38,78): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(36,22): warning C4018: '<': signed/unsigned mismatch
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(57,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(61,51): warning C4244: 'argument': conversion from 'float' to 'uint16_t', possible loss of data
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(64,42): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(78,35): warning C4018: '<': signed/unsigned mismatch
 I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(76): message : while compiling class template member function 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)'
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(42): message : see reference to function template instantiation 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)' being compiled
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(43): message : see reference to function template instantiation 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)' being compiled
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(24): message : see reference to class template instantiation 'Bloom::ParticleEmitter<Application::CheckParticles>' being compiled
   Checker.cpp
 I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(57,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
@@ -48,15 +43,10 @@ I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(33,42): warning C
               T=float
           ]
 I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(35,22): warning C4018: '<': signed/unsigned mismatch
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(38,78): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(36,22): warning C4018: '<': signed/unsigned mismatch
 I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(78,35): warning C4018: '<': signed/unsigned mismatch
 I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(76): message : while compiling class template member function 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)'
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(42): message : see reference to function template instantiation 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)' being compiled
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(43): message : see reference to function template instantiation 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)' being compiled
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(24): message : see reference to class template instantiation 'Bloom::ParticleEmitter<Application::CheckParticles>' being compiled
   main.cpp
   The contents of <filesystem> are available only with C++17 or later.
@@ -76,15 +66,10 @@ I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(58,51): warning C4244: '=': c
 I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
 I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(54,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
 I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(74,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(35,22): warning C4018: '<': signed/unsigned mismatch
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(38,78): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(36,22): warning C4018: '<': signed/unsigned mismatch
 I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(78,35): warning C4018: '<': signed/unsigned mismatch
 I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(76): message : while compiling class template member function 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)'
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(42): message : see reference to function template instantiation 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)' being compiled
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(43): message : see reference to function template instantiation 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)' being compiled
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(24): message : see reference to class template instantiation 'Bloom::ParticleEmitter<Application::CheckParticles>' being compiled
   Generating Code...
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance

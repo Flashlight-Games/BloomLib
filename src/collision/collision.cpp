@@ -129,4 +129,14 @@ bool PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 start,
     float angle = glm::degrees(atan2(start.y - end.y, start.x - end.x)) - 90;
     collisionBox* box = new collisionBox(channel, start, glm::vec2(0.001, height), angle, glm::vec2(0.5, 0.0));
     return box->check(*other);
-};
+}
+bool PhysX::AreaCheck(std::string channel, collisionBox* other, glm::vec2 position, glm::vec2 size)
+{
+    collisionBox* box = new collisionBox(channel, position, size, 0, glm::vec2(0.5, 0.5));
+    return box->check(*other);
+}
+bool PhysX::PointCheck(std::string chanel, collisionBox* other, glm::vec2 position)
+{
+    return AreaCheck(chanel,other,position,glm::vec2(0.001));
+}
+

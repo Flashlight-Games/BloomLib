@@ -35,7 +35,7 @@ namespace Application {
 			for (int i = 0; i < particles.size(); i++)
 			{
 				particles.at(i)->SetLocation(glm::vec2(Utils::Lerp(posA, posB, (i+1) / (float)amount).x, Utils::Lerp(posA, posB, (i + 1) / (float)amount).y));
-				particles.at(i)->SetScale(glm::vec2(Utils::Distance2D(posA, posB) / 16.0 / amount));
+				//particles.at(i)->SetScale(glm::vec2(Utils::Distance2D(posA, posB) / 16.0 / amount));
 				particles.at(i)->SetColor(hit ? glm::vec4(1, 0, 0, 1) : glm::vec4(1, 1, 1, 1));
 			}
 		}
