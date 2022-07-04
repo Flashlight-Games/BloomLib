@@ -1,5 +1,6 @@
 #ifndef DEPS
 #define DEPS
+#define NOMINMAX
 
 //#define T template <typename T>
 # define PI 3.14159265358979323846

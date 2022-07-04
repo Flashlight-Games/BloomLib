@@ -39,6 +39,7 @@ namespace PhysX
     };
 
     bool LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end);
+    bool LineTraceRadius(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end, float radius);
     bool AreaCheck(std::string channel, collisionBox* other,glm::vec2 position,glm::vec2 size);
     bool PointCheck(std::string chanel, collisionBox* other, glm::vec2 position);
 }
