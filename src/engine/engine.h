@@ -62,7 +62,7 @@ namespace Game{
             void DrawPixels() { (*fb_pixels).draw(); };
             void SetCameraLocation(glm::vec2 location){ view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location.x, location.y, -1)); }
 
-            double GetDeltaTime() { return frame_time; };
+            double GetDeltaTime() { return frame_time * delta_multiplier; };
             double GetGameSpeed() { return GetDeltaTime() / 16.67; };
 
             int PlaySound(SoLoud::Wav* sample) { return soloud.play(*sample); };
@@ -73,6 +73,9 @@ namespace Game{
 
             void FadeVolume(int id,int target, int duration) { soloud.fadeVolume(id,target ,duration); };
             SoLoud::Soloud* GetSound() { return &soloud; };
+
+            void SetGameSpeedMultiplier(float multiplier) { delta_multiplier = multiplier; };
+            float GetGameSpeedMultiplier() { return delta_multiplier; };
 
         private:
             // EVENTS
@@ -112,8 +115,9 @@ namespace Game{
 
             std::chrono::steady_clock::time_point last_time = GetHighResTime(); // TIME AT LAST FRAME
             double frame_time = 0.0;                                            // DELTA TIME BETWEEN FRAMES IN MS
+            float delta_multiplier = 1.0;                                       // DELTA SPEED MULTIPLIER
 
-            configuration engine_config;
+            configuration engine_config;                                        // ENGINE CONFIGURATION
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING
