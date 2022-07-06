@@ -22,6 +22,8 @@
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>
 
+#include <FastNoise/FastNoise.h> // NOISE
+
 #include <iostream>
 #include <math.h>
 #include <vector>

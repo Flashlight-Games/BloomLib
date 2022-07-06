@@ -22,6 +22,8 @@ namespace Utils {
     bool isDevelopmentConfiguration();
 
     void CopyFramebuffer(Bloom::Framebuffer* source, Bloom::Framebuffer* destination);
+
+    float Noise2D_Simplex(glm::vec2 size, int seed = RandInt(-9999,9999));
 }
 
 #endif

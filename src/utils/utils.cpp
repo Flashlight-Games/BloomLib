@@ -36,6 +36,14 @@ void Utils::CopyFramebuffer(Bloom::Framebuffer* source, Bloom::Framebuffer* dest
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 }
 
+float Utils::Noise2D_Simplex(glm::vec2 size,int seed)
+{
+    FastNoise::SmartNode<> simplex = FastNoise::New<FastNoise::Simplex>();
+    auto output = simplex->GenSingle2D(size.x,size.y,seed);
+    
+    return output;
+}
+
 int Utils::RandInt(int min, int max) {
     return int(Lerp(min, max, (rand() % 10) / 10.0));
 }

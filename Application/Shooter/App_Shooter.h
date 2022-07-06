@@ -15,6 +15,7 @@ namespace Application{
 
             auto GetChecker() { return this->checker; };
             auto GetmainBox() { return this->mainBox; };
+            auto GetSptiteBlock() { return this->sprite_block; };
         private:
             Bloom::Text* text_pressstart;
 

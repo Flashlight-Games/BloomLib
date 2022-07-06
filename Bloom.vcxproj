@@ -259,6 +259,12 @@
     <None Include="include\GLM\gtx\vector_angle.inl" />
     <None Include="include\GLM\gtx\vector_query.inl" />
     <None Include="include\GLM\gtx\wrap.inl" />
+    <None Include="FastNoise.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="FastNoiseD.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="res\engine\shaders\basic\mvp_vertex.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
@@ -490,6 +496,29 @@
   <ItemGroup>
     <ClInclude Include="Application\Shooter\App_Shooter.h" />
     <ClInclude Include="Application\Shooter\Checker\Checker.h" />
+    <ClInclude Include="include\FastNoise\FastNoise.h" />
+    <ClInclude Include="include\FastNoise\FastNoise_C.h" />
+    <ClInclude Include="include\FastNoise\FastNoise_Config.h" />
+    <ClInclude Include="include\FastNoise\FastNoise_Export.h" />
+    <ClInclude Include="include\FastNoise\Generators\BasicGenerators.h" />
+    <ClInclude Include="include\FastNoise\Generators\Blends.h" />
+    <ClInclude Include="include\FastNoise\Generators\Cellular.h" />
+    <ClInclude Include="include\FastNoise\Generators\DomainWarp.h" />
+    <ClInclude Include="include\FastNoise\Generators\DomainWarpFractal.h" />
+    <ClInclude Include="include\FastNoise\Generators\Fractal.h" />
+    <ClInclude Include="include\FastNoise\Generators\Generator.h" />
+    <ClInclude Include="include\FastNoise\Generators\Modifiers.h" />
+    <ClInclude Include="include\FastNoise\Generators\Perlin.h" />
+    <ClInclude Include="include\FastNoise\Generators\Simplex.h" />
+    <ClInclude Include="include\FastNoise\Generators\Value.h" />
+    <ClInclude Include="include\FastNoise\Metadata.h" />
+    <ClInclude Include="include\FastNoise\SmartNode.h" />
+    <ClInclude Include="include\FastSIMD\FastSIMD.h" />
+    <ClInclude Include="include\FastSIMD\FastSIMD_Config.h" />
+    <ClInclude Include="include\FastSIMD\FastSIMD_Export.h" />
+    <ClInclude Include="include\FastSIMD\FunctionList.h" />
+    <ClInclude Include="include\FastSIMD\InlInclude.h" />
+    <ClInclude Include="include\FastSIMD\SIMDTypeList.h" />
     <ClInclude Include="include\JSON\json.hpp" />
     <ClInclude Include="include\soloud\dr_flac.h" />
     <ClInclude Include="include\soloud\dr_mp3.h" />
@@ -845,6 +874,8 @@
     <ClInclude Include="src\utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Library Include="lib\FastNoise.lib" />
+    <Library Include="lib\FastNoiseD.lib" />
     <Library Include="lib\libglfw3dll.a" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
