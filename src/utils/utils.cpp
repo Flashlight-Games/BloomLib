@@ -40,15 +40,15 @@ float Utils::Noise_Simplex(glm::vec2 position,int seed)
 {
     FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::Simplex>();
     std::vector<float> output(3*3);
-    noise->GenUniformGrid2D(output.data(), position.x, position.y, 3, 3, 1, 1);
+    noise->GenUniformGrid2D(output.data(), position.x, position.y, 3, 3, 1, seed);
     return output.at(0);
 }
 
-std::vector<float> Utils::Noise_Simplex(glm::vec2 position, glm::vec2 size, int seed = RandInt(-9999, 9999))
+std::vector<float> Utils::Noise_Simplex(glm::vec2 position, glm::vec2 size, int seed)
 {
     FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::Simplex>();
     std::vector<float> output(size.x * size.y);
-    noise->GenUniformGrid2D(output.data(), position.x, position.y, size.x, size.y, 1, 1);
+    noise->GenUniformGrid2D(output.data(), position.x, position.y, size.x, size.y, 1, seed);
     return output;
 }
 
@@ -56,15 +56,15 @@ float Utils::Noise_Value(glm::vec2 position, int seed)
 {
     FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::Value>();
     std::vector<float> output(5 * 5);
-    noise->GenUniformGrid2D(output.data(), position.x, position.y, 5, 5, 1, 1);
+    noise->GenUniformGrid2D(output.data(), position.x, position.y, 5, 5, 1, seed);
     return output.at(0);
 }
 
-std::vector<float> Utils::Noise_Value(glm::vec2 position, glm::vec2 size, int seed = RandInt(-9999, 9999))
+std::vector<float> Utils::Noise_Value(glm::vec2 position, glm::vec2 size, int seed)
 {
     FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::Value>();
     std::vector<float> output(size.x * size.y);
-    noise->GenUniformGrid2D(output.data(), position.x, position.y, size.x, size.y, 1, 1);
+    noise->GenUniformGrid2D(output.data(), position.x, position.y, size.x, size.y, 1, seed);
     return output;
 }
 

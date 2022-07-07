@@ -484,6 +484,7 @@
     <ClCompile Include="src\framebuffers\chromatic_aberration.cpp" />
     <ClCompile Include="src\framebuffers\framebuffers.cpp" />
     <ClCompile Include="src\glad.cpp" />
+    <ClCompile Include="src\network\network.cpp" />
     <ClCompile Include="src\particles\particles.cpp" />
     <ClCompile Include="src\shaders\shaders.cpp" />
     <ClCompile Include="src\shake\shake.cpp" />
@@ -496,6 +497,15 @@
   <ItemGroup>
     <ClInclude Include="Application\Shooter\App_Shooter.h" />
     <ClInclude Include="Application\Shooter\Checker\Checker.h" />
+    <ClInclude Include="include\enet\callbacks.h" />
+    <ClInclude Include="include\enet\enet.h" />
+    <ClInclude Include="include\enet\list.h" />
+    <ClInclude Include="include\enet\protocol.h" />
+    <ClInclude Include="include\enet\time.h" />
+    <ClInclude Include="include\enet\types.h" />
+    <ClInclude Include="include\enet\unix.h" />
+    <ClInclude Include="include\enet\utility.h" />
+    <ClInclude Include="include\enet\win32.h" />
     <ClInclude Include="include\FastNoise\FastNoise.h" />
     <ClInclude Include="include\FastNoise\FastNoise_C.h" />
     <ClInclude Include="include\FastNoise\FastNoise_Config.h" />
@@ -864,6 +874,7 @@
     <ClInclude Include="src\dependencies.h" />
     <ClInclude Include="src\framebuffers\bloom.h" />
     <ClInclude Include="src\framebuffers\framebuffers.h" />
+    <ClInclude Include="src\network\network.h" />
     <ClInclude Include="src\particles\particles.h" />
     <ClInclude Include="src\shaders\shaders.h" />
     <ClInclude Include="src\shake\shake.h" />
