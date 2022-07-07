@@ -23,7 +23,10 @@ namespace Utils {
 
     void CopyFramebuffer(Bloom::Framebuffer* source, Bloom::Framebuffer* destination);
 
-    float Noise2D_Simplex(glm::vec2 size, int seed = RandInt(-9999,9999));
+    float Noise_Simplex(glm::vec2 position, int seed = RandInt(-9999,9999));
+    std::vector<float> Noise_Simplex(glm::vec2 position, glm::vec2 size,int seed = RandInt(-9999, 9999));
+    float Noise_Value(glm::vec2 position, int seed = RandInt(-9999, 9999));
+    std::vector<float> Noise_Value(glm::vec2 position, glm::vec2 size, int seed = RandInt(-9999, 9999));
 }
 
 #endif

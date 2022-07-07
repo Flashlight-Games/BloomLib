@@ -36,11 +36,35 @@ void Utils::CopyFramebuffer(Bloom::Framebuffer* source, Bloom::Framebuffer* dest
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 }
 
-float Utils::Noise2D_Simplex(glm::vec2 size,int seed)
+float Utils::Noise_Simplex(glm::vec2 position,int seed)
 {
-    FastNoise::SmartNode<> simplex = FastNoise::New<FastNoise::Simplex>();
-    auto output = simplex->GenSingle2D(size.x,size.y,seed);
-    
+    FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::Simplex>();
+    std::vector<float> output(3*3);
+    noise->GenUniformGrid2D(output.data(), position.x, position.y, 3, 3, 1, 1);
+    return output.at(0);
+}
+
+std::vector<float> Utils::Noise_Simplex(glm::vec2 position, glm::vec2 size, int seed = RandInt(-9999, 9999))
+{
+    FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::Simplex>();
+    std::vector<float> output(size.x * size.y);
+    noise->GenUniformGrid2D(output.data(), position.x, position.y, size.x, size.y, 1, 1);
+    return output;
+}
+
+float Utils::Noise_Value(glm::vec2 position, int seed)
+{
+    FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::Value>();
+    std::vector<float> output(5 * 5);
+    noise->GenUniformGrid2D(output.data(), position.x, position.y, 5, 5, 1, 1);
+    return output.at(0);
+}
+
+std::vector<float> Utils::Noise_Value(glm::vec2 position, glm::vec2 size, int seed = RandInt(-9999, 9999))
+{
+    FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::Value>();
+    std::vector<float> output(size.x * size.y);
+    noise->GenUniformGrid2D(output.data(), position.x, position.y, size.x, size.y, 1, 1);
     return output;
 }
 

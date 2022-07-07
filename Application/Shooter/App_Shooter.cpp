@@ -5,7 +5,7 @@ using namespace Application;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Application::Shooter* app = static_cast<Application::Shooter*>(glfwGetWindowUserPointer(window));
         if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-            app->GetSptiteBlock()->SetLocation(app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0,50 * Utils::Noise2D_Simplex(glm::vec2(0, app->GetTime()), 5) / 2));
+            app->GetSptiteBlock()->SetLocation(app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0,50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime()), 5) / 2));
             std::cout << app->GetSptiteBlock()->GetLocation().y << "\n";
         }
 }
@@ -68,6 +68,6 @@ void Shooter::GameLoop() {
 
 void Shooter::InputLoop() {
     if (glfwGetKey(GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
-        GetSptiteBlock()->SetLocation(GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise2D_Simplex(glm::vec2(0, GetTime()), 5) / 2));
+        GetSptiteBlock()->SetLocation(GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, GetTime()), 5) / 2));
     }
 }
