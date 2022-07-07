@@ -480,7 +480,6 @@
     <None Include="res\engine\shaders\testing_framebuffers\framebufferMulti_fragment.glsl" />
     <None Include="res\engine\shaders\testing_textures\textureshader_fragment.glsl" />
     <None Include="res\engine\shaders\testing_textures\textureshader_vertex.glsl" />
-    <None Include="imgui.ini" />
     <None Include="res\engine\shaders\particle\particleshader_fragment.glsl" />
     <None Include="res\engine\shaders\particle\particleshader_vertex.glsl" />
     <None Include="src\framebuffers\chromatic_aberration.h" />
@@ -1866,5 +1865,6 @@
     <Library Include="lib\libglfw3dll.a" />
     <Library Include="lib\FastNoise.lib" />
     <Library Include="lib\FastNoiseD.lib" />
+    <Library Include="lib\enet.lib" />
   </ItemGroup>
 </Project>

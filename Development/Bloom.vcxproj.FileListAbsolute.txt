@@ -25,7 +25,6 @@ I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\textures\vLine.png
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\textures\wall.jpeg
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\textures\window.png
 I:\TomerSoftware\Code\BloomLib\Output\Development\glfw3.dll
-I:\TomerSoftware\Code\BloomLib\Output\Development\imgui.ini
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\basic\mvp_vertex.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\basic\plain_fragment.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\font\font_fragment.glsl

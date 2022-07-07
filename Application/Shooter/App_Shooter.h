@@ -16,6 +16,11 @@ namespace Application{
             auto GetChecker() { return this->checker; };
             auto GetmainBox() { return this->mainBox; };
             auto GetSptiteBlock() { return this->sprite_block; };
+
+            void SetHost(ENetHost* host) { this->host = host; };
+            auto GetHost() { return this->host; };
+            
+            void SetIsServer(bool isServer) { this->isServer = isServer; };
         private:
             Bloom::Text* text_pressstart;
 
@@ -26,6 +31,9 @@ namespace Application{
             PhysX::collisionBox* mainBox;
 
             Application::Checker* checker;
+
+            ENetHost* host;
+            bool isServer = false;
 	};
 }
 #endif

@@ -27,6 +27,15 @@ namespace Utils {
     std::vector<float> Noise_Simplex(glm::vec2 position, glm::vec2 size,int seed = RandInt(-9999, 9999));
     float Noise_Value(glm::vec2 position, int seed = RandInt(-9999, 9999));
     std::vector<float> Noise_Value(glm::vec2 position, glm::vec2 size, int seed = RandInt(-9999, 9999));
+
+    template <typename T> T* GetApp(GLFWwindow* window) {
+        T* app = static_cast<T*>(glfwGetWindowUserPointer(window));
+        return app;
+    };
+
+    bool isKeyPressed(GLFWwindow* window, int key);
+    bool isKeyReleased(GLFWwindow* window, int key);
+    bool isKeyHeld(GLFWwindow* window, int key);
 }
 
 #endif

@@ -3,19 +3,55 @@
 using namespace Application;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    Application::Shooter* app = static_cast<Application::Shooter*>(glfwGetWindowUserPointer(window));
-        if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-            app->GetSptiteBlock()->SetLocation(app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0,50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime())) / 2));
+    auto app = Utils::GetApp<Application::Shooter>(window);
+    switch (key) {
+    case GLFW_KEY_SPACE:
+        if (action == GLFW_PRESS) {
+            app->GetSptiteBlock()->SetLocation(app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime())) / 2));
             std::cout << app->GetSptiteBlock()->GetLocation().y << "\n";
         }
+        break;
+    case GLFW_KEY_H:
+        if (action == GLFW_PRESS) {
+            if (app->GetHost() == NULL) {
+                app->SetHost(Network::Server_Create(7777, 10));
+                app->SetIsServer(true);
+            }
+            else
+                std::cout << "HOST ALREADY CREATED!\n";
+        }
+        break;
+    case GLFW_KEY_J:
+        if (action == GLFW_PRESS) {
+            if (app->GetHost() == NULL) {
+                app->SetHost(Network::Client_Create());
+                app->SetIsServer(false);
+                if(!Network::Client_ConnectToServer(app->GetHost(), "127.0.0.1", 7777))
+                    app->SetHost(NULL);
+            }
+            else
+                std::cout << "HOST ALREADY CREATED!\n";
+        }
+        break;
+    case GLFW_KEY_ESCAPE:
+        if (action == GLFW_PRESS) {
+            enet_host_destroy(app->GetHost());
+            glfwSetWindowShouldClose(app->GetWindow(), true);
+        }
+        break;
+    }
 }
 
 void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
-    Application::Shooter* app = static_cast<Application::Shooter*>(glfwGetWindowUserPointer(window));
-    if (key == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        app->GetChecker()->SetPosition(app->GetCursorPosition(),app->GetWindow(),app->GetTime(),app->GetmainBox());
+    auto app = Utils::GetApp<Application::Shooter>(window);
+    switch (key) {
+    case GLFW_MOUSE_BUTTON_LEFT:
+        if (action == GLFW_PRESS) {
+            app->GetChecker()->SetPosition(app->GetCursorPosition(), app->GetWindow(), app->GetTime(), app->GetmainBox());
+        }
     }
 }
+
 
 void Shooter::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
@@ -51,6 +87,15 @@ void Shooter::UILoop() {
 }
 
 void Shooter::GameLoop() {
+    //NETWORKING
+    if (host != NULL) {
+        if (isServer)
+            Network::Server_ReceiveData(host);
+        else
+            Network::Client_ReceiveData(host);
+    }
+
+    //RENDERING
     EnablePixels();
 
     sprite_block->GetShader()->use();
@@ -67,7 +112,7 @@ void Shooter::GameLoop() {
 }
 
 void Shooter::InputLoop() {
-    if (glfwGetKey(GetWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
+    if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_SPACE)) {
         GetSptiteBlock()->SetLocation(GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, GetTime())) / 2));
     }
 }

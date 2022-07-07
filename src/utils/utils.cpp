@@ -68,6 +68,19 @@ std::vector<float> Utils::Noise_Value(glm::vec2 position, glm::vec2 size, int se
     return output;
 }
 
+bool Utils::isKeyPressed(GLFWwindow* window, int key)
+{
+    return glfwGetKey(window, key) == GLFW_PRESS;
+}
+bool Utils::isKeyReleased(GLFWwindow* window, int key)
+{
+    return glfwGetKey(window, key) == GLFW_RELEASE;
+}
+bool Utils::isKeyHeld(GLFWwindow* window, int key)
+{
+    return glfwGetKey(window, key) == GLFW_REPEAT;
+}
+
 int Utils::RandInt(int min, int max) {
     return int(Lerp(min, max, (rand() % 10) / 10.0));
 }

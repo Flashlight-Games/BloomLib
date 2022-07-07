@@ -46,6 +46,6 @@
 #include "particles/particles.h" // PARTICLES
 #include "framebuffers/chromatic_aberration.h" // CHROMATIC ABERRATION
 #include "framebuffers/bloom.h" // BLOOM
-#include "network/network.h"
+#include "network/network.h" // NETWORKING
 
 #endif

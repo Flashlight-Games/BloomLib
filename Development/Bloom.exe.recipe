@@ -88,9 +88,6 @@
       <FullPath>I:\TomerSoftware\Code\BloomLib\glfw3.dll</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\imgui.ini</FullPath>
-    </ContentFile>
-    <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\FastNoise.dll</FullPath>
     </ContentFile>
     <ContentFile>

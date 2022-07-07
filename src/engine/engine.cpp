@@ -98,6 +98,8 @@ int Engine::Init(){
         soloud.init();
 
         glfwSetWindowUserPointer(GetWindow(), this);
+
+        Network::Initialize();
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;
@@ -123,6 +125,7 @@ int Engine::Prep_GameLoop(){
     try {
         if (glfwWindowShouldClose(window)){ // END IF SHOULD CLOSE
             soloud.deinit();
+            //enet_deinitialize();
             glfwTerminate();
             return -2;
         }
