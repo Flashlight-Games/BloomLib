@@ -17,10 +17,14 @@ namespace Application{
             auto GetmainBox() { return this->mainBox; };
             auto GetSptiteBlock() { return this->sprite_block; };
 
+            auto GetTargetIP() { return this->target_ip; };
+
             void SetHost(ENetHost* host) { this->host = host; };
             auto GetHost() { return this->host; };
             
             void SetIsServer(bool isServer) { this->isServer = isServer; };
+            void SetOther(ENetPeer* other) { this->other = other; };
+            auto GetOther() { return this->other; };
         private:
             Bloom::Text* text_pressstart;
 
@@ -34,6 +38,8 @@ namespace Application{
 
             ENetHost* host;
             bool isServer = false;
+            ENetPeer* other;
+            char target_ip[15] = {"127.0.0.1"};
 	};
 }
 #endif

@@ -125,7 +125,7 @@ int Engine::Prep_GameLoop(){
     try {
         if (glfwWindowShouldClose(window)){ // END IF SHOULD CLOSE
             soloud.deinit();
-            //enet_deinitialize();
+            enet_deinitialize();
             glfwTerminate();
             return -2;
         }

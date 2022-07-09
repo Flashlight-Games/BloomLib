@@ -489,6 +489,7 @@
     <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_filter.glsl" />
     <None Include="FastNoiseD.dll" />
     <None Include="FastNoise.dll" />
+    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_alpha.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\engine\textures\2x8_SpritesheetTest.png">

@@ -27,9 +27,9 @@ I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(38,49): war
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(103,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(107,51): warning C4244: 'argument': conversion from 'float' to 'uint16_t', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(110,42): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(111,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(115,51): warning C4244: 'argument': conversion from 'float' to 'uint16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(118,42): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(78,35): warning C4018: '<': signed/unsigned mismatch
 I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(76): message : while compiling class template member function 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)'
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(42): message : see reference to function template instantiation 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)' being compiled

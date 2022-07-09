@@ -125,7 +125,7 @@ bool collisionBox::check(collisionBox other){
 }
 
 bool PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end){
-    return LineTraceRadius(channel,other,start,end, 0.001);
+    return LineTraceRadius(channel,other,start,end, 1);
 }
 bool PhysX::LineTraceRadius(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end, float radius)
 {

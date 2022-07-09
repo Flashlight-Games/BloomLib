@@ -73,6 +73,7 @@ ENetEvent Network::Client_ReceiveData(ENetHost* client)
 			std::cout << "Server Closed\n";
 			break;
 		}
+		return event;
 	}
 	return event;
 }
@@ -94,27 +95,62 @@ ENetHost* Network::Server_Create(int port, int max_players, int channels)
 	return server;
 }
 
-ENetEvent Network::Server_ReceiveData(ENetHost* server)
+ENetEvent Network::Server_ReceiveData(ENetHost* server,bool debug)
 {
 	ENetEvent event;
 	while (enet_host_service(server, &event, 0) > 0) {
-		switch (event.type) {
-		case ENET_EVENT_TYPE_CONNECT:
-			std::cout << "NEW CONNECTION MADE > " << event.peer->address.host << ":" << event.peer->address.port << "\n";
-			break;
-		case ENET_EVENT_TYPE_RECEIVE:
-			std::cout << "Packet length " << event.packet->dataLength << "\n";
-			std::cout << "Packet data" << event.packet->data << "\n";
-			std::cout << "Peer adress " << event.peer->address.host << "\n";
-			std::cout << "Peer port " << event.peer->address.port << "\n";
-			std::cout << "Channel " << event.channelID << "\n";
-			break;
-		case ENET_EVENT_TYPE_DISCONNECT:
-			std::cout << "DISCONNECT > " << event.peer->address.host << ":" << event.peer->address.port << "\n";
-			break;
+		if (debug) {
+			switch (event.type) {
+			case ENET_EVENT_TYPE_CONNECT:
+				std::cout << "NEW CONNECTION MADE > " << event.peer->address.host << ":" << event.peer->address.port << "\n";
+				break;
+			case ENET_EVENT_TYPE_RECEIVE:
+				std::cout << "Packet length > " << event.packet->dataLength << "\n";
+				std::cout << "Packet data > " << event.packet->data << "\n";
+				std::cout << "Peer adress > " << event.peer->address.host << "\n";
+				std::cout << "Peer port > " << event.peer->address.port << "\n";
+				std::cout << "Channel > " << event.channelID << "\n";
+				break;
+			case ENET_EVENT_TYPE_DISCONNECT:
+				std::cout << "DISCONNECT > " << event.peer->address.host << ":" << event.peer->address.port << "\n";
+				break;
+			}
 		}
+
+		return event;
 	}
 
 	return event;
+}
+
+bool Network::isDisconnectionEvent(ENetEvent event)
+{
+	return event.type == ENET_EVENT_TYPE_DISCONNECT;
+}
+
+bool Network::isConnectionEvent(ENetEvent event)
+{
+	return event.type == ENET_EVENT_TYPE_CONNECT;
+}
+
+bool Network::isReceiveEvent(ENetEvent event)
+{
+	return event.type == ENET_EVENT_TYPE_RECEIVE;
+}
+
+bool Network::isEvent(ENetEvent event)
+{
+	return event.type != ENET_EVENT_TYPE_NONE;
+}
+
+std::string Network::GetEventData(ENetEvent event)
+{
+	return std::string(reinterpret_cast<const char*>(event.packet->data));
+}
+
+void Network::SendPacket(ENetPeer* destination, const char* data, int channel)
+{
+	ENetPacket* packet = enet_packet_create(data,strlen(data) + 1,ENET_PACKET_FLAG_RELIABLE);
+	enet_peer_send(destination, channel, packet);
 }
 

@@ -4,6 +4,7 @@
 #include <WinSock2.h>
 #include <enet/enet.h>
 #include <iostream>
+#include <string>
 
 namespace Network {
 	void Initialize();
@@ -14,7 +15,16 @@ namespace Network {
 	ENetEvent Client_ReceiveData(ENetHost* client);
 
 	ENetHost* Server_Create(int port,int max_players, int channels = 1);
-	ENetEvent Server_ReceiveData(ENetHost* server);
+	ENetEvent Server_ReceiveData(ENetHost* server,bool debug = false);
+
+	bool isDisconnectionEvent(ENetEvent event);
+	bool isConnectionEvent(ENetEvent event);
+	bool isReceiveEvent(ENetEvent event);
+	bool isEvent(ENetEvent event);
+
+	std::string GetEventData(ENetEvent event);
+
+	void SendPacket(ENetPeer* destination, const char* data, int channel = 0);
 }
 
 #endif

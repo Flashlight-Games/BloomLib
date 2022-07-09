@@ -115,6 +115,9 @@
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment.glsl</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment_alpha.glsl</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment_clear.glsl</FullPath>
     </ContentFile>
     <ContentFile>

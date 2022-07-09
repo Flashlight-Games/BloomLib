@@ -296,6 +296,9 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_alpha.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_clear.glsl">
       <DeploymentContent>true</DeploymentContent>
     </None>
