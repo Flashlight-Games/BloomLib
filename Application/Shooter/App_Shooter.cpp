@@ -72,12 +72,12 @@ void Shooter::Begin() {
 }
 
 void Shooter::UILoop() {
-    if (Utils::isDevelopmentConfiguration()) {
-        ImGui::Begin("Control window");
-        ImGui::ColorPicker3("BLOCK COLOR",block_color);
-        ImGui::InputText("IP", target_ip,sizeof(target_ip));
-        ImGui::End();
+    ImGui::Begin("Control window");
+    ImGui::ColorPicker3("BLOCK COLOR", block_color);
+    ImGui::InputText("IP", target_ip, sizeof(target_ip));
+    ImGui::End();
 
+    if (Utils::isDevelopmentConfiguration()) {
         ImGui::Begin("Performance window");
         ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "Time is %s", std::to_string((int)GetTime()).c_str());
         ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS", std::to_string(GetFPS()).c_str());

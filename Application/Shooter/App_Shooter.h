@@ -39,7 +39,7 @@ namespace Application{
             ENetHost* host;
             bool isServer = false;
             ENetPeer* other;
-            char target_ip[15] = {"127.0.0.1"};
+            char target_ip[16] = {"127.0.0.1"};
 	};
 }
 #endif

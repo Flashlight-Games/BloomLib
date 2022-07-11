@@ -91,9 +91,6 @@
       <FullPath>I:\TomerSoftware\Code\BloomLib\FastNoise.dll</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>I:\TomerSoftware\Code\BloomLib\FastNoiseD.dll</FullPath>
-    </ContentFile>
-    <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\basic\mvp_vertex.glsl</FullPath>
     </ContentFile>
     <ContentFile>

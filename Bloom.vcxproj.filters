@@ -487,7 +487,6 @@
     <None Include="res\engine\shaders\framebuffer\framebuffer_downsample.glsl" />
     <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_clear.glsl" />
     <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_filter.glsl" />
-    <None Include="FastNoiseD.dll" />
     <None Include="FastNoise.dll" />
     <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_alpha.glsl" />
   </ItemGroup>
@@ -1865,7 +1864,6 @@
   <ItemGroup>
     <Library Include="lib\libglfw3dll.a" />
     <Library Include="lib\FastNoise.lib" />
-    <Library Include="lib\FastNoiseD.lib" />
     <Library Include="lib\enet.lib" />
   </ItemGroup>
 </Project>
