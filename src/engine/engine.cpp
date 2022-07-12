@@ -99,7 +99,7 @@ int Engine::Init(){
 
         glfwSetWindowUserPointer(GetWindow(), this);
 
-        Network::Initialize();
+        //Network::Initialize(); // INITIALIZE ENET
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;
@@ -125,7 +125,7 @@ int Engine::Prep_GameLoop(){
     try {
         if (glfwWindowShouldClose(window)){ // END IF SHOULD CLOSE
             soloud.deinit();
-            enet_deinitialize();
+            //enet_deinitialize();// ENET DEINITIALIZE
             glfwTerminate();
             return -2;
         }

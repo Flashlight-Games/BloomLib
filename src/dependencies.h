@@ -2,7 +2,6 @@
 #define DEPS
 #define NOMINMAX
 
-//#define T template <typename T>
 # define PI 3.14159265358979323846
 
 
@@ -46,6 +45,6 @@
 #include "particles/particles.h" // PARTICLES
 #include "framebuffers/chromatic_aberration.h" // CHROMATIC ABERRATION
 #include "framebuffers/bloom.h" // BLOOM
-#include "network/network.h" // NETWORKING
+#include "SteamTools/steamtools.h"
 
 #endif

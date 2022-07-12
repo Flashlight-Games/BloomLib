@@ -256,6 +256,9 @@
     <None Include="FastNoise.dll">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="include\steam\lib\win32\sdkencryptedappticket.dll" />
+    <None Include="include\steam\lib\win64\sdkencryptedappticket64.dll" />
+    <None Include="include\steam\steam_api.json" />
     <None Include="res\engine\shaders\basic\mvp_vertex.glsl">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
@@ -348,6 +351,7 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
     </None>
     <None Include="src\framebuffers\chromatic_aberration.h" />
+    <None Include="steam_api.dll" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
@@ -478,12 +482,12 @@
     <ClCompile Include="src\framebuffers\chromatic_aberration.cpp" />
     <ClCompile Include="src\framebuffers\framebuffers.cpp" />
     <ClCompile Include="src\glad.cpp" />
-    <ClCompile Include="src\network\network.cpp" />
     <ClCompile Include="src\particles\particles.cpp" />
     <ClCompile Include="src\shaders\shaders.cpp" />
     <ClCompile Include="src\shake\shake.cpp" />
     <ClCompile Include="src\sprite\sprite.cpp" />
     <ClCompile Include="src\sprite\spritesheet.cpp" />
+    <ClCompile Include="src\SteamTools\steamtools.cpp" />
     <ClCompile Include="src\textures\textures.cpp" />
     <ClCompile Include="src\text\text.cpp" />
     <ClCompile Include="src\utils\utils.cpp" />
@@ -491,15 +495,6 @@
   <ItemGroup>
     <ClInclude Include="Application\Shooter\App_Shooter.h" />
     <ClInclude Include="Application\Shooter\Checker\Checker.h" />
-    <ClInclude Include="include\enet\callbacks.h" />
-    <ClInclude Include="include\enet\enet.h" />
-    <ClInclude Include="include\enet\list.h" />
-    <ClInclude Include="include\enet\protocol.h" />
-    <ClInclude Include="include\enet\time.h" />
-    <ClInclude Include="include\enet\types.h" />
-    <ClInclude Include="include\enet\unix.h" />
-    <ClInclude Include="include\enet\utility.h" />
-    <ClInclude Include="include\enet\win32.h" />
     <ClInclude Include="include\FastNoise\FastNoise.h" />
     <ClInclude Include="include\FastNoise\FastNoise_C.h" />
     <ClInclude Include="include\FastNoise\FastNoise_Config.h" />
@@ -564,6 +559,50 @@
     <ClInclude Include="include\soloud\soloud_waveshaperfilter.h" />
     <ClInclude Include="include\soloud\soloud_wavstream.h" />
     <ClInclude Include="include\soloud\stb_vorbis.h" />
+    <ClInclude Include="include\steam\isteamapplist.h" />
+    <ClInclude Include="include\steam\isteamapps.h" />
+    <ClInclude Include="include\steam\isteamappticket.h" />
+    <ClInclude Include="include\steam\isteamclient.h" />
+    <ClInclude Include="include\steam\isteamcontroller.h" />
+    <ClInclude Include="include\steam\isteamfriends.h" />
+    <ClInclude Include="include\steam\isteamgamecoordinator.h" />
+    <ClInclude Include="include\steam\isteamgameserver.h" />
+    <ClInclude Include="include\steam\isteamgameserverstats.h" />
+    <ClInclude Include="include\steam\isteamhtmlsurface.h" />
+    <ClInclude Include="include\steam\isteamhttp.h" />
+    <ClInclude Include="include\steam\isteaminput.h" />
+    <ClInclude Include="include\steam\isteaminventory.h" />
+    <ClInclude Include="include\steam\isteammatchmaking.h" />
+    <ClInclude Include="include\steam\isteammusic.h" />
+    <ClInclude Include="include\steam\isteammusicremote.h" />
+    <ClInclude Include="include\steam\isteamnetworking.h" />
+    <ClInclude Include="include\steam\isteamnetworkingmessages.h" />
+    <ClInclude Include="include\steam\isteamnetworkingsockets.h" />
+    <ClInclude Include="include\steam\isteamnetworkingutils.h" />
+    <ClInclude Include="include\steam\isteamparentalsettings.h" />
+    <ClInclude Include="include\steam\isteamps3overlayrenderer.h" />
+    <ClInclude Include="include\steam\isteamremoteplay.h" />
+    <ClInclude Include="include\steam\isteamremotestorage.h" />
+    <ClInclude Include="include\steam\isteamscreenshots.h" />
+    <ClInclude Include="include\steam\isteamugc.h" />
+    <ClInclude Include="include\steam\isteamuser.h" />
+    <ClInclude Include="include\steam\isteamuserstats.h" />
+    <ClInclude Include="include\steam\isteamutils.h" />
+    <ClInclude Include="include\steam\isteamvideo.h" />
+    <ClInclude Include="include\steam\matchmakingtypes.h" />
+    <ClInclude Include="include\steam\steamclientpublic.h" />
+    <ClInclude Include="include\steam\steamencryptedappticket.h" />
+    <ClInclude Include="include\steam\steamhttpenums.h" />
+    <ClInclude Include="include\steam\steamnetworkingfakeip.h" />
+    <ClInclude Include="include\steam\steamnetworkingtypes.h" />
+    <ClInclude Include="include\steam\steamps3params.h" />
+    <ClInclude Include="include\steam\steamtypes.h" />
+    <ClInclude Include="include\steam\steamuniverse.h" />
+    <ClInclude Include="include\steam\steam_api.h" />
+    <ClInclude Include="include\steam\steam_api_common.h" />
+    <ClInclude Include="include\steam\steam_api_flat.h" />
+    <ClInclude Include="include\steam\steam_api_internal.h" />
+    <ClInclude Include="include\steam\steam_gameserver.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="include\dearImGui\imconfig.h" />
     <ClInclude Include="include\dearImGui\imgui.h" />
@@ -868,20 +907,22 @@
     <ClInclude Include="src\dependencies.h" />
     <ClInclude Include="src\framebuffers\bloom.h" />
     <ClInclude Include="src\framebuffers\framebuffers.h" />
-    <ClInclude Include="src\network\network.h" />
     <ClInclude Include="src\particles\particles.h" />
     <ClInclude Include="src\shaders\shaders.h" />
     <ClInclude Include="src\shake\shake.h" />
     <ClInclude Include="src\sprite\sprite.h" />
     <ClInclude Include="src\sprite\spritesheet.h" />
+    <ClInclude Include="src\SteamTools\steamtools.h" />
     <ClInclude Include="src\textures\textures.h" />
     <ClInclude Include="src\text\text.h" />
     <ClInclude Include="src\utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="lib\enet.lib" />
+    <Library Include="include\steam\lib\win32\sdkencryptedappticket.lib" />
+    <Library Include="include\steam\lib\win64\sdkencryptedappticket64.lib" />
     <Library Include="lib\FastNoise.lib" />
     <Library Include="lib\libglfw3dll.a" />
+    <Library Include="lib\steam_api.lib" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -978,7 +1019,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FastNoise.lib;winmm.lib;ws2_32.lib;enet.lib;libglfw3dll.a;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;</AdditionalDependencies>
+      <AdditionalDependencies>FastNoise.lib;winmm.lib;ws2_32.lib;libglfw3dll.a;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;</AdditionalDependencies>
       <StackReserveSize>50000000</StackReserveSize>
       <AdditionalOptions>/ENTRY:"mainCRTStartup" %(AdditionalOptions)</AdditionalOptions>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -1009,7 +1050,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FastNoise.lib;winmm.lib;ws2_32.lib;enet.lib;libglfw3dll.a;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>FastNoise.lib;winmm.lib;ws2_32.lib;libglfw3dll.a;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>50000000</StackReserveSize>
       <AdditionalOptions>/ENTRY:"mainCRTStartup" %(AdditionalOptions)</AdditionalOptions>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>

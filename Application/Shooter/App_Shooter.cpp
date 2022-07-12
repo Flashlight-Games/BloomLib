@@ -5,37 +5,8 @@ using namespace Application;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     auto app = Utils::GetApp<Application::Shooter>(window);
     switch (key) {
-    case GLFW_KEY_H:
-        if (action == GLFW_PRESS) {
-            if (app->GetHost() == NULL) {
-                app->SetHost(Network::Server_Create(7777, 10));
-                app->SetIsServer(true);
-            }
-            else
-                std::cout << "HOST ALREADY CREATED!\n";
-        }
-        break;
-    case GLFW_KEY_J:
-        if (action == GLFW_PRESS) {
-            if (app->GetHost() == NULL) {
-                app->SetHost(Network::Client_Create());
-                app->SetIsServer(false);
-                auto other = Network::Client_ConnectToServer(app->GetHost(), app->GetTargetIP(), 7777);
-                if (other == NULL)
-                    app->SetHost(NULL);
-                else {
-                    app->SetOther(other);
-                    std::cout << "SUCCESS!\n";
-                }
-            }
-            else
-                std::cout << "HOST ALREADY CREATED!\n";
-        }
-        break;
     case GLFW_KEY_ESCAPE:
         if (action == GLFW_PRESS) {
-            if(app->GetHost() != NULL)
-                enet_host_destroy(app->GetHost());
             glfwSetWindowShouldClose(app->GetWindow(), true);
         }
         break;
@@ -74,7 +45,6 @@ void Shooter::Begin() {
 void Shooter::UILoop() {
     ImGui::Begin("Control window");
     ImGui::ColorPicker3("BLOCK COLOR", block_color);
-    ImGui::InputText("IP", target_ip, sizeof(target_ip));
     ImGui::End();
 
     if (Utils::isDevelopmentConfiguration()) {
@@ -89,19 +59,7 @@ void Shooter::UILoop() {
 
 void Shooter::GameLoop() {
     //NETWORKING
-    if (host != NULL) {
-        ENetEvent event;
-        if (isServer) {
-            event = Network::Server_ReceiveData(host);
-            if (Network::isConnectionEvent(event))
-                other = event.peer;
-        } else {
-            event = Network::Client_ReceiveData(host);
-        }
-        if (Network::isEvent(event))
-            if (Network::isReceiveEvent(event))
-                GetSptiteBlock()->SetLocation(glm::vec2(GetSptiteBlock()->GetLocation().x, std::stof(Network::GetEventData(event))));
-    }
+    
 
     //RENDERING
     EnablePixels();
@@ -118,14 +76,6 @@ void Shooter::GameLoop() {
     checker->Draw(GetTime(), GetGameSpeed());
     
     std::string status = "OFFLINE";
-    if (GetHost() != NULL) {
-        if (isServer)
-            status = "HOST";
-        else
-            status = "CONNECTED";
-    }
-    else
-        std::string status = "OFFLINE";
 
     text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status.c_str(), 1, GetWindowSize(), glm::vec4(1), true);
     DrawPixelsToDefault();
@@ -135,8 +85,5 @@ void Shooter::InputLoop() {
     if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_SPACE)) {
         auto newLocation = GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, GetTime())) / 2);
         GetSptiteBlock()->SetLocation(newLocation);
-        if (GetOther() != NULL) {
-            Network::SendPacket(GetOther(), std::to_string(newLocation.y).c_str());
-        }
     }
 }
