@@ -26,22 +26,25 @@ namespace Game{
     class Engine{
         public:
             Engine(configuration config, bool init = false) { this->engine_config = config; if (init) { Run(); }; };
-            int Run() { 
-                int retval = 0;
-                retval = Init();
-                retval = Prep_Begin();
+            int Run() {
+                if (SteamTools::SteamManager::Init()) {
+                    int retval = 0;
+                    retval = Init();
+                    retval = Prep_Begin();
 
-                while (retval == 0) {
-                    retval = Prep_GameLoop();
-                    if (retval != 0)
-                        return retval;
-                    retval = Prep_UILoop();
-                    if (retval != 0)
-                        return retval;
-                    retval = EndLoop();
+                    while (retval == 0) {
+                        retval = Prep_GameLoop();
+                        if (retval != 0)
+                            return retval;
+                        retval = Prep_UILoop();
+                        if (retval != 0)
+                            return retval;
+                        retval = EndLoop();
+                    }
+                    return retval;
                 }
 
-                return retval;
+                return false;
             };
             
             glm::mat4 GetWindowProjectionMatrix() { return window_projection_matrix; };
@@ -58,7 +61,7 @@ namespace Game{
             glm::vec2 GetScale() { return GetWindowSize() / GetPixelWindowSize(); };
 
             void EnablePixels(bool clear = true) { (*fb_pixels).use(clear); };
-            void DrawPixelsToDefault() { (*fb_pixels).drawToDefault(glm::vec2(windowWidth, windowHeight)); bindDefaultFramebuffer(false, windowWidth, windowHeight); };
+            void DrawPixelsToDefault(bool clear = true) { (*fb_pixels).drawToDefault(glm::vec2(windowWidth, windowHeight),clear); bindDefaultFramebuffer(false, windowWidth, windowHeight); };
             void DrawPixels() { (*fb_pixels).draw(); };
             void SetCameraLocation(glm::vec2 location){ view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location.x, location.y, -1)); }
 
@@ -77,6 +80,7 @@ namespace Game{
             void SetGameSpeedMultiplier(float multiplier) { delta_multiplier = multiplier; };
             float GetGameSpeedMultiplier() { return delta_multiplier; };
 
+            auto GetSteamManager() { return steam_manager; };
         private:
             // EVENTS
             int Init();
@@ -118,6 +122,7 @@ namespace Game{
             float delta_multiplier = 1.0;                                       // DELTA SPEED MULTIPLIER
 
             configuration engine_config;                                        // ENGINE CONFIGURATION
+            SteamTools::SteamManager* steam_manager;
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING

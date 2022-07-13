@@ -44,3 +44,5 @@ I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\framebuffer
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\framebuffer\framebuffer_fragment_filter.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\FastNoise.dll
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\framebuffer\framebuffer_fragment_alpha.glsl
+I:\TomerSoftware\Code\BloomLib\Output\Development\steam_api.dll
+I:\TomerSoftware\Code\BloomLib\Output\Development\steam_appid.txt

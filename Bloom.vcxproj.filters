@@ -695,9 +695,6 @@
     <ClCompile Include="src\utils\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\network\network.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\SteamTools\steamtools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1837,9 +1834,6 @@
     <ClInclude Include="include\FastSIMD\SIMDTypeList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\network\network.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\steam\steamuniverse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1982,5 +1976,8 @@
     <Library Include="include\steam\lib\win32\sdkencryptedappticket.lib" />
     <Library Include="include\steam\lib\win64\sdkencryptedappticket64.lib" />
     <Library Include="lib\steam_api.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="steam_appid.txt" />
   </ItemGroup>
 </Project>

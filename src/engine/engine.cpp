@@ -99,7 +99,7 @@ int Engine::Init(){
 
         glfwSetWindowUserPointer(GetWindow(), this);
 
-        //Network::Initialize(); // INITIALIZE ENET
+        steam_manager = new SteamTools::SteamManager();
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;
@@ -125,12 +125,13 @@ int Engine::Prep_GameLoop(){
     try {
         if (glfwWindowShouldClose(window)){ // END IF SHOULD CLOSE
             soloud.deinit();
-            //enet_deinitialize();// ENET DEINITIALIZE
+            SteamAPI_Shutdown();
             glfwTerminate();
             return -2;
         }
 
         // PREPARE LOOP
+        SteamTools::SteamManager::ProcessCallbacks();
         fps = 1000 / GetDeltaTime();
         glfwPollEvents(); Prep_InputLoop();
         if (!isLocked)
@@ -178,6 +179,7 @@ int Engine::EndLoop(){
 
         // Rendering pipeline end
         glfwSwapBuffers(window); // Render buffer to screen
+
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during EndLoop : " << ex.what() << std::endl;

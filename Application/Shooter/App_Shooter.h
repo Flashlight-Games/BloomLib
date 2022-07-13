@@ -16,6 +16,10 @@ namespace Application{
             auto GetChecker() { return this->checker; };
             auto GetmainBox() { return this->mainBox; };
             auto GetSptiteBlock() { return this->sprite_block; };
+
+            void SearchLobbies() { GetSteamManager()->FindLobbies(); SetNetworkStatus(SteamTools::NetworkStatus::searching);};
+            CSteamID JoinLobby(int id) { SetNetworkStatus(SteamTools::NetworkStatus::joining);  return GetSteamManager()->JoinLobbyByIdx(id); };
+            void SetNetworkStatus(SteamTools::NetworkStatus status) { this->network_status = status; };
         private:
             Bloom::Text* text_pressstart;
 
@@ -26,6 +30,11 @@ namespace Application{
             PhysX::collisionBox* mainBox;
 
             Application::Checker* checker;
+
+            // NETWORK
+            SteamTools::NetworkStatus network_status = SteamTools::NetworkStatus::offline; 
+            std::string status_string = "OFFLINE";
+            CSteamID current_lobby;
 	};
 }
 #endif

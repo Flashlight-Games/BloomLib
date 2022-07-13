@@ -2,18 +2,17 @@
 #include "text.h"
 #include "fstream"
 
-using namespace Bloom;
+using namespace Bloom; 
 
 Text::Text(const char* path, glm::mat4 view_matrix, glm::mat4 projection_matrix, float spacing, uint16_t resolution) {
     this->path = path; this->resolution = resolution; this->spacing = 2 - spacing; this->view_matrix = &view_matrix; this->projection_matrix = &projection_matrix; this->scale = (resolution / 128.0f);
-    bitsize = scale *1024;
+    bitsize = 2048 * scale;
 
     unsigned char* temp_bitmap = new unsigned char[bitsize* bitsize];
     fread(ttf_buffer, 1, 1<<20, fopen(path, "rb"));
 
     stbtt_InitFont(&font, ttf_buffer, stbtt_GetFontOffsetForIndex(ttf_buffer, 0));
-
-    stbtt_BakeFontBitmap(ttf_buffer,0, resolution , temp_bitmap, bitsize, bitsize, 32,96, char_data);
+    stbtt_BakeFontBitmap(ttf_buffer,0, resolution, temp_bitmap, bitsize, bitsize, 32,96, char_data);
     texture = new Texture2D(temp_bitmap, glm::vec2(bitsize, bitsize), GL_RED, true);
    
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
@@ -54,7 +53,6 @@ void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 scr
     position.y -= screen_size.y / 2;
     size = size / scale;
     
-
     glm::mat4 model_matrix = glm::mat4(1.0);
     model_matrix = glm::translate(model_matrix, glm::vec3(2*position.x/screen_size.x, 2 * position.y / screen_size.y, 0.0f));
     //model_matrix = glm::rotate(model_matrix, (float)glm::radians(0.0), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -73,7 +71,6 @@ void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 scr
     if (centered) {
         offsets = GetCenterOffset(text, size, screen_size);
     }
-
     float x = 0;
     float y = 0;
     float yOffset = offsets.y;
@@ -83,30 +80,26 @@ void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 scr
 
     float originalX = x;
     float originalY = y;
-
     while (*ctext) {
         if (*ctext == '\n') {
            /* yOffset -= (resolution / spacing) * scale;
             xOffset -= xCounter; xCounter = 0;
             */
         }
-        else if (*ctext >= 32 && *ctext < 127) {
-            stbtt_aligned_quad q;
-            stbtt_GetBakedQuad(char_data, bitsize, bitsize, *ctext-32, &x,&y,&q,1);
+        stbtt_aligned_quad q;
+        stbtt_GetBakedQuad(char_data, bitsize, bitsize, *ctext-32, &x,&y,&q,1);
+        float newVerts[24] = {
+            // POSITION                                                                         Texture
+            (q.x1 + xOffset) / screen_size[0], ((y-q.y1)+ yOffset) / screen_size[1],                      q.s1,q.t1,
+            (q.x1 + xOffset) / screen_size[0], (q.y1-q.y0+(y-q.y1)+ yOffset) / screen_size[1],            q.s1,q.t0,
+            (q.x0 + xOffset) / screen_size[0], (q.y1-q.y0+(y-q.y1)+ yOffset) / screen_size[1],            q.s0,q.t0,
+            (q.x0 + xOffset) / screen_size[0], ((y-q.y1)+ yOffset) / screen_size[1],                      q.s0,q.t1,
+        };
 
-            float newVerts[24] = {
-                // POSITION                                                                         Texture
-                (q.x1 + xOffset) / screen_size[0], ((y-q.y1)+ yOffset) / screen_size[1],                      q.s1,q.t1,
-                (q.x1 + xOffset) / screen_size[0], (q.y1-q.y0+(y-q.y1)+ yOffset) / screen_size[1],            q.s1,q.t0,
-                (q.x0 + xOffset) / screen_size[0], (q.y1-q.y0+(y-q.y1)+ yOffset) / screen_size[1],            q.s0,q.t0,
-                (q.x0 + xOffset) / screen_size[0], ((y-q.y1)+ yOffset) / screen_size[1],                      q.s0,q.t1,
-            };
-
-            xCounter = std::max(q.x0, q.x1);
+        xCounter = std::max(q.x0, q.x1);
             
-            glBufferData(GL_ARRAY_BUFFER,sizeof(newVerts),&newVerts,GL_STATIC_DRAW);
-            glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
-        }
+        glBufferData(GL_ARRAY_BUFFER,sizeof(newVerts),&newVerts,GL_STATIC_DRAW);
+        glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
         ++ctext;
     }
     

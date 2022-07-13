@@ -7,6 +7,9 @@
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\steam_appid.txt</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Alagard\alagard.ttf</FullPath>
     </ContentFile>
     <ContentFile>
@@ -143,6 +146,9 @@
     </ContentFile>
     <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\testing_textures\textureshader_vertex.glsl</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\steam_api.dll</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

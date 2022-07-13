@@ -351,7 +351,9 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
     </None>
     <None Include="src\framebuffers\chromatic_aberration.h" />
-    <None Include="steam_api.dll" />
+    <None Include="steam_api.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
@@ -923,6 +925,11 @@
     <Library Include="lib\FastNoise.lib" />
     <Library Include="lib\libglfw3dll.a" />
     <Library Include="lib\steam_api.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="steam_appid.txt">
+      <DeploymentContent>true</DeploymentContent>
+    </Text>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
