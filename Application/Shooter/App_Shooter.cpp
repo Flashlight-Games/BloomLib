@@ -12,7 +12,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         break;
     case GLFW_KEY_P:
         if (action == GLFW_PRESS) {
-            app->SearchLobbies();
+            app->GetSteamManager()->FindLobbies();
         }
         break;
     }
@@ -65,58 +65,21 @@ void Shooter::UILoop() {
 
 void Shooter::GameLoop() {
     //NETWORKING
-    switch (network_status) {
-    case SteamTools::NetworkStatus::offline:
-        status_string = "OFFLINE";
-        break;
-    case SteamTools::NetworkStatus::searching:
-        status_string = "SEARCHING";
-        if (GetSteamManager()->GetLobbiesFound() != -1) {
-            if (GetSteamManager()->GetLobbiesFound() == 0) {
-            }
-            else {
-                for (int i = 0; i < GetSteamManager()->GetLobbiesFound() && network_status == SteamTools::NetworkStatus::searching; i++)
-                {
-                    std::string bloom_game_name = SteamMatchmaking()->GetLobbyData(SteamMatchmaking()->GetLobbyByIndex(i), "BloomGameName");
-                    std::cout << "FOUND \"" << bloom_game_name << "\"\n";
-                    if(bloom_game_name == "Shooter")
-                        current_lobby = JoinLobby(i);
-                }
-                if (network_status == SteamTools::NetworkStatus::searching) {
-                    GetSteamManager()->CreateLobby(8);
-                    SetNetworkStatus(SteamTools::NetworkStatus::creating);
-                }
-            }
-        }
-        break;
-    case SteamTools::NetworkStatus::joining:
-        status_string = "JOINING";
-        if (GetSteamManager()->GetLobbyConnectionSuccess())
-            SetNetworkStatus(SteamTools::NetworkStatus::connected);
-        break;
-    case SteamTools::NetworkStatus::creating:
-        status_string = "CREATING";
-        if (GetSteamManager()->GetCreatedLobbyId() != static_cast<uint64>(-1)) {
-            if (GetSteamManager()->GetCreatedLobbyId() == static_cast<uint64>(0))
-                SetNetworkStatus(SteamTools::NetworkStatus::offline);
-            else {
-                current_lobby = GetSteamManager()->GetCreatedLobbyId();
-                if (SteamMatchmaking()->SetLobbyData(current_lobby, "BloomGameName", "Shooter"))
-                    std::cout << "SUCCESS!\n";
-                SetNetworkStatus(SteamTools::NetworkStatus::connected);
-            }
-        }
-        break;
-    case SteamTools::NetworkStatus::connected:
-        status_string = "CONNECTED/" + std::to_string(SteamMatchmaking()->GetNumLobbyMembers(current_lobby));
-        break;
-    }
-    
+    GetSteamManager()->Matchmake(2);
+    SetStatusString(GetSteamManager()->GetNetworkStatus());
 
     //RENDERING
     text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
     text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, 150), SteamTools::SteamManager::GetMySteamName(), 1, GetWindowSize(), glm::vec4(1), true);
-    
+
+    if (GetSteamManager()->GetNetworkStatus() == SteamTools::NetworkStatus::connected) {
+        auto LobbyNames = GetSteamManager()->GetLobbyMemberNames();
+        for (size_t i = 0; i < LobbyNames.size(); i++)
+        {
+            text_pressstart->Print(glm::vec2(3, 20 * i+20), LobbyNames.at(i), 0.25, GetWindowSize(), glm::vec4(1));
+        }
+    }
+    text_pressstart->Print(glm::vec2(3, 0), std::to_string(GetSteamManager()->GetCurrentLobby().GetAccountID()), 0.25, GetWindowSize(), glm::vec4(1));
 
     EnablePixels();
 
@@ -138,5 +101,25 @@ void Shooter::InputLoop() {
     if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_SPACE)) {
         auto newLocation = GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, GetTime())) / 2);
         GetSptiteBlock()->SetLocation(newLocation);
+    }
+}
+
+void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status){
+    switch (status) {
+    case SteamTools::connected:
+        status_string = "CONNECTED/" + std::to_string(SteamMatchmaking()->GetNumLobbyMembers(GetSteamManager()->GetCurrentLobby()));
+        break;
+    case SteamTools::offline:
+        status_string = "OFFLINE";
+        break;
+    case SteamTools::creating:
+        status_string = "CREATING";
+        break;
+    case SteamTools::joining:
+        status_string = "JOINING";
+        break;
+    case SteamTools::searching:
+        status_string = "SEARCHING";
+        break;
     }
 }
