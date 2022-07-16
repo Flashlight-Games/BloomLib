@@ -7,6 +7,8 @@ bool SteamTools::SteamManager::Init(int appid)
 	if (SteamAPI_RestartAppIfNecessary(appid))
 		return false;
 	SteamAPI_Init();
+    SteamNetworkingUtils()->InitRelayNetworkAccess();
+
 	return true;
 }
 
@@ -47,7 +49,6 @@ void SteamTools::SteamManager::OnLobbyEnter(LobbyEnter_t* pCallback)
 
     network_status = NetworkStatus::connected;
     SteamFriends()->SetRichPresence("connect", std::to_string(current_lobby.GetAccountID()).c_str());
-    std::cout << "SET \"connect\" to " << std::to_string(current_lobby.GetAccountID()).c_str() << "\n";
 }
 
 void SteamTools::SteamManager::OnLobbyCreated(LobbyCreated_t* pCallback)
@@ -56,7 +57,6 @@ void SteamTools::SteamManager::OnLobbyCreated(LobbyCreated_t* pCallback)
     current_lobby = created_lobby_id;
 
     SteamMatchmaking()->SetLobbyData(current_lobby, "BloomGameName", "Shooter");
-    std::cout << "SET " << current_lobby.GetAccountID() << "\n";
     network_status = NetworkStatus::connected;
 }
 
@@ -65,8 +65,6 @@ void SteamTools::SteamManager::OnGameLobbyJoinRequested_t(GameLobbyJoinRequested
     SteamMatchmaking()->JoinLobby(pCallback->m_steamIDLobby);
     network_status = NetworkStatus::connected;
 }
-
-
 
 std::vector<std::string> SteamTools::SteamManager::GetLobbyMemberNames()
 {
@@ -78,9 +76,10 @@ std::vector<std::string> SteamTools::SteamManager::GetLobbyMemberNames()
     return names;
 }
 
-void SteamTools::SteamManager::Matchmake(int new_lobby_max_players) {
+void SteamTools::SteamManager::MatchmakeLoop_Quick(int new_lobby_max_players) {
     switch (network_status) {
     case SteamTools::NetworkStatus::offline:
+        network_position = NetworkPosition::local;
         break;
     case SteamTools::NetworkStatus::searching:
         if (GetLobbiesFound() != -1) {
@@ -90,7 +89,6 @@ void SteamTools::SteamManager::Matchmake(int new_lobby_max_players) {
                     std::string bloom_game_name = SteamMatchmaking()->GetLobbyData(SteamMatchmaking()->GetLobbyByIndex(i), "BloomGameName");
                     if (bloom_game_name == "Shooter") {
                         network_status = NetworkStatus::joining;
-                        std::cout << "JOINING " << SteamMatchmaking()->GetLobbyByIndex(i).GetAccountID() << "\n";
                         JoinLobbyByIdx(i);
                     }
                 }
@@ -106,6 +104,58 @@ void SteamTools::SteamManager::Matchmake(int new_lobby_max_players) {
     case SteamTools::NetworkStatus::creating:
         break;
     case SteamTools::NetworkStatus::connected:
+        if(network_position == NetworkPosition::local)
+            network_position = NetworkPosition::lobby;
         break;
+    }
+}
+
+void SteamTools::SteamManager::HostP2P(int channel)
+{
+    std::cout << "Hosting!\n";
+    SteamNetworkingSockets()->CreateListenSocketP2P(channel,0,nullptr);
+    network_position = NetworkPosition::host;
+    SteamMatchmaking()->SetLobbyJoinable(GetCurrentLobby(), false);
+}
+
+void SteamTools::SteamManager::ConnectP2P(CSteamID remoteID,int channel)
+{
+    auto target = IdentityFromSteamID(remoteID);
+    SteamNetworkingSockets()->ConnectP2P(target, channel, 0, nullptr);
+}
+
+SteamNetworkingIdentity SteamTools::SteamManager::IdentityFromSteamID(CSteamID id)
+{
+    SteamNetworkingIdentity target;
+    target.SetSteamID(id);
+    return target;
+}
+
+void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(SteamNetConnectionStatusChangedCallback_t* pCallback) {
+    // CONNECTION REQUEST TO ME
+    if (pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_Connecting) {
+        SteamNetworkingSockets()->AcceptConnection(pCallback->m_hConn);
+        remotes.push_back(pCallback->m_info.m_identityRemote);
+        std::cout << "Remotes " << remotes.size() << "\n";
+        if (network_position == host) {
+            if (SteamMatchmaking()->GetNumLobbyMembers(current_lobby) == 1) {
+                SteamMatchmaking()->LeaveLobby(current_lobby);
+            }
+        }
+        else {
+            SteamMatchmaking()->LeaveLobby(current_lobby);
+        }
+
+    } // CONNECTION ACCEPTED BY PEER
+    else if(pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_Connected) {
+        network_position = NetworkPosition::remote;
+        std::cout << "ACCEPTED\n";
+    } // CONNECTION REJECTED BY PEER
+    else if (pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_ClosedByPeer) {
+        SteamMatchmaking()->LeaveLobby(current_lobby);
+        network_status = NetworkStatus::offline;
+        network_position = NetworkPosition::local;
+    } // PROBLEM DETECTED ?
+    else {
     }
 }

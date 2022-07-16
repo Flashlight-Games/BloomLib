@@ -15,6 +15,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             app->GetSteamManager()->FindLobbies();
         }
         break;
+    case GLFW_KEY_H:
+        if(action == GLFW_PRESS)
+            if (app->GetSteamManager()->GetNetworkStatus() == SteamTools::NetworkStatus::connected && app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::lobby)
+                app->GetSteamManager()->HostP2P();
+        break;
+    case GLFW_KEY_J:
+        if (action == GLFW_PRESS)
+            if (app->GetSteamManager()->GetNetworkStatus() == SteamTools::NetworkStatus::connected && app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::lobby)
+                app->GetSteamManager()->ConnectP2P(SteamMatchmaking()->GetLobbyOwner(app->GetSteamManager()->GetCurrentLobby()));
+        break;
     }
 }
 
@@ -65,8 +75,13 @@ void Shooter::UILoop() {
 
 void Shooter::GameLoop() {
     //NETWORKING
-    GetSteamManager()->Matchmake(2);
-    SetStatusString(GetSteamManager()->GetNetworkStatus());
+    if(GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::local)
+        GetSteamManager()->MatchmakeLoop_Quick(2); // UPDATE MATCHMAKING NETWORK STATUS
+    if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::remote) {
+        // PASS
+    }
+
+    SetStatusString(GetSteamManager()->GetNetworkStatus(), GetSteamManager()->GetNetworkPosition());
 
     //RENDERING
     text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
@@ -79,7 +94,12 @@ void Shooter::GameLoop() {
             text_pressstart->Print(glm::vec2(3, 20 * i+20), LobbyNames.at(i), 0.25, GetWindowSize(), glm::vec4(1));
         }
     }
-    text_pressstart->Print(glm::vec2(3, 0), std::to_string(GetSteamManager()->GetCurrentLobby().GetAccountID()), 0.25, GetWindowSize(), glm::vec4(1));
+    if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::lobby)
+        text_pressstart->Print(glm::vec2(3, 0), std::to_string(GetSteamManager()->GetCurrentLobby().GetAccountID()), 0.25, GetWindowSize(), glm::vec4(1));
+    else if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::remote)
+        text_pressstart->Print(glm::vec2(3, 0), "REMOTE", 0.25, GetWindowSize(), glm::vec4(1));
+    else if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host)
+        text_pressstart->Print(glm::vec2(3, 0), "HOST", 0.25, GetWindowSize(), glm::vec4(1));
 
     EnablePixels();
 
@@ -104,22 +124,38 @@ void Shooter::InputLoop() {
     }
 }
 
-void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status){
+void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, SteamTools::NetworkPosition position){
     switch (status) {
-    case SteamTools::connected:
+    case SteamTools::NetworkStatus::connected:
         status_string = "CONNECTED/" + std::to_string(SteamMatchmaking()->GetNumLobbyMembers(GetSteamManager()->GetCurrentLobby()));
         break;
-    case SteamTools::offline:
+    case SteamTools::NetworkStatus::offline:
         status_string = "OFFLINE";
         break;
-    case SteamTools::creating:
+    case SteamTools::NetworkStatus::creating:
         status_string = "CREATING";
         break;
-    case SteamTools::joining:
+    case SteamTools::NetworkStatus::joining:
         status_string = "JOINING";
         break;
-    case SteamTools::searching:
+    case SteamTools::NetworkStatus::searching:
         status_string = "SEARCHING";
         break;
     }
+
+    switch (position) {
+    case SteamTools::NetworkPosition::local:
+        status_string = "LC_" + status_string;
+        break;
+    case SteamTools::NetworkPosition::lobby:
+        status_string = "LB_" + status_string;
+        break;
+    case SteamTools::NetworkPosition::remote:
+        status_string = "RE_" + status_string;
+        break;
+    case SteamTools::NetworkPosition::host:
+        status_string = "SE_" + status_string;
+        break;
+    }
+    
 }

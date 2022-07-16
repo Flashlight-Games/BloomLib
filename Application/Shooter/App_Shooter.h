@@ -17,7 +17,7 @@ namespace Application{
             auto GetmainBox() { return this->mainBox; };
             auto GetSptiteBlock() { return this->sprite_block; };
 
-            void SetStatusString(SteamTools::NetworkStatus status);
+            void SetStatusString(SteamTools::NetworkStatus status, SteamTools::NetworkPosition position);
         private:
             Bloom::Text* text_pressstart;
 
