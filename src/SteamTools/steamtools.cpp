@@ -112,7 +112,6 @@ void SteamTools::SteamManager::MatchmakeLoop_Quick(int new_lobby_max_players) {
 
 void SteamTools::SteamManager::HostP2P(int channel)
 {
-    std::cout << "Hosting!\n";
     SteamNetworkingSockets()->CreateListenSocketP2P(channel,0,nullptr);
     network_position = NetworkPosition::host;
     SteamMatchmaking()->SetLobbyJoinable(GetCurrentLobby(), false);
@@ -136,7 +135,7 @@ void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(Steam
     if (pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_Connecting) {
         SteamNetworkingSockets()->AcceptConnection(pCallback->m_hConn);
         remotes.push_back(pCallback->m_info.m_identityRemote);
-        std::cout << "Remotes " << remotes.size() << "\n";
+        //std::cout << "Remotes " << remotes.size() << "\n";
         if (network_position == host) {
             if (SteamMatchmaking()->GetNumLobbyMembers(current_lobby) == 1) {
                 SteamMatchmaking()->LeaveLobby(current_lobby);
@@ -148,13 +147,39 @@ void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(Steam
 
     } // CONNECTION ACCEPTED BY PEER
     else if(pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_Connected) {
-        network_position = NetworkPosition::remote;
-        std::cout << "ACCEPTED\n";
+        if (network_position != host) {
+            network_position = NetworkPosition::remote;
+        }
     } // CONNECTION REJECTED BY PEER
     else if (pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_ClosedByPeer) {
-        SteamMatchmaking()->LeaveLobby(current_lobby);
-        network_status = NetworkStatus::offline;
-        network_position = NetworkPosition::local;
+        if (network_position != host) {
+            SteamMatchmaking()->LeaveLobby(current_lobby);
+            network_status = NetworkStatus::offline;
+            network_position = NetworkPosition::local;
+            remotes.clear();
+        }
+        else if (remotes.size() == 0) {
+            SteamMatchmaking()->LeaveLobby(current_lobby);
+            network_status = NetworkStatus::offline;
+            network_position = NetworkPosition::local;
+            remotes.clear();
+        }
+        else {
+            for (int i = 0; i < remotes.size(); i++)
+            {
+                if (remotes.at(i).GetIPv4() == pCallback->m_info.m_identityRemote.GetIPv4()) {
+                    remotes.erase(remotes.begin() + i);
+                    break;
+                }
+            }
+
+            if (remotes.size() == 0) {
+                SteamMatchmaking()->LeaveLobby(current_lobby);
+                network_status = NetworkStatus::offline;
+                network_position = NetworkPosition::local;
+                remotes.clear();
+            }
+        }
     } // PROBLEM DETECTED ?
     else {
     }

@@ -127,7 +127,7 @@ void Shooter::InputLoop() {
 void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, SteamTools::NetworkPosition position){
     switch (status) {
     case SteamTools::NetworkStatus::connected:
-        status_string = "CONNECTED/" + std::to_string(SteamMatchmaking()->GetNumLobbyMembers(GetSteamManager()->GetCurrentLobby()));
+        status_string = "CONNECTED";
         break;
     case SteamTools::NetworkStatus::offline:
         status_string = "OFFLINE";
@@ -148,13 +148,13 @@ void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, Ste
         status_string = "LC_" + status_string;
         break;
     case SteamTools::NetworkPosition::lobby:
-        status_string = "LB_" + status_string;
+        status_string = "LB_" + status_string + '/' + std::to_string(SteamMatchmaking()->GetNumLobbyMembers(GetSteamManager()->GetCurrentLobby()));
         break;
     case SteamTools::NetworkPosition::remote:
         status_string = "RE_" + status_string;
         break;
     case SteamTools::NetworkPosition::host:
-        status_string = "SE_" + status_string;
+        status_string = "SE_" + status_string + '/' + std::to_string(GetSteamManager()->GetRemotes().size());
         break;
     }
     

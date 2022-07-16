@@ -40,6 +40,7 @@ namespace SteamTools {
 		void HostP2P(int channel = 0);
 		void ConnectP2P(CSteamID remoteID,int channel = 0);
 		SteamNetworkingIdentity IdentityFromSteamID(CSteamID id);
+		auto GetRemotes() { return remotes; };
 	private:
 		STEAM_CALLBACK(SteamManager, OnGameOverlayActivated, GameOverlayActivated_t);
 		bool overlay_active = false;

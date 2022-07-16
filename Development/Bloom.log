@@ -1,4 +1,270 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  App_Shooter.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(32,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(33,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(57,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(58,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(57,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(77,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(35,22): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(38,49): warning C4244: 'argument': conversion from 'const _Ty' to 'T', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(63,45): warning C4305: 'argument': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(108,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(112,51): warning C4244: 'argument': conversion from 'float' to 'uint16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(115,42): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(78,35): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(76): message : while compiling class template member function 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)'
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(42): message : see reference to function template instantiation 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)' being compiled
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(24): message : see reference to class template instantiation 'Bloom::ParticleEmitter<Application::CheckParticles>' being compiled
+  Checker.cpp
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(57,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(58,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+I:\TomerSoftware\Code\BloomLib\include\glad\glad.h(32): message : see previous definition of 'APIENTRY'
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(32,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(33,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(35,22): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(38,49): warning C4244: 'argument': conversion from 'const _Ty' to 'T', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(78,35): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(76): message : while compiling class template member function 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)'
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(42): message : see reference to function template instantiation 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)' being compiled
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(24): message : see reference to class template instantiation 'Bloom::ParticleEmitter<Application::CheckParticles>' being compiled
+  main.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(32,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(33,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(57,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(58,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(57,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(77,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(35,22): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(38,49): warning C4244: 'argument': conversion from 'const _Ty' to 'T', possible loss of data
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(78,35): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\src\particles\particles.h(76): message : while compiling class template member function 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)'
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(42): message : see reference to function template instantiation 'void Bloom::ParticleEmitter<Application::CheckParticles>::Draw(float,float)' being compiled
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(24): message : see reference to class template instantiation 'Bloom::ParticleEmitter<Application::CheckParticles>' being compiled
   steamtools.cpp
+I:\TomerSoftware\Code\BloomLib\src\SteamTools\steamtools.cpp(166,31): warning C4018: '<': signed/unsigned mismatch
+  collision.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(32,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(33,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(57,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(58,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\collision\collision.cpp(16,41): warning C4244: '=': conversion from 'float' to 'int16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\collision\collision.cpp(24,49): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\collision\collision.cpp(132,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\collision\collision.cpp(134,85): warning C4244: 'argument': conversion from 'float' to 'uint16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\collision\collision.cpp(144,59): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+  engine.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(32,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(33,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(57,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(58,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(57,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(77,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(26,65): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(27,66): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(28,71): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(29,72): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(135,20): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\engine\engine.cpp(138,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  utils.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(32,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(33,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(57,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(58,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(5,21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(43,64): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(43,52): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(50,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(51,80): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(51,72): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(51,64): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(51,52): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(59,64): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(59,52): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(66,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(67,80): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(67,72): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(67,64): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(67,52): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(85,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(89,41): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.h(8,18): warning C4244: 'return': conversion from 'float' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+I:\TomerSoftware\Code\BloomLib\src\utils\utils.cpp(85): message : see reference to function template instantiation 'T Utils::Lerp<int>(T,T,float)' being compiled
+          with
+          [
+              T=int
+          ]
+  Generating Code...
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
   Bloom.vcxproj -> I:\TomerSoftware\Code\BloomLib\Output\Development\Bloom.exe
