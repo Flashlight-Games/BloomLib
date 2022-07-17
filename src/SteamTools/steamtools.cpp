@@ -190,12 +190,18 @@ void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(Steam
     }
 }
 
-std::string SteamTools::SteamManager::PreparePayload(const char* data, DataType type)
+std::string SteamTools::SteamManager::PreparePayload(const char* data, DataType type, std::vector<std::string> flags)
 {
     auto data_string = std::string(data);
     data_string.erase(std::remove(data_string.begin(), data_string.end(), '"'), data_string.end());
-    std::string paylod = (std::to_string(type) + PACKET_DELIMTER + std::to_string(strlen(data)).c_str() + PACKET_DELIMTER + DATA_START + data_string + DATA_END + PACKET_DELIMTER + PACKET_END);
-    return paylod;
+    std::string payload = (std::to_string(type) + PACKET_DELIMTER + std::to_string(strlen(data)).c_str() + PACKET_DELIMTER + DATA_START + data_string + DATA_END + PACKET_DELIMTER + PACKET_END);
+    if (flags.size() > 0) {
+        for (int i = 0; i < flags.size(); i++)
+        {
+            payload += DATA_START + flags.at(i) + DATA_END;
+        }
+    }
+    return payload;
 }
 
 SteamTools::Message SteamTools::SteamManager::ParsePayload(std::string data)
@@ -208,6 +214,8 @@ SteamTools::Message SteamTools::SteamManager::ParsePayload(std::string data)
     unsigned last = data.find(DATA_END);
     output.data = data.substr(first+strlen(DATA_START), last - first - strlen(DATA_END));
     
+    std::string flagstring = data.substr(data.find(PACKET_END) + strlen(PACKET_END), strlen(data.c_str()) - data.find(PACKET_END) + strlen(PACKET_END));
+
     while ((pos = data.find(PACKET_DELIMTER)) != std::string::npos) {
         token =  data.substr(0, pos);
 
@@ -218,37 +226,44 @@ SteamTools::Message SteamTools::SteamManager::ParsePayload(std::string data)
         
         data.erase(0, pos + std::strlen(PACKET_DELIMTER));
     }
+    std::cout << "FLAGS: " << flagstring << "\n";
+    while ((pos = flagstring.find(DATA_START)) != std::string::npos) {
+        auto current_flag = flagstring.substr(pos + strlen(DATA_START), flagstring.find(DATA_END) - pos - strlen(DATA_END));
+        output.flags.push_back(current_flag);
+        flagstring.erase(pos, flagstring.find(DATA_END) - pos + strlen(DATA_END));
+        std::cout << current_flag << "\n";
+    }
 
     return output;
 }
 
-bool SteamTools::SteamManager::SendMessageP2P_Reliable(int remote_idx, const char* data, DataType type,int channel)
+bool SteamTools::SteamManager::SendMessageP2P_Reliable(int remote_idx, const char* data, DataType type,std::vector<std::string> flags,int channel)
 {
-    std::string payload_string = PreparePayload(data, type);
+    std::string payload_string = PreparePayload(data, type,flags);
     const void* payload = payload_string.c_str();
     auto result = SteamNetworkingMessages()->SendMessageToUser(remotes.at(remote_idx), payload, strlen(payload_string.c_str()), 8, channel);
     return result == EResult::k_EResultOK;
 }
 
-bool SteamTools::SteamManager::SendMessageP2P_Reliable(SteamNetworkingIdentity remote, const char* data, DataType type, int channel)
+bool SteamTools::SteamManager::SendMessageP2P_Reliable(SteamNetworkingIdentity remote, const char* data, DataType type, std::vector<std::string> flags, int channel)
 {
-    std::string payload_string = PreparePayload(data, type);
+    std::string payload_string = PreparePayload(data, type, flags);
     const void* payload = payload_string.c_str();
     auto result = SteamNetworkingMessages()->SendMessageToUser(remote, payload, strlen(payload_string.c_str()), 8, channel);
     return result == EResult::k_EResultOK;
 }
 
-bool SteamTools::SteamManager::SendMessageP2P_Unreliable(int remote_idx, const char* data, DataType type, int channel)
+bool SteamTools::SteamManager::SendMessageP2P_Unreliable(int remote_idx, const char* data, DataType type, std::vector<std::string> flags, int channel)
 {
-    std::string payload_string = PreparePayload(data, type);
+    std::string payload_string = PreparePayload(data, type, flags);
     const void* payload = payload_string.c_str();
     auto result = SteamNetworkingMessages()->SendMessageToUser(remotes.at(remote_idx), payload, strlen(payload_string.c_str()), 0, channel);
     return result == EResult::k_EResultOK;
 }
 
-bool SteamTools::SteamManager::SendMessageP2P_Unreliable(SteamNetworkingIdentity remote, const char* data, DataType type, int channel)
+bool SteamTools::SteamManager::SendMessageP2P_Unreliable(SteamNetworkingIdentity remote, const char* data, DataType type, std::vector<std::string> flags, int channel)
 {
-    std::string payload_string = PreparePayload(data, type);
+    std::string payload_string = PreparePayload(data, type, flags);
     const void* payload = payload_string.c_str();
     auto result = SteamNetworkingMessages()->SendMessageToUser(remote, payload, strlen(payload_string.c_str()), 0, channel);
     return result == EResult::k_EResultOK;

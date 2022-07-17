@@ -29,6 +29,7 @@ namespace SteamTools {
 		DataType type = DataType::UNINIT;
 		int length = -1;
 		std::string data = "";
+		std::vector<std::string> flags = std::vector<std::string>();
 	};
 
 	class SteamManager {
@@ -62,12 +63,12 @@ namespace SteamTools {
 		void ConnectP2P(CSteamID remoteID,int channel = 0);
 		SteamNetworkingIdentity IdentityFromSteamID(CSteamID id);
 		auto GetRemotes() { return remotes; };
-		bool SendMessageP2P_Reliable(int remote_idx, const char* data, DataType type, int channel = 0);
-		bool SendMessageP2P_Reliable(SteamNetworkingIdentity remote, const char* data, DataType type, int channel = 0);
-		bool SendMessageP2P_Unreliable(int remote_idx, const char* data, DataType type, int channel = 0);
-		bool SendMessageP2P_Unreliable(SteamNetworkingIdentity remote, const char* data, DataType type, int channel = 0);
+		bool SendMessageP2P_Reliable(int remote_idx, const char* data, DataType type, std::vector<std::string> flags = std::vector<std::string>(), int channel = 0);
+		bool SendMessageP2P_Reliable(SteamNetworkingIdentity remote, const char* data, DataType type, std::vector<std::string> flags = std::vector<std::string>(), int channel = 0);
+		bool SendMessageP2P_Unreliable(int remote_idx, const char* data, DataType type, std::vector<std::string> flags = std::vector<std::string>(), int channel = 0);
+		bool SendMessageP2P_Unreliable(SteamNetworkingIdentity remote, const char* data, DataType type, std::vector<std::string> flags = std::vector<std::string>(), int channel = 0);
 		void ReceiveMessageP2P(int channel = 0);
-		std::string PreparePayload(const char* data, DataType type = NOTYPE);
+		std::string PreparePayload(const char* data, DataType type = NOTYPE, std::vector<std::string> flags = std::vector<std::string>());
 		Message ParsePayload(std::string data);
 		Message GetReceivedMessage();
 	private:

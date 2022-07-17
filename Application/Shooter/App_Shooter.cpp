@@ -29,8 +29,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         if (action == GLFW_PRESS) {
             auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime()), 0) / 2);
             app->GetSptiteBlock()->SetLocation(newLocation);
-            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS); // SEND PRESSED SPACE
-            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string((int)(app->GetTime())).c_str(), SteamTools::DataType::TIME_SYNC); // SYNC TIME ON KEYPRESS
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS,std::vector<std::string>({"wawa","weewee"})); // SEND PRESSED SPACE AND NEW Y
         }
     }
 }
