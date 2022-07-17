@@ -29,7 +29,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         if (action == GLFW_PRESS) {
             auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime())) / 2);
             app->GetSptiteBlock()->SetLocation(newLocation);
-            app->GetSteamManager()->SendMessageP2P_Reliable(0, "A TEST DATA");
+            std::cout << "sending " << std::to_string(key).c_str() << "\n";
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_PRESS); // SEND PRESSED SPACE
         }
     }
 }
@@ -84,9 +85,11 @@ void Shooter::GameLoop() {
     if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::local) {
         GetSteamManager()->MatchmakeLoop_Quick(2); // UPDATE MATCHMAKING NETWORK STATUS
     } if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::remote) {
-        //GetSteamManager()->ReceiveMessageP2P();
+        GetSteamManager()->ReceiveMessageP2P();
+        ParseNetworkMessage(GetSteamManager()->GetReceivedMessage());
     } if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host) {
         GetSteamManager()->ReceiveMessageP2P();
+        ParseNetworkMessage(GetSteamManager()->GetReceivedMessage());
     }
 
 
@@ -167,4 +170,14 @@ void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, Ste
         break;
     }
     
+}
+
+void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
+{
+    switch (message.type) {
+    case SteamTools::DataType::PLAYER_INPUT_PRESS:
+        std::cout << "RECEIVED PRESSED " << message.data << "\n";
+        //key_callback(GetWindow(), std::stoi(message.data), 0, GLFW_PRESS, 0);
+        break;
+    }
 }

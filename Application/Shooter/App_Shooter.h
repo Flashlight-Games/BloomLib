@@ -18,6 +18,7 @@ namespace Application{
             auto GetSptiteBlock() { return this->sprite_block; };
 
             void SetStatusString(SteamTools::NetworkStatus status, SteamTools::NetworkPosition position);
+            void ParseNetworkMessage(SteamTools::Message message);
         private:
             Bloom::Text* text_pressstart;
 

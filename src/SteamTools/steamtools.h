@@ -14,7 +14,12 @@
 namespace SteamTools {
 	enum NetworkStatus { offline, searching, creating, joining, connected };
 	enum NetworkPosition {local, lobby, host,remote};
-	enum DataType {UNINIT,NULLDATA};
+	enum DataType {
+		UNINIT, // DO NOT USE UNINIT IN SENT MESSAGES
+		NOTYPE, // NO TYPE FOR MESSAGE
+		PLAYER_INPUT_PRESS, // SEND PRESSED PLAYER INPUT
+		PLAYER_INPUT_RELEASE, // SEND PRESSED PLAYER INPUT
+	};
 
 	struct Message {
 		DataType type = DataType::UNINIT;
@@ -53,13 +58,14 @@ namespace SteamTools {
 		void ConnectP2P(CSteamID remoteID,int channel = 0);
 		SteamNetworkingIdentity IdentityFromSteamID(CSteamID id);
 		auto GetRemotes() { return remotes; };
-		bool SendMessageP2P_Reliable(int remote_idx, const char* data,int channel = 0);
-		bool SendMessageP2P_Reliable(SteamNetworkingIdentity remote, const char* data, int channel = 0);
-		bool SendMessageP2P_Unreliable(int remote_idx, const char* data, int channel = 0);
-		bool SendMessageP2P_Unreliable(SteamNetworkingIdentity remote, const char* data, int channel = 0);
+		bool SendMessageP2P_Reliable(int remote_idx, const char* data, DataType type, int channel = 0);
+		bool SendMessageP2P_Reliable(SteamNetworkingIdentity remote, const char* data, DataType type, int channel = 0);
+		bool SendMessageP2P_Unreliable(int remote_idx, const char* data, DataType type, int channel = 0);
+		bool SendMessageP2P_Unreliable(SteamNetworkingIdentity remote, const char* data, DataType type, int channel = 0);
 		void ReceiveMessageP2P(int channel = 0);
-		std::string PreparePayload(const char* data, DataType type = NULLDATA);
+		std::string PreparePayload(const char* data, DataType type = NOTYPE);
 		Message ParsePayload(std::string data);
+		Message GetReceivedMessage();
 	private:
 		STEAM_CALLBACK(SteamManager, OnGameOverlayActivated, GameOverlayActivated_t);
 		bool overlay_active = false;
@@ -76,7 +82,7 @@ namespace SteamTools {
 		STEAM_CALLBACK(SteamManager, OnSteamNetConnectionStatusChangedCallback_t, SteamNetConnectionStatusChangedCallback_t);
 		STEAM_CALLBACK(SteamManager, OnSteamNetworkingMessagesSessionRequest_t, SteamNetworkingMessagesSessionRequest_t);
 		std::vector<SteamNetworkingIdentity> remotes;
-		std::vector<std::string> received_messages;
+		std::vector<Message> received_messages;
 	};
 }
 
