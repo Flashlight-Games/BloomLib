@@ -27,9 +27,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         break;
     case GLFW_KEY_SPACE:
         if (action == GLFW_PRESS) {
-            auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime()), 0) / 2);
+            auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime())) / 2);
             app->GetSptiteBlock()->SetLocation(newLocation);
-            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS,std::vector<std::string>({"wawa","weewee"})); // SEND PRESSED SPACE AND NEW Y
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS,std::vector<std::string>({std::to_string(newLocation.y)})); // SEND PRESSED SPACE AND NEW Y
         }
     }
 }
@@ -168,7 +168,6 @@ void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, Ste
         status_string = "SE_" + status_string + '/' + std::to_string(GetSteamManager()->GetRemotes().size());
         break;
     }
-    
 }
 
 void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
@@ -178,9 +177,9 @@ void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
         glfwSetTime(stoi(message.data));
         break;
     case SteamTools::DataType::PLAYER_INPUT_KEY_PRESS:
-        auto newLocation = GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, GetTime()),0) / 2);
-        GetSptiteBlock()->SetLocation(newLocation);
-        std::cout << newLocation.y << "\n";
+        if (std::stoi(message.data) == GLFW_KEY_SPACE) {
+            GetSptiteBlock()->SetLocation(glm::vec2(GetPixelWindowSize().x / 2, std::stof(message.flags.at(0))));
+        }
         break;
     }
 }

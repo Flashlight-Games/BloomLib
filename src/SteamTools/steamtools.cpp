@@ -226,12 +226,11 @@ SteamTools::Message SteamTools::SteamManager::ParsePayload(std::string data)
         
         data.erase(0, pos + std::strlen(PACKET_DELIMTER));
     }
-    std::cout << "FLAGS: " << flagstring << "\n";
     while ((pos = flagstring.find(DATA_START)) != std::string::npos) {
         auto current_flag = flagstring.substr(pos + strlen(DATA_START), flagstring.find(DATA_END) - pos - strlen(DATA_END));
         output.flags.push_back(current_flag);
         flagstring.erase(pos, flagstring.find(DATA_END) - pos + strlen(DATA_END));
-        std::cout << current_flag << "\n";
+        std::cout << "FLAG : " << current_flag << "\n";
     }
 
     return output;
