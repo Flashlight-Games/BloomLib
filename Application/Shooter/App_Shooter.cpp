@@ -25,6 +25,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             if (app->GetSteamManager()->GetNetworkStatus() == SteamTools::NetworkStatus::connected && app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::lobby)
                 app->GetSteamManager()->ConnectP2P(SteamMatchmaking()->GetLobbyOwner(app->GetSteamManager()->GetCurrentLobby()));
         break;
+    case GLFW_KEY_SPACE:
+        if (action == GLFW_PRESS) {
+            auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime())) / 2);
+            app->GetSptiteBlock()->SetLocation(newLocation);
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, "A TEST DATA");
+        }
     }
 }
 
@@ -75,11 +81,14 @@ void Shooter::UILoop() {
 
 void Shooter::GameLoop() {
     //NETWORKING
-    if(GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::local)
+    if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::local) {
         GetSteamManager()->MatchmakeLoop_Quick(2); // UPDATE MATCHMAKING NETWORK STATUS
-    if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::remote) {
-        // PASS
+    } if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::remote) {
+        //GetSteamManager()->ReceiveMessageP2P();
+    } if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host) {
+        GetSteamManager()->ReceiveMessageP2P();
     }
+
 
     SetStatusString(GetSteamManager()->GetNetworkStatus(), GetSteamManager()->GetNetworkPosition());
 
@@ -119,8 +128,8 @@ void Shooter::GameLoop() {
 
 void Shooter::InputLoop() {
     if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_SPACE)) {
-        auto newLocation = GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, GetTime())) / 2);
-        GetSptiteBlock()->SetLocation(newLocation);
+        /*auto newLocation = GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, GetTime())) / 2);
+        GetSptiteBlock()->SetLocation(newLocation);*/
     }
 }
 

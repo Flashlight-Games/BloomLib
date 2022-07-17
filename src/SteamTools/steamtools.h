@@ -5,10 +5,22 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "JSON/json.hpp"
+
+#define PACKET_DELIMTER  " "
+#define DATA_EDGE '\"'
+#define PACKET_END "ENDDATA"
 
 namespace SteamTools {
 	enum NetworkStatus { offline, searching, creating, joining, connected };
 	enum NetworkPosition {local, lobby, host,remote};
+	enum DataType {UNINIT,NULLDATA};
+
+	struct Message {
+		DataType type = DataType::UNINIT;
+		int length = -1;
+		std::string data = "";
+	};
 
 	class SteamManager {
 	public:
@@ -41,6 +53,13 @@ namespace SteamTools {
 		void ConnectP2P(CSteamID remoteID,int channel = 0);
 		SteamNetworkingIdentity IdentityFromSteamID(CSteamID id);
 		auto GetRemotes() { return remotes; };
+		bool SendMessageP2P_Reliable(int remote_idx, const char* data,int channel = 0);
+		bool SendMessageP2P_Reliable(SteamNetworkingIdentity remote, const char* data, int channel = 0);
+		bool SendMessageP2P_Unreliable(int remote_idx, const char* data, int channel = 0);
+		bool SendMessageP2P_Unreliable(SteamNetworkingIdentity remote, const char* data, int channel = 0);
+		void ReceiveMessageP2P(int channel = 0);
+		std::string PreparePayload(const char* data, DataType type = NULLDATA);
+		Message ParsePayload(std::string data);
 	private:
 		STEAM_CALLBACK(SteamManager, OnGameOverlayActivated, GameOverlayActivated_t);
 		bool overlay_active = false;
@@ -55,7 +74,9 @@ namespace SteamTools {
 		CSteamID created_lobby_id = static_cast<uint64>(-1);
 		STEAM_CALLBACK(SteamManager, OnGameLobbyJoinRequested_t, GameLobbyJoinRequested_t);
 		STEAM_CALLBACK(SteamManager, OnSteamNetConnectionStatusChangedCallback_t, SteamNetConnectionStatusChangedCallback_t);
+		STEAM_CALLBACK(SteamManager, OnSteamNetworkingMessagesSessionRequest_t, SteamNetworkingMessagesSessionRequest_t);
 		std::vector<SteamNetworkingIdentity> remotes;
+		std::vector<std::string> received_messages;
 	};
 }
 
