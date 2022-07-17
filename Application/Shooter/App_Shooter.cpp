@@ -125,6 +125,9 @@ void Shooter::GameLoop() {
 
     checker->Draw(GetTime(), GetGameSpeed());
 
+    DrawDebugLine(GetPixelWindowSize() / glm::vec2(2), GetCursorPosition(), 3, glm::vec3(0, 1, 1));
+    DrawDebugPoint(GetPixelWindowSize() / glm::vec2(2), 3, glm::vec3(1, 0, 0));
+
     DrawPixelsToDefault(false);
 }
 
