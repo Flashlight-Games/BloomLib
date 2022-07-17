@@ -135,7 +135,7 @@ void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(Steam
     if (pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_Connecting) {
         SteamNetworkingSockets()->AcceptConnection(pCallback->m_hConn);
         remotes.push_back(pCallback->m_info.m_identityRemote);
-        //std::cout << "Remotes " << remotes.size() << "\n";
+        
         if (network_position == host) {
             if (SteamMatchmaking()->GetNumLobbyMembers(current_lobby) == 1) {
                 SteamMatchmaking()->LeaveLobby(current_lobby);
@@ -149,6 +149,7 @@ void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(Steam
     else if(pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_Connected) {
         if (network_position != host) {
             network_position = NetworkPosition::remote;
+            SendMessageP2P_Reliable(remotes.at(0), "", DataType::NOTYPE);
         }
     } // CONNECTION REJECTED BY PEER
     else if (pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_ClosedByPeer) {
@@ -193,7 +194,7 @@ std::string SteamTools::SteamManager::PreparePayload(const char* data, DataType 
 {
     auto data_string = std::string(data);
     data_string.erase(std::remove(data_string.begin(), data_string.end(), '"'), data_string.end());
-    std::string paylod = (std::to_string(type) + PACKET_DELIMTER + std::to_string(strlen(data)).c_str() + PACKET_DELIMTER + DATA_EDGE + data_string + DATA_EDGE + PACKET_DELIMTER + PACKET_END);
+    std::string paylod = (std::to_string(type) + PACKET_DELIMTER + std::to_string(strlen(data)).c_str() + PACKET_DELIMTER + DATA_START + data_string + DATA_END + PACKET_DELIMTER + PACKET_END);
     return paylod;
 }
 
@@ -202,9 +203,11 @@ SteamTools::Message SteamTools::SteamManager::ParsePayload(std::string data)
     size_t pos = 0;
     std::string token;
     Message output = Message();
-    std::string msg_data;
-    bool appending = false;
-    std::cout << "PARSING " << data << "\n";
+
+    unsigned first = data.find(DATA_START);
+    unsigned last = data.find(DATA_END);
+    output.data = data.substr(first+strlen(DATA_START), last - first - strlen(DATA_END));
+    
     while ((pos = data.find(PACKET_DELIMTER)) != std::string::npos) {
         token =  data.substr(0, pos);
 
@@ -212,25 +215,10 @@ SteamTools::Message SteamTools::SteamManager::ParsePayload(std::string data)
             output.type = DataType(std::stoi(token));
         else if (output.length == -1)
             output.length = std::stoi(token);
-        else if (token[0] == '"' && token.back() != '"') {
-            appending = !appending;
-            msg_data += token.substr(1, token.size() - 1) + PACKET_DELIMTER;
-            if(!appending)
-                output.data = msg_data;
-        }
-        else if (token[0] == '"' && token.back() == '"') {
-            msg_data += token.substr(1, token.size() - 2);
-            output.data = msg_data;
-        }
-        else if (appending) {
-            std::cout << "APPENDING! " << token << "\n";
-            msg_data += token + PACKET_DELIMTER;
-        }
         
         data.erase(0, pos + std::strlen(PACKET_DELIMTER));
     }
 
-    std::cout << "\"" << output.data << "\"\n";
     return output;
 }
 
@@ -273,7 +261,9 @@ void SteamTools::SteamManager::ReceiveMessageP2P(int channel)
     if (received_amount != 0) {
         for (int i = 0; i < (sizeof(msgs) / sizeof(msgs[0])); i++)
         {
-            received_messages.push_back(ParsePayload(std::string(static_cast<const char*>(msgs[i]->GetData()))));
+            Message received = ParsePayload(std::string(static_cast<const char*>(msgs[i]->GetData())));
+            if(received.data != "")
+                received_messages.push_back(received);
             msgs[i]->Release();
         }
     }

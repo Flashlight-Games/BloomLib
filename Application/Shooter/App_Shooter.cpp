@@ -27,10 +27,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         break;
     case GLFW_KEY_SPACE:
         if (action == GLFW_PRESS) {
-            auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime())) / 2);
+            auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime()), 0) / 2);
             app->GetSptiteBlock()->SetLocation(newLocation);
-            std::cout << "sending " << std::to_string(key).c_str() << "\n";
-            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_PRESS); // SEND PRESSED SPACE
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS); // SEND PRESSED SPACE
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string((int)(app->GetTime())).c_str(), SteamTools::DataType::TIME_SYNC); // SYNC TIME ON KEYPRESS
         }
     }
 }
@@ -175,9 +175,13 @@ void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, Ste
 void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
 {
     switch (message.type) {
-    case SteamTools::DataType::PLAYER_INPUT_PRESS:
-        std::cout << "RECEIVED PRESSED " << message.data << "\n";
-        //key_callback(GetWindow(), std::stoi(message.data), 0, GLFW_PRESS, 0);
+    case SteamTools::DataType::TIME_SYNC:
+        glfwSetTime(stoi(message.data));
+        break;
+    case SteamTools::DataType::PLAYER_INPUT_KEY_PRESS:
+        auto newLocation = GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, GetTime()),0) / 2);
+        GetSptiteBlock()->SetLocation(newLocation);
+        std::cout << newLocation.y << "\n";
         break;
     }
 }
