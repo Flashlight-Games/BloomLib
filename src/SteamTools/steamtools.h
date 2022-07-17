@@ -23,6 +23,7 @@ namespace SteamTools {
 		PLAYER_INPUT_KEY_RELEASE, // SEND PRESSED PLAYER INPUT
 		PLAYER_INPUT_STATE_PRESSED, // SEND AN UPDATE SPECIFYING A KEY IS CURRENTLY PRESSED
 		PLAYER_INPUT_STATE_RELEASED, // SEND AN UPDATE SPECIFYING A KEY IS CURRENTLY RELEASED
+		CONNECTION_STATE, // CHANGES ABOUT THE CONNECTION STATE
 	};
 
 	struct Message {
@@ -86,6 +87,7 @@ namespace SteamTools {
 		STEAM_CALLBACK(SteamManager, OnGameLobbyJoinRequested_t, GameLobbyJoinRequested_t);
 		STEAM_CALLBACK(SteamManager, OnSteamNetConnectionStatusChangedCallback_t, SteamNetConnectionStatusChangedCallback_t);
 		STEAM_CALLBACK(SteamManager, OnSteamNetworkingMessagesSessionRequest_t, SteamNetworkingMessagesSessionRequest_t);
+		STEAM_CALLBACK(SteamManager, OnLobbyChatMsg_t, LobbyChatMsg_t);
 		std::vector<SteamNetworkingIdentity> remotes;
 		std::vector<Message> received_messages;
 	};

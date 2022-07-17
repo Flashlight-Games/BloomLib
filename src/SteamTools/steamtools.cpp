@@ -115,6 +115,9 @@ void SteamTools::SteamManager::HostP2P(int channel)
     SteamNetworkingSockets()->CreateListenSocketP2P(channel,0,nullptr);
     network_position = NetworkPosition::host;
     SteamMatchmaking()->SetLobbyJoinable(GetCurrentLobby(), false);
+    auto names = GetLobbyMemberNames();
+    std::string ready_payload = PreparePayload("HOST_READY",DataType::CONNECTION_STATE,std::vector<std::string>({ std::to_string(names.begin() - find(names.begin(), names.end(), GetMySteamName()))}));
+    SteamMatchmaking()->SendLobbyChatMsg(GetCurrentLobby(), ready_payload.c_str(), strlen(ready_payload.c_str()));
 }
 
 void SteamTools::SteamManager::ConnectP2P(CSteamID remoteID,int channel)
@@ -230,7 +233,6 @@ SteamTools::Message SteamTools::SteamManager::ParsePayload(std::string data)
         auto current_flag = flagstring.substr(pos + strlen(DATA_START), flagstring.find(DATA_END) - pos - strlen(DATA_END));
         output.flags.push_back(current_flag);
         flagstring.erase(pos, flagstring.find(DATA_END) - pos + strlen(DATA_END));
-        std::cout << "FLAG : " << current_flag << "\n";
     }
 
     return output;
@@ -296,4 +298,15 @@ SteamTools::Message SteamTools::SteamManager::GetReceivedMessage()
         received_messages.erase(received_messages.begin());
     }
     return msg;
+}
+
+void SteamTools::SteamManager::OnLobbyChatMsg_t(LobbyChatMsg_t* pCallback) {
+    unsigned char data[4096];
+    auto amount = SteamMatchmaking()->GetLobbyChatEntry(pCallback->m_ulSteamIDLobby, pCallback->m_iChatID, NULL,data,sizeof(data), NULL);
+    auto message = ParsePayload(std::string(reinterpret_cast<char*>(data)));
+    std::cout << message.data << "\n";
+    if (message.type == DataType::CONNECTION_STATE && network_position == NetworkPosition::lobby)
+        if (message.data == "HOST_READY") {
+            ConnectP2P(SteamMatchmaking()->GetLobbyMemberByIndex(GetCurrentLobby(), stoi(message.flags.at(0))));
+        }
 }
