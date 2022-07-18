@@ -116,7 +116,7 @@ void SteamTools::SteamManager::HostP2P(int channel)
     network_position = NetworkPosition::host;
     SteamMatchmaking()->SetLobbyJoinable(GetCurrentLobby(), false);
     auto names = GetLobbyMemberNames();
-    std::string ready_payload = PreparePayload("HOST_READY",DataType::CONNECTION_STATE,std::vector<std::string>({ std::to_string(names.begin() - find(names.begin(), names.end(), GetMySteamName()))}));
+    std::string ready_payload = PreparePayload("STARTED_HOST_P2P",DataType::CONNECTION_STATE,std::vector<std::string>({ std::to_string(names.begin() - find(names.begin(), names.end(), GetMySteamName()))}));
     SteamMatchmaking()->SendLobbyChatMsg(GetCurrentLobby(), ready_payload.c_str(), strlen(ready_payload.c_str()));
 }
 
@@ -306,7 +306,7 @@ void SteamTools::SteamManager::OnLobbyChatMsg_t(LobbyChatMsg_t* pCallback) {
     auto message = ParsePayload(std::string(reinterpret_cast<char*>(data)));
     std::cout << message.data << "\n";
     if (message.type == DataType::CONNECTION_STATE && network_position == NetworkPosition::lobby)
-        if (message.data == "HOST_READY") {
+        if (message.data == "STARTED_HOST_P2P") {
             ConnectP2P(SteamMatchmaking()->GetLobbyMemberByIndex(GetCurrentLobby(), stoi(message.flags.at(0))));
         }
 }

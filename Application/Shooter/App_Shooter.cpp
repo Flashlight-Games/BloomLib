@@ -53,7 +53,7 @@ void Shooter::Begin() {
     sprite_block = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
     sprite_block->SetLocation(GetPixelWindowSize() / glm::vec2(2));
     sprite_block->SetRotation(0);
-    sprite_block->SetScale(glm::vec2(1));
+    sprite_block->SetScale(glm::vec2(1,2));
 
     sprite_block->GetShader()->use();
     block_color_uid = sprite_block->GetShader()->getUniformId("uColor");
@@ -83,6 +83,8 @@ void Shooter::GameLoop() {
     //NETWORKING
     if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::local) {
         GetSteamManager()->MatchmakeLoop_Quick(2); // UPDATE MATCHMAKING NETWORK STATUS
+    } if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::lobby) {
+        // WAIT FOR READY
     } if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::remote) {
         GetSteamManager()->ReceiveMessageP2P();
         ParseNetworkMessage(GetSteamManager()->GetReceivedMessage());
@@ -124,6 +126,12 @@ void Shooter::GameLoop() {
     mainBox->setScale(sprite_block->GetSize());
 
     checker->Draw(GetTime(), GetGameSpeed());
+
+    if (PhysX::LineTrace("main", mainBox, GetCursorPosition(), sprite_block->GetLocation())) {
+        DrawDebugLine(GetCursorPosition(), sprite_block->GetLocation(), 1, glm::vec3(0, 1, 1));
+        DrawDebugLine(sprite_block->GetLocation(), PhysX::LineTracePoint("main", mainBox, GetCursorPosition(), sprite_block->GetLocation()), 1, glm::vec3(1, 0.5, 0));
+        DrawDebugPoint(PhysX::LineTracePoint("main", mainBox, GetCursorPosition(), sprite_block->GetLocation()), 2, glm::vec3(1, 0, 0));
+    }
 
     DrawPixelsToDefault(false);
 }

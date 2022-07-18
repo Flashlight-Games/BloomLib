@@ -81,12 +81,15 @@ namespace Game{
             float GetGameSpeedMultiplier() { return delta_multiplier; };
 
             auto GetSteamManager() { return steam_manager; };
-            void DrawDebugPoint(glm::vec2 position, int size = 1, glm::vec3 color = glm::vec3(1, 1, 1)) { debug_sprite->SetLocation(position); debug_sprite->SetRotation(0); debug_sprite->SetScale(glm::vec2(size / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(GetViewMatrix()); };
+            void DrawDebugPoint(glm::vec2 position, int size = 1, glm::vec3 color = glm::vec3(1, 1, 1)) { if (Utils::isDevelopmentConfiguration()) { debug_sprite->SetLocation(position); debug_sprite->SetRotation(0); debug_sprite->SetScale(glm::vec2(size / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(GetViewMatrix()); } };
             void DrawDebugLine(glm::vec2 positionA, glm::vec2 positionB, int thickness = 1, glm::vec3 color = glm::vec3(1, 1, 1)) {
-                float height = (std::sqrt(std::pow(positionA.x - positionB.x, 2) + std::pow(positionA.y - positionB.y, 2)));
-                float angle = glm::degrees(atan2(positionA.y - positionB.y, positionA.x - positionB.x)) - 90;
-                glm::vec2 position = (positionA + positionB) / glm::vec2(2);
-                debug_sprite->SetLocation(position); debug_sprite->SetRotation(angle); debug_sprite->SetScale(glm::vec2(thickness / 16.0, height / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(GetViewMatrix());
+                if (Utils::isDevelopmentConfiguration()) {
+                    float height = (std::sqrt(std::pow(positionA.x - positionB.x, 2) + std::pow(positionA.y - positionB.y, 2)));
+                    
+                    float angle = glm::degrees(atan2(positionA.y - positionB.y, positionA.x - positionB.x)) - 90;
+                    glm::vec2 position = (positionA + positionB) / glm::vec2(2);
+                    debug_sprite->SetLocation(position); debug_sprite->SetRotation((int)(angle + 180) % 180); debug_sprite->SetScale(glm::vec2(thickness / 16.0, height / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(GetViewMatrix());
+                }
             }
         private:
             // EVENTS
