@@ -60,10 +60,6 @@ void Shooter::Begin() {
 
     mainBox = new PhysX::collisionBox("main", sprite_block);
 
-
-    cursor_block = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
-    cursorBox = new PhysX::collisionBox("main", cursor_block);
-
     checker = new Application::Checker(25,GetViewMatrix(),GetPixelProjectionMatrix());
 }
 
@@ -130,16 +126,6 @@ void Shooter::GameLoop() {
     mainBox->setScale(sprite_block->GetSize());
 
     checker->Draw(GetTime(), GetGameSpeed());
-
-    cursor_block->GetShader()->use();
-    cursor_block->GetShader()->uniformVec4(cursor_block->GetShader()->getUniformId("uColor"), glm::vec4(1, 1, 0, 0.5));
-    cursor_block->SetLocation(GetCursorPosition());
-    cursorBox->setLocation(cursor_block->GetLocation());
-    
-    cursor_block->Draw(GetViewMatrix());
-    if (cursorBox->check_Traced(mainBox) != glm::vec2(INFINITY))
-        DrawDebugPoint(cursorBox->check_Traced(mainBox),2,glm::vec3(1,0,1));
-
 
     DrawPixelsToDefault(false);
 }

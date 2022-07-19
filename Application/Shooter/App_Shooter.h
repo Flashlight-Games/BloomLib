@@ -28,8 +28,6 @@ namespace Application{
             int block_color_uid = 0;
             float block_color[3] = {5,5,5};
 
-            Bloom::Sprite* cursor_block;
-            PhysX::collisionBox* cursorBox;
 
             Application::Checker* checker;
 
