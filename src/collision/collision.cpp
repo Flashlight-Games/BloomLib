@@ -66,11 +66,11 @@ float oneDimensionalCheck(collisionBox A,collisionBox B, uint16_t lineAngle,glm:
     float otherMax = 0;
 
     // LINE A
-    glm::vec2 originA = A.getOrigin(); glm::vec2 scaleA = A.getScale();
-    thisPointB = getPointOnLineAtAngle(transformationMatrix * glm::vec4(glm::vec2((originA[0]-1)*scaleA[0],(originA[1])*scaleA[1]),0,1),lineAngle);
-    thisPointC = getPointOnLineAtAngle(transformationMatrix * glm::vec4(glm::vec2((originA[0])*scaleA[0],(originA[1]-1)*scaleA[1]),0,1),lineAngle);
-    thisPointD = getPointOnLineAtAngle(transformationMatrix * glm::vec4(glm::vec2((originA[0]-1)*scaleA[0],(originA[1]-1)*scaleA[1]),0,1),lineAngle);
-    thisPointA = getPointOnLineAtAngle(transformationMatrix * glm::vec4(glm::vec2((originA[0])*scaleA[0],(originA[1])*scaleA[1]),0,1),lineAngle);
+    glm::vec2 this_origin  = A.getOrigin(); glm::vec2 this_scale = A.getScale();
+    thisPointB = getPointOnLineAtAngle(transformationMatrix * glm::vec4(glm::vec2((this_origin [0]-1)*this_scale[0],(this_origin [1])*this_scale[1]),0,1),lineAngle);
+    thisPointC = getPointOnLineAtAngle(transformationMatrix * glm::vec4(glm::vec2((this_origin [0])*this_scale[0],(this_origin [1]-1)*this_scale[1]),0,1),lineAngle);
+    thisPointD = getPointOnLineAtAngle(transformationMatrix * glm::vec4(glm::vec2((this_origin [0]-1)*this_scale[0],(this_origin [1]-1)*this_scale[1]),0,1),lineAngle);
+    thisPointA = getPointOnLineAtAngle(transformationMatrix * glm::vec4(glm::vec2((this_origin [0])*this_scale[0],(this_origin [1])*this_scale[1]),0,1),lineAngle);
 
     glm::vec2 originB = B.getOrigin(); glm::vec2 scaleB = B.getScale();
     otherPointA = getPointOnLineAtAngle(otherTransformationMatrix * glm::vec4(glm::vec2((originB[0]-1)*scaleB[0],(originB[1])*scaleB[1]),0,1),lineAngle);
@@ -89,23 +89,23 @@ float oneDimensionalCheck(collisionBox A,collisionBox B, uint16_t lineAngle,glm:
     return penetrationDepth;
 }
 
-bool collisionBox::check_overlap(collisionBox other,glm::mat4 transformationMatrix,glm::mat4 otherTransformationMatrix){
-    glm::vec2 otherLocation = other.getLocation();
-    glm::vec2 otherScale = other.getScale();
-    uint16_t otherRotation = other.getRotation();
+bool collisionBox::check_SAT(collisionBox* other,glm::mat4 transformationMatrix,glm::mat4 otherTransformationMatrix){
+    glm::vec2 otherLocation = other->getLocation();
+    glm::vec2 otherScale = other->getScale();
+    uint16_t otherRotation = other->getRotation();
     float minPenetration;
     float minAxis;
 
-    float PA = oneDimensionalCheck(*this, other, (*this).getRotation() + 90, transformationMatrix, otherTransformationMatrix);
+    float PA = oneDimensionalCheck(*this, *other, (*this).getRotation() + 90, transformationMatrix, otherTransformationMatrix);
     if(PA == -1) // A
         return false;
-    float PB = oneDimensionalCheck(*this, other, (*this).getRotation(), transformationMatrix, otherTransformationMatrix);
+    float PB = oneDimensionalCheck(*this, *other, (*this).getRotation(), transformationMatrix, otherTransformationMatrix);
     if(PB == -1) // B
         return false;
-    float PC = oneDimensionalCheck(*this, other, other.getRotation() + 90, transformationMatrix, otherTransformationMatrix);
+    float PC = oneDimensionalCheck(*this, *other, other->getRotation() + 90, transformationMatrix, otherTransformationMatrix);
     if(PC == -1) // C
         return false;
-    float PD = oneDimensionalCheck(*this, other, other.getRotation(), transformationMatrix, otherTransformationMatrix);
+    float PD = oneDimensionalCheck(*this, *other, other->getRotation(), transformationMatrix, otherTransformationMatrix);
     if(PD == -1) // D
         return false;
 
@@ -115,32 +115,81 @@ bool collisionBox::check_overlap(collisionBox other,glm::mat4 transformationMatr
     else if (minPenetration == PB)
         minAxis = (*this).getRotation();
     else if (minPenetration == PC)
-        minAxis = other.getRotation() + 90;
+        minAxis = other->getRotation() + 90;
     else if (minPenetration == PD)
-        minAxis = other.getRotation();
+        minAxis = other->getRotation();
 
     return true;
 }
 
-bool collisionBox::check_overlap(collisionBox other){
+bool collisionBox::check_SAT(collisionBox* other){
     glm::mat4 transMatrix = makeTransformationMatrix();
-    glm::mat4 otherTransMatrix = other.makeTransformationMatrix();
-    return check_overlap(other, transMatrix, otherTransMatrix);
+    glm::mat4 otherTransMatrix = other->makeTransformationMatrix();
+    return check_SAT(other, transMatrix, otherTransMatrix);
 }
 
-bool PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end){
-    return LineTraceRadius(channel,other,start,end, 1);
+glm::vec2 collisionBox::check_Traced(collisionBox* other, glm::mat4 transformationMatrix, glm::mat4 otherTransformationMatrix) {
+    if (this->channel != other->channel)
+        return glm::vec2(INFINITY);
+
+    glm::vec2 this_origin = getOrigin(); glm::vec2 this_scale = getScale();
+    if (this_origin.x == 0)
+        this_origin.x = 0.001;
+    if (this_origin.y == 0)
+        this_origin.y = 0.001;
+    glm::vec2 thisA = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0] - 1) * this_scale[0], (this_origin [1]) * this_scale[1]), 0, 1);
+    glm::vec2 thisB = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0]) * this_scale[0], (this_origin [1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 thisC = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0] - 1) * this_scale[0], (this_origin [1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 thisD = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0]) * this_scale[0], (this_origin [1]) * this_scale[1]), 0, 1);
+
+    glm::vec2 other_origin = other->getOrigin(); glm::vec2 other_scale = other->getScale();
+    if (other_origin.x == 0)
+        other_origin.x = 0.001;
+    if (other_origin.y == 0)
+        other_origin.y = 0.001;
+    glm::vec2 otherA = other->makeTransformationMatrix() * glm::vec4(glm::vec2((other_origin[0] - 1) * other_scale[0], (other_origin[1]) * other_scale[1]), 0, 1);
+    glm::vec2 otherB = other->makeTransformationMatrix() * glm::vec4(glm::vec2((other_origin[0]) * other_scale[0], (other_origin[1] - 1) * other_scale[1]), 0, 1);
+    glm::vec2 otherC = other->makeTransformationMatrix() * glm::vec4(glm::vec2((other_origin[0] - 1) * other_scale[0], (other_origin[1] - 1) * other_scale[1]), 0, 1);
+    glm::vec2 otherD = other->makeTransformationMatrix() * glm::vec4(glm::vec2((other_origin[0]) * other_scale[0], (other_origin[1]) * other_scale[1]), 0, 1);
+
+   
+    glm::vec2 hitpoint;
+    hitpoint = LineTrace(this->channel, other, this->getCenter(), thisA);
+    if (hitpoint != glm::vec2 INFINITY)
+        return hitpoint;
+    hitpoint = LineTrace(this->channel, other, this->getCenter(), thisB);
+    if (hitpoint != glm::vec2 INFINITY)
+        return hitpoint;
+    hitpoint = LineTrace(this->channel, other, this->getCenter(), thisC);
+    if (hitpoint != glm::vec2 INFINITY)
+        return hitpoint;
+    hitpoint = LineTrace(this->channel, other, this->getCenter(), thisD);
+    if (hitpoint != glm::vec2 INFINITY)
+        return hitpoint;
+
+    hitpoint = LineTrace(other->getChannel(), this, other->getCenter(), otherA);
+    if (hitpoint != glm::vec2 INFINITY)
+        return hitpoint;
+    hitpoint = LineTrace(other->getChannel(), this, other->getCenter(), otherB);
+    if (hitpoint != glm::vec2 INFINITY)
+        return hitpoint;
+    hitpoint = LineTrace(other->getChannel(), this, other->getCenter(), otherC);
+    if (hitpoint != glm::vec2 INFINITY)
+        return hitpoint;
+    hitpoint = LineTrace(other->getChannel(), this, other->getCenter(), otherD);
+    if (hitpoint != glm::vec2 INFINITY)
+        return hitpoint;
+
+    return glm::vec2(INFINITY);
 }
-bool PhysX::LineTraceRadius(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end, float radius)
-{
-    float height = (std::sqrt(std::pow(start.x - end.x, 2) + std::pow(start.y - end.y, 2)));
-    float angle = glm::degrees(atan2(start.y - end.y, start.x - end.x)) - 90;
-    collisionBox* box = new collisionBox(channel, start, glm::vec2(radius, height), angle, glm::vec2(0.5, 0.0));
-    return box->check_overlap(*other);
+
+glm::vec2 collisionBox::check_Traced(collisionBox* other){
+    glm::mat4 transMatrix = makeTransformationMatrix();
+    glm::mat4 otherTransMatrix = other->makeTransformationMatrix();
+    return check_Traced(other, transMatrix, otherTransMatrix);
 }
+
 glm::vec2 GetLineInterceptionPoint(glm::vec2 startA, glm::vec2 endA, glm::vec2 startB, glm::vec2 endB) {
-    // Y - Y1 = M(X-X1)
-    
     float slopeA = (endA.y - startA.y) / ((endA.x - startA.x)+0.001);
     float slopeB = (endB.y - startB.y) / ((endB.x - startB.x) + 0.001);
     float heightA = slopeA*(-startA.x) + startA.y;
@@ -156,17 +205,17 @@ glm::vec2 GetLineInterceptionPoint(glm::vec2 startA, glm::vec2 endA, glm::vec2 s
     return glm::vec2(interceptionX, interceptionY);
 }
 
-glm::vec2 PhysX::LineTracePoint(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end)
+glm::vec2 PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end)
 {
-    glm::vec2 originA = other->getOrigin(); glm::vec2 scaleA = other->getScale();
-    if (originA.x == 0)
-        originA.x = 0.001;
-    if (originA.y == 0)
-        originA.y = 0.001;
-    glm::vec2 pointA = other->makeTransformationMatrix() * glm::vec4(glm::vec2((originA[0] - 1) * scaleA[0], (originA[1]) * scaleA[1]), 0, 1);
-    glm::vec2 pointB = other->makeTransformationMatrix() * glm::vec4(glm::vec2((originA[0]) * scaleA[0], (originA[1] - 1) * scaleA[1]), 0, 1);
-    glm::vec2 pointC = other->makeTransformationMatrix() * glm::vec4(glm::vec2((originA[0] - 1) * scaleA[0], (originA[1] - 1) * scaleA[1]), 0, 1);
-    glm::vec2 pointD = other->makeTransformationMatrix() * glm::vec4(glm::vec2((originA[0]) * scaleA[0], (originA[1]) * scaleA[1]), 0, 1);
+    glm::vec2 this_origin  = other->getOrigin(); glm::vec2 this_scale = other->getScale();
+    if (this_origin .x == 0)
+        this_origin .x = 0.001;
+    if (this_origin .y == 0)
+        this_origin .y = 0.001;
+    glm::vec2 pointA = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0] - 1) * this_scale[0], (this_origin [1]) * this_scale[1]), 0, 1);
+    glm::vec2 pointB = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0]) * this_scale[0], (this_origin [1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 pointC = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0] - 1) * this_scale[0], (this_origin [1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 pointD = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0]) * this_scale[0], (this_origin [1]) * this_scale[1]), 0, 1);
 
     auto BC = GetLineInterceptionPoint(start, end, pointB, pointC);
     auto CA = GetLineInterceptionPoint(start, end, pointC, pointA);
@@ -176,6 +225,7 @@ glm::vec2 PhysX::LineTracePoint(std::string channel, collisionBox* other, glm::v
     float minDist = INFINITY;
     float tolerance = 0.5;
     float radius = std::sqrt(std::pow(other->getScale().x * 0.5, 2) + std::pow(other->getScale().y * 0.5, 2)) + tolerance;
+
     if(Utils::Distance2D(other->getCenter(), BC) <= radius && Utils::Distance2D(start, BC) <= minDist)
         minDist = Utils::Distance2D(start, BC);
     if (Utils::Distance2D(other->getCenter(), CA) <= radius && Utils::Distance2D(start, CA) <= minDist)
@@ -185,24 +235,34 @@ glm::vec2 PhysX::LineTracePoint(std::string channel, collisionBox* other, glm::v
     if (Utils::Distance2D(other->getCenter(), DB) <= radius && Utils::Distance2D(start, DB) <= minDist)
         minDist = Utils::Distance2D(start, DB);
 
+    glm::vec2 return_point;
+
     if (minDist == Utils::Distance2D(start, BC))
-        return BC;
-    if (minDist == Utils::Distance2D(start, CA))
-        return CA;
-    if (minDist == Utils::Distance2D(start, AD))
-        return AD;
-    if (minDist == Utils::Distance2D(start, DB))
-        return DB;
-    return glm::vec2(INFINITY);
+        return_point = BC;
+    else if (minDist == Utils::Distance2D(start, CA))
+        return_point = CA;
+    else if (minDist == Utils::Distance2D(start, AD))
+        return_point = AD;
+    else if (minDist == Utils::Distance2D(start, DB))
+        return_point = DB;
+    else
+        return glm::vec2(INFINITY);
+
+    if (return_point.x > std::min(start.x, end.x) && return_point.x < std::max(start.x, end.x) && return_point.y > std::min(start.y, end.y) && return_point.y < std::max(start.y, end.y))
+        return return_point;
+    else
+        return glm::vec2(INFINITY);
     
 }
-bool PhysX::AreaCheck(std::string channel, collisionBox* other, glm::vec2 position, glm::vec2 size)
+
+bool PhysX::AreaCheck_SAT(std::string channel, collisionBox* other, glm::vec2 position, glm::vec2 size)
 {
     collisionBox* box = new collisionBox(channel, position, size, 0, glm::vec2(0.5, 0.5));
-    return box->check_overlap(*other);
+    return box->check_SAT(other);
 }
-bool PhysX::PointCheck(std::string chanel, collisionBox* other, glm::vec2 position)
+
+bool PhysX::PointCheck_SAT(std::string chanel, collisionBox* other, glm::vec2 position)
 {
-    return AreaCheck(chanel,other,position,glm::vec2(0.001));
+    return AreaCheck_SAT(chanel,other,position,glm::vec2(0.001));
 }
 

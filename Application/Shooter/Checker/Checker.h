@@ -31,7 +31,7 @@ namespace Application {
 			posB = position;
 
 			auto particles = emmiter->Play(window,time);
-			bool hit = PhysX::LineTrace("main", other, posA, posB);
+			bool hit = PhysX::LineTrace("main", other, posA, posB) != glm::vec2(INFINITY);
 			for (int i = 0; i < particles.size(); i++)
 			{
 				particles.at(i)->SetLocation(glm::vec2(Utils::Lerp(posA, posB, (i+1) / (float)amount).x, Utils::Lerp(posA, posB, (i + 1) / (float)amount).y));
