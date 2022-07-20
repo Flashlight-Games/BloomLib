@@ -26,7 +26,8 @@ namespace Application{
 
             Bloom::Sprite* sprite_block;
             PhysX::collisionBox* mainBox;
-
+            
+            float main_anlge = 0;
             int block_color_uid = 0;
             float block_color[3] = {5,5,5};
 

@@ -83,6 +83,7 @@ void Shooter::UILoop() {
         ImGui::TextColored(ImVec4(1, 1, 1, 1), (std::string("LOC Y: ").c_str() + std::to_string(test_location.y)).c_str());
         ImGui::SliderFloat("FORCE", &test_inforce, -100, 100);
         ImGui::SliderFloat("MASS", &test_mass, 0, 10);
+        ImGui::SliderFloat("M_ANGLE", &main_anlge, 0, 10);
     } ImGui::End();
 
     if (Utils::isDevelopmentConfiguration()) {
@@ -134,7 +135,7 @@ void Shooter::GameLoop() {
 
     sprite_block->GetShader()->use();
     sprite_block->GetShader()->uniformVec4(block_color_uid, glm::vec4(block_color[0], block_color[1], block_color[2], 1));
-    sprite_block->SetRotation(0);
+    sprite_block->SetRotation(main_anlge);
     sprite_block->Draw(GetViewMatrix());
 
     mainBox->setLocation(sprite_block->GetLocation());
@@ -149,8 +150,8 @@ void Shooter::GameLoop() {
     
     test_velocity += test_acceleration * glm::vec2(GetDeltaTime() / 1000); // VELOCITY
     if (testBox->check_Traced(mainBox) != glm::vec2(INFINITY)) {
-        if(glm::dot(glm::normalize(testBox->check_TracedNormal(mainBox)),glm::normalize(test_velocity)) < 0.0)
-            test_velocity += (glm::abs(test_velocity) * testBox->check_TracedNormal(mainBox)) * glm::vec2(1.1);
+        if (glm::dot(glm::normalize(testBox->check_TracedNormal(mainBox)), glm::normalize(test_velocity)) < 0.0)
+            test_velocity += (glm::abs(test_velocity) * testBox->check_TracedNormal(mainBox)) * glm::vec2(1.5);
     }
     test_location += test_velocity * glm::vec2(GetDeltaTime() / 1000) * pixels_to_meters; // LOCATION
     // PHYSICS END
@@ -158,6 +159,8 @@ void Shooter::GameLoop() {
     test_block->SetLocation(test_location);
     testBox->setLocation(test_block->GetLocation());
     test_block->Draw(GetViewMatrix());
+    
+    DrawDebugLine(test_location, test_location + testBox->check_TracedNormal(mainBox) * glm::vec2(10), 1, glm::vec3(1, 0, 1));
 
     DrawPixelsToDefault(false);
 }
