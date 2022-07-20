@@ -6,6 +6,7 @@
 #include "dependencies.h"
 #include "sprite/sprite.h"
 #include "utils/utils.h"
+#include <iostream>
 
 namespace PhysX
 {
@@ -20,6 +21,9 @@ namespace PhysX
 
         glm::vec2 check_Traced(collisionBox* other, glm::mat4 transformationMatrix, glm::mat4 otherTransformationMatrix);
         glm::vec2 check_Traced(collisionBox* other);
+
+        glm::vec2 check_TracedNormal(collisionBox* other, glm::mat4 transformationMatrix, glm::mat4 otherTransformationMatrix);
+        glm::vec2 check_TracedNormal(collisionBox* other);
 
         glm::vec2 getLocation(){return location;};
         glm::vec2 getCenter() { return location + getScale() * (getOrigin() - glm::vec2(0.5)); }
@@ -44,8 +48,10 @@ namespace PhysX
     };
 
     glm::vec2 LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end);
+    glm::vec2 LineTraceNormal(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end);
     bool AreaCheck_SAT(std::string channel, collisionBox* other,glm::vec2 position,glm::vec2 size);
     bool PointCheck_SAT(std::string chanel, collisionBox* other, glm::vec2 position);
+    glm::vec2 GetNormal(glm::vec2 pointA, glm::vec2 pointB);
 }
 
 #endif

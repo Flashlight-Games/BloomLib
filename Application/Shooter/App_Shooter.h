@@ -19,6 +19,8 @@ namespace Application{
 
             void SetStatusString(SteamTools::NetworkStatus status, SteamTools::NetworkPosition position);
             void ParseNetworkMessage(SteamTools::Message message);
+
+            void PhysicsBoost() { test_force += glm::vec2(500,0); };
         private:
             Bloom::Text* text_pressstart;
 
@@ -28,6 +30,16 @@ namespace Application{
             int block_color_uid = 0;
             float block_color[3] = {5,5,5};
 
+
+            Bloom::Sprite* test_block;
+            PhysX::collisionBox* testBox;
+            float pixels_to_meters = 25;
+            float test_mass = 5; // KG
+            float test_inforce = 50;
+            glm::vec2 test_location;
+            glm::vec2 test_force;
+            glm::vec2 test_acceleration;
+            glm::vec2 test_velocity;
 
             Application::Checker* checker;
 
