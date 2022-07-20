@@ -57,7 +57,7 @@ void Shooter::Begin() {
     sprite_block = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
     sprite_block->SetLocation(GetPixelWindowSize() / glm::vec2(2));
     sprite_block->SetRotation(0);
-    sprite_block->SetScale(glm::vec2(4,1));
+    sprite_block->SetScale(glm::vec2(6,1));
 
     sprite_block->GetShader()->use();
     block_color_uid = sprite_block->GetShader()->getUniformId("uColor");
@@ -79,6 +79,8 @@ void Shooter::UILoop() {
         ImGui::TextColored(ImVec4(0, 1, 0, 1), (std::string("ACCEL Y: ").c_str() + std::to_string(test_acceleration.y)).c_str());
         ImGui::TextColored(ImVec4(1, 1, 0, 1), (std::string("VELOCITY X: ").c_str() + std::to_string(test_velocity.x)).c_str());
         ImGui::TextColored(ImVec4(1, 1, 0, 1), (std::string("VELOCITY Y: ").c_str() + std::to_string(test_velocity.y)).c_str());
+        ImGui::TextColored(ImVec4(1, 1, 1, 1), (std::string("LOC X: ").c_str() + std::to_string(test_location.x)).c_str());
+        ImGui::TextColored(ImVec4(1, 1, 1, 1), (std::string("LOC Y: ").c_str() + std::to_string(test_location.y)).c_str());
         ImGui::SliderFloat("FORCE", &test_inforce, -100, 100);
         ImGui::SliderFloat("MASS", &test_mass, 0, 10);
     } ImGui::End();
@@ -132,7 +134,7 @@ void Shooter::GameLoop() {
 
     sprite_block->GetShader()->use();
     sprite_block->GetShader()->uniformVec4(block_color_uid, glm::vec4(block_color[0], block_color[1], block_color[2], 1));
-    sprite_block->SetRotation(45);
+    sprite_block->SetRotation(0);
     sprite_block->Draw(GetViewMatrix());
 
     mainBox->setLocation(sprite_block->GetLocation());
@@ -141,24 +143,21 @@ void Shooter::GameLoop() {
 
     checker->Draw(GetTime(), GetGameSpeed());
 
+    // PHYSICS START
     test_force -= test_velocity * glm::vec2(5) * test_mass; // FRICTION
     test_acceleration = test_force / glm::vec2(test_mass); // ACCELERATION
     
     test_velocity += test_acceleration * glm::vec2(GetDeltaTime() / 1000); // VELOCITY
-    if (testBox->check_Traced(mainBox) == glm::vec2(INFINITY)) {
-        //test_velocity += test_acceleration * glm::vec2(GetDeltaTime() / 1000);
-    }
-    else {
+    if (testBox->check_Traced(mainBox) != glm::vec2(INFINITY)) {
         if(glm::dot(glm::normalize(testBox->check_TracedNormal(mainBox)),glm::normalize(test_velocity)) < 0.0)
-            test_velocity += (glm::ceil(glm::abs(test_velocity)) * testBox->check_TracedNormal(mainBox));
+            test_velocity += (glm::abs(test_velocity) * testBox->check_TracedNormal(mainBox)) * glm::vec2(1.1);
     }
     test_location += test_velocity * glm::vec2(GetDeltaTime() / 1000) * pixels_to_meters; // LOCATION
+    // PHYSICS END
 
     test_block->SetLocation(test_location);
     testBox->setLocation(test_block->GetLocation());
     test_block->Draw(GetViewMatrix());
-
-    DrawDebugLine(test_location, test_location + (testBox->check_TracedNormal(mainBox) * glm::vec2(20)), 1, glm::vec3(1, 0, 1));
 
     DrawPixelsToDefault(false);
 }

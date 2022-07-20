@@ -34,9 +34,14 @@ I:\TomerSoftware\Code\BloomLib\Application\Shooter\Checker\Checker.h(38,49): war
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(139,51): warning C4244: 'argument': conversion from 'float' to 'uint16_t', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(142,42): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(147,67): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(141,51): warning C4244: 'argument': conversion from 'float' to 'uint16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(144,42): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(150,67): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(153,110): warning C4305: 'argument': truncation from 'double' to 'T'
           with
           [
               T=float
