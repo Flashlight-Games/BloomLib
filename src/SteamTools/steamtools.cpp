@@ -76,7 +76,7 @@ std::vector<std::string> SteamTools::SteamManager::GetLobbyMemberNames()
     return names;
 }
 
-void SteamTools::SteamManager::MatchmakeLoop_Quick(int new_lobby_max_players) {
+void SteamTools::SteamManager::MatchmakeLoop_Quick(int new_lobby_max_players, int current_time) {
     switch (network_status) {
     case SteamTools::NetworkStatus::offline:
         network_position = NetworkPosition::local;
@@ -95,6 +95,8 @@ void SteamTools::SteamManager::MatchmakeLoop_Quick(int new_lobby_max_players) {
                 if (network_status == SteamTools::NetworkStatus::searching) {
                     CreateLobby(new_lobby_max_players);
                     network_status = NetworkStatus::creating;
+                    this->max_lobby_players = new_lobby_max_players;
+                    host_time = current_time;
                 }
             }
         }
@@ -138,7 +140,7 @@ void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(Steam
     if (pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_Connecting) {
         SteamNetworkingSockets()->AcceptConnection(pCallback->m_hConn);
         remotes.push_back(pCallback->m_info.m_identityRemote);
-        
+
         if (network_position == host) {
             if (SteamMatchmaking()->GetNumLobbyMembers(current_lobby) == 1) {
                 SteamMatchmaking()->LeaveLobby(current_lobby);
@@ -286,7 +288,6 @@ void SteamTools::SteamManager::ReceiveMessageP2P(int channel)
 }
 
 void SteamTools::SteamManager::OnSteamNetworkingMessagesSessionRequest_t(SteamNetworkingMessagesSessionRequest_t* pCallback) {
-    std::cout << "Accepted Session Request from " << SteamFriends()->GetFriendPersonaName(pCallback->m_identityRemote.GetSteamID()) << "!\n";
     SteamNetworkingMessages()->AcceptSessionWithUser(pCallback->m_identityRemote);
 }
 
@@ -298,6 +299,19 @@ SteamTools::Message SteamTools::SteamManager::GetReceivedMessage()
         received_messages.erase(received_messages.begin());
     }
     return msg;
+}
+
+bool SteamTools::SteamManager::StartWhenReady(int current_time, int channel, bool start_when_full, int min_players_to_start, int max_wait_time_for_players)
+{
+    if (SteamFriends()->GetFriendPersonaName(SteamMatchmaking()->GetLobbyOwner(GetCurrentLobby())) == GetMySteamName()) {
+        if (GetNetworkStatus() == NetworkStatus::connected && GetNetworkPosition() == SteamTools::NetworkPosition::lobby) {
+            if (SteamMatchmaking()->GetNumLobbyMembers(current_lobby) >= (max_lobby_players) || (SteamMatchmaking()->GetNumLobbyMembers(current_lobby) >= min_players_to_start && current_time - host_time >= max_wait_time_for_players)) {
+                HostP2P(channel);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 void SteamTools::SteamManager::OnLobbyChatMsg_t(LobbyChatMsg_t* pCallback) {

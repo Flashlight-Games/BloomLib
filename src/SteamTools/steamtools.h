@@ -56,11 +56,12 @@ namespace SteamTools {
 		auto GetNetworkStatus() { return network_status; };
 		auto GetNetworkPosition() { return network_position; };
 		std::vector<std::string> GetLobbyMemberNames();
+		auto GetMaxLobbyMembers() { return SteamMatchmaking()->GetLobbyMemberLimit(GetCurrentLobby()); };
 
-		void MatchmakeLoop_Quick(int new_lobby_max_players);
+		void MatchmakeLoop_Quick(int new_lobby_max_players, int current_time);
 
 		// CONNECTION
-		void HostP2P(int channel = 0);
+		void HostP2P(int current_time);
 		void ConnectP2P(CSteamID remoteID,int channel = 0);
 		SteamNetworkingIdentity IdentityFromSteamID(CSteamID id);
 		auto GetRemotes() { return remotes; };
@@ -72,6 +73,7 @@ namespace SteamTools {
 		std::string PreparePayload(const char* data, DataType type = NOTYPE, std::vector<std::string> flags = std::vector<std::string>());
 		Message ParsePayload(std::string data);
 		Message GetReceivedMessage();
+		bool StartWhenReady(int current_time, int channel = 0, bool start_when_full = true, int min_players_to_start = 2, int max_wait_time_for_players = 120);;
 	private:
 		STEAM_CALLBACK(SteamManager, OnGameOverlayActivated, GameOverlayActivated_t);
 		bool overlay_active = false;
@@ -90,6 +92,9 @@ namespace SteamTools {
 		STEAM_CALLBACK(SteamManager, OnLobbyChatMsg_t, LobbyChatMsg_t);
 		std::vector<SteamNetworkingIdentity> remotes;
 		std::vector<Message> received_messages;
+
+		int max_lobby_players = 0;
+		int host_time = -1;
 	};
 }
 
