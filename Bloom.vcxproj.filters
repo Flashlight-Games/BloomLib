@@ -1971,11 +1971,13 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="lib\libglfw3dll.a" />
     <Library Include="lib\FastNoise.lib" />
     <Library Include="include\steam\lib\win32\sdkencryptedappticket.lib" />
     <Library Include="include\steam\lib\win64\sdkencryptedappticket64.lib" />
     <Library Include="lib\steam_api.lib" />
+    <Library Include="lib\glfw3.lib" />
+    <Library Include="lib\glfw3_mt.lib" />
+    <Library Include="lib\glfw3dll.lib" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="steam_appid.txt" />

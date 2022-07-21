@@ -8,7 +8,7 @@ bool SteamTools::SteamManager::Init(int appid)
 		return false;
 	SteamAPI_Init();
     SteamNetworkingUtils()->InitRelayNetworkAccess();
-
+   
 	return true;
 }
 

@@ -923,7 +923,9 @@
     <Library Include="include\steam\lib\win32\sdkencryptedappticket.lib" />
     <Library Include="include\steam\lib\win64\sdkencryptedappticket64.lib" />
     <Library Include="lib\FastNoise.lib" />
-    <Library Include="lib\libglfw3dll.a" />
+    <Library Include="lib\glfw3.lib" />
+    <Library Include="lib\glfw3dll.lib" />
+    <Library Include="lib\glfw3_mt.lib" />
     <Library Include="lib\steam_api.lib" />
   </ItemGroup>
   <ItemGroup>
@@ -1015,7 +1017,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)\include;%(AdditionalIncludeDirectories);$(ProjectDir)\src;</AdditionalIncludeDirectories>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <Optimization>MaxSpeed</Optimization>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -1026,7 +1028,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FastNoise.lib;winmm.lib;ws2_32.lib;libglfw3dll.a;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;</AdditionalDependencies>
+      <AdditionalDependencies>steam_api.lib;FastNoise.lib;winmm.lib;ws2_32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;</AdditionalDependencies>
       <StackReserveSize>50000000</StackReserveSize>
       <AdditionalOptions>/ENTRY:"mainCRTStartup" %(AdditionalOptions)</AdditionalOptions>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -1048,7 +1050,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir)\include;%(AdditionalIncludeDirectories);$(ProjectDir)\src;</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
@@ -1057,7 +1059,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FastNoise.lib;winmm.lib;ws2_32.lib;libglfw3dll.a;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>steam_api.lib;FastNoise.lib;winmm.lib;ws2_32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>50000000</StackReserveSize>
       <AdditionalOptions>/ENTRY:"mainCRTStartup" %(AdditionalOptions)</AdditionalOptions>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>

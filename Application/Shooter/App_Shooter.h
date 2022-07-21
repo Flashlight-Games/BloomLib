@@ -21,6 +21,7 @@ namespace Application{
             void ParseNetworkMessage(SteamTools::Message message);
 
             void PhysicsBoost() { test_force += glm::vec2(500,0); };
+            void SetGamepad(int gamepad) { gamepad_active = gamepad; };
         private:
             Bloom::Text* text_pressstart;
 
@@ -41,6 +42,7 @@ namespace Application{
             glm::vec2 test_force;
             glm::vec2 test_acceleration;
             glm::vec2 test_velocity;
+            int gamepad_active = -1;
 
             Application::Checker* checker;
 

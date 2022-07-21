@@ -48,6 +48,7 @@ void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
     }
 }
 
+
 void Shooter::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
@@ -73,17 +74,22 @@ void Shooter::Begin() {
 void Shooter::UILoop() {
     ImGui::Begin("Control window"); {
         //ImGui::ColorPicker3("BLOCK COLOR", block_color);
-        ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::string("FORCE X: ").c_str() + std::to_string(test_force.x)).c_str());
-        ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::string("FORCE Y: ").c_str() + std::to_string(test_force.y)).c_str());
-        ImGui::TextColored(ImVec4(0, 1, 0, 1), (std::string("ACCEL X: ").c_str() + std::to_string(test_acceleration.x)).c_str());
-        ImGui::TextColored(ImVec4(0, 1, 0, 1), (std::string("ACCEL Y: ").c_str() + std::to_string(test_acceleration.y)).c_str());
-        ImGui::TextColored(ImVec4(1, 1, 0, 1), (std::string("VELOCITY X: ").c_str() + std::to_string(test_velocity.x)).c_str());
-        ImGui::TextColored(ImVec4(1, 1, 0, 1), (std::string("VELOCITY Y: ").c_str() + std::to_string(test_velocity.y)).c_str());
-        ImGui::TextColored(ImVec4(1, 1, 1, 1), (std::string("LOC X: ").c_str() + std::to_string(test_location.x)).c_str());
-        ImGui::TextColored(ImVec4(1, 1, 1, 1), (std::string("LOC Y: ").c_str() + std::to_string(test_location.y)).c_str());
+        if (Utils::isDevelopmentConfiguration()) {
+            ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::string("FORCE X: ").c_str() + std::to_string(test_force.x)).c_str());
+            ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::string("FORCE Y: ").c_str() + std::to_string(test_force.y)).c_str());
+            ImGui::TextColored(ImVec4(0, 1, 0, 1), (std::string("ACCEL X: ").c_str() + std::to_string(test_acceleration.x)).c_str());
+            ImGui::TextColored(ImVec4(0, 1, 0, 1), (std::string("ACCEL Y: ").c_str() + std::to_string(test_acceleration.y)).c_str());
+            ImGui::TextColored(ImVec4(1, 1, 0, 1), (std::string("VELOCITY X: ").c_str() + std::to_string(test_velocity.x)).c_str());
+            ImGui::TextColored(ImVec4(1, 1, 0, 1), (std::string("VELOCITY Y: ").c_str() + std::to_string(test_velocity.y)).c_str());
+            ImGui::TextColored(ImVec4(1, 1, 1, 1), (std::string("LOC X: ").c_str() + std::to_string(test_location.x)).c_str());
+            ImGui::TextColored(ImVec4(1, 1, 1, 1), (std::string("LOC Y: ").c_str() + std::to_string(test_location.y)).c_str());
+        }
+
         ImGui::SliderFloat("FORCE", &test_inforce, -100, 100);
         ImGui::SliderFloat("MASS", &test_mass, 0, 10);
         ImGui::SliderFloat("M_ANGLE", &main_anlge, 0, 10);
+        ImGui::TextColored(ImVec4(1, 0.2,0.2, 1), (std::string("GAMEPAD : ").c_str() + std::to_string(gamepad_active)).c_str());
+        ImGui::TextColored(ImVec4(1, 0.5, 0.0, 1), (std::string("GLFW v_").c_str() + std::string(glfwGetVersionString())).c_str());
     } ImGui::End();
 
     if (Utils::isDevelopmentConfiguration()) {
@@ -151,7 +157,7 @@ void Shooter::GameLoop() {
     test_velocity += test_acceleration * glm::vec2(GetDeltaTime() / 1000); // VELOCITY
     if (testBox->check_Traced(mainBox) != glm::vec2(INFINITY)) {
         if (glm::dot(glm::normalize(testBox->check_TracedNormal(mainBox)), glm::normalize(test_velocity)) < 0.0)
-            test_velocity += (glm::abs(test_velocity) * testBox->check_TracedNormal(mainBox)) * glm::vec2(1.5);
+            test_velocity += (glm::abs(test_velocity) * testBox->check_TracedNormal(mainBox)) * glm::vec2(1.0); // Multiply by 1.0 for non moving object, and 1.5 for moving objects
     }
     test_location += test_velocity * glm::vec2(GetDeltaTime() / 1000) * pixels_to_meters; // LOCATION
     // PHYSICS END
@@ -174,9 +180,9 @@ void Shooter::InputLoop() {
         this->test_force.x = test_inforce;
     if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_LEFT))
         this->test_force.x = -test_inforce;
-    if(!Utils::isKeyPressed(GetWindow(), GLFW_KEY_LEFT) && !Utils::isKeyPressed(GetWindow(), GLFW_KEY_RIGHT))
+    if (!Utils::isKeyPressed(GetWindow(), GLFW_KEY_LEFT) && !Utils::isKeyPressed(GetWindow(), GLFW_KEY_RIGHT))
         this->test_force.x = 0.0;
-        
+
 
     if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_UP))
         this->test_force.y = test_inforce;
