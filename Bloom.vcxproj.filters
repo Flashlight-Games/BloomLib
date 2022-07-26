@@ -493,6 +493,7 @@
     <None Include="include\steam\lib\win32\sdkencryptedappticket.dll" />
     <None Include="include\steam\lib\win64\sdkencryptedappticket64.dll" />
     <None Include="steam_api.dll" />
+    <None Include="Application\Shooter\Cave\caveshader_vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
@@ -538,6 +539,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\test\ring.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\engine\textures\tilemap.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
@@ -689,13 +693,13 @@
     <ClCompile Include="src\framebuffers\bloom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Shooter\Checker\Checker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\utils\utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\SteamTools\steamtools.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Shooter\Cave\Cave.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1759,9 +1763,6 @@
     <ClInclude Include="src\framebuffers\bloom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Shooter\Checker\Checker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\utils\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1967,6 +1968,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\SteamTools\steamtools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Shooter\Cave\Cave.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

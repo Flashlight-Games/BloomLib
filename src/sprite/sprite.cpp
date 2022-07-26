@@ -92,7 +92,7 @@ void Sprite::SetUVOffset(glm::vec2 offset){
     float xScale = (this->texture->GetSize()[0]*ppp*UVscale[0]); // Sprite width 
     float yScale = (this->texture->GetSize()[1]*ppp*UVscale[1]); // Sprite width 
     float verts[] = {
-        // POSITION                                             COLOR       Texture
+        // POSITION                                          COLOR       Texture
         (Origin[0]-1)*xScale,     (Origin[1]-1)*yScale,      1,1,1,      offset[0],offset[1],
         (Origin[0])*xScale, (Origin[1]-1)*yScale,            1,1,1,      offset[0]+UVscale[0],offset[1],
         (Origin[0])*xScale, (Origin[1])*yScale,              1,1,1,      offset[0]+UVscale[0],offset[1]+UVscale[1],

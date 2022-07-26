@@ -81,12 +81,23 @@ bool Utils::isKeyHeld(GLFWwindow* window, int key)
     return glfwGetKey(window, key) == GLFW_REPEAT;
 }
 
+float Utils::map(float input, float input_start, float input_end, float output_start, float output_end)
+{
+    double slope = 1.0 * (output_end - output_start) / (input_end - input_start);
+    return (output_start + slope * (input - input_start));
+}
+
+float Utils::clamp(float input, float min, float max)
+{
+    return std::min(std::max(input,min),max);
+}
+
 int Utils::RandInt(int min, int max) {
-    return int(Lerp(min, max, (rand() % 10) / 10.0));
+    return int(Lerp(min, max, (rand() % (int)max) / (float)max));
 }
 
 float Utils::RandFloat(float min, float max) {
-    return Lerp(min, max, (rand() % 10) / 10.0);
+    return Lerp(min, max, (rand() % (int)ceil(max)) / (float)ceil(max));
 }
 
 bool Utils::isDevelopmentConfiguration() { return *ENGINE_CONFIGURATION == *"Development"; }

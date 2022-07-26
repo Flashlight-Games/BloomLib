@@ -17,9 +17,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         break;
     case GLFW_KEY_SPACE:
         if (action == GLFW_PRESS) {
-            auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime())) / 2);
-            app->GetSptiteBlock()->SetLocation(newLocation);
-            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS,std::vector<std::string>({std::to_string(newLocation.y)})); // SEND PRESSED SPACE AND NEW Y
+            if (app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host || app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::remote) {
+                auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime())) / 2);
+                app->GetSptiteBlock()->SetLocation(newLocation);
+                app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({ std::to_string(newLocation.y) })); // SEND PRESSED SPACE AND NEW Y
+            }
         }
     case GLFW_KEY_V:
         if (action == GLFW_PRESS) {
@@ -33,11 +35,10 @@ void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
     switch (key) {
     case GLFW_MOUSE_BUTTON_LEFT:
         if (action == GLFW_PRESS) {
-            app->GetChecker()->SetPosition(app->GetCursorPosition(), app->GetWindow(), app->GetTime(), app->GetmainBox());
+            //
         }
     }
 }
-
 
 void Shooter::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
@@ -54,11 +55,12 @@ void Shooter::Begin() {
     block_color_uid = sprite_block->GetShader()->getUniformId("uColor");
 
     test_block = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
+    test_block->SetScale(glm::vec2(0.8));
     testBox = new PhysX::collisionBox("main",test_block);
 
     mainBox = new PhysX::collisionBox("main", sprite_block);
 
-    checker = new Application::Checker(25,GetViewMatrix(),GetPixelProjectionMatrix());
+    cave_generator = new Application::Cave(GetViewMatrix(), GetPixelProjectionMatrix(), -1);
 }
 
 void Shooter::UILoop() {
@@ -78,7 +80,7 @@ void Shooter::UILoop() {
         ImGui::SliderFloat("FORCE", &test_inforce, -100, 100);
         ImGui::SliderFloat("MASS", &test_mass, 0, 10);
         ImGui::SliderFloat("M_ANGLE", &main_anlge, 0, 10);
-        ImGui::TextColored(ImVec4(1, 0.2,0.2, 1), (std::string("GAMEPAD : ").c_str() + std::to_string(gamepad_active)).c_str());
+        ImGui::TextColored(ImVec4(1, 0.2,0.2, 1), (std::string("GAMEPAD : ").c_str() + std::to_string(jid)).c_str());
         ImGui::TextColored(ImVec4(1, 0.5, 0.0, 1), (std::string("GLFW v_").c_str() + std::string(glfwGetVersionString())).c_str());
     } ImGui::End();
 
@@ -129,16 +131,9 @@ void Shooter::GameLoop() {
 
     EnablePixels();
 
-    sprite_block->GetShader()->use();
-    sprite_block->GetShader()->uniformVec4(block_color_uid, glm::vec4(block_color[0], block_color[1], block_color[2], 1));
-    sprite_block->SetRotation(main_anlge);
-    sprite_block->Draw(GetViewMatrix());
-
     mainBox->setLocation(sprite_block->GetLocation());
     mainBox->setRotation(sprite_block->GetRotation());
     mainBox->setScale(sprite_block->GetSize());
-
-    checker->Draw(GetTime(), GetGameSpeed());
 
     // PHYSICS START
     test_force -= test_velocity * glm::vec2(5) * test_mass; // FRICTION
@@ -154,9 +149,16 @@ void Shooter::GameLoop() {
 
     test_block->SetLocation(test_location);
     testBox->setLocation(test_block->GetLocation());
+    camera_location = Utils::Lerp(camera_location, -(test_location - (GetPixelWindowSize() / glm::vec2(2))), 0.2);
+    SetCameraLocation(camera_location);
     test_block->Draw(GetViewMatrix());
+    sprite_block->GetShader()->use();
+    sprite_block->GetShader()->uniformVec4(block_color_uid, glm::vec4(block_color[0], block_color[1], block_color[2], 1));
+    sprite_block->SetRotation(main_anlge);
+    sprite_block->Draw(GetViewMatrix());
+
     
-    DrawDebugLine(test_location, test_location + testBox->check_TracedNormal(mainBox) * glm::vec2(10), 1, glm::vec3(1, 0, 1));
+    cave_generator->Draw(GetViewMatrix(),test_location,GetPixelWindowSize());
 
     DrawPixelsToDefault(false);
 }
@@ -180,6 +182,18 @@ void Shooter::InputLoop() {
         this->test_force.y = -test_inforce;
     if (!Utils::isKeyPressed(GetWindow(), GLFW_KEY_UP) && !Utils::isKeyPressed(GetWindow(), GLFW_KEY_DOWN))
         this->test_force.y = 0.0;
+
+    InputHandle_t handlesOut[STEAM_INPUT_MAX_COUNT];
+    int found =  SteamInput()->GetConnectedControllers(handlesOut);
+    if (found > 0) {
+        auto LeftData = SteamInput()->GetAnalogActionData(handlesOut[0], SteamInput()->GetAnalogActionHandle("analog_controls"));
+        this->test_force.x = LeftData.x * test_inforce;
+        this->test_force.y = LeftData.y * test_inforce;
+
+        auto FireData = SteamInput()->GetDigitalActionData(handlesOut[0], SteamInput()->GetDigitalActionHandle("fire_lasers"));
+        if (FireData.bState)
+            test_force *= glm::vec2(3);
+    }
 }
 
 void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, SteamTools::NetworkPosition position){

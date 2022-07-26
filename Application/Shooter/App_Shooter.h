@@ -2,7 +2,7 @@
 #define APP
 
 #include "engine/engine.h"
-#include "Checker/Checker.h"
+#include "Cave/Cave.h"
 
 namespace Application{
 	class Shooter : public Game::Engine {
@@ -13,7 +13,6 @@ namespace Application{
             void UILoop();
             void InputLoop();
 
-            auto GetChecker() { return this->checker; };
             auto GetmainBox() { return this->mainBox; };
             auto GetSptiteBlock() { return this->sprite_block; };
 
@@ -21,7 +20,8 @@ namespace Application{
             void ParseNetworkMessage(SteamTools::Message message);
 
             void PhysicsBoost() { test_force += glm::vec2(500,0); };
-            void SetGamepad(int gamepad) { gamepad_active = gamepad; };
+            void SetGamepad(int gamepad) { jid = gamepad; };
+
         private:
             Bloom::Text* text_pressstart;
 
@@ -42,13 +42,15 @@ namespace Application{
             glm::vec2 test_force;
             glm::vec2 test_acceleration;
             glm::vec2 test_velocity;
-            int gamepad_active = -1;
+            int jid = -1;
 
-            Application::Checker* checker;
+            Cave* cave_generator;
 
             // NETWORK
             std::string status_string = "OFFLINE";
             CSteamID current_lobby;
+
+            glm::vec2 camera_location = glm::vec2(0);
 	};
 }
 #endif

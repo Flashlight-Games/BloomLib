@@ -36,6 +36,9 @@ namespace Utils {
     bool isKeyPressed(GLFWwindow* window, int key);
     bool isKeyReleased(GLFWwindow* window, int key);
     bool isKeyHeld(GLFWwindow* window, int key);
+
+    float map(float input, float input_start, float input_end, float output_start, float output_end);
+    float clamp(float input, float min, float max);
 }
 
 #endif

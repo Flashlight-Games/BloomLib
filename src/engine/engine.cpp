@@ -19,9 +19,17 @@ void Engine::Prep_InputLoop(){
     }
 }
 
+static void error_callback(int error, const char* description)
+{
+    fprintf(stderr, "GLFW Error: %s\n", description);
+}
+
 // EVENTS
 int Engine::Init(){
     try {
+        glfwSetErrorCallback(error_callback);
+        srand(time(NULL));
+
         // CONFIGURATION
         this->windowWidth = engine_config.resolution_window_size.x;
         this->windowHeight = engine_config.resolution_window_size.y;

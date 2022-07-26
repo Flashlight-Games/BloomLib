@@ -8,7 +8,7 @@ bool SteamTools::SteamManager::Init(int appid)
 		return false;
 	SteamAPI_Init();
     SteamNetworkingUtils()->InitRelayNetworkAccess();
-   
+    SteamInput()->Init(false);
 	return true;
 }
 
@@ -318,7 +318,6 @@ void SteamTools::SteamManager::OnLobbyChatMsg_t(LobbyChatMsg_t* pCallback) {
     unsigned char data[4096];
     auto amount = SteamMatchmaking()->GetLobbyChatEntry(pCallback->m_ulSteamIDLobby, pCallback->m_iChatID, NULL,data,sizeof(data), NULL);
     auto message = ParsePayload(std::string(reinterpret_cast<char*>(data)));
-    std::cout << message.data << "\n";
     if (message.type == DataType::CONNECTION_STATE && network_position == NetworkPosition::lobby)
         if (message.data == "STARTED_HOST_P2P") {
             ConnectP2P(SteamMatchmaking()->GetLobbyMemberByIndex(GetCurrentLobby(), stoi(message.flags.at(0))));
