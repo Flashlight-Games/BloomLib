@@ -252,20 +252,41 @@ glm::vec2 PhysX::collisionBox::check_TracedNormal(collisionBox* other)
 }
 
 glm::vec2 PhysX::GetLineInterceptionPoint(glm::vec2 startA, glm::vec2 endA, glm::vec2 startB, glm::vec2 endB) {
-    double slopeA = (endA.y - startA.y) / ((endA.x - startA.x)+0.001);
-    double slopeB = (endB.y - startB.y) / ((endB.x - startB.x) + 0.001);
-    float heightA = slopeA*(-startA.x) + startA.y;
-    float heightB = slopeB * (-startB.x) + startB.y;
+    bool Avertical = (endA.x - startA.x) == 0;
+    bool Bvertical = (endB.x - startB.x) == 0;
 
-    if (slopeA == slopeB)
-        slopeA += 0.001;
-    
-    float interceptionX = (heightB - heightA) / ((slopeA - slopeB) + 0.001);
-    float interceptionY = slopeA * (interceptionX - startA.x) + startA.y;
-    glm::vec2 return_point = glm::vec2(interceptionX, interceptionY);
-    //if (return_point.x > std::min(startA.x, endA.x) && return_point.x < std::max(startA.x, endA.x) && return_point.y > std::min(startA.y, endA.y) && return_point.y < std::max(startA.y, endA.y))
+    if (!Avertical && !Bvertical) {
+        double slopeA = (endA.y - startA.y) / ((endA.x - startA.x));
+        double slopeB = (endB.y - startB.y) / ((endB.x - startB.x));
+        float heightA = slopeA * (-startA.x) + startA.y;
+        float heightB = slopeB * (-startB.x) + startB.y;
+
+        if (slopeA == slopeB)
+            return glm::vec2(INFINITY);
+        float interceptionX = (heightB - heightA) / ((slopeA - slopeB));
+        float interceptionY = slopeA * (interceptionX - startA.x) + startA.y;
+
         return glm::vec2(interceptionX, interceptionY);
-    //else return glm::vec2(INFINITY);
+
+    }
+    else if (Avertical) {
+        double slopeB = (endB.y - startB.y) / ((endB.x - startB.x));
+        float heightB = slopeB * (-startB.x) + startB.y;
+
+        float interceptionX = startA.x;
+        float interceptionY = slopeB * startA.x + heightB;
+        return glm::vec2(interceptionX, interceptionY);
+    }
+    else if (Bvertical) {
+        double slopeA = (endA.y - startA.y) / ((endA.x - startA.x));
+        float heightA = slopeA * (-startA.x) + startA.y;
+
+        float interceptionX = startB.x;
+        float interceptionY = slopeA * startB.x + heightA;
+        return glm::vec2(interceptionX, interceptionY);
+    }
+    else
+        return glm::vec2(INFINITY);
 }
 
 glm::vec2 PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end)
@@ -335,9 +356,9 @@ glm::vec2 PhysX::LineTraceNormal(std::string channel, collisionBox* other, glm::
 {
     glm::vec2 this_origin = other->getOrigin(); glm::vec2 this_scale = other->getScale();
     if (this_origin.x == 0)
-        this_origin.x = 0.001;
+        this_origin.x = 0.0001;
     if (this_origin.y == 0)
-        this_origin.y = 0.001;
+        this_origin.y = 0.0001;
     glm::vec2 pointA = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
     glm::vec2 pointB = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
     glm::vec2 pointC = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
