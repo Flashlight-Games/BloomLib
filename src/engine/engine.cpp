@@ -137,6 +137,7 @@ int Engine::Prep_GameLoop(){
             soloud.deinit();
             SteamAPI_Shutdown();
             glfwTerminate();
+            update_thread->detach();
             return -2;
         }
 

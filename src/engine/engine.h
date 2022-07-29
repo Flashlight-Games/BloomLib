@@ -91,6 +91,11 @@ namespace Game{
                     debug_sprite->SetLocation(position); debug_sprite->SetRotation((int)(angle + 180) % 180); debug_sprite->SetScale(glm::vec2(thickness / 16.0, height / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(GetViewMatrix());
                 }
             }
+            std::chrono::steady_clock::time_point GetHighResTime() { return std::chrono::high_resolution_clock::now(); };
+
+            std::thread* update_thread;
+            std::chrono::steady_clock::time_point last_update_time;
+            std::chrono::steady_clock::time_point current_update_time;
         private:
             // EVENTS
             int Init();
@@ -106,8 +111,6 @@ namespace Game{
             virtual void InputLoop();
             // BACK
             int EndLoop();
-
-            std::chrono::steady_clock::time_point GetHighResTime() { return std::chrono::high_resolution_clock::now(); };
 
             glm::mat4 window_projection_matrix;                                 // PROJECTION MATRIX FOR WINDOW
             glm::mat4 pixel_projection_matrix;                                  // PROJECTION MATRIX FOR PIXELS
@@ -135,7 +138,6 @@ namespace Game{
             SteamTools::SteamManager* steam_manager;                            // STEAM MANAGER
 
             Bloom::Sprite* debug_sprite;
-
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING

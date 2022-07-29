@@ -105,7 +105,7 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Application\Shooter\Cave\caveshader_vertex.glsl" />
+    <None Include="res\shooter\shaders\cave\caveshader_vertex.glsl" />
     <None Include="Bloom.aps" />
     <None Include="glfw3.dll">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -431,8 +431,6 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
     </Image>
     <Image Include="res\shaki\man.png" />
-    <Image Include="res\test\crystal.png" />
-    <Image Include="res\test\ring.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="res\**\*.*">
@@ -470,6 +468,8 @@
     <ClCompile Include="include\soloud\soloud_wav.cpp" />
     <ClCompile Include="include\soloud\soloud_wavstream.cpp" />
     <ClCompile Include="include\soloud\stb_vorbis.c" />
+    <ClCompile Include="Application\Shooter\Player\Player.cpp" />
+    <ClCompile Include="src\kinematicBody\KinematicBody.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="include\dearImGui\imgui.cpp" />
     <ClCompile Include="include\dearImGui\imgui_demo.cpp" />
@@ -607,6 +607,8 @@
     <ClInclude Include="include\steam\steam_api_flat.h" />
     <ClInclude Include="include\steam\steam_api_internal.h" />
     <ClInclude Include="include\steam\steam_gameserver.h" />
+    <ClInclude Include="Application\Shooter\Player\Player.h" />
+    <ClInclude Include="src\kinematicBody\KinematicBody.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="include\dearImGui\imconfig.h" />
     <ClInclude Include="include\dearImGui\imgui.h" />

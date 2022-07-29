@@ -5,7 +5,7 @@ using namespace Application;
 Cave::Cave(glm::mat4 view_matrix,glm::mat4 pixel_projection_matrix, int seed)
 {
 	tile_sprite = new Bloom::Sprite("res/engine/textures/tilemap.png", 1, view_matrix, pixel_projection_matrix,glm::vec2(0.5),glm::vec2(1.0),glm::vec2(1.0/4.0),glm::vec2(0.0));
-	tile_sprite->SetShader(new Bloom::Shader("Application/Shooter/Cave/caveshader_vertex.glsl", "res/engine/shaders/sprite/spriteshader_fragment.glsl"), view_matrix, pixel_projection_matrix);
+	tile_sprite->SetShader(new Bloom::Shader("res/shooter/shaders/cave/caveshader_vertex.glsl", "res/engine/shaders/sprite/spriteshader_fragment.glsl"), view_matrix, pixel_projection_matrix);
 
 	if (seed == -1)
 		seed = Utils::RandFloat(0,2400000);
@@ -132,13 +132,14 @@ void Application::Cave::Draw(glm::mat4 view_matrix, glm::vec2 player_position, g
 					tpos.y = std::floor((index-1) / 4.0);
 					
 					tile_sprite->GetShader()->uniformVec2(tile_sprite->GetShader()->getUniformId((std::string("texuv[") + std::to_string(counter) + std::string("]")).c_str()), glm::vec2(0.25,0.25)*tpos);
+					counter++;
 				}
-				counter++;
+				
 
-					if (counter >= 100) {
-						tile_sprite->DrawInstanced(view_matrix, 100);
-						counter = 0;
-					}
+				if (counter >= 100) {
+					tile_sprite->DrawInstanced(view_matrix, 100);
+					counter = 0;
+				}
 			}
 		}
 	}

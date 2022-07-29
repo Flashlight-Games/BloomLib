@@ -493,7 +493,7 @@
     <None Include="include\steam\lib\win32\sdkencryptedappticket.dll" />
     <None Include="include\steam\lib\win64\sdkencryptedappticket64.dll" />
     <None Include="steam_api.dll" />
-    <None Include="Application\Shooter\Cave\caveshader_vertex.glsl" />
+    <None Include="res\shooter\shaders\cave\caveshader_vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
@@ -533,12 +533,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\shaki\man.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\test\crystal.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\test\ring.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\engine\textures\tilemap.png">
@@ -700,6 +694,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application\Shooter\Cave\Cave.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Shooter\Player\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\kinematicBody\KinematicBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1971,6 +1971,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\Shooter\Cave\Cave.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Shooter\Player\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\kinematicBody\KinematicBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

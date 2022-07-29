@@ -1,5 +1,5 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  App_Shooter.cpp
+  KinematicBody.cpp
   The contents of <filesystem> are available only with C++17 or later.
 I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
 I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(32,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
@@ -15,35 +15,15 @@ I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(33,42): warning C
 I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(57,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(58,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(57,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(77,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(84,255): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\kinematicBody\KinematicBody.h(27,20): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\kinematicBody\KinematicBody.cpp(20,23): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\src\kinematicBody\KinematicBody.cpp(38,27): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\src\kinematicBody\KinematicBody.cpp(49,84): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(87,34): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\engine\engine.h(91,103): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(58,39): warning C4305: 'argument': truncation from 'double' to 'T'
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(83,48): warning C4305: 'argument': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(100,57): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(102,50): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(135,51): warning C4244: 'argument': conversion from 'float' to 'uint16_t', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(142,67): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(147,63): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(152,113): warning C4305: 'argument': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\kinematicBody\KinematicBody.cpp(66,27): warning C4018: '<': signed/unsigned mismatch
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
   Bloom.vcxproj -> I:\TomerSoftware\Code\BloomLib\Output\Development\Bloom.exe

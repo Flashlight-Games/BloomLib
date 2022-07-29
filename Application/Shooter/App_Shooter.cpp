@@ -19,13 +19,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         if (action == GLFW_PRESS) {
             if (app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host || app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::remote) {
                 auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime())) / 2);
-                app->GetSptiteBlock()->SetLocation(newLocation);
                 app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({ std::to_string(newLocation.y) })); // SEND PRESSED SPACE AND NEW Y
             }
-        }
-    case GLFW_KEY_V:
-        if (action == GLFW_PRESS) {
-            app->PhysicsBoost();
+            else {
+                app->GetCharacter()->Jump();
+            }
         }
     }
 }
@@ -35,7 +33,9 @@ void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
     switch (key) {
     case GLFW_MOUSE_BUTTON_LEFT:
         if (action == GLFW_PRESS) {
-            //
+            glm::vec2 position = app->GetCursorPosition() - (app->GetPixelWindowSize() / glm::vec2(2));
+            position = (position + app->GetCharacter()->GetLocation()) / glm::vec2(16);
+            app->GetCave()->SetBlock(glm::round(position), cave_tile::empty);
         }
     }
 }
@@ -46,40 +46,30 @@ void Shooter::Begin() {
 
     text_pressstart = new Bloom::Text("res/engine/fonts/PressStart/PressStart.ttf",GetViewMatrix(),GetWindowProjectionMatrix(),-0.5,128);
 
-    sprite_block = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
-    sprite_block->SetLocation(GetPixelWindowSize() / glm::vec2(2));
-    sprite_block->SetRotation(0);
-    sprite_block->SetScale(glm::vec2(6,1));
-
-    sprite_block->GetShader()->use();
-    block_color_uid = sprite_block->GetShader()->getUniformId("uColor");
-
-    test_block = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix(), glm::vec2(0.5));
-    test_block->SetScale(glm::vec2(0.8));
-    testBox = new PhysX::collisionBox("main",test_block);
-
-    mainBox = new PhysX::collisionBox("main", sprite_block);
-
     cave_generator = new Application::Cave(GetViewMatrix(), GetPixelProjectionMatrix(), -1);
+    player_character = new Application::Player(GetViewMatrix(), GetPixelProjectionMatrix());
+
+    collisionA = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
+    collisionB = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
+    collisionC = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
+    collisionD = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
+    collisionE = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
+    collisionF = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
+    collisionG = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
+    collisionH = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
+    collisionI = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
+
+    update_thread = new std::thread(&Application::Shooter::Update, this);
 }
 
 void Shooter::UILoop() {
     ImGui::Begin("Control window"); {
         //ImGui::ColorPicker3("BLOCK COLOR", block_color);
         if (Utils::isDevelopmentConfiguration()) {
-            ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::string("FORCE X: ").c_str() + std::to_string(test_force.x)).c_str());
-            ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::string("FORCE Y: ").c_str() + std::to_string(test_force.y)).c_str());
-            ImGui::TextColored(ImVec4(0, 1, 0, 1), (std::string("ACCEL X: ").c_str() + std::to_string(test_acceleration.x)).c_str());
-            ImGui::TextColored(ImVec4(0, 1, 0, 1), (std::string("ACCEL Y: ").c_str() + std::to_string(test_acceleration.y)).c_str());
-            ImGui::TextColored(ImVec4(1, 1, 0, 1), (std::string("VELOCITY X: ").c_str() + std::to_string(test_velocity.x)).c_str());
-            ImGui::TextColored(ImVec4(1, 1, 0, 1), (std::string("VELOCITY Y: ").c_str() + std::to_string(test_velocity.y)).c_str());
-            ImGui::TextColored(ImVec4(1, 1, 1, 1), (std::string("LOC X: ").c_str() + std::to_string(test_location.x)).c_str());
-            ImGui::TextColored(ImVec4(1, 1, 1, 1), (std::string("LOC Y: ").c_str() + std::to_string(test_location.y)).c_str());
+            ImGui::TextColored(ImVec4(0, 1, 0.5, 1), (std::to_string(player_character->GetLocation().x).c_str()));
+            ImGui::TextColored(ImVec4(0, 1, 0.5, 1), (std::to_string(player_character->GetLocation().y).c_str()));
+            ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::to_string(player_character->getvel()).c_str()));
         }
-
-        ImGui::SliderFloat("FORCE", &test_inforce, -100, 100);
-        ImGui::SliderFloat("MASS", &test_mass, 0, 10);
-        ImGui::SliderFloat("M_ANGLE", &main_anlge, 0, 10);
         ImGui::TextColored(ImVec4(1, 0.2,0.2, 1), (std::string("GAMEPAD : ").c_str() + std::to_string(jid)).c_str());
         ImGui::TextColored(ImVec4(1, 0.5, 0.0, 1), (std::string("GLFW v_").c_str() + std::string(glfwGetVersionString())).c_str());
     } ImGui::End();
@@ -131,34 +121,8 @@ void Shooter::GameLoop() {
 
     EnablePixels();
 
-    mainBox->setLocation(sprite_block->GetLocation());
-    mainBox->setRotation(sprite_block->GetRotation());
-    mainBox->setScale(sprite_block->GetSize());
-
-    // PHYSICS START
-    test_force -= test_velocity * glm::vec2(5) * test_mass; // FRICTION
-    test_acceleration = test_force / glm::vec2(test_mass); // ACCELERATION
-    
-    test_velocity += test_acceleration * glm::vec2(GetDeltaTime() / 1000); // VELOCITY
-    if (testBox->check_Traced(mainBox) != glm::vec2(INFINITY)) {
-        if (glm::dot(glm::normalize(testBox->check_TracedNormal(mainBox)), glm::normalize(test_velocity)) < 0.0)
-            test_velocity += (glm::abs(test_velocity) * testBox->check_TracedNormal(mainBox)) * glm::vec2(1.0); // Multiply by 1.0 for non moving object, and 1.5 for moving objects
-    }
-    test_location += test_velocity * glm::vec2(GetDeltaTime() / 1000) * pixels_to_meters; // LOCATION
-    // PHYSICS END
-
-    test_block->SetLocation(test_location);
-    testBox->setLocation(test_block->GetLocation());
-    camera_location = Utils::Lerp(camera_location, -(test_location - (GetPixelWindowSize() / glm::vec2(2))), 0.2);
-    SetCameraLocation(camera_location);
-    test_block->Draw(GetViewMatrix());
-    sprite_block->GetShader()->use();
-    sprite_block->GetShader()->uniformVec4(block_color_uid, glm::vec4(block_color[0], block_color[1], block_color[2], 1));
-    sprite_block->SetRotation(main_anlge);
-    sprite_block->Draw(GetViewMatrix());
-
-    
-    cave_generator->Draw(GetViewMatrix(),test_location,GetPixelWindowSize());
+    player_character->Draw(GetViewMatrix());
+    cave_generator->Draw(GetViewMatrix(), player_character->GetLocation(), GetPixelWindowSize());
 
     DrawPixelsToDefault(false);
 }
@@ -169,31 +133,33 @@ void Shooter::InputLoop() {
         GetSptiteBlock()->SetLocation(newLocation);*/
     }
     if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_RIGHT))
-        this->test_force.x = test_inforce;
+        this->character_input.x = 1;
     if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_LEFT))
-        this->test_force.x = -test_inforce;
+        this->character_input.x = -1;
     if (!Utils::isKeyPressed(GetWindow(), GLFW_KEY_LEFT) && !Utils::isKeyPressed(GetWindow(), GLFW_KEY_RIGHT))
-        this->test_force.x = 0.0;
+        this->character_input.x = 0.0;
 
 
     if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_UP))
-        this->test_force.y = test_inforce;
+        this->character_input.y = 1;
     if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_DOWN))
-        this->test_force.y = -test_inforce;
+        this->character_input.y = -1;
     if (!Utils::isKeyPressed(GetWindow(), GLFW_KEY_UP) && !Utils::isKeyPressed(GetWindow(), GLFW_KEY_DOWN))
-        this->test_force.y = 0.0;
+        this->character_input.y = 0.0;
 
     InputHandle_t handlesOut[STEAM_INPUT_MAX_COUNT];
     int found =  SteamInput()->GetConnectedControllers(handlesOut);
     if (found > 0) {
         auto LeftData = SteamInput()->GetAnalogActionData(handlesOut[0], SteamInput()->GetAnalogActionHandle("analog_controls"));
-        this->test_force.x = LeftData.x * test_inforce;
-        this->test_force.y = LeftData.y * test_inforce;
+        this->character_input.x = LeftData.x * 1;
+        this->character_input.y = LeftData.y * 1;
 
         auto FireData = SteamInput()->GetDigitalActionData(handlesOut[0], SteamInput()->GetDigitalActionHandle("fire_lasers"));
         if (FireData.bState)
-            test_force *= glm::vec2(3);
+            character_input *= glm::vec2(3);
     }
+
+    player_character->Move(character_input);
 }
 
 void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, SteamTools::NetworkPosition position){
@@ -239,8 +205,55 @@ void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
         break;
     case SteamTools::DataType::PLAYER_INPUT_KEY_PRESS:
         if (std::stoi(message.data) == GLFW_KEY_SPACE) {
-            GetSptiteBlock()->SetLocation(glm::vec2(GetPixelWindowSize().x / 2, std::stof(message.flags.at(0))));
+            
         }
         break;
+    }
+}
+
+void Application::Shooter::Update() {
+    while (true) {
+        Utils::SyncSleep(300);
+        last_update_time = current_update_time;
+        current_update_time = GetHighResTime();
+        std::chrono::milliseconds delta = std::chrono::duration_cast<std::chrono::milliseconds>(current_update_time - last_update_time);
+
+        collisionA->setLocation(glm::vec2(-32));
+        collisionB->setLocation(glm::vec2(-32));
+        collisionC->setLocation(glm::vec2(-32));
+        collisionD->setLocation(glm::vec2(-32));
+        collisionE->setLocation(glm::vec2(-32));
+        collisionF->setLocation(glm::vec2(-32));
+        collisionG->setLocation(glm::vec2(-32));
+        collisionH->setLocation(glm::vec2(-32));
+        collisionI->setLocation(glm::vec2(-32));
+
+        auto tiles = cave_generator->GetTiles();
+        glm::vec2 playerpos = glm::round(player_character->GetLocation() / glm::vec2(16));
+
+        playerpos.x = Utils::clamp(playerpos.x, 1, tiles.size() - 1);
+        playerpos.y = Utils::clamp(playerpos.y, 1, tiles.at(playerpos.x).size() - 1);
+        if (tiles.at(playerpos.x + 1).at(playerpos.y) == cave_tile::block)
+            collisionA->setLocation((playerpos + glm::vec2(1, 0)) * glm::vec2(16));
+        if (tiles.at(playerpos.x - 1).at(playerpos.y) == cave_tile::block)
+            collisionB->setLocation((playerpos + glm::vec2(-1, 0)) * glm::vec2(16));
+        if (tiles.at(playerpos.x).at(playerpos.y + 1) == cave_tile::block)
+            collisionC->setLocation((playerpos + glm::vec2(0, 1)) * glm::vec2(16));
+        if (tiles.at(playerpos.x).at(playerpos.y - 1) == cave_tile::block)
+            collisionD->setLocation((playerpos + glm::vec2(0, -1)) * glm::vec2(16));
+        if (tiles.at(playerpos.x + 1).at(playerpos.y + 1) == cave_tile::block)
+            collisionE->setLocation((playerpos + glm::vec2(1, 1)) * glm::vec2(16));
+        if (tiles.at(playerpos.x - 1).at(playerpos.y + 1) == cave_tile::block)
+            collisionF->setLocation((playerpos + glm::vec2(-1, 1)) * glm::vec2(16));
+        if (tiles.at(playerpos.x + 1).at(playerpos.y - 1) == cave_tile::block)
+            collisionG->setLocation((playerpos + glm::vec2(1, -1)) * glm::vec2(16));
+        if (tiles.at(playerpos.x - 1).at(playerpos.y - 1) == cave_tile::block)
+            collisionH->setLocation((playerpos + glm::vec2(-1, -1)) * glm::vec2(16));
+        if (tiles.at(playerpos.x).at(playerpos.y) == cave_tile::block)
+            collisionI->setLocation((playerpos + glm::vec2(0, 0)) * glm::vec2(16));
+
+        player_character->Update(delta.count(), std::vector<PhysX::collisionBox*>({ collisionA,collisionB,collisionC,collisionD,collisionE,collisionF,collisionG,collisionH ,collisionI }));
+        camera_location = -(player_character->GetLocation() - (GetPixelWindowSize() / glm::vec2(2)));
+        SetCameraLocation(camera_location);
     }
 }

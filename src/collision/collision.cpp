@@ -287,7 +287,7 @@ glm::vec2 PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 s
     auto DB = GetLineInterceptionPoint(start, end, pointD, pointB);
 
     float minDist = INFINITY;
-    float tolerance = 5;
+    float tolerance = 0;
     float radius = std::sqrt(std::pow(other->getScale().x * 0.5, 2) + std::pow(other->getScale().y * 0.5, 2)) + tolerance;
 
     if(Utils::Distance2D(other->getCenter(), BC) <= radius && Utils::Distance2D(start, BC) <= minDist && BC != glm::vec2(INFINITY))
@@ -346,7 +346,7 @@ glm::vec2 PhysX::LineTraceNormal(std::string channel, collisionBox* other, glm::
     auto DB = GetLineInterceptionPoint(start, end, pointD, pointB);
 
     float minDist = INFINITY;
-    float tolerance = 0;
+    float tolerance = -1;
     float radius = std::sqrt(std::pow(other->getScale().x * 0.5, 2) + std::pow(other->getScale().y * 0.5, 2)) + tolerance;
 
     if (Utils::Distance2D(other->getCenter(), BC) <= radius && Utils::Distance2D(start, BC) <= minDist)
