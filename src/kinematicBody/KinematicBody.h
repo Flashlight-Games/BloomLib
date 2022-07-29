@@ -10,9 +10,10 @@ namespace PhysX {
 		glm::vec2 GetLocation(float DeltaTime, std::vector<PhysX::collisionBox*> other_boxes); // CLEAR FORCES AND GET LOCATION
 		void ApplyForce(glm::vec2 force) { applied_forces.push_back(force); };
 		void ApplyVelocity(glm::vec2 velocity) { this->velocity += velocity; };
+		auto GetVelocity() { return velocity; };
 
 		glm::vec2 GetDepth(std::vector<PhysX::collisionBox*> other_boxes);
-		auto GetVelocity() { return glm::length(velocity); };
+		auto GetSpeed() { return glm::length(velocity); };
 	private:
 		PhysX::collisionBox* collision;
 		glm::vec2 location = glm::vec2(500,500);
@@ -20,6 +21,7 @@ namespace PhysX {
 		glm::vec2 velocity = glm::vec2(0,0);
 		glm::vec2 acceleration = glm::vec2(0);
 		std::vector<glm::vec2> applied_forces;
+		bool hit = false;
 
 		float mass;
 		float pixels_to_meters = 25;

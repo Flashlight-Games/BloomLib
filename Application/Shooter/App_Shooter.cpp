@@ -25,6 +25,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
                 app->GetCharacter()->Jump();
             }
         }
+        else
+            app->GetCharacter()->ResetJump();
     }
 }
 
@@ -102,6 +104,9 @@ void Shooter::GameLoop() {
     SetStatusString(GetSteamManager()->GetNetworkStatus(), GetSteamManager()->GetNetworkPosition());
 
     //RENDERING
+    camera_location = Utils::Lerp(camera_location,- (player_character->GetLocation() - (GetPixelWindowSize() / glm::vec2(2))),0.15);
+    SetCameraLocation(camera_location);
+
     text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
     text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, 150), SteamTools::SteamManager::GetMySteamName(), 1, GetWindowSize(), glm::vec4(1), true);
 
@@ -125,6 +130,8 @@ void Shooter::GameLoop() {
     cave_generator->Draw(GetViewMatrix(), player_character->GetLocation(), GetPixelWindowSize());
 
     DrawPixelsToDefault(false);
+
+    
 }
 
 void Shooter::InputLoop() {
@@ -253,7 +260,5 @@ void Application::Shooter::Update() {
             collisionI->setLocation((playerpos + glm::vec2(0, 0)) * glm::vec2(16));
 
         player_character->Update(delta.count(), std::vector<PhysX::collisionBox*>({ collisionA,collisionB,collisionC,collisionD,collisionE,collisionF,collisionG,collisionH ,collisionI }));
-        camera_location = -(player_character->GetLocation() - (GetPixelWindowSize() / glm::vec2(2)));
-        SetCameraLocation(camera_location);
     }
 }

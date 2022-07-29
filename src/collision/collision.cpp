@@ -251,15 +251,14 @@ glm::vec2 PhysX::collisionBox::check_TracedNormal(collisionBox* other)
     return check_TracedNormal(other, transMatrix, otherTransMatrix);
 }
 
-glm::vec2 GetLineInterceptionPoint(glm::vec2 startA, glm::vec2 endA, glm::vec2 startB, glm::vec2 endB) {
-    float slopeA = (endA.y - startA.y) / ((endA.x - startA.x)+0.001);
-    float slopeB = (endB.y - startB.y) / ((endB.x - startB.x) + 0.001);
+glm::vec2 PhysX::GetLineInterceptionPoint(glm::vec2 startA, glm::vec2 endA, glm::vec2 startB, glm::vec2 endB) {
+    double slopeA = (endA.y - startA.y) / ((endA.x - startA.x)+0.001);
+    double slopeB = (endB.y - startB.y) / ((endB.x - startB.x) + 0.001);
     float heightA = slopeA*(-startA.x) + startA.y;
     float heightB = slopeB * (-startB.x) + startB.y;
 
     if (slopeA == slopeB)
         slopeA += 0.001;
-
     
     float interceptionX = (heightB - heightA) / ((slopeA - slopeB) + 0.001);
     float interceptionY = slopeA * (interceptionX - startA.x) + startA.y;
@@ -271,15 +270,15 @@ glm::vec2 GetLineInterceptionPoint(glm::vec2 startA, glm::vec2 endA, glm::vec2 s
 
 glm::vec2 PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end)
 {
-    glm::vec2 this_origin  = other->getOrigin(); glm::vec2 this_scale = other->getScale();
-    if (this_origin .x == 0)
-        this_origin .x = 0.001;
-    if (this_origin .y == 0)
-        this_origin .y = 0.001;
-    glm::vec2 pointA = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0] - 1) * this_scale[0], (this_origin [1]) * this_scale[1]), 0, 1);
-    glm::vec2 pointB = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0]) * this_scale[0], (this_origin [1] - 1) * this_scale[1]), 0, 1);
-    glm::vec2 pointC = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0] - 1) * this_scale[0], (this_origin [1] - 1) * this_scale[1]), 0, 1);
-    glm::vec2 pointD = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0]) * this_scale[0], (this_origin [1]) * this_scale[1]), 0, 1);
+    glm::vec2 this_origin = other->getOrigin(); glm::vec2 this_scale = other->getScale();
+    if (this_origin.x == 0)
+        this_origin.x = 0.001;
+    if (this_origin.y == 0)
+        this_origin.y = 0.001;
+    glm::vec2 pointA = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+    glm::vec2 pointB = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 pointC = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 pointD = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
 
     auto BC = GetLineInterceptionPoint(start, end, pointB, pointC);
     auto CA = GetLineInterceptionPoint(start, end, pointC, pointA);
@@ -290,16 +289,18 @@ glm::vec2 PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 s
     float tolerance = 0;
     float radius = std::sqrt(std::pow(other->getScale().x * 0.5, 2) + std::pow(other->getScale().y * 0.5, 2)) + tolerance;
 
-    if(Utils::Distance2D(other->getCenter(), BC) <= radius && Utils::Distance2D(start, BC) <= minDist && BC != glm::vec2(INFINITY))
+    if (Utils::Distance2D(other->getCenter(), BC) <= radius && Utils::Distance2D(start, BC) <= minDist) {
         minDist = Utils::Distance2D(start, BC);
-    if (Utils::Distance2D(other->getCenter(), CA) <= radius && Utils::Distance2D(start, CA) <= minDist && CA != glm::vec2(INFINITY))
+    } if (Utils::Distance2D(other->getCenter(), CA) <= radius && Utils::Distance2D(start, CA) <= minDist) {
         minDist = Utils::Distance2D(start, CA);
-    if (Utils::Distance2D(other->getCenter(), AD) <= radius && Utils::Distance2D(start, AD) <= minDist && AD != glm::vec2(INFINITY))
+    } if (Utils::Distance2D(other->getCenter(), AD) <= radius && Utils::Distance2D(start, AD) <= minDist) {
         minDist = Utils::Distance2D(start, AD);
-    if (Utils::Distance2D(other->getCenter(), DB) <= radius && Utils::Distance2D(start, DB) <= minDist && DB != glm::vec2(INFINITY))
+    } if (Utils::Distance2D(other->getCenter(), DB) <= radius && Utils::Distance2D(start, DB) <= minDist) {
         minDist = Utils::Distance2D(start, DB);
+    }
 
-    glm::vec2 return_point;
+    glm::vec2 return_point = glm::vec2(INFINITY);
+
 
     if (minDist == Utils::Distance2D(start, BC))
         return_point = BC;
@@ -310,12 +311,14 @@ glm::vec2 PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 s
     else if (minDist == Utils::Distance2D(start, DB))
         return_point = DB;
     else
-        return glm::vec2(INFINITY);
-
-    if (return_point.x > std::min(start.x, end.x) && return_point.x < std::max(start.x, end.x) && return_point.y > std::min(start.y, end.y) && return_point.y < std::max(start.y, end.y))
         return return_point;
-    else
+
+    if (return_point.x >= std::min(start.x, end.x) && return_point.x <= std::max(start.x, end.x) && return_point.y >= std::min(start.y, end.y) && return_point.y <= std::max(start.y, end.y)) {
+        return return_point;
+    }
+    else {
         return glm::vec2(INFINITY);
+    }
     
 }
 

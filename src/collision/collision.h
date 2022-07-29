@@ -52,6 +52,7 @@ namespace PhysX
     bool AreaCheck_SAT(std::string channel, collisionBox* other,glm::vec2 position,glm::vec2 size);
     bool PointCheck_SAT(std::string chanel, collisionBox* other, glm::vec2 position);
     glm::vec2 GetNormal(glm::vec2 pointA, glm::vec2 pointB);
+    glm::vec2 GetLineInterceptionPoint(glm::vec2 startA, glm::vec2 endA, glm::vec2 startB, glm::vec2 endB);
 }
 
 #endif

@@ -13,6 +13,7 @@ PhysX::KinematicBody::KinematicBody(std::string channel, float mass, Bloom::Spri
 
 glm::vec2 PhysX::KinematicBody::GetLocation(float DeltaTime, std::vector<PhysX::collisionBox*> other_boxes)
 {
+    hit = false;
     DeltaTime = DeltaTime / 1000;
     if (DeltaTime > 0.1)
         return location;
@@ -25,10 +26,8 @@ glm::vec2 PhysX::KinematicBody::GetLocation(float DeltaTime, std::vector<PhysX::
 
     auto force_gravity = gravity * mass * 4.0f;
     net_force += force_gravity * DeltaTime;
-    //auto force_drag = (velocity != glm::vec2(0) ? -glm::normalize(velocity) * 0.5f * 1.293f * 1.05f * (this->collision->getScale().x * this->collision->getScale().y) * (velocity * velocity) : glm::vec2(0,0));
     auto force_drag = -velocity * drag;
     net_force += force_drag * DeltaTime;
-    //velocity *= 0.99;
 
     acceleration = (net_force) / glm::vec2(mass); // ACCELERATION
     velocity += acceleration;// VELOCITY
@@ -48,10 +47,10 @@ glm::vec2 PhysX::KinematicBody::GetLocation(float DeltaTime, std::vector<PhysX::
                 if (glm::dot(glm::normalize(hit_normal), glm::normalize(velocity)) < 0.0) {
                     velocity += (glm::abs(velocity) * hit_normal) * glm::vec2(1.00 + bounciness);
                 }
+                hit = true;
             }
         }
     }
-    
     
     location += velocity * DeltaTime * pixels_to_meters; // LOCATION
     // PHYSICS END
