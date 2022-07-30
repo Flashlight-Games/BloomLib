@@ -23,6 +23,9 @@ namespace Application{
             auto GetCharacter() { return player_character; };
 
             void Update();
+            void Start(int seed = -1);
+            auto GetStarted() { return started; };
+            auto GetInput() { return character_input; };
         private:
 
             glm::vec2 camera_location = glm::vec2(0);
@@ -30,7 +33,9 @@ namespace Application{
 
             //PhysX::collisionBox* mainBox;
             Player* player_character;
+            Player* other_character;
             glm::vec2 character_input;
+            glm::vec2 other_input;
             int jid = -1;
 
             Cave* cave_generator;
@@ -49,6 +54,9 @@ namespace Application{
             PhysX::collisionBox* collisionH;
             PhysX::collisionBox* collisionI;
             std::vector<PhysX::collisionBox*> boxes;
+
+            bool started = false;
+            float last_update = 0.0;
 	};
 }
 #endif

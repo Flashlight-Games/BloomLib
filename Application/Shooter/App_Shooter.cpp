@@ -16,17 +16,30 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         }
         break;
     case GLFW_KEY_SPACE:
-        if (action == GLFW_PRESS) {
-            if (app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host || app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::remote) {
-                auto newLocation = app->GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, app->GetTime())) / 2);
-                app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(key).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({ std::to_string(newLocation.y) })); // SEND PRESSED SPACE AND NEW Y
+        if (app->GetStarted()) {
+            if (action == GLFW_PRESS) {
+                app->GetCharacter()->Jump();
+                app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_KEY_SPACE).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({})); // SEND {SPACE} OTHER JUMP
             }
             else {
-                app->GetCharacter()->Jump();
+                app->GetCharacter()->ResetJump();
+                app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_KEY_SPACE).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_RELEASE, std::vector<std::string>({})); // SEND {SPACE} OTHER JUMP RELEASE
             }
         }
-        else
-            app->GetCharacter()->ResetJump();
+        break;
+
+
+    case GLFW_KEY_A:
+        app->GetSteamManager()->SendMessageP2P_Reliable(0, "0", SteamTools::DataType::PLAYER_INPUT_STATE_PRESSED, std::vector<std::string>({ std::to_string((action == GLFW_PRESS) * -1)})); // SEND {0,INPUTX} OTHER XINPUT
+        app->GetSteamManager()->SendMessageP2P_Reliable(0, "1", SteamTools::DataType::GAME_STATE, std::vector<std::string>({
+            std::to_string(app->GetCharacter()->GetLocation().x),std::to_string(app->GetCharacter()->GetLocation().y)})); // SEND {1,LOCX,LOCY} PLAYER POSITION
+        break;
+
+    case GLFW_KEY_D:
+        app->GetSteamManager()->SendMessageP2P_Reliable(0, "0", SteamTools::DataType::PLAYER_INPUT_STATE_PRESSED, std::vector<std::string>({ std::to_string((action == GLFW_PRESS) * 1) })); // SEND {0,INPUTX} OTHER XINPUT
+        app->GetSteamManager()->SendMessageP2P_Reliable(0, "1", SteamTools::DataType::GAME_STATE, std::vector<std::string>({
+            std::to_string(app->GetCharacter()->GetLocation().x),std::to_string(app->GetCharacter()->GetLocation().y) })); // SEND {1,LOCX,LOCY} PLAYER POSITION
+        break;
     }
 }
 
@@ -34,11 +47,23 @@ void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
     auto app = Utils::GetApp<Application::Shooter>(window);
     switch (key) {
     case GLFW_MOUSE_BUTTON_LEFT:
-        if (action == GLFW_PRESS) {
+        if (action == GLFW_PRESS && app->GetStarted()) {
             glm::vec2 position = app->GetCursorPosition() - (app->GetPixelWindowSize() / glm::vec2(2));
-            position = (position + app->GetCharacter()->GetLocation()) / glm::vec2(16);
-            app->GetCave()->SetBlock(glm::round(position), cave_tile::empty);
+            position = glm::round((position + app->GetCharacter()->GetLocation()) / glm::vec2(16));
+            app->GetCave()->SetBlock(position, cave_tile::empty);
+
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_MOUSE_BUTTON_LEFT).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({std::to_string(position.x),std::to_string(position.y) })); // SEND {LEFT_CLICK,X,Y}  DELETE
         }
+        break;
+    case GLFW_MOUSE_BUTTON_RIGHT:
+        if (action == GLFW_PRESS && app->GetStarted()) {
+            glm::vec2 position = app->GetCursorPosition() - (app->GetPixelWindowSize() / glm::vec2(2));
+            position = glm::round((position + app->GetCharacter()->GetLocation()) / glm::vec2(16));
+            app->GetCave()->SetBlock(position, cave_tile::block);
+
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_MOUSE_BUTTON_RIGHT).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({ std::to_string(position.x),std::to_string(position.y) })); // SEND {RIGHT_CLICK,X,Y}  PLACE
+        }
+        break;
     }
 }
 
@@ -48,8 +73,9 @@ void Shooter::Begin() {
 
     text_pressstart = new Bloom::Text("res/engine/fonts/PressStart/PressStart.ttf",GetViewMatrix(),GetWindowProjectionMatrix(),-0.5,128);
 
-    cave_generator = new Application::Cave(GetViewMatrix(), GetPixelProjectionMatrix(), -1);
     player_character = new Application::Player(GetViewMatrix(), GetPixelProjectionMatrix());
+    other_character = new Application::Player(GetViewMatrix(), GetPixelProjectionMatrix());
+    cave_generator = new Application::Cave(GetViewMatrix(), GetPixelProjectionMatrix());
 
     collisionA = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
     collisionB = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
@@ -89,7 +115,7 @@ void Shooter::UILoop() {
 void Shooter::GameLoop() {
     //NETWORKING
     if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::local) {
-        GetSteamManager()->MatchmakeLoop_Quick(4,GetTime()); // UPDATE MATCHMAKING NETWORK STATUS
+        GetSteamManager()->MatchmakeLoop_Quick(2,GetTime()); // UPDATE MATCHMAKING NETWORK STATUS
     } if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::lobby) {
         GetSteamManager()->StartWhenReady(GetTime(), 0, true, 2, 120);
     } if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::remote) {
@@ -98,13 +124,16 @@ void Shooter::GameLoop() {
     } if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host) {
         GetSteamManager()->ReceiveMessageP2P();
         ParseNetworkMessage(GetSteamManager()->GetReceivedMessage());
+        if (!started) {
+            if(GetSteamManager()->GetRemotes().size() > 0)
+                Start();
+        }
     }
-
 
     SetStatusString(GetSteamManager()->GetNetworkStatus(), GetSteamManager()->GetNetworkPosition());
 
     //RENDERING
-    camera_location = Utils::Lerp(camera_location,- (player_character->GetLocation() - (GetPixelWindowSize() / glm::vec2(2))),0.15);
+    camera_location = (Utils::Lerp(camera_location,- (player_character->GetLocation() - (GetPixelWindowSize() / glm::vec2(2))),0.15));
     SetCameraLocation(camera_location);
 
     text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
@@ -127,32 +156,19 @@ void Shooter::GameLoop() {
     EnablePixels();
 
     player_character->Draw(GetViewMatrix());
+    other_character->Draw(GetViewMatrix());
     cave_generator->Draw(GetViewMatrix(), player_character->GetLocation(), GetPixelWindowSize());
 
     DrawPixelsToDefault(false);
-
-    
 }
 
 void Shooter::InputLoop() {
-    if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_SPACE)) {
-        /*auto newLocation = GetPixelWindowSize() / glm::vec2(2) + glm::vec2(0, 50 * Utils::Noise_Simplex(glm::vec2(0, GetTime())) / 2);
-        GetSptiteBlock()->SetLocation(newLocation);*/
-    }
-    if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_RIGHT))
+    if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_D))
         this->character_input.x = 1;
-    if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_LEFT))
+    if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_A))
         this->character_input.x = -1;
-    if (!Utils::isKeyPressed(GetWindow(), GLFW_KEY_LEFT) && !Utils::isKeyPressed(GetWindow(), GLFW_KEY_RIGHT))
+    if (!Utils::isKeyPressed(GetWindow(), GLFW_KEY_A) && !Utils::isKeyPressed(GetWindow(), GLFW_KEY_D))
         this->character_input.x = 0.0;
-
-
-    if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_UP))
-        this->character_input.y = 1;
-    if (Utils::isKeyPressed(GetWindow(), GLFW_KEY_DOWN))
-        this->character_input.y = -1;
-    if (!Utils::isKeyPressed(GetWindow(), GLFW_KEY_UP) && !Utils::isKeyPressed(GetWindow(), GLFW_KEY_DOWN))
-        this->character_input.y = 0.0;
 
     InputHandle_t handlesOut[STEAM_INPUT_MAX_COUNT];
     int found =  SteamInput()->GetConnectedControllers(handlesOut);
@@ -167,6 +183,7 @@ void Shooter::InputLoop() {
     }
 
     player_character->Move(character_input);
+    other_character->Move(other_input);
 }
 
 void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, SteamTools::NetworkPosition position){
@@ -212,53 +229,116 @@ void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
         break;
     case SteamTools::DataType::PLAYER_INPUT_KEY_PRESS:
         if (std::stoi(message.data) == GLFW_KEY_SPACE) {
-            
+            other_character->Jump();
+        } else if (std::stoi(message.data) == GLFW_MOUSE_BUTTON_LEFT) {
+            GetCave()->SetBlock(glm::vec2(std::stof(message.flags.at(0)), std::stof(message.flags.at(1))), cave_tile::empty);
+        } else if (std::stoi(message.data) == GLFW_MOUSE_BUTTON_RIGHT) {
+            GetCave()->SetBlock(glm::vec2(std::stof(message.flags.at(0)), std::stof(message.flags.at(1))), cave_tile::block);
         }
         break;
+    case SteamTools::DataType::PLAYER_INPUT_KEY_RELEASE:
+        if (std::stoi(message.data) == GLFW_KEY_SPACE) {
+            other_character->ResetJump();
+        }
+        break;
+    case SteamTools::DataType::GAME_STATE:
+        if (std::stoi(message.data) == 0) { // WORLD SEED
+            Start(std::stoi(message.flags.at(0)));
+            std::cout << "STARTED GAME ON SEED " << message.flags.at(0) << "\n";
+        } else if (std::stoi(message.data) == 1) { // PLAYER POSITION
+            other_character->SetLocation(glm::vec2(std::stof(message.flags.at(0)), std::stof(message.flags.at(1))));
+        }
+        break;
+    case SteamTools::DataType::PLAYER_INPUT_STATE_PRESSED:
+        if (std::stoi(message.data) == 0) { // XINPUT
+            this->other_input.x = std::stof(message.flags.at(0)); 
+        }
     }
 }
 
 void Application::Shooter::Update() {
-    while (true) {
-        Utils::SyncSleep(300);
-        last_update_time = current_update_time;
-        current_update_time = GetHighResTime();
-        std::chrono::milliseconds delta = std::chrono::duration_cast<std::chrono::milliseconds>(current_update_time - last_update_time);
+    while (!glfwWindowShouldClose(GetWindow())) {
+        if (started) {
+            Utils::SyncSleep(300);
+            last_update_time = current_update_time;
+            current_update_time = GetHighResTime();
+            std::chrono::milliseconds delta = std::chrono::duration_cast<std::chrono::milliseconds>(current_update_time - last_update_time);
 
-        collisionA->setLocation(glm::vec2(-32));
-        collisionB->setLocation(glm::vec2(-32));
-        collisionC->setLocation(glm::vec2(-32));
-        collisionD->setLocation(glm::vec2(-32));
-        collisionE->setLocation(glm::vec2(-32));
-        collisionF->setLocation(glm::vec2(-32));
-        collisionG->setLocation(glm::vec2(-32));
-        collisionH->setLocation(glm::vec2(-32));
-        collisionI->setLocation(glm::vec2(-32));
+            collisionA->setLocation(glm::vec2(-32));
+            collisionB->setLocation(glm::vec2(-32));
+            collisionC->setLocation(glm::vec2(-32));
+            collisionD->setLocation(glm::vec2(-32));
+            collisionE->setLocation(glm::vec2(-32));
+            collisionF->setLocation(glm::vec2(-32));
+            collisionG->setLocation(glm::vec2(-32));
+            collisionH->setLocation(glm::vec2(-32));
+            collisionI->setLocation(glm::vec2(-32));
 
-        auto tiles = cave_generator->GetTiles();
-        glm::vec2 playerpos = glm::round(player_character->GetLocation() / glm::vec2(16));
+            auto tiles = cave_generator->GetTiles();
+            glm::vec2 playerpos = glm::round(player_character->GetLocation() / glm::vec2(16));
 
-        playerpos.x = Utils::clamp(playerpos.x, 1, tiles.size() - 1);
-        playerpos.y = Utils::clamp(playerpos.y, 1, tiles.at(playerpos.x).size() - 1);
-        if (tiles.at(playerpos.x + 1).at(playerpos.y) == cave_tile::block)
-            collisionA->setLocation((playerpos + glm::vec2(1, 0)) * glm::vec2(16));
-        if (tiles.at(playerpos.x - 1).at(playerpos.y) == cave_tile::block)
-            collisionB->setLocation((playerpos + glm::vec2(-1, 0)) * glm::vec2(16));
-        if (tiles.at(playerpos.x).at(playerpos.y + 1) == cave_tile::block)
-            collisionC->setLocation((playerpos + glm::vec2(0, 1)) * glm::vec2(16));
-        if (tiles.at(playerpos.x).at(playerpos.y - 1) == cave_tile::block)
-            collisionD->setLocation((playerpos + glm::vec2(0, -1)) * glm::vec2(16));
-        if (tiles.at(playerpos.x + 1).at(playerpos.y + 1) == cave_tile::block)
-            collisionE->setLocation((playerpos + glm::vec2(1, 1)) * glm::vec2(16));
-        if (tiles.at(playerpos.x - 1).at(playerpos.y + 1) == cave_tile::block)
-            collisionF->setLocation((playerpos + glm::vec2(-1, 1)) * glm::vec2(16));
-        if (tiles.at(playerpos.x + 1).at(playerpos.y - 1) == cave_tile::block)
-            collisionG->setLocation((playerpos + glm::vec2(1, -1)) * glm::vec2(16));
-        if (tiles.at(playerpos.x - 1).at(playerpos.y - 1) == cave_tile::block)
-            collisionH->setLocation((playerpos + glm::vec2(-1, -1)) * glm::vec2(16));
-        if (tiles.at(playerpos.x).at(playerpos.y) == cave_tile::block)
-            collisionI->setLocation((playerpos + glm::vec2(0, 0)) * glm::vec2(16));
+            playerpos.x = Utils::clamp(playerpos.x, 1, tiles.size() - 1);
+            playerpos.y = Utils::clamp(playerpos.y, 1, tiles.at(playerpos.x).size() - 1);
+            if (tiles.at(playerpos.x + 1).at(playerpos.y) == cave_tile::block)
+                collisionA->setLocation((playerpos + glm::vec2(1, 0)) * glm::vec2(16));
+            if (tiles.at(playerpos.x - 1).at(playerpos.y) == cave_tile::block)
+                collisionB->setLocation((playerpos + glm::vec2(-1, 0)) * glm::vec2(16));
+            if (tiles.at(playerpos.x).at(playerpos.y + 1) == cave_tile::block)
+                collisionC->setLocation((playerpos + glm::vec2(0, 1)) * glm::vec2(16));
+            if (tiles.at(playerpos.x).at(playerpos.y - 1) == cave_tile::block)
+                collisionD->setLocation((playerpos + glm::vec2(0, -1)) * glm::vec2(16));
+            if (tiles.at(playerpos.x + 1).at(playerpos.y + 1) == cave_tile::block)
+                collisionE->setLocation((playerpos + glm::vec2(1, 1)) * glm::vec2(16));
+            if (tiles.at(playerpos.x - 1).at(playerpos.y + 1) == cave_tile::block)
+                collisionF->setLocation((playerpos + glm::vec2(-1, 1)) * glm::vec2(16));
+            if (tiles.at(playerpos.x + 1).at(playerpos.y - 1) == cave_tile::block)
+                collisionG->setLocation((playerpos + glm::vec2(1, -1)) * glm::vec2(16));
+            if (tiles.at(playerpos.x - 1).at(playerpos.y - 1) == cave_tile::block)
+                collisionH->setLocation((playerpos + glm::vec2(-1, -1)) * glm::vec2(16));
+            if (tiles.at(playerpos.x).at(playerpos.y) == cave_tile::block)
+                collisionI->setLocation((playerpos + glm::vec2(0, 0)) * glm::vec2(16));
 
-        player_character->Update(delta.count(), std::vector<PhysX::collisionBox*>({ collisionA,collisionB,collisionC,collisionD,collisionE,collisionF,collisionG,collisionH ,collisionI }));
+            player_character->Update(delta.count(), std::vector<PhysX::collisionBox*>({ collisionA,collisionB,collisionC,collisionD,collisionE,collisionF,collisionG,collisionH ,collisionI }));
+
+            glm::vec2 otherplayerpos = glm::round(other_character->GetLocation() / glm::vec2(16));
+
+            otherplayerpos.x = Utils::clamp(otherplayerpos.x, 1, tiles.size() - 1);
+            otherplayerpos.y = Utils::clamp(otherplayerpos.y, 1, tiles.at(otherplayerpos.x).size() - 1);
+            if (tiles.at(otherplayerpos.x + 1).at(otherplayerpos.y) == cave_tile::block)
+                collisionA->setLocation((otherplayerpos + glm::vec2(1, 0)) * glm::vec2(16));
+            if (tiles.at(otherplayerpos.x - 1).at(otherplayerpos.y) == cave_tile::block)
+                collisionB->setLocation((otherplayerpos + glm::vec2(-1, 0)) * glm::vec2(16));
+            if (tiles.at(otherplayerpos.x).at(otherplayerpos.y + 1) == cave_tile::block)
+                collisionC->setLocation((otherplayerpos + glm::vec2(0, 1)) * glm::vec2(16));
+            if (tiles.at(otherplayerpos.x).at(otherplayerpos.y - 1) == cave_tile::block)
+                collisionD->setLocation((otherplayerpos + glm::vec2(0, -1)) * glm::vec2(16));
+            if (tiles.at(otherplayerpos.x + 1).at(otherplayerpos.y + 1) == cave_tile::block)
+                collisionE->setLocation((otherplayerpos + glm::vec2(1, 1)) * glm::vec2(16));
+            if (tiles.at(otherplayerpos.x - 1).at(otherplayerpos.y + 1) == cave_tile::block)
+                collisionF->setLocation((otherplayerpos + glm::vec2(-1, 1)) * glm::vec2(16));
+            if (tiles.at(otherplayerpos.x + 1).at(otherplayerpos.y - 1) == cave_tile::block)
+                collisionG->setLocation((otherplayerpos + glm::vec2(1, -1)) * glm::vec2(16));
+            if (tiles.at(otherplayerpos.x - 1).at(otherplayerpos.y - 1) == cave_tile::block)
+                collisionH->setLocation((otherplayerpos + glm::vec2(-1, -1)) * glm::vec2(16));
+            if (tiles.at(otherplayerpos.x).at(otherplayerpos.y) == cave_tile::block)
+                collisionI->setLocation((otherplayerpos + glm::vec2(0, 0)) * glm::vec2(16));
+
+            other_character->Update(delta.count(), std::vector<PhysX::collisionBox*>({ collisionA,collisionB,collisionC,collisionD,collisionE,collisionF,collisionG,collisionH ,collisionI }));
+
+            if (GetTime() - last_update >= 0.1) {
+                GetSteamManager()->SendMessageP2P_Reliable(0, "1", SteamTools::DataType::GAME_STATE, std::vector<std::string>({
+                std::to_string(GetCharacter()->GetLocation().x),std::to_string(GetCharacter()->GetLocation().y) })); // SEND {1,LOCX,LOCY} PLAYER POSITION
+                last_update = GetTime();
+            }
+        }
     }
+}
+
+void Application::Shooter::Start(int seed)
+{
+    int my_seed = cave_generator->Generate(seed);
+    if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host) {
+        GetSteamManager()->SendMessageP2P_Reliable(0,"0", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(my_seed) })); // SEND {0,SEED} WORLD GENERATION
+    }
+    started = true;
 }

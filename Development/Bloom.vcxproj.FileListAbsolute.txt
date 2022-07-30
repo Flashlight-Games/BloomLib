@@ -46,3 +46,5 @@ I:\TomerSoftware\Code\BloomLib\Output\Development\FastNoise.dll
 I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\shaders\framebuffer\framebuffer_fragment_alpha.glsl
 I:\TomerSoftware\Code\BloomLib\Output\Development\steam_api.dll
 I:\TomerSoftware\Code\BloomLib\Output\Development\steam_appid.txt
+I:\TomerSoftware\Code\BloomLib\Output\Development\res\engine\textures\tilemap.png
+I:\TomerSoftware\Code\BloomLib\Output\Development\res\shooter\shaders\cave\caveshader_vertex.glsl

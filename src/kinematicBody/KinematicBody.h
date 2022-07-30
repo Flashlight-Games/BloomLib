@@ -14,6 +14,10 @@ namespace PhysX {
 
 		glm::vec2 GetDepth(std::vector<PhysX::collisionBox*> other_boxes);
 		auto GetSpeed() { return glm::length(velocity); };
+		void SetDrag(float drag) { this->drag = drag; };
+		auto GetAcceleration() { return acceleration; };
+
+		void SetLocation(glm::vec2 location) { this->location = location; };
 	private:
 		PhysX::collisionBox* collision;
 		glm::vec2 location = glm::vec2(500,500);

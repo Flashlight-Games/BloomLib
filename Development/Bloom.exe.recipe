@@ -79,6 +79,9 @@
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\rect16.png</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\tilemap.png</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\vLine.png</FullPath>
     </ContentFile>
     <ContentFile>
@@ -86,6 +89,9 @@
     </ContentFile>
     <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\window.png</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\shooter\shaders\cave\caveshader_vertex.glsl</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>I:\TomerSoftware\Code\BloomLib\glfw3.dll</FullPath>

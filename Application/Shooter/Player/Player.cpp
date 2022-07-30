@@ -9,13 +9,19 @@ Application::Player::Player(glm::mat4 view_matrix, glm::mat4 pixel_projection_ma
 
 void Application::Player::Update(double DeltaTime, std::vector<PhysX::collisionBox*> others)
 {
-	this->sprite->SetLocation((this->kinematics->GetLocation(DeltaTime,others)));
 	for (int i = 0; i < others.size(); i++)
 	{
-		bool landed = PhysX::LineTraceNormal("main", others.at(i), sprite->GetLocation() + glm::vec2((sprite->GetSize().x)/2.0-2.0, 0), sprite->GetLocation() + glm::vec2(sprite->GetSize().x/2-1, -9)) != glm::vec2(0) || PhysX::LineTraceNormal("main", others.at(i), sprite->GetLocation() + glm::vec2(-((sprite->GetSize().x) / 2.0 - 2.0), 0), sprite->GetLocation() + glm::vec2(-(sprite->GetSize().x / 2 - 1), -9)) != glm::vec2(0);
+		bool landed = PhysX::LineTrace("main", others.at(i), sprite->GetLocation() + glm::vec2((sprite->GetSize().x)/2.0-1.0, 0), sprite->GetLocation() + glm::vec2(sprite->GetSize().x/2-1, -10)) != glm::vec2(INFINITY) || PhysX::LineTrace("main", others.at(i), sprite->GetLocation() + glm::vec2(-((sprite->GetSize().x) / 2.0 - 2.0), 0), sprite->GetLocation() + glm::vec2(-(sprite->GetSize().x / 2 - 1), -9)) != glm::vec2(INFINITY);
 		if (jump_timer <= 0.0 && landed && reset_jump) {
 			jump_timer = coyote_time;
 		}
+		if (glm::abs(kinematics->GetVelocity()).y <= 0.1) {
+			kinematics->SetDrag(200); // MORE DRAG ON GROUND
+		} else {
+			kinematics->SetDrag(100);
+		}
 	}
 	jump_timer -= DeltaTime / 1000;
+
+	this->sprite->SetLocation((this->kinematics->GetLocation(DeltaTime, others)));
 }

@@ -20,6 +20,7 @@ namespace Application {
 		void Update(double DeltaTime, std::vector<PhysX::collisionBox*> others);
 		void Draw(glm::mat4 view_matrix) { this->sprite->Draw(view_matrix); };
 		auto GetLocation() { return sprite->GetLocation(); };
+		void SetLocation(glm::vec2 location) { kinematics->SetLocation(location); };
 		void Damage(float damage) { health -= damage; };
 		auto Getdepth(std::vector<PhysX::collisionBox*> others) { return kinematics->GetDepth(others); };
 	private:
@@ -31,7 +32,7 @@ namespace Application {
 		float movement_speed = 0.5;
 		float mass = 30;
 		
-		float coyote_time = 1.0;
+		float coyote_time = 0.33;
 		float jump_timer = coyote_time;
 		bool landed = false;
 		bool reset_jump = true;

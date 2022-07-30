@@ -8,14 +8,12 @@ namespace Application {
 	enum cave_tile{empty,block};
 	class Cave {
 	public:
-		Cave(glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix, int seed = -1);
+		Cave(glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix);
 		void Draw(glm::mat4 view_matrix, glm::vec2 player_position, glm::vec2 screen_size);
 		std::vector<std::vector<cave_tile>> GetTiles() { return tiles; };
 		void SetBlock(glm::vec2 position, cave_tile new_tile) { 
-			for (int i = 0; i < 3; i++)
-			{
-				tiles.at(position.x+i).at(position.y) = new_tile;
-			}
+			tiles.at(position.x).at(position.y) = new_tile;
+
 			//TEXTURES
 			tile_textures.clear();
 			for (int x = 0; x < size.x; x++)
@@ -71,6 +69,7 @@ namespace Application {
 			}
 			
 		};
+		int Generate(int seed);
 	private:
 		glm::vec2 size = glm::vec2(256,64);
 		int tile_size = 16;

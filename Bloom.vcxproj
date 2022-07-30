@@ -105,7 +105,9 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shooter\shaders\cave\caveshader_vertex.glsl" />
+    <None Include="res\shooter\shaders\cave\caveshader_vertex.glsl">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="Bloom.aps" />
     <None Include="glfw3.dll">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -411,7 +413,9 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
     </Image>
-    <Image Include="res\engine\textures\tilemap.png" />
+    <Image Include="res\engine\textures\tilemap.png">
+      <DeploymentContent>true</DeploymentContent>
+    </Image>
     <Image Include="res\engine\textures\vLine.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
