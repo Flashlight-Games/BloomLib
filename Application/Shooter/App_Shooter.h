@@ -57,7 +57,7 @@ namespace Application{
 
             bool started = false;
             float last_update = 0.0;
-            float location_update_interval = 0.25;
+            float location_update_interval = 0.1;
 	};
 }
 #endif
