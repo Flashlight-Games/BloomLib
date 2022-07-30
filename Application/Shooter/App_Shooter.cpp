@@ -77,6 +77,8 @@ void Shooter::Begin() {
     other_character = new Application::Player(GetViewMatrix(), GetPixelProjectionMatrix());
     cave_generator = new Application::Cave(GetViewMatrix(), GetPixelProjectionMatrix());
 
+    player_character->SetHue(Utils::RandInt(0, 360));
+
     collisionA = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
     collisionB = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
     collisionC = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
@@ -133,7 +135,7 @@ void Shooter::GameLoop() {
     SetStatusString(GetSteamManager()->GetNetworkStatus(), GetSteamManager()->GetNetworkPosition());
 
     //RENDERING
-    camera_location = (Utils::Lerp(camera_location,- (player_character->GetLocation() - (GetPixelWindowSize() / glm::vec2(2))),0.15));
+    camera_location = ((Utils::Lerp(camera_location,- (player_character->GetLocation() - (GetPixelWindowSize() / glm::vec2(2))),0.15)));
     SetCameraLocation(camera_location);
 
     text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
@@ -155,8 +157,8 @@ void Shooter::GameLoop() {
 
     EnablePixels();
 
-    player_character->Draw(GetViewMatrix());
     other_character->Draw(GetViewMatrix());
+    player_character->Draw(GetViewMatrix());
     cave_generator->Draw(GetViewMatrix(), player_character->GetLocation(), GetPixelWindowSize());
 
     DrawPixelsToDefault(false);
@@ -247,6 +249,10 @@ void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
             std::cout << "STARTED GAME ON SEED " << message.flags.at(0) << "\n";
         } else if (std::stoi(message.data) == 1) { // PLAYER POSITION
             other_character->SetLocation(glm::vec2(std::stof(message.flags.at(0)), std::stof(message.flags.at(1))));
+        } else if (std::stoi(message.data) == 2) { // PLAYER COLOR
+            other_character->SetHue(std::stoi(message.flags.at(0)));
+        } else if (std::stoi(message.data) == 3) { // PLAYER VELOCITY
+            other_character->SetVelocity(glm::vec2(std::stof(message.flags.at(0)), std::stof(message.flags.at(1))));
         }
         break;
     case SteamTools::DataType::PLAYER_INPUT_STATE_PRESSED:
@@ -325,9 +331,13 @@ void Application::Shooter::Update() {
 
             other_character->Update(delta.count(), std::vector<PhysX::collisionBox*>({ collisionA,collisionB,collisionC,collisionD,collisionE,collisionF,collisionG,collisionH ,collisionI }));
 
-            if (GetTime() - last_update >= 0.1) {
+            if (GetTime() - last_update >= location_update_interval) {
                 GetSteamManager()->SendMessageP2P_Reliable(0, "1", SteamTools::DataType::GAME_STATE, std::vector<std::string>({
                 std::to_string(GetCharacter()->GetLocation().x),std::to_string(GetCharacter()->GetLocation().y) })); // SEND {1,LOCX,LOCY} PLAYER POSITION
+                last_update = GetTime();
+
+                GetSteamManager()->SendMessageP2P_Reliable(0, "3", SteamTools::DataType::GAME_STATE, std::vector<std::string>({
+                std::to_string(GetCharacter()->GetVelocity().x),std::to_string(GetCharacter()->GetVelocity().y) })); // SEND {1,LOCX,LOCY} PLAYER POSITION
                 last_update = GetTime();
             }
         }
@@ -340,5 +350,6 @@ void Application::Shooter::Start(int seed)
     if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host) {
         GetSteamManager()->SendMessageP2P_Reliable(0,"0", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(my_seed) })); // SEND {0,SEED} WORLD GENERATION
     }
+    GetSteamManager()->SendMessageP2P_Reliable(0, "2", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(player_character->GetHue()) })); // SEND {0,SEED} WORLD GENERATION
     started = true;
 }

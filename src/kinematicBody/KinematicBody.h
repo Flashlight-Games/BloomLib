@@ -16,6 +16,7 @@ namespace PhysX {
 		auto GetSpeed() { return glm::length(velocity); };
 		void SetDrag(float drag) { this->drag = drag; };
 		auto GetAcceleration() { return acceleration; };
+		void SetVelocity(glm::vec2 velocity) { this->velocity = velocity; };
 
 		void SetLocation(glm::vec2 location) { this->location = location; };
 	private:

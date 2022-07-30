@@ -28,7 +28,6 @@ static void error_callback(int error, const char* description)
 int Engine::Init(){
     try {
         glfwSetErrorCallback(error_callback);
-        srand(time(NULL));
 
         // CONFIGURATION
         this->windowWidth = engine_config.resolution_window_size.x;
@@ -45,6 +44,8 @@ int Engine::Init(){
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
             glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         #endif
+
+        srand((unsigned)time(NULL) * Utils::RandInt(0,240000));
 
         glfwWindowHint(GLFW_RESIZABLE,               engine_config.glfw_resizeable);
         glfwWindowHint(GLFW_DECORATED,               engine_config.glfw_decorated);

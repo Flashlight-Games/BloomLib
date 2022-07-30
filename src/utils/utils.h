@@ -39,6 +39,8 @@ namespace Utils {
 
     float map(float input, float input_start, float input_end, float output_start, float output_end);
     float clamp(float input, float min, float max);
+
+    glm::vec3 HSVtoRGB(glm::vec3 hsv);
 }
 
 #endif
