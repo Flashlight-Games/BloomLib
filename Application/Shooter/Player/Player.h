@@ -8,7 +8,7 @@ namespace Application {
 	{
 	public:
 		Player(glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix);
-		void Move(glm::vec2 movement) { this->movement_input = movement * (movement_speed*mass); kinematics->ApplyForce(movement_input);};
+		void Move(float DeltaTime, glm::vec2 movement) { this->movement_input = movement * (movement_speed * (DeltaTime / (1000/60)) * mass); kinematics->ApplyForce(movement_input); };
 		void Aim(float angle);
 		void Jump() { if (jump_timer > 0) { kinematics->ApplyForce(glm::vec2(0, 500)); jump_timer = 0.0; reset_jump = false; } };
 		void Shoot();

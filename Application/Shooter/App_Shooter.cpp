@@ -184,8 +184,8 @@ void Shooter::InputLoop() {
             character_input *= glm::vec2(3);
     }
 
-    player_character->Move(character_input);
-    other_character->Move(other_input);
+    player_character->Move(GetDeltaTime(), character_input);
+    other_character->Move(GetDeltaTime(),other_input);
 }
 
 void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, SteamTools::NetworkPosition position){
