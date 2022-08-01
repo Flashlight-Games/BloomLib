@@ -3,7 +3,7 @@
 Application::Player::Player(glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix)
 {
 	this->sprite = new Bloom::Sprite("res/engine/textures/rect16.png", 1, view_matrix, pixel_projection_matrix, glm::vec2(0.5,0.5));
-	this->sprite->SetScale(glm::vec2(0.8));
+	this->sprite->SetScale(glm::vec2(12.0/16.0));
 	this->kinematics = new PhysX::KinematicBody("main", mass, this->sprite);
 
 	this->sprite->GetShader()->use();

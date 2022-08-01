@@ -447,6 +447,7 @@
   <ItemGroup>
     <ClCompile Include="Application\Shooter\App_Shooter.cpp" />
     <ClCompile Include="Application\Shooter\Cave\Cave.cpp" />
+    <ClCompile Include="Application\Shooter\Guns\Guns.cpp" />
     <ClCompile Include="Application\Shooter\main.cpp" />
     <ClCompile Include="include\soloud\dr_impl.cpp" />
     <ClCompile Include="include\soloud\soloud.cpp" />
@@ -503,6 +504,7 @@
   <ItemGroup>
     <ClInclude Include="Application\Shooter\App_Shooter.h" />
     <ClInclude Include="Application\Shooter\Cave\Cave.h" />
+    <ClInclude Include="Application\Shooter\Guns\Guns.h" />
     <ClInclude Include="include\FastNoise\FastNoise.h" />
     <ClInclude Include="include\FastNoise\FastNoise_C.h" />
     <ClInclude Include="include\FastNoise\FastNoise_Config.h" />

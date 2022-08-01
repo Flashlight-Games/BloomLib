@@ -6,6 +6,7 @@ float Utils::Distance2D(glm::vec2 A, glm::vec2 B)
 }
 
 glm::vec2 Utils::PointAtAngleAndDistance(float angle, float distance) {
+    // RADIANS!
     return glm::vec2(distance * cos(angle), (distance * sin(angle)));
 }
 
@@ -94,9 +95,9 @@ float Utils::clamp(float input, float min, float max)
 
 glm::vec3 Utils::HSVtoRGB(glm::vec3 hsv)
 {
-    auto H = clamp(hsv.r,0,360);
-    auto S = clamp(hsv.g,0,100);
-    auto V = clamp(hsv.b,0,100);
+    auto H = Utils::clamp(hsv.r,0,360);
+    auto S = Utils::clamp(hsv.g,0,100);
+    auto V = Utils::clamp(hsv.b,0,100);
 
     float s = S / 100;
     float v = V / 100;
@@ -133,7 +134,7 @@ int Utils::RandInt(int min, int max) {
 }
 
 float Utils::RandFloat(float min, float max) {
-    return Lerp(min, max, (rand() % (int)ceil(max)) / (float)ceil(max));
+    return Lerp(min, max, (rand() % (int)ceil((max != 0) ? max : 100)) / (float)ceil((max!=0) ? max : 100));
 }
 
 bool Utils::isDevelopmentConfiguration() { return *ENGINE_CONFIGURATION == *"Development"; }

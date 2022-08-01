@@ -702,6 +702,9 @@
     <ClCompile Include="src\kinematicBody\KinematicBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Shooter\Guns\Guns.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\boneKinematics\boneKinematics.h">
@@ -1977,6 +1980,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\kinematicBody\KinematicBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Shooter\Guns\Guns.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

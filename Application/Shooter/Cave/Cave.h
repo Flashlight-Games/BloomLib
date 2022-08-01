@@ -12,6 +12,8 @@ namespace Application {
 		void Draw(glm::mat4 view_matrix, glm::vec2 player_position, glm::vec2 screen_size);
 		std::vector<std::vector<cave_tile>> GetTiles() { return tiles; };
 		void SetBlock(glm::vec2 position, cave_tile new_tile) { 
+			position.x = Utils::clamp(position.x, 1, tiles.size()-1);
+			position.y = Utils::clamp(position.y, 1, tiles.at(position.x).size() - 1);
 			tiles.at(position.x).at(position.y) = new_tile;
 
 			//TEXTURES

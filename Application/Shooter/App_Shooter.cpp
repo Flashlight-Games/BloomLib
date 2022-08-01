@@ -48,20 +48,28 @@ void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
     switch (key) {
     case GLFW_MOUSE_BUTTON_LEFT:
         if (action == GLFW_PRESS && app->GetStarted()) {
-            glm::vec2 position = app->GetCursorPosition() - (app->GetPixelWindowSize() / glm::vec2(2));
-            position = glm::round((position + app->GetCharacter()->GetLocation()) / glm::vec2(16));
-            app->GetCave()->SetBlock(position, cave_tile::empty);
+            //glm::vec2 position = app->GetCursorPosition() - (app->GetPixelWindowSize() / glm::vec2(2));
+            //position = glm::round((position + app->GetCharacter()->GetLocation()) / glm::vec2(16));
+            //app->GetCave()->SetBlock(position, cave_tile::empty);
 
-            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_MOUSE_BUTTON_LEFT).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({std::to_string(position.x),std::to_string(position.y) })); // SEND {LEFT_CLICK,X,Y}  DELETE
+            //app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_MOUSE_BUTTON_LEFT).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({std::to_string(position.x),std::to_string(position.y) })); // SEND {LEFT_CLICK,X,Y}  DELETE
+
+            app->PlayerFire();
         }
         break;
     case GLFW_MOUSE_BUTTON_RIGHT:
-        if (action == GLFW_PRESS && app->GetStarted()) {
-            glm::vec2 position = app->GetCursorPosition() - (app->GetPixelWindowSize() / glm::vec2(2));
-            position = glm::round((position + app->GetCharacter()->GetLocation()) / glm::vec2(16));
-            app->GetCave()->SetBlock(position, cave_tile::block);
+        if (app->GetStarted()) {
+            if (action == GLFW_PRESS) {
+                //glm::vec2 position = app->GetCursorPosition() - (app->GetPixelWindowSize() / glm::vec2(2));
+                //position = glm::round((position + app->GetCharacter()->GetLocation()) / glm::vec2(16));
+                //app->GetCave()->SetBlock(position, cave_tile::block);
 
-            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_MOUSE_BUTTON_RIGHT).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({ std::to_string(position.x),std::to_string(position.y) })); // SEND {RIGHT_CLICK,X,Y}  PLACE
+                //app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_MOUSE_BUTTON_RIGHT).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({ std::to_string(position.x),std::to_string(position.y) })); // SEND {RIGHT_CLICK,X,Y}  PLACE
+                app->PlayerZoom();
+            }
+            else if (action == GLFW_RELEASE) {
+                app->PlayerStopZoom();
+            }
         }
         break;
     }
@@ -135,7 +143,10 @@ void Shooter::GameLoop() {
     SetStatusString(GetSteamManager()->GetNetworkStatus(), GetSteamManager()->GetNetworkPosition());
 
     //RENDERING
-    camera_location = ((Utils::Lerp(camera_location,- (player_character->GetLocation() - (GetPixelWindowSize() / glm::vec2(2))),0.15)));
+    glm::vec2 player_camera_location = -(player_character->GetLocation() - (GetPixelWindowSize() / glm::vec2(2)));
+    zoom_location = -((GetCursorPosition() - GetPixelWindowSize() / glm::vec2(2)) / (GetPixelWindowSize() / glm::vec2(2)) * glm::vec2(player_gun->GetZoom())) + player_camera_location;
+
+    camera_location = ((Utils::Lerp(camera_location, (zoom) ? zoom_location : player_camera_location, 0.15)));
     SetCameraLocation(camera_location);
 
     text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
@@ -185,6 +196,8 @@ void Shooter::InputLoop() {
     }
 
     player_character->Move(GetDeltaTime(), character_input);
+    player_gun->Aim(glm::degrees(std::atan2(player_character->GetLocation().y - GetCursorWorldPosition().y, player_character->GetLocation().x - GetCursorWorldPosition().x)) + 180);
+
     other_character->Move(GetDeltaTime(),other_input);
 }
 
@@ -305,6 +318,7 @@ void Application::Shooter::Update() {
                 collisionI->setLocation((playerpos + glm::vec2(0, 0)) * glm::vec2(16));
 
             player_character->Update(delta.count(), std::vector<PhysX::collisionBox*>({ collisionA,collisionB,collisionC,collisionD,collisionE,collisionF,collisionG,collisionH ,collisionI }));
+            player_gun->SetLocation(player_character->GetLocation());
 
             glm::vec2 otherplayerpos = glm::round(other_character->GetLocation() / glm::vec2(16));
 
