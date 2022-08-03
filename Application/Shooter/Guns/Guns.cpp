@@ -1,7 +1,16 @@
 #include "Guns.h"
 
-float Application::Gun::Fire(Cave* cave, Player* other)
+float Application::Gun::Fire(Cave* cave, Player* other, glm::vec3 transform)
 {
+    if (transform != glm::vec3(-1, -1, -1)) {
+        angle = transform.z;
+        location.x = transform.x;
+        location.y = transform.y;
+    }
+
+    angle = std::round(angle);
+    location = glm::round(location);
+    
     float damage = 0;
     auto tiles = cave->GetTiles();
     for (int i = 0; i < bullets_per_shot; i++)
@@ -25,7 +34,7 @@ float Application::Gun::Fire(Cave* cave, Player* other)
             current_bullet_position = current_bullet_position + Utils::PointAtAngleAndDistance(glm::radians(bullet_angle), tolerance);
 
             if (Utils::Distance2D(other->GetLocation(), current_bullet_position) <= tolerance) {
-                damage = other->Damage(damage); energy = -1;
+                damage = other->Damage(this->damage); energy = -1;
             }
         }
     }

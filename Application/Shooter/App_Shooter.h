@@ -34,6 +34,8 @@ namespace Application{
             void PlayerFire() { std::cout << "DAMAGE : " << player_gun->Fire(cave_generator, other_character) << "\n"; };
             void PlayerZoom() { zoom = true; };
             void PlayerStopZoom() { zoom = false; }
+            auto GetPlayerAimAngle() { return player_gun->GetAngle(); };
+            auto GetPlayerAmmo() { return player_gun->GetAmmo(); };
         private:
 
             glm::vec2 camera_location = glm::vec2(0);
@@ -41,11 +43,11 @@ namespace Application{
 
             Player* player_character;
             glm::vec2 character_input;
-            Gun* player_gun = new Gun(1, 3, 0, 48, 1, 32, 3, 1);
+            Gun* player_gun = new TEST_GUN;
 
             Player* other_character;            
             glm::vec2 other_input;
-            Gun* other_gun = new Gun(1, 3, 0, 48, 1, 32, 3, 1);
+            Gun* other_gun = new TEST_GUN;
 
             int jid = -1;
 

@@ -48,12 +48,7 @@ void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
     switch (key) {
     case GLFW_MOUSE_BUTTON_LEFT:
         if (action == GLFW_PRESS && app->GetStarted()) {
-            //glm::vec2 position = app->GetCursorPosition() - (app->GetPixelWindowSize() / glm::vec2(2));
-            //position = glm::round((position + app->GetCharacter()->GetLocation()) / glm::vec2(16));
-            //app->GetCave()->SetBlock(position, cave_tile::empty);
-
-            //app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_MOUSE_BUTTON_LEFT).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({std::to_string(position.x),std::to_string(position.y) })); // SEND {LEFT_CLICK,X,Y}  DELETE
-
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_MOUSE_BUTTON_LEFT).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({ std::to_string(app->GetPlayerAimAngle()),std::to_string(app->GetPlayerAmmo()),std::to_string(app->GetCharacter()->GetLocation().x),std::to_string(app->GetCharacter()->GetLocation().y) })); // SEND {LEFT_CLICK,X,Y}  DELETE
             app->PlayerFire();
         }
         break;
@@ -196,7 +191,7 @@ void Shooter::InputLoop() {
     }
 
     player_character->Move(GetDeltaTime(), character_input);
-    player_gun->Aim(glm::degrees(std::atan2(player_character->GetLocation().y - GetCursorWorldPosition().y, player_character->GetLocation().x - GetCursorWorldPosition().x)) + 180);
+    player_gun->Aim(std::round(glm::degrees(std::atan2(player_character->GetLocation().y - GetCursorWorldPosition().y, player_character->GetLocation().x - GetCursorWorldPosition().x)) + 180));
 
     other_character->Move(GetDeltaTime(),other_input);
 }
@@ -246,7 +241,8 @@ void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
         if (std::stoi(message.data) == GLFW_KEY_SPACE) {
             other_character->Jump();
         } else if (std::stoi(message.data) == GLFW_MOUSE_BUTTON_LEFT) {
-            GetCave()->SetBlock(glm::vec2(std::stof(message.flags.at(0)), std::stof(message.flags.at(1))), cave_tile::empty);
+            other_gun->SetLocation(glm::vec2(std::stof(message.flags.at(2)), std::stof(message.flags.at(3))));
+            other_gun->Fire(cave_generator,player_character,glm::vec3(std::stof(message.flags.at(2)), std::stof(message.flags.at(3)), std::stof(message.flags.at(0))));
         } else if (std::stoi(message.data) == GLFW_MOUSE_BUTTON_RIGHT) {
             GetCave()->SetBlock(glm::vec2(std::stof(message.flags.at(0)), std::stof(message.flags.at(1))), cave_tile::block);
         }
@@ -344,6 +340,7 @@ void Application::Shooter::Update() {
                 collisionI->setLocation((otherplayerpos + glm::vec2(0, 0)) * glm::vec2(16));
 
             other_character->Update(delta.count(), std::vector<PhysX::collisionBox*>({ collisionA,collisionB,collisionC,collisionD,collisionE,collisionF,collisionG,collisionH ,collisionI }));
+            other_gun->SetLocation(other_character->GetLocation());
 
             if (GetTime() - last_update >= location_update_interval) {
                 GetSteamManager()->SendMessageP2P_Reliable(0, "1", SteamTools::DataType::GAME_STATE, std::vector<std::string>({
@@ -351,7 +348,7 @@ void Application::Shooter::Update() {
                 last_update = GetTime();
 
                 GetSteamManager()->SendMessageP2P_Reliable(0, "3", SteamTools::DataType::GAME_STATE, std::vector<std::string>({
-                std::to_string(GetCharacter()->GetVelocity().x),std::to_string(GetCharacter()->GetVelocity().y) })); // SEND {1,LOCX,LOCY} PLAYER POSITION
+                std::to_string(GetCharacter()->GetVelocity().x),std::to_string(GetCharacter()->GetVelocity().y) })); // SEND {1,LOCX,LOCY} PLAYER VELOCITY
                 last_update = GetTime();
             }
         }
