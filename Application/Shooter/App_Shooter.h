@@ -31,7 +31,7 @@ namespace Application{
             glm::vec2 GetCursorWorldPosition() { return (GetCursorPosition() - (GetPixelWindowSize() / glm::vec2(2)) + GetCameraWorldPosition()); }
             glm::vec2 GetCameraWorldPosition() { return (GetPixelWindowSize() / glm::vec2(2)) - camera_location; };
 
-            void PlayerFire() { std::cout << "DAMAGE : " << player_gun->Fire(cave_generator, other_character) << "\n"; };
+            void PlayerFire() { player_gun->Fire(cave_generator, other_character); };
             void PlayerZoom() { zoom = true; };
             void PlayerStopZoom() { zoom = false; }
             auto GetPlayerAimAngle() { return player_gun->GetAngle(); };

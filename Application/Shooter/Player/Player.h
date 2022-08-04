@@ -29,6 +29,8 @@ namespace Application {
 
 		void SetHue(float hue) { this->hue = hue; this->color = Utils::HSVtoRGB(glm::vec3(hue, 100, 100)); };
 		void Death() { this->kinematics->SetLocation(glm::vec2(-100, -100)); };
+		void SetHealth(float health) { this->health = health; };
+		auto GetHealth() { return health; };
 	private:
 
 		glm::vec2 movement_input = glm::vec2(0);

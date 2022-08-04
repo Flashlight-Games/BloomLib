@@ -21,7 +21,7 @@ namespace PhysX {
 		void SetLocation(glm::vec2 location) { this->location = location; };
 	private:
 		PhysX::collisionBox* collision;
-		glm::vec2 location = glm::vec2(500,500);
+		glm::vec2 location = glm::vec2(0,0);
 		glm::vec2 net_force = glm::vec2(0);
 		glm::vec2 velocity = glm::vec2(0,0);
 		glm::vec2 acceleration = glm::vec2(0);

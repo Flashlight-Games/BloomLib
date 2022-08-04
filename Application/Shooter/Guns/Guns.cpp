@@ -18,7 +18,7 @@ float Application::Gun::Fire(Cave* cave, Player* other, glm::vec3 transform)
         float bullet_angle = angle + Utils::RandFloat(-spread / 2.0, spread / 2.0);
         glm::vec2 current_bullet_position = location;
         int energy = penetration;
-        while (energy >= 0 && Utils::Distance2D(location, current_bullet_position) <= range) {
+        while (energy > 0 && Utils::Distance2D(location, current_bullet_position) <= range) {
             int block_x = std::round(current_bullet_position.x / 16.0);
             int block_y = std::round(current_bullet_position.y / 16.0);
 

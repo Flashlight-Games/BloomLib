@@ -99,12 +99,14 @@ void Shooter::UILoop() {
     ImGui::Begin("Control window"); {
         //ImGui::ColorPicker3("BLOCK COLOR", block_color);
         if (Utils::isDevelopmentConfiguration()) {
-            ImGui::TextColored(ImVec4(0, 1, 0.5, 1), (std::to_string(player_character->GetLocation().x).c_str()));
-            ImGui::TextColored(ImVec4(0, 1, 0.5, 1), (std::to_string(player_character->GetLocation().y).c_str()));
-            ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::to_string(player_character->getvel()).c_str()));
+            ImGui::TextColored(ImVec4(1, 0.2, 0.2, 1), (std::string("GAMEPAD : ").c_str() + std::to_string(jid)).c_str());
+            ImGui::TextColored(ImVec4(1, 0.5, 0.0, 1), (std::string("GLFW v_").c_str() + std::string(glfwGetVersionString())).c_str());
         }
-        ImGui::TextColored(ImVec4(1, 0.2,0.2, 1), (std::string("GAMEPAD : ").c_str() + std::to_string(jid)).c_str());
-        ImGui::TextColored(ImVec4(1, 0.5, 0.0, 1), (std::string("GLFW v_").c_str() + std::string(glfwGetVersionString())).c_str());
+        ImGui::TextColored(ImVec4(0, 1, 0, 1), ((std::string("PLAYER HP: ") + std::to_string(player_character->GetHealth())).c_str()));
+        ImGui::TextColored(ImVec4(0, 1, 0, 1), ((std::string("ENEMY HP: ") + std::to_string(other_character->GetHealth())).c_str()));
+        ImGui::TextColored(ImVec4(0, 1, 0.5, 1), (std::to_string(player_character->GetLocation().x).c_str()));
+        ImGui::TextColored(ImVec4(0, 1, 0.5, 1), (std::to_string(player_character->GetLocation().y).c_str()));
+        ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::to_string(player_character->getvel()).c_str()));
     } ImGui::End();
 
     if (Utils::isDevelopmentConfiguration()) {
@@ -360,6 +362,9 @@ void Application::Shooter::Start(int seed)
     int my_seed = cave_generator->Generate(seed);
     if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host) {
         GetSteamManager()->SendMessageP2P_Reliable(0,"0", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(my_seed) })); // SEND {0,SEED} WORLD GENERATION
+        player_character->SetLocation(glm::vec2(64 * 16, 32 * 16));
+    } else {
+        player_character->SetLocation(glm::vec2((256-64) * 16, 32 * 16));
     }
     GetSteamManager()->SendMessageP2P_Reliable(0, "2", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(player_character->GetHue()) })); // SEND {0,SEED} WORLD GENERATION
     started = true;
