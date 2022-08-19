@@ -75,6 +75,7 @@ namespace SteamTools {
 		Message ParsePayload(std::string data);
 		Message GetReceivedMessage();
 		bool StartWhenReady(int current_time, int channel = 0, bool start_when_full = true, int min_players_to_start = 2, int max_wait_time_for_players = 120);;
+		void Disconnect();
 	private:
 		STEAM_CALLBACK(SteamManager, OnGameOverlayActivated, GameOverlayActivated_t);
 		bool overlay_active = false;
@@ -96,6 +97,9 @@ namespace SteamTools {
 
 		int max_lobby_players = 0;
 		int host_time = -1;
+
+		HSteamListenSocket listen_socket;
+		HSteamNetConnection connection_socket;
 	};
 }
 

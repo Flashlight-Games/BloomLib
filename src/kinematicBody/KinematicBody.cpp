@@ -27,7 +27,6 @@ glm::vec2 PhysX::KinematicBody::GetLocation(float DeltaTime, std::vector<PhysX::
     auto force_gravity = gravity * mass * 4.0f;
     net_force += force_gravity * DeltaTime;
     auto force_drag = -velocity * drag;
-    //std::cout << drag << "\n";
     net_force += force_drag * DeltaTime;
 
     acceleration = (net_force) / glm::vec2(mass); // ACCELERATION

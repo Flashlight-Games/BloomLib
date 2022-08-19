@@ -24,7 +24,7 @@ namespace Application {
 		void Draw(glm::mat4 view_matrix) { this->sprite->GetShader()->use(); this->sprite->GetShader()->uniformVec4(color_uid,glm::vec4(color,1)); ; this->sprite->Draw(view_matrix); };
 		auto GetLocation() { return sprite->GetLocation(); };
 		void SetLocation(glm::vec2 location) { kinematics->SetLocation(location); };
-		float Damage(float damage) { health -= damage; if (health <= 0) { Death(); } return health; };
+		float Damage(float damage) { if (health > 0) { if (health > damage) { health -= damage; } else { health = 0; Death(); } } return health; };
 		auto Getdepth(std::vector<PhysX::collisionBox*> others) { return kinematics->GetDepth(others); };
 
 		void SetHue(float hue) { this->hue = hue; this->color = Utils::HSVtoRGB(glm::vec3(hue, 100, 100)); };

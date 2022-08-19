@@ -52,6 +52,7 @@ int Application::Cave::Generate(int seed)
 	float fill = Utils::map(Utils::Noise_Value(glm::vec2(-1.0), seed), -1, 1, 0.35, 0.45);
 	//NOISE
 	tiles.clear();
+	tile_textures.clear();
 	for (int x = 0; x < size.x; x++)
 	{
 		std::vector<cave_tile> row;

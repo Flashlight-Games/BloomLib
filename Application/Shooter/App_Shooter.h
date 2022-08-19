@@ -31,11 +31,14 @@ namespace Application{
             glm::vec2 GetCursorWorldPosition() { return (GetCursorPosition() - (GetPixelWindowSize() / glm::vec2(2)) + GetCameraWorldPosition()); }
             glm::vec2 GetCameraWorldPosition() { return (GetPixelWindowSize() / glm::vec2(2)) - camera_location; };
 
-            void PlayerFire() { player_gun->Fire(cave_generator, other_character); };
+            void PlayerFire() { player_gun->Fire(GetTime(), cave_generator, other_character); };
             void PlayerZoom() { zoom = true; };
             void PlayerStopZoom() { zoom = false; }
             auto GetPlayerAimAngle() { return player_gun->GetAngle(); };
             auto GetPlayerAmmo() { return player_gun->GetAmmo(); };
+
+            void StartRound();
+            void ResetPoints() { my_points = 0; other_points = 0; };
         private:
 
             glm::vec2 camera_location = glm::vec2(0);
@@ -74,6 +77,12 @@ namespace Application{
 
             glm::vec2 zoom_location;
             bool zoom = false;
+
+            int my_points = 0;
+            int other_points = 0;
+
+            float last_point = 0;
+            float last_msg = 0.0;
 	};
 }
 #endif

@@ -114,7 +114,7 @@ void SteamTools::SteamManager::MatchmakeLoop_Quick(int new_lobby_max_players, in
 
 void SteamTools::SteamManager::HostP2P(int channel)
 {
-    SteamNetworkingSockets()->CreateListenSocketP2P(channel,0,nullptr);
+    listen_socket = SteamNetworkingSockets()->CreateListenSocketP2P(channel,0,nullptr);
     network_position = NetworkPosition::host;
     SteamMatchmaking()->SetLobbyJoinable(GetCurrentLobby(), false);
     auto names = GetLobbyMemberNames();
@@ -125,7 +125,7 @@ void SteamTools::SteamManager::HostP2P(int channel)
 void SteamTools::SteamManager::ConnectP2P(CSteamID remoteID,int channel)
 {
     auto target = IdentityFromSteamID(remoteID);
-    SteamNetworkingSockets()->ConnectP2P(target, channel, 0, nullptr);
+    connection_socket = SteamNetworkingSockets()->ConnectP2P(target, channel, 0, nullptr);
 }
 
 SteamNetworkingIdentity SteamTools::SteamManager::IdentityFromSteamID(CSteamID id)
@@ -150,13 +150,15 @@ void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(Steam
             SteamMatchmaking()->LeaveLobby(current_lobby);
         }
 
-    } // CONNECTION ACCEPTED BY PEER
+    } 
+    // CONNECTION ACCEPTED BY PEER
     else if(pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_Connected) {
         if (network_position != host) {
             network_position = NetworkPosition::remote;
             SendMessageP2P_Reliable(remotes.at(0), "", DataType::NOTYPE);
         }
-    } // CONNECTION REJECTED BY PEER
+    } 
+    // CONNECTION REJECTED BY PEER
     else if (pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_ClosedByPeer) {
         if (network_position != host) {
             SteamMatchmaking()->LeaveLobby(current_lobby);
@@ -171,22 +173,27 @@ void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(Steam
             remotes.clear();
         }
         else {
-            for (int i = 0; i < remotes.size(); i++)
-            {
-                if (remotes.at(i).GetIPv4() == pCallback->m_info.m_identityRemote.GetIPv4()) {
-                    remotes.erase(remotes.begin() + i);
-                    break;
+            if (remotes.size() > 0) {
+                for (int i = 0; i < remotes.size(); i++)
+                {
+                    if (remotes.at(i).GetIPv4() == pCallback->m_info.m_identityRemote.GetIPv4()) {
+                        remotes.erase(remotes.begin() + i);
+                        std::cout << "DISCONNECTED!\n";
+                        break;
+                    }
                 }
             }
 
-            if (remotes.size() == 0) {
+            if (remotes.size() <= 1) {
                 SteamMatchmaking()->LeaveLobby(current_lobby);
                 network_status = NetworkStatus::offline;
                 network_position = NetworkPosition::local;
                 remotes.clear();
             }
         }
-    } // PROBLEM DETECTED ?
+        std::cout << "CONNECTION REJECTED!\n";
+    } 
+    // PROBLEM DETECTED ?
     else if(pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_ProblemDetectedLocally) {
         SteamMatchmaking()->LeaveLobby(current_lobby);
         network_status = NetworkStatus::offline;
@@ -244,32 +251,43 @@ bool SteamTools::SteamManager::SendMessageP2P_Reliable(int remote_idx, const cha
 {
     std::string payload_string = PreparePayload(data, type,flags);
     const void* payload = payload_string.c_str();
-    auto result = SteamNetworkingMessages()->SendMessageToUser(remotes.at(remote_idx), payload, strlen(payload_string.c_str()), 8, channel);
-    return result == EResult::k_EResultOK;
+    if (remotes.size() > 0) {
+        auto result = SteamNetworkingMessages()->SendMessageToUser(remotes.at(remote_idx), payload, strlen(payload_string.c_str()), 8, channel);
+        return result == EResult::k_EResultOK;
+    }
+    return false;
+    
 }
 
 bool SteamTools::SteamManager::SendMessageP2P_Reliable(SteamNetworkingIdentity remote, const char* data, DataType type, std::vector<std::string> flags, int channel)
 {
     std::string payload_string = PreparePayload(data, type, flags);
     const void* payload = payload_string.c_str();
-    auto result = SteamNetworkingMessages()->SendMessageToUser(remote, payload, strlen(payload_string.c_str()), 8, channel);
-    return result == EResult::k_EResultOK;
+    if (remotes.size() > 0) {
+        auto result = SteamNetworkingMessages()->SendMessageToUser(remote, payload, strlen(payload_string.c_str()), 8, channel);
+        return result == EResult::k_EResultOK;
+    }
+    return false;
 }
 
 bool SteamTools::SteamManager::SendMessageP2P_Unreliable(int remote_idx, const char* data, DataType type, std::vector<std::string> flags, int channel)
 {
     std::string payload_string = PreparePayload(data, type, flags);
     const void* payload = payload_string.c_str();
-    auto result = SteamNetworkingMessages()->SendMessageToUser(remotes.at(remote_idx), payload, strlen(payload_string.c_str()), 0, channel);
-    return result == EResult::k_EResultOK;
+    if (remotes.size() > 0) {
+        auto result = SteamNetworkingMessages()->SendMessageToUser(remotes.at(remote_idx), payload, strlen(payload_string.c_str()), 0, channel);
+        return result == EResult::k_EResultOK;
+    } return false;
 }
 
 bool SteamTools::SteamManager::SendMessageP2P_Unreliable(SteamNetworkingIdentity remote, const char* data, DataType type, std::vector<std::string> flags, int channel)
 {
     std::string payload_string = PreparePayload(data, type, flags);
     const void* payload = payload_string.c_str();
-    auto result = SteamNetworkingMessages()->SendMessageToUser(remote, payload, strlen(payload_string.c_str()), 0, channel);
-    return result == EResult::k_EResultOK;
+    if (remotes.size() > 0) {
+        auto result = SteamNetworkingMessages()->SendMessageToUser(remote, payload, strlen(payload_string.c_str()), 0, channel);
+        return result == EResult::k_EResultOK;
+    } return false;
 }
 
 void SteamTools::SteamManager::ReceiveMessageP2P(int channel)
@@ -312,6 +330,30 @@ bool SteamTools::SteamManager::StartWhenReady(int current_time, int channel, boo
         }
     }
     return false;
+}
+
+void SteamTools::SteamManager::Disconnect()
+{
+    if (network_status == NetworkStatus::connected && network_position == NetworkPosition::local) {
+        if (network_position == NetworkPosition::host || network_position == NetworkPosition::remote) {
+            for (int i = 0; i < remotes.size(); i++)
+            {
+                SteamNetworking()->CloseP2PSessionWithUser(remotes.at(i).GetSteamID());
+            };
+            network_status = NetworkStatus::offline;
+            network_position = NetworkPosition::local;
+            remotes.clear();
+        }
+        else if (network_position == NetworkPosition::lobby) {
+            SteamMatchmaking()->LeaveLobby(GetCurrentLobby());
+            network_status = NetworkStatus::offline;
+            network_position = NetworkPosition::local;
+            remotes.clear();
+        }
+
+        SteamNetworkingSockets()->CloseConnection(connection_socket, 0, "", false);
+        SteamNetworkingSockets()->CloseListenSocket(listen_socket);
+    }
 }
 
 void SteamTools::SteamManager::OnLobbyChatMsg_t(LobbyChatMsg_t* pCallback) {

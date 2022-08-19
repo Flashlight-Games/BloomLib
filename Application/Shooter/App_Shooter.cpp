@@ -12,7 +12,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         break;
     case GLFW_KEY_P:
         if (action == GLFW_PRESS) {
-            app->GetSteamManager()->FindLobbies();
+            if (app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::local) {
+                app->ResetPoints();
+                app->GetSteamManager()->FindLobbies();
+            } else
+                app->GetSteamManager()->Disconnect();
         }
         break;
     case GLFW_KEY_SPACE:
@@ -106,7 +110,8 @@ void Shooter::UILoop() {
         ImGui::TextColored(ImVec4(0, 1, 0, 1), ((std::string("ENEMY HP: ") + std::to_string(other_character->GetHealth())).c_str()));
         ImGui::TextColored(ImVec4(0, 1, 0.5, 1), (std::to_string(player_character->GetLocation().x).c_str()));
         ImGui::TextColored(ImVec4(0, 1, 0.5, 1), (std::to_string(player_character->GetLocation().y).c_str()));
-        ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::to_string(player_character->getvel()).c_str()));
+        ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::string("MY POINTS: ") + std::to_string(my_points)).c_str());
+        ImGui::TextColored(ImVec4(0, 1, 1, 1), (std::string("OTHER POINTS: ") + std::to_string(other_points)).c_str());
     } ImGui::End();
 
     if (Utils::isDevelopmentConfiguration()) {
@@ -117,11 +122,18 @@ void Shooter::UILoop() {
     }
         
     text_pressstart->Print(glm::vec2(10, GetWindowSize().y - 25), ("FPS:" + std::to_string(GetFPS())).c_str(), 0.25, GetWindowSize(), glm::vec4(1, 1, 1, 1));
+    if (my_points >= 3 || other_points >= 3) {
+        text_pressstart->Print(GetWindowSize() / glm::vec2(2), (my_points > other_points) ? "VICTORY" : "DEFEAT", 2, GetWindowSize(), glm::vec4(1, 1, 1, 1), true);
+    }
+
+    text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
+    text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, 150), SteamTools::SteamManager::GetMySteamName(), 1, GetWindowSize(), glm::vec4(1), true);
 }
 
 void Shooter::GameLoop() {
     //NETWORKING
     if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::local) {
+        started = false;
         GetSteamManager()->MatchmakeLoop_Quick(2,GetTime()); // UPDATE MATCHMAKING NETWORK STATUS
     } if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::lobby) {
         GetSteamManager()->StartWhenReady(GetTime(), 0, true, 2, 120);
@@ -146,8 +158,8 @@ void Shooter::GameLoop() {
     camera_location = ((Utils::Lerp(camera_location, (zoom) ? zoom_location : player_camera_location, 0.15)));
     SetCameraLocation(camera_location);
 
-    text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
-    text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, 150), SteamTools::SteamManager::GetMySteamName(), 1, GetWindowSize(), glm::vec4(1), true);
+    /*text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
+    text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, 150), SteamTools::SteamManager::GetMySteamName(), 1, GetWindowSize(), glm::vec4(1), true);*/
 
     if (GetSteamManager()->GetNetworkStatus() == SteamTools::NetworkStatus::connected) {
         auto LobbyNames = GetSteamManager()->GetLobbyMemberNames();
@@ -235,6 +247,7 @@ void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, Ste
 
 void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
 {
+    last_msg = GetTime();
     switch (message.type) {
     case SteamTools::DataType::TIME_SYNC:
         glfwSetTime(stoi(message.data));
@@ -244,7 +257,7 @@ void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
             other_character->Jump();
         } else if (std::stoi(message.data) == GLFW_MOUSE_BUTTON_LEFT) {
             other_gun->SetLocation(glm::vec2(std::stof(message.flags.at(2)), std::stof(message.flags.at(3))));
-            other_gun->Fire(cave_generator,player_character,glm::vec3(std::stof(message.flags.at(2)), std::stof(message.flags.at(3)), std::stof(message.flags.at(0))));
+            other_gun->Fire(GetTime(), cave_generator, player_character, glm::vec3(std::stof(message.flags.at(2)), std::stof(message.flags.at(3)), std::stof(message.flags.at(0))));
         } else if (std::stoi(message.data) == GLFW_MOUSE_BUTTON_RIGHT) {
             GetCave()->SetBlock(glm::vec2(std::stof(message.flags.at(0)), std::stof(message.flags.at(1))), cave_tile::block);
         }
@@ -264,12 +277,22 @@ void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
             other_character->SetHue(std::stoi(message.flags.at(0)));
         } else if (std::stoi(message.data) == 3) { // PLAYER VELOCITY
             other_character->SetVelocity(glm::vec2(std::stof(message.flags.at(0)), std::stof(message.flags.at(1))));
+        } else if (std::stoi(message.data) == 4) { // OTHER PLAYER HEALTH
+            other_character->SetHealth(std::stoi(message.flags.at(0)));
+        } else if (std::stoi(message.data) == 5) { // POINT UPDATE
+            my_points++;
+            if (other_points < 3 && my_points < 3)
+                StartRound();
         }
         break;
     case SteamTools::DataType::PLAYER_INPUT_STATE_PRESSED:
         if (std::stoi(message.data) == 0) { // XINPUT
             this->other_input.x = std::stof(message.flags.at(0)); 
         }
+        break;
+    default:
+        //std::cout << "UNKOWN DATATYPE\n";
+        break;
     }
 }
 
@@ -347,11 +370,35 @@ void Application::Shooter::Update() {
             if (GetTime() - last_update >= location_update_interval) {
                 GetSteamManager()->SendMessageP2P_Reliable(0, "1", SteamTools::DataType::GAME_STATE, std::vector<std::string>({
                 std::to_string(GetCharacter()->GetLocation().x),std::to_string(GetCharacter()->GetLocation().y) })); // SEND {1,LOCX,LOCY} PLAYER POSITION
-                last_update = GetTime();
 
                 GetSteamManager()->SendMessageP2P_Reliable(0, "3", SteamTools::DataType::GAME_STATE, std::vector<std::string>({
                 std::to_string(GetCharacter()->GetVelocity().x),std::to_string(GetCharacter()->GetVelocity().y) })); // SEND {1,LOCX,LOCY} PLAYER VELOCITY
+
+                GetSteamManager()->SendMessageP2P_Reliable(0, "4", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(player_character->GetHealth()) }));
+
                 last_update = GetTime();
+            }
+
+
+            if (player_character->GetHealth() <= 0 && GetTime() > (last_point + 3)) {
+                other_points++;
+                GetSteamManager()->SendMessageP2P_Reliable(0, "5", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(my_points),std::to_string(other_points) }));
+                
+                if(other_points < 3 && my_points < 3)
+                    StartRound();
+
+                last_point = GetTime();
+            }
+
+            player_gun->UpdateCooldown(GetTime());
+            other_gun->UpdateCooldown(GetTime());
+
+            if (GetSteamManager()->GetNetworkStatus() == SteamTools::NetworkStatus::connected) {
+                if (GetTime() - last_msg > 5) {
+                    GetSteamManager()->Disconnect();
+                    this->my_points = 3;
+                    this->other_points = 0;
+                }
             }
         }
     }
@@ -368,4 +415,14 @@ void Application::Shooter::Start(int seed)
     }
     GetSteamManager()->SendMessageP2P_Reliable(0, "2", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(player_character->GetHue()) })); // SEND {0,SEED} WORLD GENERATION
     started = true;
+}
+
+void Application::Shooter::StartRound() {
+    if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host) {
+        player_character->SetLocation(glm::vec2(64 * 16, 32 * 16));
+    } else {
+        player_character->SetLocation(glm::vec2((256 - 64) * 16, 32 * 16));
+    }
+    player_character->SetHealth(100);
+    other_character->SetHealth(100);
 }
