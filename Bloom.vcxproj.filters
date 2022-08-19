@@ -705,6 +705,12 @@
     <ClCompile Include="Application\Shooter\Guns\Guns.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Shooter\Abilities\Ability.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Shooter\Abilities\TestAbility.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\boneKinematics\boneKinematics.h">
@@ -1983,6 +1989,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\Shooter\Guns\Guns.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Shooter\Abilities\Ability.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

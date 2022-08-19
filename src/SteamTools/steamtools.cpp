@@ -178,7 +178,6 @@ void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(Steam
                 {
                     if (remotes.at(i).GetIPv4() == pCallback->m_info.m_identityRemote.GetIPv4()) {
                         remotes.erase(remotes.begin() + i);
-                        std::cout << "DISCONNECTED!\n";
                         break;
                     }
                 }
@@ -191,7 +190,6 @@ void SteamTools::SteamManager::OnSteamNetConnectionStatusChangedCallback_t(Steam
                 remotes.clear();
             }
         }
-        std::cout << "CONNECTION REJECTED!\n";
     } 
     // PROBLEM DETECTED ?
     else if(pCallback->m_info.m_eState == k_ESteamNetworkingConnectionState_ProblemDetectedLocally) {
@@ -334,7 +332,7 @@ bool SteamTools::SteamManager::StartWhenReady(int current_time, int channel, boo
 
 void SteamTools::SteamManager::Disconnect()
 {
-    if (network_status == NetworkStatus::connected && network_position == NetworkPosition::local) {
+    if (network_status == NetworkStatus::connected) {
         if (network_position == NetworkPosition::host || network_position == NetworkPosition::remote) {
             for (int i = 0; i < remotes.size(); i++)
             {

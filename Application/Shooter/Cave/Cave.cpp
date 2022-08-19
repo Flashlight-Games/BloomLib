@@ -110,6 +110,22 @@ int Application::Cave::Generate(int seed)
 	tiles.at(size.x -((size.x / 4))).at(size.y / 2 - 3) = cave_tile::block;
 	tiles.at(size.x -((size.x / 4)+1)).at(size.y / 2 - 3) = cave_tile::block;
 
+	tiles.at((size.x / 4) - 1).at(size.y / 2 - 2) = cave_tile::empty;
+	tiles.at((size.x / 4)).at(size.y / 2 - 2) = cave_tile::empty;
+	tiles.at((size.x / 4) + 1).at(size.y / 2 - 2) = cave_tile::empty;
+
+	tiles.at(size.x - ((size.x / 4) - 1)).at(size.y / 2 - 2) = cave_tile::empty;
+	tiles.at(size.x - ((size.x / 4))).at(size.y / 2 - 2) = cave_tile::empty;
+	tiles.at(size.x - ((size.x / 4) + 1)).at(size.y / 2 - 2) = cave_tile::empty;
+
+	tiles.at((size.x / 4) - 1).at(size.y / 2 - 1) = cave_tile::empty;
+	tiles.at((size.x / 4)).at(size.y / 2 - 1) = cave_tile::empty;
+	tiles.at((size.x / 4) + 1).at(size.y / 2 - 1) = cave_tile::empty;
+
+	tiles.at(size.x - ((size.x / 4) - 1)).at(size.y / 2 - 1) = cave_tile::empty;
+	tiles.at(size.x - ((size.x / 4))).at(size.y / 2 - 1) = cave_tile::empty;
+	tiles.at(size.x - ((size.x / 4) + 1)).at(size.y / 2 - 1) = cave_tile::empty;
+
 	//TEXTURES
 	for (int x = 0; x < size.x; x++)
 	{

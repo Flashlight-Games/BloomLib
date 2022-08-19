@@ -5,6 +5,8 @@
 #include "Cave/Cave.h"
 #include "Player/Player.h"
 #include "Guns/Guns.h"
+#include "Abilities/Ability.h"
+#include "Abilities/TestAbility.h"
 
 namespace Application{
 	class Shooter : public Game::Engine {
@@ -39,6 +41,9 @@ namespace Application{
 
             void StartRound();
             void ResetPoints() { my_points = 0; other_points = 0; };
+
+            void ActivateAbility() { this->player_ability->Activate(GetTime()); };
+            void DeactivateAbility() { this->player_ability->Deactivate(GetTime()); };
         private:
 
             glm::vec2 camera_location = glm::vec2(0);
@@ -47,10 +52,12 @@ namespace Application{
             Player* player_character;
             glm::vec2 character_input;
             Gun* player_gun = new TEST_GUN;
+            Ability* player_ability;
 
             Player* other_character;            
             glm::vec2 other_input;
             Gun* other_gun = new TEST_GUN;
+            Ability* other_ability = new Abilities::Test(other_character);
 
             int jid = -1;
 

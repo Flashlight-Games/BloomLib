@@ -15,10 +15,24 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             if (app->GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::local) {
                 app->ResetPoints();
                 app->GetSteamManager()->FindLobbies();
-            } else
+            }
+            else {
                 app->GetSteamManager()->Disconnect();
+            }
         }
         break;
+
+    case GLFW_KEY_LEFT_SHIFT:
+        if (app->GetStarted()) {
+            if (action == GLFW_PRESS) {
+                app->ActivateAbility();
+            }
+            else if (action == GLFW_RELEASE) {
+                app->DeactivateAbility();
+            }
+        }
+        break;
+
     case GLFW_KEY_SPACE:
         if (app->GetStarted()) {
             if (action == GLFW_PRESS) {
@@ -84,6 +98,9 @@ void Shooter::Begin() {
     other_character = new Application::Player(GetViewMatrix(), GetPixelProjectionMatrix());
     cave_generator = new Application::Cave(GetViewMatrix(), GetPixelProjectionMatrix());
 
+    player_ability = new Abilities::Test(player_character);
+    other_ability = new Abilities::Test(other_character);
+
     player_character->SetHue(Utils::RandInt(0, 360));
 
     collisionA = new PhysX::collisionBox("main", glm::vec2(0), glm::vec2(16));
@@ -118,6 +135,8 @@ void Shooter::UILoop() {
         ImGui::Begin("Performance window");
         ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "Time is %s", std::to_string((int)GetTime()).c_str());
         ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS", std::to_string(GetFPS()).c_str());
+        ImGui::SliderInt("PlayerPoints", &my_points, 0, 3);
+        ImGui::SliderInt("OtherPoints", &other_points, 0, 3);
         ImGui::End();
     }
         
@@ -125,9 +144,6 @@ void Shooter::UILoop() {
     if (my_points >= 3 || other_points >= 3) {
         text_pressstart->Print(GetWindowSize() / glm::vec2(2), (my_points > other_points) ? "VICTORY" : "DEFEAT", 2, GetWindowSize(), glm::vec4(1, 1, 1, 1), true);
     }
-
-    text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
-    text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, 150), SteamTools::SteamManager::GetMySteamName(), 1, GetWindowSize(), glm::vec4(1), true);
 }
 
 void Shooter::GameLoop() {
@@ -158,8 +174,8 @@ void Shooter::GameLoop() {
     camera_location = ((Utils::Lerp(camera_location, (zoom) ? zoom_location : player_camera_location, 0.15)));
     SetCameraLocation(camera_location);
 
-    /*text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
-    text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, 150), SteamTools::SteamManager::GetMySteamName(), 1, GetWindowSize(), glm::vec4(1), true);*/
+    text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, -150), status_string, 1, GetWindowSize(), glm::vec4(1), true);
+    text_pressstart->Print(GetWindowSize() / glm::vec2(2) + glm::vec2(0, 150), SteamTools::SteamManager::GetMySteamName(), 1, GetWindowSize(), glm::vec4(1), true);
 
     if (GetSteamManager()->GetNetworkStatus() == SteamTools::NetworkStatus::connected) {
         auto LobbyNames = GetSteamManager()->GetLobbyMemberNames();
@@ -400,6 +416,9 @@ void Application::Shooter::Update() {
                     this->other_points = 0;
                 }
             }
+
+            this->player_ability->Update(GetTime());
+            this->other_ability->Update(GetTime());
         }
     }
 }
@@ -413,6 +432,7 @@ void Application::Shooter::Start(int seed)
     } else {
         player_character->SetLocation(glm::vec2((256-64) * 16, 32 * 16));
     }
+    player_character->GetKinematics()->SetVelocity(glm::vec2(0));
     GetSteamManager()->SendMessageP2P_Reliable(0, "2", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(player_character->GetHue()) })); // SEND {0,SEED} WORLD GENERATION
     started = true;
 }
