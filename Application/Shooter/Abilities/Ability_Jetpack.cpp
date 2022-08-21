@@ -1,8 +1,9 @@
 #include "Ability_Jetpack.h"
 
-Application::Abilities::Jetpack::Jetpack(Player* player) : Ability(player, 2.0) {
-
-};
+Application::Abilities::Jetpack::Jetpack(Player* player) : Ability(player, 2.0)
+{
+	Ability(player, 2.0);
+}
 
 void Application::Abilities::Jetpack::Activate(float time)
 {

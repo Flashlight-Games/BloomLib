@@ -5,9 +5,12 @@
 #include "Cave/Cave.h"
 #include "Player/Player.h"
 #include "Guns/Guns.h"
+#include "Compass/Compass.h"
+
 #include "Abilities/Ability.h"
 #include "Abilities/Ability_Jetpack.h"
 #include "Abilities/Ability_Dash.h"
+#include "Abilities/Ability_GravityFlip.h"
 
 namespace Application{
 	class Shooter : public Game::Engine {
@@ -55,6 +58,8 @@ namespace Application{
             Gun* player_gun = new TEST_GUN;
             Ability* player_ability;
 
+            Compass* player_compass;
+
             Player* other_character;            
             glm::vec2 other_input;
             Gun* other_gun = new TEST_GUN;
@@ -63,6 +68,8 @@ namespace Application{
             int jid = -1;
 
             Cave* cave_generator;
+
+            
 
             // NETWORK
             std::string status_string = "OFFLINE";

@@ -11,7 +11,7 @@ namespace Application {
 	public:
 		Player(glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix);
 		void Move(float DeltaTime, glm::vec2 movement) { this->movement_input = movement * (movement_speed * (DeltaTime / (1000/60)) * mass); kinematics->ApplyForce(movement_input); };
-		void Jump() { if (jump_timer > 0) { kinematics->ApplyForce(glm::vec2(0, 500)); jump_timer = 0.0; reset_jump = false; } };
+		void Jump();
 		void ResetJump() { reset_jump = true; if (kinematics->GetVelocity().y > 0 && !landed) { kinematics->ApplyVelocity(-kinematics->GetVelocity() / glm::vec2(2.0) * glm::vec2(0,1)); } };
 
 		auto getvel() { return kinematics->GetSpeed(); };

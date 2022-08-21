@@ -5,9 +5,9 @@ float Utils::Distance2D(glm::vec2 A, glm::vec2 B)
     return std::sqrt(std::pow(A.x - B.x, 2) + std::pow(A.y - B.y, 2));
 }
 
-glm::vec2 Utils::PointAtAngleAndDistance(float angle, float distance) {
+glm::vec2 Utils::PointAtAngleAndDistance(float angle_radians, float distance) {
     // RADIANS!
-    return glm::vec2(distance * cos(angle), (distance * sin(angle)));
+    return glm::vec2(distance * cos(angle_radians), (distance * sin(angle_radians)));
 }
 
 void Utils::SyncSleep(int target_fps) {

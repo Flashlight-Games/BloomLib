@@ -99,8 +99,7 @@ void Shooter::Begin() {
     other_character = new Application::Player(GetViewMatrix(), GetPixelProjectionMatrix());
     cave_generator = new Application::Cave(GetViewMatrix(), GetPixelProjectionMatrix());
 
-    /*player_ability = new Abilities::Jetpack(player_character);
-    other_ability = new Abilities::Jetpack(other_character);*/    
+    player_compass = new Compass(player_character,other_character,GetViewMatrix(),GetPixelProjectionMatrix() );
 
     player_character->SetHue(Utils::RandInt(0, 360));
 
@@ -197,6 +196,9 @@ void Shooter::GameLoop() {
     other_character->Draw(GetViewMatrix());
     player_character->Draw(GetViewMatrix());
     cave_generator->Draw(GetViewMatrix(), player_character->GetLocation(), GetPixelWindowSize());
+
+    player_compass->Update();
+    player_compass->Draw(GetViewMatrix());
 
     DrawPixelsToDefault(false);
 }
@@ -440,11 +442,11 @@ void Application::Shooter::Start(int seed)
         player_character->SetLocation(glm::vec2(64 * 16, 32 * 16));
 
         player_ability = new Abilities::Jetpack(player_character);
-        other_ability = new Abilities::Dash(other_character);
+        other_ability = new Abilities::GravityFlip(other_character);
     } else {
         player_character->SetLocation(glm::vec2((256-64) * 16, 32 * 16));
 
-        player_ability = new Abilities::Dash(player_character);
+        player_ability = new Abilities::GravityFlip(player_character);
         other_ability = new Abilities::Jetpack(other_character);
     }
     player_character->GetKinematics()->SetVelocity(glm::vec2(0));

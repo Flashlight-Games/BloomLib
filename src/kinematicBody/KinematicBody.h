@@ -18,6 +18,8 @@ namespace PhysX {
 		auto GetAcceleration() { return acceleration; };
 		void SetVelocity(glm::vec2 velocity) { this->velocity = velocity; };
 
+		void SetGravity(glm::vec2 gravity) { this->gravity = gravity; };
+		auto GetGravity() { return this->gravity; };
 		void SetLocation(glm::vec2 location) { this->location = location; };
 	private:
 		PhysX::collisionBox* collision;

@@ -173,38 +173,28 @@ I:\TomerSoftware\Code\BloomLib\Application\Shooter\Cave\Cave.h(63,37): warning C
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Cave\Cave.h(63,108): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Cave\Cave.h(63,83): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Cave\Cave.h(63,82): warning C4244: 'argument': conversion from 'float' to 'const unsigned int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\src\kinematicBody\KinematicBody.h(34,20): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\kinematicBody\KinematicBody.h(36,20): warning C4305: 'initializing': truncation from 'double' to 'float'
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Player\Player.h(46,21): warning C4305: 'initializing': truncation from 'double' to 'float'
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Player\Player.h(27,83): warning C4244: '-=': conversion from 'float' to 'uint8_t', possible loss of data
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Player\Player.h(30,40): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\Player\Player.h(32,49): warning C4244: '=': conversion from 'float' to 'uint8_t', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.h(84,44): warning C4305: 'initializing': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(105,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(124,53): warning C4305: 'argument': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(154,57): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(156,50): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(175,107): warning C4305: 'argument': truncation from 'double' to 'float'
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(224,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(227,39): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(294,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(298,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(345,69): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(346,74): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.h(91,44): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(104,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(123,53): warning C4305: 'argument': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(153,57): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(155,50): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(174,107): warning C4305: 'argument': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(226,40): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(229,39): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(296,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(300,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(347,69): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(348,74): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(346,85): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(347,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(347,55): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
-          with
-          [
-              T=float
-          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(348,85): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(349,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
@@ -215,12 +205,12 @@ I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(349,55): warn
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(351,35): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(351,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(351,54): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(351,55): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
@@ -235,12 +225,12 @@ I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(353,54): warn
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(355,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(355,35): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(355,58): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(355,54): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
@@ -275,38 +265,38 @@ I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(361,58): warn
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(363,35): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(363,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(363,51): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(363,58): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(366,49): warning C4244: 'argument': conversion from '_Rep' to 'double', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(365,35): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(365,51): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(368,49): warning C4244: 'argument': conversion from '_Rep' to 'double', possible loss of data
           with
           [
               _Rep=__int64
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(371,79): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(372,89): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(373,79): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(374,89): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(372,100): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(373,43): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
-          with
-          [
-              T=float
-          ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(373,65): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
-          with
-          [
-              T=float
-          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(374,100): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
 I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(375,43): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
@@ -317,12 +307,12 @@ I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(375,65): warn
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(377,40): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(377,43): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(377,64): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(377,65): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
@@ -337,12 +327,12 @@ I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(379,64): warn
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(381,43): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(381,40): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(381,68): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(381,64): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
@@ -377,21 +367,60 @@ I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(387,68): warn
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(389,40): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(389,43): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(389,61): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(389,68): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(392,48): warning C4244: 'argument': conversion from '_Rep' to 'double', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(391,40): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(391,61): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\App_Shooter.cpp(394,48): warning C4244: 'argument': conversion from '_Rep' to 'double', possible loss of data
           with
           [
               _Rep=__int64
           ]
+  Compass.cpp
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(57,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\src\sprite\sprite.h(58,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+I:\TomerSoftware\Code\BloomLib\include\glad\glad.h(32): message : see previous definition of 'APIENTRY'
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\src\text\text.h(38,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(32,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\framebuffers.h(33,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\src\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\src\kinematicBody\KinematicBody.h(36,20): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Player\Player.h(46,21): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Player\Player.h(27,83): warning C4244: '-=': conversion from 'float' to 'uint8_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Player\Player.h(30,40): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Player\Player.h(32,49): warning C4244: '=': conversion from 'float' to 'uint8_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\Shooter\Compass\Compass.cpp(6,132): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+  Generating Code...
 Development\Ability_Jetpack.obj : warning LNK4042: object specified more than once; extras ignored
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance

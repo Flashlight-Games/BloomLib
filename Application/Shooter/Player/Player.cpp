@@ -10,11 +10,27 @@ Application::Player::Player(glm::mat4 view_matrix, glm::mat4 pixel_projection_ma
 	this->color_uid = this->sprite->GetShader()->getUniformId("uColor");
 }
 
+void Application::Player::Jump()
+{
+	std::cout << jump_timer;
+	if (jump_timer > 0) {		
+		if (kinematics->GetGravity().y < 0) {
+			kinematics->ApplyForce(glm::vec2(0, 500)); jump_timer = 0.0; reset_jump = false;
+		} else {
+			kinematics->ApplyForce(glm::vec2(0, -500)); jump_timer = 0.0; reset_jump = false;
+		}
+	}
+}
+
 void Application::Player::Update(double DeltaTime, std::vector<PhysX::collisionBox*> others)
 {
 	for (int i = 0; i < others.size(); i++)
 	{
-		bool landed = PhysX::LineTrace("main", others.at(i), sprite->GetLocation() + glm::vec2((sprite->GetSize().x)/2.0-1.0, 0), sprite->GetLocation() + glm::vec2(sprite->GetSize().x/2-1, -10)) != glm::vec2(INFINITY) || PhysX::LineTrace("main", others.at(i), sprite->GetLocation() + glm::vec2(-((sprite->GetSize().x) / 2.0 - 2.0), 0), sprite->GetLocation() + glm::vec2(-(sprite->GetSize().x / 2 - 1), -9)) != glm::vec2(INFINITY);
+		bool landed;
+		if(kinematics->GetGravity().y < 0)
+			landed = PhysX::LineTrace("main", others.at(i), sprite->GetLocation() + glm::vec2((sprite->GetSize().x) / 2.0 - 1.0, 0), sprite->GetLocation() + glm::vec2(sprite->GetSize().x / 2 - 1, -10)) != glm::vec2(INFINITY) || PhysX::LineTrace("main", others.at(i), sprite->GetLocation() + glm::vec2(-((sprite->GetSize().x) / 2.0 - 2.0), 0), sprite->GetLocation() + glm::vec2(-(sprite->GetSize().x / 2 - 1), -10)) != glm::vec2(INFINITY);
+		else
+			landed = PhysX::LineTrace("main", others.at(i), sprite->GetLocation() + glm::vec2((sprite->GetSize().x) / 2.0 - 1.0, 0), sprite->GetLocation() + glm::vec2(sprite->GetSize().x / 2 - 1, 10)) != glm::vec2(INFINITY) || PhysX::LineTrace("main", others.at(i), sprite->GetLocation() + glm::vec2(-((sprite->GetSize().x) / 2.0 - 2.0), 0), sprite->GetLocation() + glm::vec2(-(sprite->GetSize().x / 2 - 1), 10)) != glm::vec2(INFINITY);
 		if (jump_timer <= 0.0 && landed && reset_jump) {
 			jump_timer = coyote_time;
 		}

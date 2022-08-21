@@ -447,10 +447,12 @@
   <ItemGroup>
     <ClCompile Include="Application\Shooter\Abilities\Ability.cpp" />
     <ClCompile Include="Application\Shooter\Abilities\Ability_Dash.cpp" />
+    <ClCompile Include="Application\Shooter\Abilities\Ability_GravityFlip.cpp" />
     <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.cpp" />
     <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.h" />
     <ClCompile Include="Application\Shooter\App_Shooter.cpp" />
     <ClCompile Include="Application\Shooter\Cave\Cave.cpp" />
+    <ClCompile Include="Application\Shooter\Compass\Compass.cpp" />
     <ClCompile Include="Application\Shooter\Guns\Guns.cpp" />
     <ClCompile Include="Application\Shooter\main.cpp" />
     <ClCompile Include="include\soloud\dr_impl.cpp" />
@@ -508,8 +510,10 @@
   <ItemGroup>
     <ClInclude Include="Application\Shooter\Abilities\Ability.h" />
     <ClInclude Include="Application\Shooter\Abilities\Ability_Dash.h" />
+    <ClInclude Include="Application\Shooter\Abilities\Ability_GravityFlip.h" />
     <ClInclude Include="Application\Shooter\App_Shooter.h" />
     <ClInclude Include="Application\Shooter\Cave\Cave.h" />
+    <ClInclude Include="Application\Shooter\Compass\Compass.h" />
     <ClInclude Include="Application\Shooter\Guns\Guns.h" />
     <ClInclude Include="include\FastNoise\FastNoise.h" />
     <ClInclude Include="include\FastNoise\FastNoise_C.h" />
