@@ -30,6 +30,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             else if (action == GLFW_RELEASE) {
                 app->DeactivateAbility();
             }
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_KEY_LEFT_SHIFT).c_str(), SteamTools::DataType::PLAYER_INPUT_STATE_PRESSED, std::vector<std::string>({std::to_string(action == GLFW_PRESS)})); // SEND {LSHIFT} OTHER ABILITY
         }
         break;
 
@@ -98,8 +99,8 @@ void Shooter::Begin() {
     other_character = new Application::Player(GetViewMatrix(), GetPixelProjectionMatrix());
     cave_generator = new Application::Cave(GetViewMatrix(), GetPixelProjectionMatrix());
 
-    player_ability = new Abilities::Test(player_character);
-    other_ability = new Abilities::Test(other_character);
+    /*player_ability = new Abilities::Jetpack(player_character);
+    other_ability = new Abilities::Jetpack(other_character);*/    
 
     player_character->SetHue(Utils::RandInt(0, 360));
 
@@ -305,6 +306,14 @@ void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
         if (std::stoi(message.data) == 0) { // XINPUT
             this->other_input.x = std::stof(message.flags.at(0)); 
         }
+        else if (std::stoi(message.data) == GLFW_KEY_LEFT_SHIFT) {
+            if (std::stoi(message.flags.at(0)) == GLFW_PRESS) {
+                this->other_ability->Activate(GetTime());
+            }
+            else {
+                this->other_ability->Deactivate(GetTime());
+            }
+        }
         break;
     default:
         //std::cout << "UNKOWN DATATYPE\n";
@@ -429,8 +438,14 @@ void Application::Shooter::Start(int seed)
     if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host) {
         GetSteamManager()->SendMessageP2P_Reliable(0,"0", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(my_seed) })); // SEND {0,SEED} WORLD GENERATION
         player_character->SetLocation(glm::vec2(64 * 16, 32 * 16));
+
+        player_ability = new Abilities::Jetpack(player_character);
+        other_ability = new Abilities::Dash(other_character);
     } else {
         player_character->SetLocation(glm::vec2((256-64) * 16, 32 * 16));
+
+        player_ability = new Abilities::Dash(player_character);
+        other_ability = new Abilities::Jetpack(other_character);
     }
     player_character->GetKinematics()->SetVelocity(glm::vec2(0));
     GetSteamManager()->SendMessageP2P_Reliable(0, "2", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(player_character->GetHue()) })); // SEND {0,SEED} WORLD GENERATION

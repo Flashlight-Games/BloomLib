@@ -446,7 +446,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Shooter\Abilities\Ability.cpp" />
-    <ClCompile Include="Application\Shooter\Abilities\TestAbility.h" />
+    <ClCompile Include="Application\Shooter\Abilities\Ability_Dash.cpp" />
+    <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.cpp" />
+    <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.h" />
     <ClCompile Include="Application\Shooter\App_Shooter.cpp" />
     <ClCompile Include="Application\Shooter\Cave\Cave.cpp" />
     <ClCompile Include="Application\Shooter\Guns\Guns.cpp" />
@@ -505,6 +507,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Shooter\Abilities\Ability.h" />
+    <ClInclude Include="Application\Shooter\Abilities\Ability_Dash.h" />
     <ClInclude Include="Application\Shooter\App_Shooter.h" />
     <ClInclude Include="Application\Shooter\Cave\Cave.h" />
     <ClInclude Include="Application\Shooter\Guns\Guns.h" />

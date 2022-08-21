@@ -6,7 +6,8 @@
 #include "Player/Player.h"
 #include "Guns/Guns.h"
 #include "Abilities/Ability.h"
-#include "Abilities/TestAbility.h"
+#include "Abilities/Ability_Jetpack.h"
+#include "Abilities/Ability_Dash.h"
 
 namespace Application{
 	class Shooter : public Game::Engine {
@@ -57,7 +58,7 @@ namespace Application{
             Player* other_character;            
             glm::vec2 other_input;
             Gun* other_gun = new TEST_GUN;
-            Ability* other_ability = new Abilities::Test(other_character);
+            Ability* other_ability;
 
             int jid = -1;
 

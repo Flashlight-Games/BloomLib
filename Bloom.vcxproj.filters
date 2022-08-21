@@ -708,7 +708,13 @@
     <ClCompile Include="Application\Shooter\Abilities\Ability.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Shooter\Abilities\TestAbility.h">
+    <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Shooter\Abilities\Ability_Dash.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1992,6 +1998,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\Shooter\Abilities\Ability.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Shooter\Abilities\Ability_Dash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
