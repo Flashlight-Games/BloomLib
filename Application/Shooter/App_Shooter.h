@@ -39,7 +39,7 @@ namespace Application{
             glm::vec2 GetCursorWorldPosition() { return (GetCursorPosition() - (GetPixelWindowSize() / glm::vec2(2)) + GetCameraWorldPosition()); }
             glm::vec2 GetCameraWorldPosition() { return (GetPixelWindowSize() / glm::vec2(2)) - camera_location; };
 
-            void PlayerFire() { player_gun->Fire(GetTime(), cave_generator, other_character); };
+            bool PlayerFire() { return player_gun->Fire(GetTime(), cave_generator, other_character); };
             void PlayerZoom() { zoom = true; };
             void PlayerStopZoom() { zoom = false; }
             auto GetPlayerAimAngle() { return player_gun->GetAngle(); };
@@ -50,6 +50,8 @@ namespace Application{
 
             void ActivateAbility() { this->player_ability->Activate(GetTime()); };
             void DeactivateAbility() { this->player_ability->Deactivate(GetTime()); };
+
+            void SetFiring(bool fire) { this->firing = fire; };
         private:
 
             glm::vec2 camera_location = glm::vec2(0);
@@ -58,20 +60,21 @@ namespace Application{
             Player* player_character;
             glm::vec2 character_input;
             glm::vec2 last_input;
-            Gun* player_gun = new TEST_GUN;
+            Gun* player_gun = new ASSAULT_RIFLE;
             Ability* player_ability;
 
             Compass* player_compass;
 
             Player* other_character;            
             glm::vec2 other_input;
-            Gun* other_gun = new TEST_GUN;
+            Gun* other_gun = new ASSAULT_RIFLE;
             Ability* other_ability;
 
             int jid = -1;
 
             Cave* cave_generator;
             
+            bool firing = false;
 
             // NETWORK
             std::string status_string = "OFFLINE";

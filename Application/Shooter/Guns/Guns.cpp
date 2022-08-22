@@ -1,6 +1,6 @@
 #include "Guns.h"
 
-float Application::Gun::Fire(float time,Cave* cave, Player* other, glm::vec3 transform)
+bool Application::Gun::Fire(float time,Cave* cave, Player* other, glm::vec3 transform)
 {
     if (this->cooldown <= 0) {
         this->last_fire = time;
@@ -42,7 +42,7 @@ float Application::Gun::Fire(float time,Cave* cave, Player* other, glm::vec3 tra
             }
         }
 
-        return damage;
+        return true;
     }
-    return 0.0;
+    return false;
 }

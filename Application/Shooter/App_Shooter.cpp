@@ -65,9 +65,8 @@ void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
     auto app = Utils::GetApp<Application::Shooter>(window);
     switch (key) {
     case GLFW_MOUSE_BUTTON_LEFT:
-        if (action == GLFW_PRESS && app->GetStarted()) {
-            app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_MOUSE_BUTTON_LEFT).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({ std::to_string(app->GetPlayerAimAngle()),std::to_string(app->GetPlayerAmmo()),std::to_string(app->GetCharacter()->GetLocation().x),std::to_string(app->GetCharacter()->GetLocation().y) })); // SEND {LEFT_CLICK,X,Y}  DELETE
-            app->PlayerFire();
+        if (app->GetStarted()) {
+            app->SetFiring(action == GLFW_PRESS);
         }
         break;
     case GLFW_MOUSE_BUTTON_RIGHT:
@@ -239,6 +238,12 @@ void Shooter::InputLoop() {
 
     if(character_input != last_input)
         GetSteamManager()->SendMessageP2P_Reliable(0, "0", SteamTools::DataType::PLAYER_INPUT_STATE_PRESSED, std::vector<std::string>({ std::to_string(character_input.x),std::to_string(character_input.y) })); // SEND {0,INPUTX} OTHER XINPUT
+
+    if (firing) {
+        if (PlayerFire()) {
+            GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_MOUSE_BUTTON_LEFT).c_str(), SteamTools::DataType::PLAYER_INPUT_KEY_PRESS, std::vector<std::string>({ std::to_string(GetPlayerAimAngle()),std::to_string(GetPlayerAmmo()),std::to_string(GetCharacter()->GetLocation().x),std::to_string(GetCharacter()->GetLocation().y) })); // SEND {LEFT_CLICK,X,Y}  DELETE
+        }
+    }
 }
 
 void Application::Shooter::SetStatusString(SteamTools::NetworkStatus status, SteamTools::NetworkPosition position){
