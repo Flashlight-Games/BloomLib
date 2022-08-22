@@ -10,6 +10,9 @@ Cave::Cave(glm::mat4 view_matrix,glm::mat4 pixel_projection_matrix)
 
 void Application::Cave::Draw(glm::mat4 view_matrix, glm::vec2 player_position, glm::vec2 screen_size)
 {
+	while (draw_lock) {
+
+	}
 	int counter = 0;
 	tile_sprite->GetShader()->use();
 	for (int x = 0; x < tiles.size(); x++)

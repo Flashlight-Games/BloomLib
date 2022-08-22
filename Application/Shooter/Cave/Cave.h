@@ -12,8 +12,18 @@ namespace Application {
 		void Draw(glm::mat4 view_matrix, glm::vec2 player_position, glm::vec2 screen_size);
 		std::vector<std::vector<cave_tile>> GetTiles() { return tiles; };
 		void SetBlock(glm::vec2 position, cave_tile new_tile) { 
-			position.x = Utils::clamp(position.x, 1, tiles.size()-1);
-			position.y = Utils::clamp(position.y, 1, tiles.at(position.x).size() - 1);
+			
+			if (tiles.size() <= 0)
+				return;
+
+			draw_lock = true;
+			position.x = Utils::clamp(position.x, 1, (int)(tiles.size())-1);
+			if (position.x >= (int)(tiles.size()) - 1)
+				return;
+			position.y = Utils::clamp(position.y, 1, (int)(tiles.at(position.x).size()) - 1);
+			if (position.y >= (int)(tiles.at(position.x).size()) - 1)
+				return;
+
 			tiles.at(position.x).at(position.y) = new_tile;
 
 			//TEXTURES
@@ -69,7 +79,8 @@ namespace Application {
 				}
 				tile_textures.push_back(texture_row);
 			}
-			
+	
+			draw_lock = false;
 		};
 		int Generate(int seed);
 	private:
@@ -80,5 +91,6 @@ namespace Application {
 		std::vector<std::vector<cave_tile>> tiles;
 		std::vector<std::vector<uint8>> tile_textures;
 		Bloom::Sprite* tile_sprite;
+		bool draw_lock = false;
 	};
 }

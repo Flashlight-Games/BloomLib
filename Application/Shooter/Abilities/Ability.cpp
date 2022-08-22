@@ -23,5 +23,8 @@ void Application::Ability::Reset()
 {
 	this->cooldown = 0.0;
 }
-;
+void Application::Ability::SetCave(Cave* cave)
+{
+	this->cave = cave;
+}
 

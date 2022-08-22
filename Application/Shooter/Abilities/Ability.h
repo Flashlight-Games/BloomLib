@@ -2,6 +2,7 @@
 #define ABILITY
 
 #include "../Player/Player.h"
+#include "../Cave/Cave.h"
 
 namespace Application {
 	class Ability
@@ -17,6 +18,8 @@ namespace Application {
 		float GetActiveDuration() { return this->active_duration; };
 		Player* GetPlayer() { return this->player; };
 		void Reset();
+		void SetCave(Cave* cave);
+		auto GetCave() {return this->cave;};
 	private:
 		float cooldown = 0.0;
 		bool active = false;
@@ -25,6 +28,7 @@ namespace Application {
 		float recharge_speed = 0.0;
 		float active_duration = 0.0;
 		float activate_time = 0.0;
+		Cave* cave;
 	};
 }
 #endif

@@ -723,6 +723,9 @@
     <ClCompile Include="Application\Shooter\Compass\Compass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Shooter\Abilities\Ability_Blink.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\boneKinematics\boneKinematics.h">
@@ -2013,6 +2016,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\Shooter\Compass\Compass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Shooter\Abilities\Ability_Blink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

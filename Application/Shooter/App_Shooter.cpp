@@ -355,9 +355,14 @@ void Application::Shooter::Update() {
 
             auto tiles = cave_generator->GetTiles();
             glm::vec2 playerpos = glm::round(player_character->GetLocation() / glm::vec2(16));
+            glm::vec2 otherplayerpos = glm::round(other_character->GetLocation() / glm::vec2(16));
 
             playerpos.x = Utils::clamp(playerpos.x, 1, tiles.size() - 1);
             playerpos.y = Utils::clamp(playerpos.y, 1, tiles.at(playerpos.x).size() - 1);
+
+            otherplayerpos.x = Utils::clamp(otherplayerpos.x, 1, tiles.size() - 1);
+            otherplayerpos.y = Utils::clamp(otherplayerpos.y, 1, tiles.at(otherplayerpos.x).size() - 1);
+
             if (tiles.at(playerpos.x + 1).at(playerpos.y) == cave_tile::block)
                 collisionA->setLocation((playerpos + glm::vec2(1, 0)) * glm::vec2(16));
             if (tiles.at(playerpos.x - 1).at(playerpos.y) == cave_tile::block)
@@ -374,16 +379,14 @@ void Application::Shooter::Update() {
                 collisionG->setLocation((playerpos + glm::vec2(1, -1)) * glm::vec2(16));
             if (tiles.at(playerpos.x - 1).at(playerpos.y - 1) == cave_tile::block)
                 collisionH->setLocation((playerpos + glm::vec2(-1, -1)) * glm::vec2(16));
-            if (tiles.at(playerpos.x).at(playerpos.y) == cave_tile::block)
+            if (tiles.at(playerpos.x).at(playerpos.y) == cave_tile::block) {
                 collisionI->setLocation((playerpos + glm::vec2(0, 0)) * glm::vec2(16));
+            }
 
             player_character->Update(delta.count(), std::vector<PhysX::collisionBox*>({ collisionA,collisionB,collisionC,collisionD,collisionE,collisionF,collisionG,collisionH ,collisionI }));
             player_gun->SetLocation(player_character->GetLocation());
 
-            glm::vec2 otherplayerpos = glm::round(other_character->GetLocation() / glm::vec2(16));
-
-            otherplayerpos.x = Utils::clamp(otherplayerpos.x, 1, tiles.size() - 1);
-            otherplayerpos.y = Utils::clamp(otherplayerpos.y, 1, tiles.at(otherplayerpos.x).size() - 1);
+            
             if (tiles.at(otherplayerpos.x + 1).at(otherplayerpos.y) == cave_tile::block)
                 collisionA->setLocation((otherplayerpos + glm::vec2(1, 0)) * glm::vec2(16));
             if (tiles.at(otherplayerpos.x - 1).at(otherplayerpos.y) == cave_tile::block)
@@ -455,16 +458,19 @@ void Application::Shooter::Start(int seed)
 
     if (GetSteamManager()->GetNetworkPosition() == SteamTools::NetworkPosition::host) {
         GetSteamManager()->SendMessageP2P_Reliable(0,"0", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(my_seed) })); // SEND {0,SEED} WORLD GENERATION
-        player_character->SetLocation(glm::vec2(64 * 16, 32 * 16));
+        player_character->SetLocation(glm::vec2(64 * 16, 32 * 16 - 1));
 
-        player_ability = new Abilities::Dash(player_character);
+        player_ability = new Abilities::Blink(player_character);
         other_ability = new Abilities::GravityFlip(other_character);
     } else {
-        player_character->SetLocation(glm::vec2((256-64) * 16, 32 * 16));
+        player_character->SetLocation(glm::vec2((256-64) * 16, 32 * 16 - 1));
 
         player_ability = new Abilities::GravityFlip(player_character);
-        other_ability = new Abilities::Dash(other_character);
+        other_ability = new Abilities::Blink(other_character);
     }
+
+    other_ability->SetCave(cave_generator);
+    player_ability->SetCave(cave_generator);
     player_character->GetKinematics()->SetVelocity(glm::vec2(0));
     GetSteamManager()->SendMessageP2P_Reliable(0, "2", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(player_character->GetHue()) })); // SEND {0,SEED} WORLD GENERATION
     started = true;

@@ -446,6 +446,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Shooter\Abilities\Ability.cpp" />
+    <ClCompile Include="Application\Shooter\Abilities\Ability_Blink.cpp" />
     <ClCompile Include="Application\Shooter\Abilities\Ability_Dash.cpp" />
     <ClCompile Include="Application\Shooter\Abilities\Ability_GravityFlip.cpp" />
     <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.cpp" />
@@ -509,6 +510,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Shooter\Abilities\Ability.h" />
+    <ClInclude Include="Application\Shooter\Abilities\Ability_Blink.h" />
     <ClInclude Include="Application\Shooter\Abilities\Ability_Dash.h" />
     <ClInclude Include="Application\Shooter\Abilities\Ability_GravityFlip.h" />
     <ClInclude Include="Application\Shooter\App_Shooter.h" />

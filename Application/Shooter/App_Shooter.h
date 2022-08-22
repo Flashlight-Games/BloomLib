@@ -11,6 +11,7 @@
 #include "Abilities/Ability_Jetpack.h"
 #include "Abilities/Ability_Dash.h"
 #include "Abilities/Ability_GravityFlip.h"
+#include "Abilities/Ability_Blink.h"
 
 namespace Application{
 	class Shooter : public Game::Engine {
@@ -69,7 +70,6 @@ namespace Application{
             int jid = -1;
 
             Cave* cave_generator;
-
             
 
             // NETWORK
