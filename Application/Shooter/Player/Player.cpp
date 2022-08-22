@@ -12,7 +12,6 @@ Application::Player::Player(glm::mat4 view_matrix, glm::mat4 pixel_projection_ma
 
 void Application::Player::Jump()
 {
-	std::cout << jump_timer;
 	if (jump_timer > 0) {		
 		if (kinematics->GetGravity().y < 0) {
 			kinematics->ApplyForce(glm::vec2(0, 500)); jump_timer = 0.0; reset_jump = false;
@@ -43,4 +42,9 @@ void Application::Player::Update(double DeltaTime, std::vector<PhysX::collisionB
 	jump_timer -= DeltaTime / 1000;
 
 	this->sprite->SetLocation((this->kinematics->GetLocation(DeltaTime, others)));
+}
+
+void Application::Player::SetCursorPosition(glm::vec2 cursor_pos)
+{
+	this->cursor_position = cursor_pos;
 }

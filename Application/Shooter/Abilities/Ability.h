@@ -16,6 +16,7 @@ namespace Application {
 		bool GetActive() { return this->active; };
 		float GetActiveDuration() { return this->active_duration; };
 		Player* GetPlayer() { return this->player; };
+		void Reset();
 	private:
 		float cooldown = 0.0;
 		bool active = false;

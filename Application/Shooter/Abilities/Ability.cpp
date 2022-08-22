@@ -18,5 +18,10 @@ void Application::Ability::Activate(float time)
 void Application::Ability::Deactivate(float time)
 {
 	if (this->active) { this->active = false;  this->last_active = time; this->active_duration = 0.0; } 
-};
+}
+void Application::Ability::Reset()
+{
+	this->cooldown = 0.0;
+}
+;
 

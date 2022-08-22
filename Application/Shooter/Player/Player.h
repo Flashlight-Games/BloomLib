@@ -10,7 +10,7 @@ namespace Application {
 	{
 	public:
 		Player(glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix);
-		void Move(float DeltaTime, glm::vec2 movement) { this->movement_input = movement * (movement_speed * (DeltaTime / (1000/60)) * mass); kinematics->ApplyForce(movement_input); };
+		void Move(float DeltaTime, glm::vec2 movement) { this->movement_input = movement * (movement_speed * (DeltaTime / (1000/60)) * mass); kinematics->ApplyForce(glm::vec2(movement_input.x, 0.0)); };
 		void Jump();
 		void ResetJump() { reset_jump = true; if (kinematics->GetVelocity().y > 0 && !landed) { kinematics->ApplyVelocity(-kinematics->GetVelocity() / glm::vec2(2.0) * glm::vec2(0,1)); } };
 
@@ -33,6 +33,11 @@ namespace Application {
 		auto GetHealth() { return health; };
 
 		auto GetKinematics() { return kinematics; };
+
+		void SetCursorPosition(glm::vec2 cursor_pos);
+		auto GetCursrorPosition() { return this->cursor_position; }
+
+		auto GetMovementInput() { return this->movement_input; }
 	private:
 
 		glm::vec2 movement_input = glm::vec2(0);
@@ -51,6 +56,8 @@ namespace Application {
 		int color_uid;
 		int hue = 0;
 		glm::vec3 color;
+
+		glm::vec2 cursor_position;
 	};
 }
 

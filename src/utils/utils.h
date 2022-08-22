@@ -41,6 +41,10 @@ namespace Utils {
     float clamp(float input, float min, float max);
 
     glm::vec3 HSVtoRGB(glm::vec3 hsv);
+
+    template <typename T> int sgn(T val) {
+        return (T(0) < val) - (val < T(0));
+    }
 }
 
 #endif

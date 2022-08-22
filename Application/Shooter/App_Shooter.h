@@ -55,6 +55,7 @@ namespace Application{
 
             Player* player_character;
             glm::vec2 character_input;
+            glm::vec2 last_input;
             Gun* player_gun = new TEST_GUN;
             Ability* player_ability;
 

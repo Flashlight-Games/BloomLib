@@ -7,10 +7,15 @@ void Application::Abilities::Dash::Activate(float time)
 	Ability::Activate(time);
 	if (!GetActive())
 		return;
-	glm::vec2 dir = glm::normalize(GetPlayer()->GetKinematics()->GetVelocity());
-	GetPlayer()->GetKinematics()->SetVelocity(glm::vec2(0));
-	GetPlayer()->GetKinematics()->ApplyForce(dir * glm::vec2(700));
-	GetPlayer()->GetKinematics()->SetDrag(0);
+	glm::vec2 dir = glm::normalize(GetPlayer()->GetMovementInput());
+	if (glm::length(dir) > 0.0) {
+		GetPlayer()->GetKinematics()->SetVelocity(glm::vec2(0));
+		GetPlayer()->GetKinematics()->ApplyForce(dir * glm::vec2(700));
+		GetPlayer()->GetKinematics()->SetDrag(0);
+	} else {
+		this->Reset();
+		return;
+	}
 }
 
 void Application::Abilities::Dash::Deactivate(float time)
