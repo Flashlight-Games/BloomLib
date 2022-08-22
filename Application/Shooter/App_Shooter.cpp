@@ -193,7 +193,7 @@ void Shooter::GameLoop() {
 
     other_character->Draw(GetViewMatrix());
     player_character->Draw(GetViewMatrix());
-    cave_generator->Draw(GetViewMatrix(), player_character->GetLocation(), GetPixelWindowSize());
+    cave_generator->Draw(GetViewMatrix(), camera_location * glm::vec2(-1) + glm::vec2(16), GetPixelWindowSize());
 
     player_compass->Update();
     player_compass->Draw(GetViewMatrix());
