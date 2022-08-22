@@ -12,6 +12,7 @@
 #include "Abilities/Ability_Dash.h"
 #include "Abilities/Ability_GravityFlip.h"
 #include "Abilities/Ability_Blink.h"
+#include "Abilities/Ability_Teleport.h"
 
 namespace Application{
 	class Shooter : public Game::Engine {

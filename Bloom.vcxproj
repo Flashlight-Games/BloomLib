@@ -451,6 +451,7 @@
     <ClCompile Include="Application\Shooter\Abilities\Ability_GravityFlip.cpp" />
     <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.cpp" />
     <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.h" />
+    <ClCompile Include="Application\Shooter\Abilities\Ability_Teleport.cpp" />
     <ClCompile Include="Application\Shooter\App_Shooter.cpp" />
     <ClCompile Include="Application\Shooter\Cave\Cave.cpp" />
     <ClCompile Include="Application\Shooter\Compass\Compass.cpp" />
@@ -513,6 +514,7 @@
     <ClInclude Include="Application\Shooter\Abilities\Ability_Blink.h" />
     <ClInclude Include="Application\Shooter\Abilities\Ability_Dash.h" />
     <ClInclude Include="Application\Shooter\Abilities\Ability_GravityFlip.h" />
+    <ClInclude Include="Application\Shooter\Abilities\Ability_Teleport.h" />
     <ClInclude Include="Application\Shooter\App_Shooter.h" />
     <ClInclude Include="Application\Shooter\Cave\Cave.h" />
     <ClInclude Include="Application\Shooter\Compass\Compass.h" />

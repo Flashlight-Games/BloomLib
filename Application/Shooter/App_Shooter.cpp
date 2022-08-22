@@ -31,6 +31,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
                 app->DeactivateAbility();
             }
             app->GetSteamManager()->SendMessageP2P_Reliable(0, std::to_string(GLFW_KEY_LEFT_SHIFT).c_str(), SteamTools::DataType::PLAYER_INPUT_STATE_PRESSED, std::vector<std::string>({std::to_string(action == GLFW_PRESS)})); // SEND {LSHIFT} OTHER ABILITY
+            app->GetSteamManager()->SendMessageP2P_Reliable(0, "6", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(app->GetCursorWorldPosition().x),std::to_string(app->GetCursorWorldPosition().y) })); // SEND CURSOR LOCATION
         }
         break;
 
@@ -313,6 +314,8 @@ void Application::Shooter::ParseNetworkMessage(SteamTools::Message message)
             my_points++;
             if (other_points < 3 && my_points < 3)
                 StartRound();
+        } else if (std::stoi(message.data) == 6) { // CURSOR UPDATE
+            other_character->SetCursorPosition(glm::vec2(std::stof(message.flags.at(0)), std::stof(message.flags.at(1))));
         }
         break;
     case SteamTools::DataType::PLAYER_INPUT_STATE_PRESSED:
@@ -418,6 +421,8 @@ void Application::Shooter::Update() {
 
                 GetSteamManager()->SendMessageP2P_Reliable(0, "4", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(player_character->GetHealth()) }));
 
+                GetSteamManager()->SendMessageP2P_Reliable(0, "6", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(GetCursorWorldPosition().x),std::to_string(GetCursorWorldPosition().y) })); // SEND CURSOR LOCATION
+
                 last_update = GetTime();
             }
 
@@ -445,6 +450,8 @@ void Application::Shooter::Update() {
 
             this->player_ability->Update(GetTime());
             this->other_ability->Update(GetTime());
+
+            this->player_character->SetCursorPosition(GetCursorWorldPosition());
         }
     }
 }
@@ -460,13 +467,13 @@ void Application::Shooter::Start(int seed)
         GetSteamManager()->SendMessageP2P_Reliable(0,"0", SteamTools::DataType::GAME_STATE, std::vector<std::string>({ std::to_string(my_seed) })); // SEND {0,SEED} WORLD GENERATION
         player_character->SetLocation(glm::vec2(64 * 16, 32 * 16 - 1));
 
-        player_ability = new Abilities::Blink(player_character);
+        player_ability = new Abilities::Teleport(player_character);
         other_ability = new Abilities::GravityFlip(other_character);
     } else {
         player_character->SetLocation(glm::vec2((256-64) * 16, 32 * 16 - 1));
 
         player_ability = new Abilities::GravityFlip(player_character);
-        other_ability = new Abilities::Blink(other_character);
+        other_ability = new Abilities::Teleport(other_character);
     }
 
     other_ability->SetCave(cave_generator);
