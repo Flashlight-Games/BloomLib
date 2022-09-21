@@ -473,12 +473,12 @@ void Application::Shooter::Start(int seed)
         player_character->SetLocation(glm::vec2(64 * 16, 32 * 16 - 1));
 
         player_ability = new Abilities::Teleport(player_character);
-        other_ability = new Abilities::GravityFlip(other_character);
+        other_ability = new Abilities::Dash(other_character);
     } else {
         player_character->SetLocation(glm::vec2((256-64) * 16, 32 * 16 - 1));
 
-        player_ability = new Abilities::GravityFlip(player_character);
-        other_ability = new Abilities::Teleport(other_character);
+        player_ability = new Abilities::Teleport(player_character);
+        other_ability = new Abilities::Dash(other_character);
     }
 
     other_ability->SetCave(cave_generator);

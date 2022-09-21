@@ -37,4 +37,9 @@ Release/
 Output/
 *.log
 *.tlog
+
+*.pdb
+*.tlog
+*.lastbuildstate
+*.recipe
 *.pdb
