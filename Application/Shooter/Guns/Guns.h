@@ -11,6 +11,9 @@ namespace Application {
 		Gun(float reload_duration,int max_ammo,float spread,float range, float bullets_per_shot,float zoom_blocks, float penetration, float damage, float rate) {
 			this->reload_duration = reload_duration; this->max_ammo = max_ammo; this->spread = spread; this->range = range; this->bullets_per_shot = bullets_per_shot; this->zoom_blocks = zoom_blocks; this->penetration = penetration; this->damage = damage; this->fire_rate = rate;
 		};
+		Gun(float reload_duration, int max_ammo, float spread, float range, float bullets_per_shot, float zoom_blocks, float penetration, float damage, float rate,float bullet_size) {
+			this->reload_duration = reload_duration; this->max_ammo = max_ammo; this->spread = spread; this->range = range; this->bullets_per_shot = bullets_per_shot; this->zoom_blocks = zoom_blocks; this->penetration = penetration; this->damage = damage; this->fire_rate = rate;this->tolerance = bullet_size;
+		};
 		bool Fire(float time, Cave* cave, Player* other, glm::vec3 transform = glm::vec3(-1,-1,-1)); // returns other's health or -1 if missed
 		auto GetZoom() { return zoom_blocks; };
 		auto GetAmmo() { return current_ammo; };
@@ -46,4 +49,5 @@ namespace Application {
 #define SHOTGUN Gun(0,0,45,100,8,15,1,10,1.0);
 #define SMG Gun(0,0,20,200,1,50,0,10,0.1);
 #define ASSAULT_RIFLE Gun(0,0,10,300,1,100,1,35,0.3);
+#define KATANA Gun(0,0,0,24,1,0,1,150,0.8,18);
 #endif // !Guns
