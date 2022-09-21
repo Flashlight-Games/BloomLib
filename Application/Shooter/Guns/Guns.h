@@ -49,5 +49,5 @@ namespace Application {
 #define SHOTGUN Gun(0,0,45,100,8,15,1,10,1.0);
 #define SMG Gun(0,0,20,200,1,50,0,10,0.1);
 #define ASSAULT_RIFLE Gun(0,0,10,300,1,100,1,35,0.3);
-#define KATANA Gun(0,0,0,24,1,0,1,150,0.8,18);
+#define KATANA Gun(0,0,0,24,1,0,1,150,0.4,18);
 #endif // !Guns
