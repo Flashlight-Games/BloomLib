@@ -60,14 +60,14 @@ namespace Application{
             Player* player_character;
             glm::vec2 character_input;
             glm::vec2 last_input;
-            Gun* player_gun = new KATANA;
+            Gun* player_gun = new RAILGUN;
             Ability* player_ability;
 
             Compass* player_compass;
 
             Player* other_character;            
             glm::vec2 other_input;
-            Gun* other_gun = new KATANA;
+            Gun* other_gun = new RAILGUN;
             Ability* other_ability;
 
             int jid = -1;
