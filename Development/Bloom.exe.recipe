@@ -2,159 +2,156 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\Output\Development\Bloom.exe</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\Output\Development\Bloom.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\steam_appid.txt</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\steam_appid.txt</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Alagard\alagard.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Alagard\alagard.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\PressStart\PressStart.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\PressStart\PressStart.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-Black.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-Black.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-BlackItalic.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-BlackItalic.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-Bold.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-Bold.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-BoldItalic.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-BoldItalic.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-Italic.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-Italic.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-Light.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-Light.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-LightItalic.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-LightItalic.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-Medium.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-Medium.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-MediumItalic.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-MediumItalic.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-Regular.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-Regular.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-Thin.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-Thin.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\fonts\Roboto\Roboto-ThinItalic.ttf</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\fonts\Roboto\Roboto-ThinItalic.ttf</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\2x8_SpritesheetTest.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\2x8_SpritesheetTest.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\4x4_SpritesheetTest.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\4x4_SpritesheetTest.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\8x2_SpritesheetTest.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\8x2_SpritesheetTest.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\container.jpeg</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\container.jpeg</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\detailTest16.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\detailTest16.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\detailTest16Border.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\detailTest16Border.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\detailTest16Line.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\detailTest16Line.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\grass.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\grass.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\rect16.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\rect16.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\tilemap.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\tilemap.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\vLine.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\vLine.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\wall.jpeg</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\wall.jpeg</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\textures\window.png</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\textures\window.png</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\shooter\shaders\cave\caveshader_vertex.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\glfw3.dll</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\glfw3.dll</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\FastNoise.dll</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\FastNoise.dll</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\basic\mvp_vertex.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\basic\mvp_vertex.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\basic\plain_fragment.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\basic\plain_fragment.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\font\font_fragment.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\font\font_fragment.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\font\font_vertex.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\font\font_vertex.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_downsample.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\framebuffer\framebuffer_downsample.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment_alpha.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment_alpha.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment_clear.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment_clear.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment_filter.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\framebuffer\framebuffer_fragment_filter.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\framebuffer\framebuffer_vertex.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\framebuffer\framebuffer_vertex.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\particle\particleshader_fragment.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\particle\particleshader_fragment.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\particle\particleshader_vertex.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\particle\particleshader_vertex.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\sprite\spriteshader_fragment.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\sprite\spriteshader_fragment.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\sprite\spriteshader_vertex.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\sprite\spriteshader_vertex.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\testing_framebuffers\framebufferMulti_fragment.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\testing_framebuffers\framebufferMulti_fragment.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\testing_textures\textureshader_fragment.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\testing_textures\textureshader_fragment.glsl</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\res\engine\shaders\testing_textures\textureshader_vertex.glsl</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\res\engine\shaders\testing_textures\textureshader_vertex.glsl</FullPath>
-    </ContentFile>
-    <ContentFile>
-      <FullPath>C:\Users\shaki\Documents\GitHub\BloomLib\steam_api.dll</FullPath>
+      <FullPath>I:\TomerSoftware\Code\BloomLib\steam_api.dll</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

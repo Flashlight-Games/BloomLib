@@ -129,6 +129,10 @@ glm::vec3 Utils::HSVtoRGB(glm::vec3 hsv)
     return glm::vec3(R, G, B);
 }
 
+glm::vec2 Utils::PixelateResolution(glm::vec2 resolution, int pixels_per_pixel){
+    return resolution / glm::vec2(pixels_per_pixel);
+}
+
 int Utils::RandInt(int min, int max) {
     return int(Lerp(min, max, (rand() % (int)max) / (float)max));
 }

@@ -96,6 +96,9 @@ namespace Game{
             std::thread* update_thread;
             std::chrono::steady_clock::time_point last_update_time;
             std::chrono::steady_clock::time_point current_update_time;
+
+            glm::vec2 GetCursorWorldPosition(glm::vec2 camera_location);
+            glm::vec2 GetCameraWorldPosition(glm::vec2 camera_location);
         private:
             // EVENTS
             int Init();

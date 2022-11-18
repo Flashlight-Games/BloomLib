@@ -493,7 +493,6 @@
     <None Include="include\steam\lib\win32\sdkencryptedappticket.dll" />
     <None Include="include\steam\lib\win64\sdkencryptedappticket64.dll" />
     <None Include="steam_api.dll" />
-    <None Include="res\shooter\shaders\cave\caveshader_vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
@@ -675,12 +674,6 @@
     <ClCompile Include="src\particles\particles.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Shooter\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Shooter\App_Shooter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\framebuffers\chromatic_aberration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -693,40 +686,13 @@
     <ClCompile Include="src\SteamTools\steamtools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Shooter\Cave\Cave.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Shooter\Player\Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\kinematicBody\KinematicBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Shooter\Guns\Guns.cpp">
+    <ClCompile Include="Application\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Shooter\Abilities\Ability.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.h">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Shooter\Abilities\Ability_Dash.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Shooter\Abilities\Ability_Jetpack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Shooter\Abilities\Ability_GravityFlip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Shooter\Compass\Compass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Shooter\Abilities\Ability_Blink.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Shooter\Abilities\Ability_Teleport.cpp">
+    <ClCompile Include="Application\App.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1784,9 +1750,6 @@
     <ClInclude Include="src\particles\particles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Shooter\App_Shooter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\framebuffers\bloom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1997,34 +1960,10 @@
     <ClInclude Include="src\SteamTools\steamtools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Shooter\Cave\Cave.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Shooter\Player\Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\kinematicBody\KinematicBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Shooter\Guns\Guns.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Shooter\Abilities\Ability.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Shooter\Abilities\Ability_Dash.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Shooter\Abilities\Ability_GravityFlip.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Shooter\Compass\Compass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Shooter\Abilities\Ability_Blink.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Shooter\Abilities\Ability_Teleport.h">
+    <ClInclude Include="Application\App.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

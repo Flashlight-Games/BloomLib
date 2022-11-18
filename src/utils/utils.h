@@ -45,6 +45,8 @@ namespace Utils {
     template <typename T> int sgn(T val) {
         return (T(0) < val) - (val < T(0));
     }
+
+    glm::vec2 PixelateResolution(glm::vec2 resolution, int pixels_per_pixel);
 }
 
 #endif

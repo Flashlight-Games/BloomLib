@@ -221,3 +221,12 @@ void Engine::InputLoop() {
         glfwSetWindowShouldClose(window, true);*/
 }
 
+glm::vec2 Engine::GetCursorWorldPosition(glm::vec2 camera_location)
+{
+    return (GetCursorPosition() - (GetPixelWindowSize() / glm::vec2(2)) + GetCameraWorldPosition(camera_location));
+}
+
+glm::vec2 Engine::GetCameraWorldPosition(glm::vec2 camera_location)
+{
+    return (GetPixelWindowSize() / glm::vec2(2)) - camera_location;
+}
