@@ -7,7 +7,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     switch (key) {
     case GLFW_KEY_ESCAPE:
         if (action == GLFW_PRESS) {
-            glfwSetWindowShouldClose(app->GetWindow(), true);
+            app->CloseGame();
         }
         break;
     }
@@ -59,4 +59,7 @@ void Application::App::Update() {
     while (!glfwWindowShouldClose(GetWindow())) {
 
     }
+
+    update_thread->detach();
+    delete update_thread;
 }

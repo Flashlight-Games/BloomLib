@@ -4,9 +4,9 @@
 #include "framebuffers.h"
 
 namespace Bloom {
-	class Chromatic_Aberration : public Framebuffer {
+	class Chromatic_Aberration_Framebuffer : public Framebuffer {
 	public:
-		Chromatic_Aberration(int width, int height);
+		Chromatic_Aberration_Framebuffer(glm::vec2 size);
 		void SetSize(float size);
 		float GetSize() { return size; };
 	private:

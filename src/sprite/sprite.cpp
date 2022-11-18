@@ -2,8 +2,8 @@
 
 using namespace Bloom;
 
-Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin,glm::vec2 size,glm::vec2 textureUVScale,glm::vec2 textureUVOffset){
-    this->ppp=pixels_per_pixel;
+Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin,glm::vec2 size,glm::vec2 textureUVScale,glm::vec2 textureUVOffset){
+    this->ppp = pixels_per_pixel; this->view_matrix = view_matrix;
     this->UVoffset=textureUVOffset; this->UVscale = textureUVScale;this->Origin = origin;
 
     transformation[3] = size[0];transformation[4] = size[1];
@@ -43,15 +43,22 @@ Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_mat
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), ((void*)(5 * sizeof(float)))); // Texture
 
 
-    SetShader(new Bloom::Shader("res/engine/shaders/sprite/spriteshader_vertex.glsl", "res/engine/shaders/sprite/spriteshader_fragment.glsl"),view_matrix,pixel_projection_matrix);
+    SetShader(new Bloom::Shader("res/engine/shaders/sprite/spriteshader_vertex.glsl", "res/engine/shaders/sprite/spriteshader_fragment.glsl"),pixel_projection_matrix);
+    original_shader = true;
 
     model_matrix = glm::mat4(1.0);
     model_matrix           = glm::translate(model_matrix,glm::vec3(this->transformation[0],this->transformation[1],0.0f));
     model_matrix           = glm::rotate(model_matrix,(float)glm::radians(this->transformation[2]),glm::vec3(0.0f,0.0f,1.0f));
     model_matrix           = glm::scale(model_matrix,glm::vec3(this->transformation[3],this->transformation[4],1.0f));
+}
 
-    this->view_matrix = &view_matrix;
-};
+Bloom::Sprite::~Sprite()
+{
+    if (original_shader)
+        delete shader;
+    delete texture;
+}
+
 
 void Sprite::UpdateLocation(){
     model_matrix = glm::mat4(1.0);
@@ -60,12 +67,12 @@ void Sprite::UpdateLocation(){
     model_matrix           = glm::scale(model_matrix,glm::vec3(this->transformation[3],this->transformation[4],1.0f));
 }
 
-void Sprite::Draw(glm::mat4 view_matrix){
+void Sprite::Draw(){
     shader->use();
     shader->uniformFloat(uColorUni,1);
     setTextureAtLocation(GL_TEXTURE0,this->texture->GetID()); shader->uniformInt(uTextureUni,0);
     shader->uniformMat4(shader->getUniformId("model"),model_matrix);
-    shader->uniformMat4(shader->getUniformId("view"),(view_matrix));
+    shader->uniformMat4(shader->getUniformId("view"),(*(view_matrix)));
 
     UpdateLocation();
 
@@ -74,12 +81,12 @@ void Sprite::Draw(glm::mat4 view_matrix){
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
 }
 
-void Bloom::Sprite::DrawInstanced(glm::mat4 view_matrix,int amount)
+void Bloom::Sprite::DrawInstanced(int amount)
 {
     shader->use();
     shader->uniformFloat(uColorUni, 1);
     setTextureAtLocation(GL_TEXTURE0, this->texture->GetID()); shader->uniformInt(uTextureUni, 0);
-    shader->uniformMat4(shader->getUniformId("view"), (view_matrix));
+    shader->uniformMat4(shader->getUniformId("view"), *(view_matrix));
 
     UpdateLocation();
 

@@ -301,6 +301,8 @@ void SteamTools::SteamManager::ReceiveMessageP2P(int channel)
             msgs[i]->Release();
         }
     }
+    delete &msgs;
+    delete msgs;
 }
 
 void SteamTools::SteamManager::OnSteamNetworkingMessagesSessionRequest_t(SteamNetworkingMessagesSessionRequest_t* pCallback) {

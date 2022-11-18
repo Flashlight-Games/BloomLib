@@ -6,7 +6,9 @@
 namespace Bloom {
 	class Bloom_Framebuffer {
 	public:
-		Bloom_Framebuffer(int width, int height);
+		Bloom_Framebuffer(glm::vec2 size);
+		~Bloom_Framebuffer();
+
 		void SetSize(float size);
 		int GetSize() { return size; };
 
@@ -15,6 +17,7 @@ namespace Bloom {
 		void DrawToDefault(glm::vec2 window_size, bool include_objects = false);
 		void HTextureGUI() { return bloom_h->getTexture()->ImGui(); };
 		void VTextureGUI() { return bloom_v->getTexture()->ImGui(); };
+
 	private:
 		Framebuffer* bloom_o;
 		Framebuffer* bloom_f;

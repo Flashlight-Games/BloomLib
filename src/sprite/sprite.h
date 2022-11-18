@@ -20,9 +20,10 @@ namespace Bloom{
         public:
             
             Sprite(){};
-            Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4 view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5,0.5),glm::vec2 size = glm::vec2(1,1),glm::vec2 textureUVScale = glm::vec2(1,1),glm::vec2 textureUVOffset = glm::vec2(0,0));
-            void Draw(glm::mat4 view_matrix);
-            void DrawInstanced(glm::mat4 view_matrix, int amount);
+            Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5,0.5),glm::vec2 size = glm::vec2(1,1),glm::vec2 textureUVScale = glm::vec2(1,1),glm::vec2 textureUVOffset = glm::vec2(0,0));
+            ~Sprite();
+            void Draw();
+            void DrawInstanced(int amount);
 
             void SetLocation(glm::vec2 location){transformation[0] = location[0];transformation[1] = location[1];UpdateLocation();};
             glm::vec2 GetLocation(){return glm::vec2(transformation[0],transformation[1]);};
@@ -50,14 +51,14 @@ namespace Bloom{
             Bloom::Shader* GetShader(){return shader;};
             glm::mat4 GetModelMatrix(){return model_matrix;};
 
-            void SetShader(Bloom::Shader* new_shader, glm::mat4 view_matrix, glm::mat4 projection_matrix) {
-                this->shader = new_shader;
+            void SetShader(Bloom::Shader* new_shader, glm::mat4 projection_matrix) {
+                this->shader = new_shader; original_shader = false;
 
                 shader->use();
                 uColorUni = shader->getUniformId("uColor");
                 uTextureUni = shader->getUniformId("uTexture");
 
-                shader->uniformMat4(shader->getUniformId("view"), view_matrix);
+                shader->uniformMat4(shader->getUniformId("view"), *view_matrix);
                 shader->uniformMat4(shader->getUniformId("projection"), projection_matrix);
             };
 
@@ -89,6 +90,7 @@ namespace Bloom{
             glm::mat4 model_matrix;
             glm::mat4* view_matrix;
 
+            bool original_shader;
             float uColorUni;
             float uTextureUni;
     };

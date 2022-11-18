@@ -7,6 +7,7 @@ namespace PhysX {
 	{
 	public:
 		KinematicBody(std::string channel,float mass,Bloom::Sprite* source,glm::vec2 gravity = glm::vec2(0, - 9.8),float bounce = 0.05f, float drag = 100.0f);
+		~KinematicBody();
 		glm::vec2 GetLocation(float DeltaTime, std::vector<PhysX::collisionBox*> other_boxes); // CLEAR FORCES AND GET LOCATION
 		void ApplyForce(glm::vec2 force) { applied_forces.push_back(force); };
 		void ApplyVelocity(glm::vec2 velocity) { this->velocity += velocity; };

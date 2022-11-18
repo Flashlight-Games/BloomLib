@@ -2,9 +2,9 @@
 
 using namespace Bloom;
 
-Framebuffer::Framebuffer(int width,int height,bool linear_scaling,bool HDR){
-    this->width = width;
-    this->height = height;
+Framebuffer::Framebuffer(glm::vec2 size,bool linear_scaling,bool HDR){
+    this->width = size.x;
+    this->height = size.y;
 
     // FRAMEBUFFER CREATION
     glGenVertexArrays(1,&fbVao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
@@ -54,7 +54,13 @@ Framebuffer::Framebuffer(int width,int height,bool linear_scaling,bool HDR){
 
     glBindFramebuffer(GL_FRAMEBUFFER,0); // BIND RENDER BUFFER
     setTextureUniform("uTexture");
-};
+}
+
+Bloom::Framebuffer::~Framebuffer()
+{
+    delete fbTexture;
+}
+
 void Framebuffer::use(bool clear){
 
     // DISABLE glViewport for faster performance

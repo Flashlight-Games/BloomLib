@@ -59,6 +59,10 @@ namespace Bloom{
                 p_sprite->SetShader(new Bloom::Shader("res/engine/shaders/particle/particleshader_vertex.glsl", "res/engine/shaders/particle/particleshader_fragment.glsl"),view_matrix,projection_matrix);
             }
         };
+        ~ParticleEmitter() {
+            delete p_sprite;
+        }
+
         std::vector<T*> Play(GLFWwindow* window, float time,glm::vec2 location = glm::vec2(0,0)) {
             int last_size = particles.size();
             time = std::max(time, (float)0.0);
@@ -87,9 +91,10 @@ namespace Bloom{
                     if(i > 0 && i % 101 == 100)
                         p_sprite->DrawInstanced(p_view_matrix, (int)std::min((int)particles.size(), 100));
 
-                    if (p->GetAge() > p->GetLifetime())
+                    if (p->GetAge() > p->GetLifetime()) {
+                        delete particles.begin() + i;
                         particles.erase(particles.begin() + i);
-                    else {
+                    } else {
                         p->SetAge(Gametime);
                     }
                 }

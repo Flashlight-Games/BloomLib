@@ -4,8 +4,8 @@
 
 using namespace Bloom; 
 
-Text::Text(const char* path, glm::mat4 view_matrix, glm::mat4 projection_matrix, float spacing, uint16_t resolution) {
-    this->path = path; this->resolution = resolution; this->spacing = 2 - spacing; this->view_matrix = &view_matrix; this->projection_matrix = &projection_matrix; this->scale = (resolution / 128.0f);
+Text::Text(const char* path, glm::mat4* view_matrix, glm::mat4 projection_matrix, float spacing, uint16_t resolution) {
+    this->path = path; this->resolution = resolution; this->spacing = 2 - spacing; this->view_matrix = view_matrix; this->projection_matrix = &projection_matrix; this->scale = (resolution / 128.0f);
     bitsize = 2048 * scale;
 
     unsigned char* temp_bitmap = new unsigned char[bitsize* bitsize];
@@ -15,6 +15,8 @@ Text::Text(const char* path, glm::mat4 view_matrix, glm::mat4 projection_matrix,
     stbtt_BakeFontBitmap(ttf_buffer,0, resolution, temp_bitmap, bitsize, bitsize, 32,96, char_data);
     texture = new Texture2D(temp_bitmap, glm::vec2(bitsize, bitsize), GL_RED, true);
    
+    delete temp_bitmap;
+
     glGenVertexArrays(1,&vao); // VAO can store all vertex attrib pointer configs, so we dont have to specify them for each object.
     glBindVertexArray(vao);
 
@@ -42,6 +44,13 @@ Text::Text(const char* path, glm::mat4 view_matrix, glm::mat4 projection_matrix,
     glGenBuffers(1,&ebo); // Set ebo id
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo); // bind the ebo as an element array buffer
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),&indices,GL_STATIC_DRAW);
+}
+
+Bloom::Text::~Text()
+{
+    delete texture;
+    delete path;
+    delete projection_matrix;
 }
 
 void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 screen_size, glm::vec4 color,bool centered){

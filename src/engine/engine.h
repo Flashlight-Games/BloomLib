@@ -46,10 +46,12 @@ namespace Game{
 
                 return false;
             };
+
+            int CloseGame();
             
             glm::mat4 GetWindowProjectionMatrix() { return window_projection_matrix; };
             glm::mat4 GetPixelProjectionMatrix() { return pixel_projection_matrix; };
-            glm::mat4 GetViewMatrix() { return view_matrix; };
+            glm::mat4* GetViewMatrix() { return &view_matrix; };
 
             glm::vec2 GetWindowSize() { return glm::vec2(windowWidth, windowHeight); };
             glm::vec2 GetPixelWindowSize() { return glm::vec2(pixel_windowWidth, pixel_windowHeight); };
@@ -81,14 +83,14 @@ namespace Game{
             float GetGameSpeedMultiplier() { return delta_multiplier; };
 
             auto GetSteamManager() { return steam_manager; };
-            void DrawDebugPoint(glm::vec2 position, int size = 1, glm::vec3 color = glm::vec3(1, 1, 1)) { if (Utils::isDevelopmentConfiguration()) { debug_sprite->SetLocation(position); debug_sprite->SetRotation(0); debug_sprite->SetScale(glm::vec2(size / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(GetViewMatrix()); } };
+            void DrawDebugPoint(glm::vec2 position, int size = 1, glm::vec3 color = glm::vec3(1, 1, 1)) { if (Utils::isDevelopmentConfiguration()) { debug_sprite->SetLocation(position); debug_sprite->SetRotation(0); debug_sprite->SetScale(glm::vec2(size / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(); } };
             void DrawDebugLine(glm::vec2 positionA, glm::vec2 positionB, int thickness = 1, glm::vec3 color = glm::vec3(1, 1, 1)) {
                 if (Utils::isDevelopmentConfiguration()) {
                     float height = (std::sqrt(std::pow(positionA.x - positionB.x, 2) + std::pow(positionA.y - positionB.y, 2)));
                     
                     float angle = glm::degrees(atan2(positionA.y - positionB.y, positionA.x - positionB.x)) - 90;
                     glm::vec2 position = (positionA + positionB) / glm::vec2(2);
-                    debug_sprite->SetLocation(position); debug_sprite->SetRotation((int)(angle + 180) % 180); debug_sprite->SetScale(glm::vec2(thickness / 16.0, height / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(GetViewMatrix());
+                    debug_sprite->SetLocation(position); debug_sprite->SetRotation((int)(angle + 180) % 180); debug_sprite->SetScale(glm::vec2(thickness / 16.0, height / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw();
                 }
             }
             std::chrono::steady_clock::time_point GetHighResTime() { return std::chrono::high_resolution_clock::now(); };
@@ -104,6 +106,7 @@ namespace Game{
             int Init();
             int Prep_Begin();
             virtual void Begin();
+            
 
             // LOOPS
             int Prep_GameLoop();

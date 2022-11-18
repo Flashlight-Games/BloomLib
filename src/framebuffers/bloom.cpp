@@ -1,16 +1,16 @@
 #include "bloom.h"
 
-Bloom::Bloom_Framebuffer::Bloom_Framebuffer(int width, int height){
-	bloom_o = new Framebuffer(width, height, true,true);
+Bloom::Bloom_Framebuffer::Bloom_Framebuffer(glm::vec2 size){
+	bloom_o = new Framebuffer(size, true,true);
 	bloom_o->setShader("res/engine/shaders/framebuffer/framebuffer_fragment_clear.glsl");
 
-	bloom_f = new Framebuffer(width, height, true, true);
+	bloom_f = new Framebuffer(size, true, true);
 	bloom_f->setShader("res/engine/shaders/framebuffer/framebuffer_fragment_filter.glsl");
 
-	bloom_h = new Framebuffer(width,height,true, true); // SHRINKER
+	bloom_h = new Framebuffer(size,true, true); // SHRINKER
 	bloom_h->setShader("res/engine/shaders/framebuffer/framebuffer_downsample.glsl");
 	
-	bloom_v = new Framebuffer(width, height, true, true);
+	bloom_v = new Framebuffer(size, true, true);
 	bloom_v->setShader("res/engine/shaders/framebuffer/framebuffer_fragment.glsl");
 	
 	bloom_f->GetShader().use();
@@ -25,6 +25,19 @@ Bloom::Bloom_Framebuffer::Bloom_Framebuffer(int width, int height){
 		this->mips.push_back(new Bloom::Texture2D(nullptr, glm::vec2(lastSizeX / 2, lastSizeY / 2)));
 		lastSizeX /= 2;
 		lastSizeY /= 2;
+	}
+}
+
+Bloom::Bloom_Framebuffer::~Bloom_Framebuffer()
+{
+	delete bloom_o;
+	delete bloom_f;
+	delete bloom_h;
+	delete bloom_v;
+
+	for (int i = 0; i < mips.size(); i++)
+	{
+		delete mips.at(i);
 	}
 }
 

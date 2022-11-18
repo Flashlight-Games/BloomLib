@@ -1,12 +1,12 @@
 #include "chromatic_aberration.h"
 
-Bloom::Chromatic_Aberration::Chromatic_Aberration(int width, int height) : Framebuffer::Framebuffer(width, height, true, false) {
+Bloom::Chromatic_Aberration_Framebuffer::Chromatic_Aberration_Framebuffer(glm::vec2 size) : Framebuffer::Framebuffer(size, true, false) {
 	setShader("res/engine/shaders/framebuffer/framebuffer_chromatic_aberration.glsl");
 	GetShader().use();
 	size_uid = GetShader().getUniformId("uSize");
 }
 
-void Bloom::Chromatic_Aberration::SetSize(float size) {
+void Bloom::Chromatic_Aberration_Framebuffer::SetSize(float size) {
 	this->size = size;
 	GetShader().use();
 	GetShader().uniformFloat(size_uid, this->size);

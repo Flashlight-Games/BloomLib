@@ -16,6 +16,7 @@ namespace Bloom{
     class Bone{
         public:
             Bone(Bone* parent,int16_t length);
+            ~Bone();
             static std::vector<Bloom::Bone*> Bones(int amount,int length);
 
             glm::vec2 GetLocation(){return location;};

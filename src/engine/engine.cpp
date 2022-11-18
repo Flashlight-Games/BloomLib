@@ -99,17 +99,14 @@ int Engine::Init(){
         window_projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
         view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)); 
 
-        Bloom::Framebuffer* tmp_pixels = new Bloom::Framebuffer(pixel_windowWidth, pixel_windowHeight, false);
-        tmp_pixels->setTextureUniform("uTexture");
-
-        fb_pixels = tmp_pixels;
+        fb_pixels = new Bloom::Framebuffer(GetWindowSize(), false);
+        fb_pixels->setTextureUniform("uTexture");
 
         soloud.init();
 
         glfwSetWindowUserPointer(GetWindow(), this);
 
         steam_manager = new SteamTools::SteamManager();
-
         debug_sprite = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
     }
     catch (const std::exception& ex) {
@@ -135,11 +132,7 @@ int Engine::Prep_Begin(){
 int Engine::Prep_GameLoop(){
     try {
         if (glfwWindowShouldClose(window)){ // END IF SHOULD CLOSE
-            soloud.deinit();
-            SteamAPI_Shutdown();
-            glfwTerminate();
-            update_thread->detach();
-            return -2;
+            return CloseGame();
         }
 
         // PREPARE LOOP
@@ -214,6 +207,22 @@ void Engine::UILoop() {
 void Engine::GameLoop() {
     std::string errmsg = "Please define application method 'GameLoop'";
     throw std::runtime_error(errmsg);
+}
+
+int Game::Engine::CloseGame()
+{
+    glfwSetWindowShouldClose(GetWindow(), true);
+    soloud.deinit();
+    SteamAPI_Shutdown();
+    glfwTerminate();
+    update_thread->detach();
+
+    delete fb_pixels;
+    delete window;
+    delete steam_manager;
+    delete debug_sprite;
+
+    return -2;
 }
 
 void Engine::InputLoop() {

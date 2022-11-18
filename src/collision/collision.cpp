@@ -409,7 +409,9 @@ glm::vec2 PhysX::LineTraceNormal(std::string channel, collisionBox* other, glm::
 bool PhysX::AreaCheck_SAT(std::string channel, collisionBox* other, glm::vec2 position, glm::vec2 size)
 {
     collisionBox* box = new collisionBox(channel, position, size, 0, glm::vec2(0.5, 0.5));
-    return box->check_SAT(other);
+    bool result = box->check_SAT(other);
+    delete box;
+    return result;
 }
 
 bool PhysX::PointCheck_SAT(std::string chanel, collisionBox* other, glm::vec2 position)

@@ -6,6 +6,12 @@ Bloom::Bone::Bone(Bone* parent,int16_t length){
         parent->SetChild(this);
 }
 
+Bloom::Bone::~Bone()
+{
+    delete Parent;
+    delete Child;
+}
+
 glm::vec2 Bloom::Bone::GetEndLocation(){
     int offset = 0;
     if(this->Parent != NULL)
@@ -16,11 +22,14 @@ glm::vec2 Bloom::Bone::GetEndLocation(){
 std::vector<Bloom::Bone*> Bloom::Bone::Bones(int amount,int length){
     std::vector<Bloom::Bone*> bones;
     Bloom::Bone* lBone = NULL;
+    Bloom::Bone* tmp_Bone = NULL;
     for(int i = 0; i < amount; i++){
-        auto tmp_bone = new Bloom::Bone(lBone,length);
-        bones.push_back(tmp_bone);
-        lBone = tmp_bone;
+        tmp_Bone = new Bloom::Bone(lBone,length);
+        bones.push_back(tmp_Bone);
+        lBone = tmp_Bone;
     }
+
+    delete tmp_Bone;
 
     return bones;
 }

@@ -11,6 +11,11 @@ PhysX::KinematicBody::KinematicBody(std::string channel, float mass, Bloom::Spri
     this->drag = drag;
 }
 
+PhysX::KinematicBody::~KinematicBody()
+{
+    delete collision;
+}
+
 glm::vec2 PhysX::KinematicBody::GetLocation(float DeltaTime, std::vector<PhysX::collisionBox*> other_boxes)
 {
     hit = false;

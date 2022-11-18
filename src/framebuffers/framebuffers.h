@@ -12,7 +12,8 @@
 namespace Bloom{
     class Framebuffer{
         public:
-        Framebuffer(int width,int height,bool linear_scaling = true, bool HDR = false);
+        Framebuffer(glm::vec2 size ,bool linear_scaling = true, bool HDR = false);
+        ~Framebuffer();
         // Framebuffer(){};
         
         Shader fbShader = Shader("res/engine/shaders/framebuffer/framebuffer_vertex.glsl","res/engine/shaders/framebuffer/framebuffer_fragment_alpha.glsl");
