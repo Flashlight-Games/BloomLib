@@ -7,18 +7,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Bloom", "Bloom.vcxproj", "{
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Development|x64 = Development|x64
 		Development|x86 = Development|x86
-		Release|x64 = Release|x64
+		Library (.lib)|x86 = Library (.lib)|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{98EB38F7-C805-4430-ABCE-5F1C4434F517}.Development|x64.ActiveCfg = Development|x64
-		{98EB38F7-C805-4430-ABCE-5F1C4434F517}.Development|x64.Build.0 = Development|x64
 		{98EB38F7-C805-4430-ABCE-5F1C4434F517}.Development|x86.ActiveCfg = Development|Win32
 		{98EB38F7-C805-4430-ABCE-5F1C4434F517}.Development|x86.Build.0 = Development|Win32
-		{98EB38F7-C805-4430-ABCE-5F1C4434F517}.Release|x64.ActiveCfg = Release|x64
-		{98EB38F7-C805-4430-ABCE-5F1C4434F517}.Release|x64.Build.0 = Release|x64
+		{98EB38F7-C805-4430-ABCE-5F1C4434F517}.Library (.lib)|x86.ActiveCfg = Library (.lib)|Win32
+		{98EB38F7-C805-4430-ABCE-5F1C4434F517}.Library (.lib)|x86.Build.0 = Library (.lib)|Win32
 		{98EB38F7-C805-4430-ABCE-5F1C4434F517}.Release|x86.ActiveCfg = Release|Win32
 		{98EB38F7-C805-4430-ABCE-5F1C4434F517}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection

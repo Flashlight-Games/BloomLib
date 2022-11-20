@@ -1,4 +1,5 @@
 #include "bloom.h"
+#include "Bloom.h"
 
 Bloom::Bloom_Framebuffer::Bloom_Framebuffer(glm::vec2 size){
 	bloom_o = new Framebuffer(size, true,true);
