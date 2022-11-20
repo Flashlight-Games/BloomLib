@@ -1,0 +1,11 @@
+I:\TomerSoftware\Code\BloomLib\Output\Library (.lib)\concrt140.dll
+I:\TomerSoftware\Code\BloomLib\Output\Library (.lib)\msvcp140.dll
+I:\TomerSoftware\Code\BloomLib\Output\Library (.lib)\msvcp140_1.dll
+I:\TomerSoftware\Code\BloomLib\Output\Library (.lib)\msvcp140_2.dll
+I:\TomerSoftware\Code\BloomLib\Output\Library (.lib)\msvcp140_atomic_wait.dll
+I:\TomerSoftware\Code\BloomLib\Output\Library (.lib)\msvcp140_codecvt_ids.dll
+I:\TomerSoftware\Code\BloomLib\Output\Library (.lib)\vccorlib140.dll
+I:\TomerSoftware\Code\BloomLib\Output\Library (.lib)\vcruntime140.dll
+I:\TomerSoftware\Code\BloomLib\Output\Library (.lib)\vcamp140.dll
+I:\TomerSoftware\Code\BloomLib\Output\Library (.lib)\vcomp140.dll
+I:\TomerSoftware\Code\BloomLib\Library (.lib)\Bloom.vcxproj.CopyComplete
