@@ -1,7 +1,7 @@
 #ifndef BONEKINEMATICS
 #define BONEKINEMATICS
 
-#include "bones/bones.h"
+#include "Bloom/bones/bones.h"
 
 #include <GLM/glm.hpp> // MATRICES
 #include <GLM/gtc/matrix_transform.hpp>

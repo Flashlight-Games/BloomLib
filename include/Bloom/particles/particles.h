@@ -11,7 +11,7 @@
 #include <GLM/gtc/type_ptr.hpp>
 
 #include <vector>
-#include "sprite/sprite.h"
+#include "Bloom/sprite/sprite.h"
 
 namespace Bloom{
     class Particle {
@@ -51,12 +51,12 @@ namespace Bloom{
             p_amount = amount;
             p_view_matrix = view_matrix;
             p_projection_matrix = projection_matrix;
-            p_sprite = new Bloom::Sprite("res/engine/textures/rect16.png", 1, p_view_matrix, p_projection_matrix, glm::vec2(0.5, 0.5), glm::vec2(1));
+            p_sprite = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, p_view_matrix, p_projection_matrix, glm::vec2(0.5, 0.5), glm::vec2(1));
             if (fShader != "") {
-                p_sprite->SetShader(new Bloom::Shader("res/engine/shaders/particle/particleshader_vertex.glsl", fShader.c_str()), view_matrix, projection_matrix);
+                p_sprite->SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/particle/particleshader_vertex.glsl", fShader.c_str()), view_matrix, projection_matrix);
             }
             else {
-                p_sprite->SetShader(new Bloom::Shader("res/engine/shaders/particle/particleshader_vertex.glsl", "res/engine/shaders/particle/particleshader_fragment.glsl"),view_matrix,projection_matrix);
+                p_sprite->SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/particle/particleshader_vertex.glsl", "include/Bloom/res/engine/shaders/particle/particleshader_fragment.glsl"),view_matrix,projection_matrix);
             }
         };
         ~ParticleEmitter() {

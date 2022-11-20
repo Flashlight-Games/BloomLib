@@ -43,7 +43,7 @@ Sprite::Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4* view_ma
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), ((void*)(5 * sizeof(float)))); // Texture
 
 
-    SetShader(new Bloom::Shader("res/engine/shaders/sprite/spriteshader_vertex.glsl", "res/engine/shaders/sprite/spriteshader_fragment.glsl"),pixel_projection_matrix);
+    SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/sprite/spriteshader_vertex.glsl", "include/Bloom/res/engine/shaders/sprite/spriteshader_fragment.glsl"),pixel_projection_matrix);
     original_shader = true;
 
     model_matrix = glm::mat4(1.0);

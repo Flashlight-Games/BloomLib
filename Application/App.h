@@ -1,7 +1,7 @@
 #ifndef BLOOM_APP
 #define BLOOM_APP
 
-#include "engine/engine.h"
+#include "Bloom/engine/engine.h"
 
 namespace Application {
     class App : public Game::Engine {

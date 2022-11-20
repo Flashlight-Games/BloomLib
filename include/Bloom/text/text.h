@@ -5,8 +5,8 @@
 #include <glad/glad.h> // OPENGL
 #include <GLFW/glfw3.h>
 
-#include "textures/textures.h"
-#include "shaders/shaders.h"
+#include "Bloom/textures/textures.h"
+#include "Bloom/shaders/shaders.h"
 
 #include <iostream>
 
@@ -37,7 +37,7 @@ namespace Bloom{
             GLuint ebo;
             GLuint bitsize;
             float spacing = 1.9;
-            Shader qShader = Shader("res/engine/shaders/font/font_vertex.glsl","res/engine/shaders/font/font_fragment.glsl");
+            Shader qShader = Shader("include/Bloom/res/engine/shaders/font/font_vertex.glsl","include/Bloom/res/engine/shaders/font/font_fragment.glsl");
             int indices[6] = {
                 0,1,2,
                 0,2,3

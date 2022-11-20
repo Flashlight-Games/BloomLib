@@ -1,7 +1,7 @@
 #ifndef UTILS
 #define UTILS
 
-#include "dependencies.h"
+#include "Bloom/dependencies.h"
 
 namespace Utils {
     template <typename T> T Lerp(T A, T B, float percentage) {

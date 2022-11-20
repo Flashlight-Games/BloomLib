@@ -3,16 +3,16 @@
 
 Bloom::Bloom_Framebuffer::Bloom_Framebuffer(glm::vec2 size){
 	bloom_o = new Framebuffer(size, true,true);
-	bloom_o->setShader("res/engine/shaders/framebuffer/framebuffer_fragment_clear.glsl");
+	bloom_o->setShader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_fragment_clear.glsl");
 
 	bloom_f = new Framebuffer(size, true, true);
-	bloom_f->setShader("res/engine/shaders/framebuffer/framebuffer_fragment_filter.glsl");
+	bloom_f->setShader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_fragment_filter.glsl");
 
 	bloom_h = new Framebuffer(size,true, true); // SHRINKER
-	bloom_h->setShader("res/engine/shaders/framebuffer/framebuffer_downsample.glsl");
+	bloom_h->setShader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_downsample.glsl");
 	
 	bloom_v = new Framebuffer(size, true, true);
-	bloom_v->setShader("res/engine/shaders/framebuffer/framebuffer_fragment.glsl");
+	bloom_v->setShader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_fragment.glsl");
 	
 	bloom_f->GetShader().use();
 	intensity_uid= bloom_f->GetShader().getUniformId("intensity");

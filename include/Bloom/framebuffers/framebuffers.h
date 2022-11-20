@@ -6,8 +6,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "shaders/shaders.h"
-#include "textures/textures.h"
+#include "Bloom/shaders/shaders.h"
+#include "Bloom/textures/textures.h"
 
 namespace Bloom{
     class Framebuffer{
@@ -16,7 +16,7 @@ namespace Bloom{
         ~Framebuffer();
         // Framebuffer(){};
         
-        Shader fbShader = Shader("res/engine/shaders/framebuffer/framebuffer_vertex.glsl","res/engine/shaders/framebuffer/framebuffer_fragment_alpha.glsl");
+        Shader fbShader = Shader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_vertex.glsl","include/Bloom/res/engine/shaders/framebuffer/framebuffer_fragment_alpha.glsl");
         void use(bool clear);
         virtual void draw();
         virtual void drawToDefault(glm::vec2 window_size,bool clear = true);

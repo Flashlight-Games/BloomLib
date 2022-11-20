@@ -1,8 +1,8 @@
 #ifndef ENGINE
 #define ENGINE
 
-#include "dependencies.h"
-#include "utils/utils.h"
+#include "Bloom/dependencies.h"
+#include "Bloom/utils/utils.h"
 
 namespace Game{
     struct configuration {

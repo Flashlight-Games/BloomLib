@@ -107,7 +107,7 @@ int Engine::Init(){
         glfwSetWindowUserPointer(GetWindow(), this);
 
         steam_manager = new SteamTools::SteamManager();
-        debug_sprite = new Bloom::Sprite("res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
+        debug_sprite = new Bloom::Sprite("Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;

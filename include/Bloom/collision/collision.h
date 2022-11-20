@@ -3,9 +3,9 @@
 
 #define PI 3.14159265358979323846   
 
-#include "dependencies.h"
-#include "sprite/sprite.h"
-#include "utils/utils.h"
+#include "Bloom/dependencies.h"
+#include "Bloom/sprite/sprite.h"
+#include "Bloom/utils/utils.h"
 #include <iostream>
 
 namespace PhysX

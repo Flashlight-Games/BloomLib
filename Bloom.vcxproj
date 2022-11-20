@@ -27,120 +27,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="res\engine\fonts\Alagard\alagard.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\PressStart\PressStart.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Black.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-BlackItalic.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Bold.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-BoldItalic.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Italic.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Light.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-LightItalic.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Medium.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-MediumItalic.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Regular.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Thin.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-ThinItalic.ttf">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Font>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Bloom.aps" />
     <None Include="glfw3.dll">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -299,230 +185,12 @@
     <None Include="include\steam\lib\win32\sdkencryptedappticket.dll" />
     <None Include="include\steam\lib\win64\sdkencryptedappticket64.dll" />
     <None Include="include\steam\steam_api.json" />
-    <None Include="res\engine\shaders\basic\mvp_vertex.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\basic\plain_fragment.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\font\font_fragment.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\font\font_vertex.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_downsample.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_alpha.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_clear.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_filter.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_vertex.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\particle\particleshader_fragment.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\particle\particleshader_vertex.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\sprite\spriteshader_fragment.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\sprite\spriteshader_vertex.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\testing_framebuffers\framebufferMulti_fragment.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\testing_textures\textureshader_fragment.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\testing_textures\textureshader_vertex.glsl">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </None>
-    <None Include="src\framebuffers\chromatic_aberration.h" />
     <None Include="steam_api.dll">
       <DeploymentContent>true</DeploymentContent>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\4x4_SpritesheetTest.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\8x2_SpritesheetTest.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\container.jpeg">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\detailTest16.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\detailTest16Border.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\detailTest16Line.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\grass.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\rect16.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\tilemap.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\vLine.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\wall.jpeg">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\window.png">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|x64'">true</DeploymentContent>
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|x64'">true</DeploymentContent>
-    </Image>
-    <Image Include="res\shaki\man.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="res\**\*.*">
+    <Content Include="Include\Bloom\res\**\*.*">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Library (.lib)|Win32'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">true</DeploymentContent>
@@ -534,6 +202,24 @@
   <ItemGroup>
     <ClCompile Include="Application\App.cpp" />
     <ClCompile Include="Application\main.cpp" />
+    <ClCompile Include="include\Bloom\boneKinematics\boneKinematics.cpp" />
+    <ClCompile Include="include\Bloom\bones\bones.cpp" />
+    <ClCompile Include="include\Bloom\collision\collision.cpp" />
+    <ClCompile Include="include\Bloom\engine\engine.cpp" />
+    <ClCompile Include="include\Bloom\framebuffers\bloom.cpp" />
+    <ClCompile Include="include\Bloom\framebuffers\chromatic_aberration.cpp" />
+    <ClCompile Include="include\Bloom\framebuffers\framebuffers.cpp" />
+    <ClCompile Include="include\Bloom\glad.cpp" />
+    <ClCompile Include="include\Bloom\kinematicBody\KinematicBody.cpp" />
+    <ClCompile Include="include\Bloom\particles\particles.cpp" />
+    <ClCompile Include="include\Bloom\shaders\shaders.cpp" />
+    <ClCompile Include="include\Bloom\shake\shake.cpp" />
+    <ClCompile Include="include\Bloom\sprite\sprite.cpp" />
+    <ClCompile Include="include\Bloom\sprite\spritesheet.cpp" />
+    <ClCompile Include="include\Bloom\SteamTools\steamtools.cpp" />
+    <ClCompile Include="include\Bloom\textures\textures.cpp" />
+    <ClCompile Include="include\Bloom\text\text.cpp" />
+    <ClCompile Include="include\Bloom\utils\utils.cpp" />
     <ClCompile Include="include\soloud\dr_impl.cpp" />
     <ClCompile Include="include\soloud\soloud.cpp" />
     <ClCompile Include="include\soloud\soloud_audiosource.cpp" />
@@ -558,8 +244,6 @@
     <ClCompile Include="include\soloud\soloud_wav.cpp" />
     <ClCompile Include="include\soloud\soloud_wavstream.cpp" />
     <ClCompile Include="include\soloud\stb_vorbis.c" />
-    <ClCompile Include="src\kinematicBody\KinematicBody.cpp" />
-    <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="include\dearImGui\imgui.cpp" />
     <ClCompile Include="include\dearImGui\imgui_demo.cpp" />
     <ClCompile Include="include\dearImGui\imgui_draw.cpp" />
@@ -568,25 +252,27 @@
     <ClCompile Include="include\dearImGui\imgui_tables.cpp" />
     <ClCompile Include="include\dearImGui\imgui_widgets.cpp" />
     <ClCompile Include="include\GLM\detail\glm.cpp" />
-    <ClCompile Include="src\boneKinematics\boneKinematics.cpp" />
-    <ClCompile Include="src\bones\bones.cpp" />
-    <ClCompile Include="src\collision\collision.cpp" />
-    <ClCompile Include="src\framebuffers\bloom.cpp" />
-    <ClCompile Include="src\framebuffers\chromatic_aberration.cpp" />
-    <ClCompile Include="src\framebuffers\framebuffers.cpp" />
-    <ClCompile Include="src\glad.cpp" />
-    <ClCompile Include="src\particles\particles.cpp" />
-    <ClCompile Include="src\shaders\shaders.cpp" />
-    <ClCompile Include="src\shake\shake.cpp" />
-    <ClCompile Include="src\sprite\sprite.cpp" />
-    <ClCompile Include="src\sprite\spritesheet.cpp" />
-    <ClCompile Include="src\SteamTools\steamtools.cpp" />
-    <ClCompile Include="src\textures\textures.cpp" />
-    <ClCompile Include="src\text\text.cpp" />
-    <ClCompile Include="src\utils\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\App.h" />
+    <ClInclude Include="include\Bloom\boneKinematics\boneKinematics.h" />
+    <ClInclude Include="include\Bloom\bones\bones.h" />
+    <ClInclude Include="include\Bloom\collision\collision.h" />
+    <ClInclude Include="include\Bloom\dependencies.h" />
+    <ClInclude Include="include\Bloom\engine\engine.h" />
+    <ClInclude Include="include\Bloom\framebuffers\bloom.h" />
+    <ClInclude Include="include\Bloom\framebuffers\chromatic_aberration.h" />
+    <ClInclude Include="include\Bloom\framebuffers\framebuffers.h" />
+    <ClInclude Include="include\Bloom\kinematicBody\KinematicBody.h" />
+    <ClInclude Include="include\Bloom\particles\particles.h" />
+    <ClInclude Include="include\Bloom\shaders\shaders.h" />
+    <ClInclude Include="include\Bloom\shake\shake.h" />
+    <ClInclude Include="include\Bloom\sprite\sprite.h" />
+    <ClInclude Include="include\Bloom\sprite\spritesheet.h" />
+    <ClInclude Include="include\Bloom\SteamTools\steamtools.h" />
+    <ClInclude Include="include\Bloom\textures\textures.h" />
+    <ClInclude Include="include\Bloom\text\text.h" />
+    <ClInclude Include="include\Bloom\utils\utils.h" />
     <ClInclude Include="include\FastNoise\FastNoise.h" />
     <ClInclude Include="include\FastNoise\FastNoise_C.h" />
     <ClInclude Include="include\FastNoise\FastNoise_Config.h" />
@@ -695,8 +381,6 @@
     <ClInclude Include="include\steam\steam_api_flat.h" />
     <ClInclude Include="include\steam\steam_api_internal.h" />
     <ClInclude Include="include\steam\steam_gameserver.h" />
-    <ClInclude Include="src\kinematicBody\KinematicBody.h" />
-    <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="include\dearImGui\imconfig.h" />
     <ClInclude Include="include\dearImGui\imgui.h" />
     <ClInclude Include="include\dearImGui\imgui_impl_glfw.h" />
@@ -994,21 +678,6 @@
     <ClInclude Include="include\KHR\khrplatform.h" />
     <ClInclude Include="include\STBI\stb_image.h" />
     <ClInclude Include="include\STBTT\stb_truetype.h" />
-    <ClInclude Include="src\boneKinematics\boneKinematics.h" />
-    <ClInclude Include="src\bones\bones.h" />
-    <ClInclude Include="src\collision\collision.h" />
-    <ClInclude Include="src\dependencies.h" />
-    <ClInclude Include="src\framebuffers\bloom.h" />
-    <ClInclude Include="src\framebuffers\framebuffers.h" />
-    <ClInclude Include="src\particles\particles.h" />
-    <ClInclude Include="src\shaders\shaders.h" />
-    <ClInclude Include="src\shake\shake.h" />
-    <ClInclude Include="src\sprite\sprite.h" />
-    <ClInclude Include="src\sprite\spritesheet.h" />
-    <ClInclude Include="src\SteamTools\steamtools.h" />
-    <ClInclude Include="src\textures\textures.h" />
-    <ClInclude Include="src\text\text.h" />
-    <ClInclude Include="src\utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="include\steam\lib\win32\sdkencryptedappticket.lib" />

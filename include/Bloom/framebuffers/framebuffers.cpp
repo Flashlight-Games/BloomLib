@@ -88,7 +88,7 @@ void Framebuffer::drawToDefault(glm::vec2 window_size, bool clear) {
 }
 
 void Framebuffer::setShader(const char* fragment_source){
-    fbShader = Shader("res/engine/shaders/framebuffer/framebuffer_vertex.glsl",fragment_source);
+    fbShader = Shader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_vertex.glsl",fragment_source);
 };
 
 void Framebuffer::setTextureUniform(const char* uniform){

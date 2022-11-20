@@ -1,6 +1,6 @@
 #pragma once
-#include "collision/collision.h"
-#include "sprite/sprite.h"
+#include "Bloom/collision/collision.h"
+#include "Bloom/sprite/sprite.h"
 
 namespace PhysX {
 	class KinematicBody

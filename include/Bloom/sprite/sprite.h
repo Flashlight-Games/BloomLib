@@ -12,8 +12,8 @@
 #include <math.h>
 #include <string>
 
-#include "shaders/shaders.h" // SHADERS
-#include "textures/textures.h" // TEXTURES
+#include "Bloom/shaders/shaders.h" // SHADERS
+#include "Bloom/textures/textures.h" // TEXTURES
 
 namespace Bloom{
     class Sprite{
