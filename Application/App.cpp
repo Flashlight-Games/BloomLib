@@ -8,8 +8,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     case GLFW_KEY_ESCAPE:
         if (action == GLFW_PRESS) {
             app->CloseGame();
+            delete app;
         }
         break;
+    case GLFW_KEY_UP:
+        if (action == GLFW_PRESS)
+            Utils::EnableWireframe();
+        else if(action == GLFW_RELEASE)
+            Utils::DisableWireframe();
     }
 }
 
@@ -20,8 +26,6 @@ void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
         break;
     }
 }
-
-
 
 void Application::App::UILoop() {
     ImGui::Begin("Control window"); {
@@ -39,8 +43,20 @@ void Application::App::UILoop() {
 }
 
 void Application::App::GameLoop() {
-    glClearColor(0.21, 0.21, 0.21, 1.0);
-    DrawPixelsToDefault(false);
+    //EnablePixels();
+    std::vector<glm::vec2> offsets;
+    for (int idxY = 0; idxY < this->testSprite->GetVerticesAmount().y; idxY++)
+    {
+        for (int idxX = 0; idxX < this->testSprite->GetVerticesAmount().x; idxX++)
+        {
+            offsets.push_back(glm::vec2(glm::sin(2*GetTime()) * glm::sin(0.5*GetTime()) * glm::pow(1 - (idxY+1) / this->testSprite->GetVerticesAmount().y,2) * 100, 0));
+        }
+    }
+
+    this->testSprite->SetVertexPositionOffsets(offsets);
+
+    testSprite->Draw();
+    //DrawPixelsToDefault();
 }
 
 void Application::App::InputLoop() {
@@ -51,9 +67,16 @@ void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
 
-    update_thread = new std::thread(&Application::App::Update, this);
-}
+    this->testSprite = new Bloom::SubdividedSprite("include/Bloom/res/engine/textures/grass.png",1,GetViewMatrix(),GetWindowProjectionMatrix(),glm::vec2(4));
+    this->testSprite->SetLocation(GetWindowSize() / glm::vec2(2.0));
+    this->testSprite->SetScale(glm::vec2(1));
+    this->testSprite->SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/sprite/spriteshader_vertex.glsl", "include/Bloom/res/engine/shaders/sprite/spriteshader_fragment_UV.glsl"), GetWindowProjectionMatrix());
+    
+    
 
+    update_thread = new std::thread(&Application::App::Update, this);
+    glClearColor(0.21, 0.21, 0.21, 1.0);
+}
 
 void Application::App::Update() {
     while (!glfwWindowShouldClose(GetWindow())) {
@@ -62,4 +85,10 @@ void Application::App::Update() {
 
     update_thread->detach();
     delete update_thread;
+}
+
+Application::App::~App()
+{
+    delete testSprite;
+    delete referenceSprite;
 }

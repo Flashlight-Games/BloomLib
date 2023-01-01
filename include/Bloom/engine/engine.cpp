@@ -99,7 +99,7 @@ int Engine::Init(){
         window_projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
         view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)); 
 
-        fb_pixels = new Bloom::Framebuffer(GetWindowSize(), false);
+        fb_pixels = new Bloom::Framebuffer(GetPixelWindowSize(), false);
         fb_pixels->setTextureUniform("uTexture");
 
         soloud.init();

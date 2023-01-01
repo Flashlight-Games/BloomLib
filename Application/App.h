@@ -12,8 +12,12 @@ namespace Application {
         void UILoop();
         void InputLoop();
         void Update();
+
+        ~App();
     private:
         // HERE GO VARIABLES
+        Bloom::SubdividedSprite* testSprite;
+        Bloom::Sprite* referenceSprite;
     };
 }
 #endif

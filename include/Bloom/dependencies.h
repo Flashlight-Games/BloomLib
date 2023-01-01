@@ -37,7 +37,8 @@
 #include "framebuffers/framebuffers.h" // FRAMEBUFFERS
 #include "textures/textures.h" // TEXTURES
 #include "sprite/sprite.h" // SPRITES
-#include "sprite/spritesheet.h" // SPRITES
+#include "sprite/spritesheet.h" // SPRITESHEETS
+#include "sprite/sprite_subdivided.h" //SUBDIVIDEDSPRITES
 #include "collision/collision.h" // COLLISION BOXES
 #include "bones/bones.h" // BONE SYSTEM
 #include "boneKinematics/boneKinematics.h" // BONE KINEMATICS

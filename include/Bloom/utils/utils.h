@@ -47,6 +47,9 @@ namespace Utils {
     }
 
     glm::vec2 PixelateResolution(glm::vec2 resolution, int pixels_per_pixel);
+
+    void EnableWireframe();
+    void DisableWireframe();
 }
 
 #endif

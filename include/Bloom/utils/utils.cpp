@@ -133,6 +133,18 @@ glm::vec2 Utils::PixelateResolution(glm::vec2 resolution, int pixels_per_pixel){
     return resolution / glm::vec2(pixels_per_pixel);
 }
 
+void Utils::EnableWireframe()
+{
+    glPolygonMode(GL_FRONT, GL_LINE);
+    glPolygonMode(GL_BACK, GL_LINE);
+}
+
+void Utils::DisableWireframe()
+{
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glPolygonMode(GL_BACK, GL_FILL);
+}
+
 int Utils::RandInt(int min, int max) {
     return int(Lerp(min, max, (rand() % (int)max) / (float)max));
 }
