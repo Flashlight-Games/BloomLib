@@ -192,60 +192,6 @@
     <None Include="include\steam\lib\win32\sdkencryptedappticket.dll" />
     <None Include="include\steam\lib\win64\sdkencryptedappticket64.dll" />
     <None Include="include\steam\steam_api.json" />
-    <None Include="res\engine\shaders\basic\mvp_vertex.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\basic\plain_fragment.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\font\font_fragment.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\font\font_vertex.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_downsample.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_alpha.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_clear.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_fragment_filter.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\framebuffer\framebuffer_vertex.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\particle\particleshader_fragment.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\particle\particleshader_vertex.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\sprite\spriteshader_fragment.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\sprite\spriteshader_vertex.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\testing_framebuffers\framebufferMulti_fragment.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\testing_textures\textureshader_fragment.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
-    <None Include="res\engine\shaders\testing_textures\textureshader_vertex.glsl">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
     <None Include="steam_api.dll">
       <DeploymentContent>true</DeploymentContent>
     </None>
@@ -768,45 +714,6 @@
     <Image Include="include\Bloom\res\engine\textures\vLine.png" />
     <Image Include="include\Bloom\res\engine\textures\wall.jpeg" />
     <Image Include="include\Bloom\res\engine\textures\window.png" />
-    <Image Include="res\engine\textures\2x8_SpritesheetTest.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\4x4_SpritesheetTest.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\8x2_SpritesheetTest.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\container.jpeg">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\detailTest16.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\detailTest16Border.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\detailTest16Line.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\grass.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\rect16.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\tilemap.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\vLine.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\wall.jpeg">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
-    <Image Include="res\engine\textures\window.png">
-      <DeploymentContent>true</DeploymentContent>
-    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="include\Bloom\res\engine\fonts\Alagard\alagard.ttf" />
@@ -823,48 +730,6 @@
     <Font Include="include\Bloom\res\engine\fonts\Roboto\Roboto-Regular.ttf" />
     <Font Include="include\Bloom\res\engine\fonts\Roboto\Roboto-Thin.ttf" />
     <Font Include="include\Bloom\res\engine\fonts\Roboto\Roboto-ThinItalic.ttf" />
-    <Font Include="res\engine\fonts\Alagard\alagard.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\PressStart\PressStart.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Black.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-BlackItalic.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Bold.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-BoldItalic.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Italic.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Light.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-LightItalic.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Medium.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-MediumItalic.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Regular.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-Thin.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
-    <Font Include="res\engine\fonts\Roboto\Roboto-ThinItalic.ttf">
-      <DeploymentContent>true</DeploymentContent>
-    </Font>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
