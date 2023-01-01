@@ -16,8 +16,6 @@ namespace Application {
         ~App();
     private:
         // HERE GO VARIABLES
-        Bloom::SubdividedSprite* testSprite;
-        Bloom::Sprite* referenceSprite;
     };
 }
 #endif
