@@ -303,6 +303,7 @@
     <ClInclude Include="include\FastSIMD\FunctionList.h" />
     <ClInclude Include="include\FastSIMD\InlInclude.h" />
     <ClInclude Include="include\FastSIMD\SIMDTypeList.h" />
+    <ClInclude Include="include\HTTP\HTTPRequest.hpp" />
     <ClInclude Include="include\JSON\json.hpp" />
     <ClInclude Include="include\soloud\dr_flac.h" />
     <ClInclude Include="include\soloud\dr_mp3.h" />

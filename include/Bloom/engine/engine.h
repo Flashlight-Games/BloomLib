@@ -20,6 +20,8 @@ namespace Game{
         bool rendering_anti_aliasing = false;
         bool rendering_enable_vsync = true;
 
+        bool feature_enable_steam = true;
+
         std::string window_name = "Bloom";
     };
 
@@ -27,7 +29,11 @@ namespace Game{
         public:
             Engine(configuration config, bool init = false) { this->engine_config = config; if (init) { Run(); }; };
             int Run() {
-                if (SteamTools::SteamManager::Init()) {
+                //feature_enable_steam
+                bool should_init_engine = !engine_config.feature_enable_steam;
+                if (engine_config.feature_enable_steam)
+                    should_init_engine = SteamTools::SteamManager::Init();
+                if (should_init_engine) {
                     int retval = 0;
                     retval = Init();
                     retval = Prep_Begin();
@@ -143,7 +149,7 @@ namespace Game{
             configuration engine_config;                                        // ENGINE CONFIGURATION
             SteamTools::SteamManager* steam_manager;                            // STEAM MANAGER
 
-            Bloom::Sprite* debug_sprite;
+            Bloom::Sprite* debug_sprite;                                        // DEBUG SPRITE
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING
