@@ -44,6 +44,8 @@ void Application::App::UILoop() {
 
 void Application::App::GameLoop() {
     // RENDERING
+    EnablePixels();
+    DrawPixelsToDefault();
 }
 
 void Application::App::InputLoop() {
@@ -54,6 +56,7 @@ void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
     
+    this->test = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
 
     update_thread = new std::thread(&Application::App::Update, this);
     glClearColor(0.21, 0.21, 0.21, 1.0);

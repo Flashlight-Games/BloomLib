@@ -78,7 +78,7 @@ namespace Bloom{
             };
 
             float transformation[5] = {
-                32,32, // Location
+                0,0, // Location
                 0, // Rotation
                 1,1, // Scale
             };
