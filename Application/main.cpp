@@ -8,7 +8,7 @@ int main()
     settings.rendering_enable_vsync = false;
     settings.window_name = "Test Game";
     settings.glfw_transparent = false;
-    settings.feature_enable_steam = true;
+    settings.feature_enable_steam = false;
 
     Application::App App = Application::App(settings);
     return App.Run();

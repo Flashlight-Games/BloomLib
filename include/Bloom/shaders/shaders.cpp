@@ -97,3 +97,92 @@ void setTextureAtLocation(GLenum location, GLuint texture, int uniformID){
     if(uniformID != -1)
         glUniform1i(uniformID,location -33984);
 };
+
+Bloom::ComputeShader::ComputeShader(const char* compute_source, glm::vec2 size)
+{
+    this->size = size;
+
+    glGenTextures(1, &TextureID);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, TextureID);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, size.x, size.y, 0, GL_RED, GL_FLOAT, NULL);
+    glBindImageTexture(0, TextureID, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32F);
+
+    // LOADING
+    std::string computeReadData;
+
+    std::ifstream computeFile(compute_source); // OPEN VERTEX FILE
+    if (computeFile.good()) {
+        while (computeFile.good()) {
+            int currChar = computeFile.get();
+            if (currChar != -1) // IF NOT EOF
+                computeReadData += currChar;
+        }
+        computeFile.close();
+    }
+    else {
+        std::string errmsg = "FAILED TO LOAD COMPUTE SHADER FROM "; errmsg.append(compute_source);
+        throw std::runtime_error(errmsg);
+    }
+
+    //COMPILING
+    const char* computeData = computeReadData.c_str();
+
+    char info[512];
+    GLint success;
+
+    GLuint computeID = glCreateShader(GL_COMPUTE_SHADER);
+    glShaderSource(computeID, 1, &computeData, NULL);
+    glCompileShader(computeID);
+
+    glGetShaderiv(computeID, GL_COMPILE_STATUS, &success);
+    if (!success) { glGetShaderInfoLog(computeID, 512, NULL, info); std::string errmsg = "COMPUTE SHADER COMPILE ERROR: "; errmsg.append(info); throw std::runtime_error(errmsg); }
+
+
+    //ATTACHING
+    programID = glCreateProgram();
+    glAttachShader(programID, computeID);
+    glLinkProgram(programID);
+
+    glGetProgramiv(programID, GL_LINK_STATUS, &success);
+    if (!success) { glGetProgramInfoLog(programID, 512, NULL, info); std::string errmsg = "COMPUTE SHADER PROGRAM LINK ERROR: "; errmsg.append(info); throw std::runtime_error(errmsg); }
+    glDeleteShader(computeID);
+}
+
+void Bloom::ComputeShader::Use()
+{
+    glUseProgram(programID);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, TextureID);
+}
+
+void Bloom::ComputeShader::Dispatch(bool wait)
+{
+    glDispatchCompute(size.x, size.y, 1);
+    if (wait) {
+        glMemoryBarrier(GL_ALL_BARRIER_BITS);
+    }
+}
+
+void Bloom::ComputeShader::SetValues(std::vector<float> values)
+{
+    if(values.size() != size.x * size.y)
+        throw std::runtime_error("COMPUTE SHADER DATA SIZE DOES NOT MATCH COMPUTE SHDAER SIZE!\n");
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, TextureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, size.x, size.y, 0, GL_RED, GL_FLOAT, values.data());
+}
+
+std::vector<float> Bloom::ComputeShader::ReadData()
+{
+    std::vector<float> compute_data(size.x * size.y);
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_FLOAT, compute_data.data());
+    return compute_data;
+}
+

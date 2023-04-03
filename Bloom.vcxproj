@@ -33,6 +33,7 @@
     </None>
     <None Include="include\Bloom\res\engine\shaders\basic\mvp_vertex.glsl" />
     <None Include="include\Bloom\res\engine\shaders\basic\plain_fragment.glsl" />
+    <None Include="include\Bloom\res\engine\shaders\compute\compute_shader.glsl" />
     <None Include="include\Bloom\res\engine\shaders\font\font_fragment.glsl" />
     <None Include="include\Bloom\res\engine\shaders\font\font_vertex.glsl" />
     <None Include="include\Bloom\res\engine\shaders\framebuffer\framebuffer_chromatic_aberration.glsl" />

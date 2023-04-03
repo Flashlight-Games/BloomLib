@@ -57,6 +57,23 @@ void Application::App::Begin() {
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
     
     this->test = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
+    this->cstest = new Bloom::ComputeShader("include/Bloom/res/engine/shaders/compute/compute_shader.glsl", glm::vec2(10, 1));
+
+    this->cstest->Use();
+    this->cstest->SetValues(std::vector<float>({0,1,2,3,4,5,6,7,8,9}));
+
+    for (int i = 0; i < 10; i++)
+    {
+        this->cstest->Use();
+        this->cstest->Dispatch(true);
+        auto data = this->cstest->ReadData();
+
+        for (int i = 0; i < data.size(); i++)
+        {
+            std::cout << data.at(i) << ", ";
+        }
+        std::cout << "\n";
+    }
 
     update_thread = new std::thread(&Application::App::Update, this);
     glClearColor(0.21, 0.21, 0.21, 1.0);

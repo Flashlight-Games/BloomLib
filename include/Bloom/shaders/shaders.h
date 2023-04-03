@@ -9,6 +9,7 @@
 #include <GLM/glm.hpp>
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>
+#include <vector>
 namespace Bloom{
     class Shader{
         public:
@@ -33,6 +34,19 @@ namespace Bloom{
         int programID;
         int vertexID;
         int fragmentID;
+    };
+
+    class ComputeShader {
+    public:
+        ComputeShader(const char* compute_source, glm::vec2 size);
+        void Use();
+        void Dispatch(bool wait = false);
+        void SetValues(std::vector<float> values);
+        std::vector<float> ReadData();
+    private:
+        int programID;
+        GLuint TextureID;
+        glm::vec2 size;
     };
 }
 void setTextureAtLocation(GLenum location, GLuint texture, int uniformID = -1);

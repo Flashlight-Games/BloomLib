@@ -451,6 +451,7 @@
     <None Include="include\Bloom\res\engine\shaders\testing_framebuffers\framebufferMulti_fragment.glsl" />
     <None Include="include\Bloom\res\engine\shaders\testing_textures\textureshader_fragment.glsl" />
     <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_fragment_UV.glsl" />
+    <None Include="include\Bloom\res\engine\shaders\compute\compute_shader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\dearImGui\imgui.cpp">
