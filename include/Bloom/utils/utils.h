@@ -17,7 +17,7 @@ namespace Utils {
 
     int RandInt(int min, int max);
 
-    float RandFloat(float min, float max);
+    float RandFloat(float min, float max, int precision = 1000);
 
     bool isDevelopmentConfiguration();
 
@@ -50,6 +50,18 @@ namespace Utils {
 
     void EnableWireframe();
     void DisableWireframe();
+
+    std::string Black(bool background = false);
+    std::string Red(bool background = false);
+    std::string Green(bool background = false);
+    std::string Yellow(bool background = false);
+    std::string Blue(bool background = false);
+    std::string Magenta(bool background = false);
+    std::string Cyan(bool background = false);
+    std::string White(bool background = false);
+    std::string Default(bool background = false);
+
+    glm::vec2 rotateVector(glm::vec2 vector, float degrees, glm::vec2 axis = glm::vec2(0));
 }
 
 #endif

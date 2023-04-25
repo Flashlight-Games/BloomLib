@@ -16,8 +16,6 @@ namespace Application {
         ~App();
     private:
         // HERE GO VARIABLES
-        Bloom::Sprite* test;
-        Bloom::ComputeShader* cstest;
     };
 }
 #endif

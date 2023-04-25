@@ -38,6 +38,8 @@ namespace PhysX
 
         glm::mat4 makeTransformationMatrix();
 
+        void copyTransform(Bloom::Sprite* sprite) { this->location = sprite->GetLocation(); this->rotation = sprite->GetRotation(); this->scale = sprite->GetSize(); }
+
         private:
         int16_t rotation = 0;
         glm::vec2 location = glm::vec2(0,0);
@@ -45,6 +47,7 @@ namespace PhysX
         glm::vec2 origin = glm::vec2(0,0);
 
         std::string channel;
+
     };
 
     glm::vec2 LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end);

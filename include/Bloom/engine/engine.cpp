@@ -15,7 +15,7 @@ void Engine::Prep_InputLoop(){
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during InputLoop : " << ex.what() << std::endl;
-        glfwTerminate();
+        CloseGame();
     }
 }
 
@@ -111,7 +111,7 @@ int Engine::Init(){
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;
-        glfwTerminate();
+        CloseGame();
         return -1;
     }
     return 0;
@@ -123,7 +123,7 @@ int Engine::Prep_Begin(){
     }
     catch (const std::exception& ex) {
             std::cout << "Encountered Bloom Exception during Beginning : " << ex.what() << std::endl;
-            glfwTerminate();
+            CloseGame();
             return -1;
     }
     return 0;
@@ -131,14 +131,11 @@ int Engine::Prep_Begin(){
 
 int Engine::Prep_GameLoop(){
     try {
-        if (glfwWindowShouldClose(window)){ // END IF SHOULD CLOSE
-            return CloseGame();
-        }
-
         // PREPARE LOOP
         SteamTools::SteamManager::ProcessCallbacks();
         fps = 1000 / GetDeltaTime();
-        glfwPollEvents(); Prep_InputLoop();
+        glfwPollEvents(); 
+        Prep_InputLoop();
         if (!isLocked)
             game_time = glfwGetTime();
         
@@ -156,7 +153,7 @@ int Engine::Prep_GameLoop(){
     }
     catch (const std::exception& ex) {
             std::cout << "Encountered Bloom Exception during GameLoop : " << ex.what() << std::endl;
-            glfwTerminate();
+            CloseGame();
             return -1;
     }
     return 0;
@@ -171,7 +168,7 @@ int Engine::Prep_UILoop(){
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during UILoop : " << ex.what() << std::endl;
-        glfwTerminate();
+        CloseGame();
         return -1;
     }
     return 0;
@@ -185,10 +182,13 @@ int Engine::EndLoop(){
         // Rendering pipeline end
         glfwSwapBuffers(window); // Render buffer to screen
 
+        if (glfwWindowShouldClose(GetWindow())) { // END IF SHOULD CLOSE
+            return CloseGame();
+        }
     }
     catch (const std::exception& ex) {
         std::cout << "Encountered Bloom Exception during EndLoop : " << ex.what() << std::endl;
-        glfwTerminate();
+        CloseGame();
         return -1;
     }
     return 0;
@@ -214,15 +214,17 @@ int Game::Engine::CloseGame()
     glfwSetWindowShouldClose(GetWindow(), true);
     soloud.deinit();
     SteamAPI_Shutdown();
+    glfwDestroyWindow(GetWindow());
     glfwTerminate();
     update_thread->detach();
 
     delete fb_pixels;
-    delete window;
     delete steam_manager;
     delete debug_sprite;
 
-    return -2;
+    std::cout << Utils::Default() << Utils::Default(true);
+
+    return -1;
 }
 
 void Engine::InputLoop() {
@@ -238,4 +240,9 @@ glm::vec2 Engine::GetCursorWorldPosition(glm::vec2 camera_location)
 glm::vec2 Engine::GetCameraWorldPosition(glm::vec2 camera_location)
 {
     return (GetPixelWindowSize() / glm::vec2(2)) - camera_location;
+}
+
+void Game::Engine::ExitGame()
+{
+    glfwSetWindowShouldClose(GetWindow(), GLFW_TRUE);
 }

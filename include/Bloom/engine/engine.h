@@ -52,8 +52,6 @@ namespace Game{
 
                 return false;
             };
-
-            int CloseGame();
             
             glm::mat4 GetWindowProjectionMatrix() { return window_projection_matrix; };
             glm::mat4 GetPixelProjectionMatrix() { return pixel_projection_matrix; };
@@ -99,6 +97,18 @@ namespace Game{
                     debug_sprite->SetLocation(position); debug_sprite->SetRotation((int)(angle + 180) % 180); debug_sprite->SetScale(glm::vec2(thickness / 16.0, height / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw();
                 }
             }
+            void DrawDebugCollision(PhysX::collisionBox* collision,int thickness = 1, glm::vec3 color = glm::vec3(1,1,1)) {
+                if (Utils::isDevelopmentConfiguration()) {
+                    glm::vec2 location = collision->getLocation();
+                    glm::vec2 rotation_axis = collision->getLocation() + (collision->getOrigin() - glm::vec2(0.5)) * collision->getScale();
+                    glm::vec2 offset = -(collision->getOrigin() - glm::vec2(0.5)) * collision->getScale();
+                    DrawDebugLine(offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(0.5, 0.5),collision->getRotation(), rotation_axis), offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(0.5, -0.5), collision->getRotation(), rotation_axis), thickness, color);
+                    DrawDebugLine(offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(0.5, -0.5),collision->getRotation(), rotation_axis), offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(-0.5, -0.5), collision->getRotation(), rotation_axis), thickness, color);
+                    DrawDebugLine(offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(-0.5, -0.5),collision->getRotation(), rotation_axis), offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(-0.5, 0.5), collision->getRotation(), rotation_axis), thickness, color);
+                    DrawDebugLine(offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(-0.5, 0.5),collision->getRotation(), rotation_axis), offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(0.5, 0.5), collision->getRotation(), rotation_axis), thickness, color);
+
+                }
+            }
             std::chrono::steady_clock::time_point GetHighResTime() { return std::chrono::high_resolution_clock::now(); };
 
             std::thread* update_thread;
@@ -107,6 +117,8 @@ namespace Game{
 
             glm::vec2 GetCursorWorldPosition(glm::vec2 camera_location);
             glm::vec2 GetCameraWorldPosition(glm::vec2 camera_location);
+
+            void ExitGame();
         private:
             // EVENTS
             int Init();
@@ -123,6 +135,8 @@ namespace Game{
             virtual void InputLoop();
             // BACK
             int EndLoop();
+
+            int CloseGame();
 
             glm::mat4 window_projection_matrix;                                 // PROJECTION MATRIX FOR WINDOW
             glm::mat4 pixel_projection_matrix;                                  // PROJECTION MATRIX FOR PIXELS
@@ -150,6 +164,8 @@ namespace Game{
             SteamTools::SteamManager* steam_manager;                            // STEAM MANAGER
 
             Bloom::Sprite* debug_sprite;                                        // DEBUG SPRITE
+
+            bool should_close = false;
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING

@@ -1,4 +1,15 @@
 #include "shaders.h"
+#include <string>
+
+/*
+    this->cstest = new Bloom::ComputeShader("include/Bloom/res/engine/shaders/compute/multiplication_compute.glsl", glm::vec2(size));
+
+    this->cstest->Use();
+    this->cstest->Dispatch(true);
+    float* data = this->cstest->ReadData();
+    
+*/
+
 
 using namespace Bloom;
 
@@ -100,19 +111,17 @@ void setTextureAtLocation(GLenum location, GLuint texture, int uniformID){
 
 Bloom::ComputeShader::ComputeShader(const char* compute_source, glm::vec2 size)
 {
+    int max_size = 10000 * 10000;
+    if (size.x * size.y > max_size) {
+        std::string errmsg = "FAILED TO CREATE COMPUTE SHADER, SIZE LARGER THAN "; errmsg.append(std::to_string(max_size));
+        throw std::runtime_error(errmsg);
+    }
     this->size = size;
-
-    glGenTextures(1, &TextureID);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, TextureID);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-
+    this->texture = new Bloom::Texture2D(NULL,size,GL_R32F, false);
+    
     glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, size.x, size.y, 0, GL_RED, GL_FLOAT, NULL);
-    glBindImageTexture(0, TextureID, 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32F);
-
+    glBindImageTexture(0, this->texture->GetID(), 0, GL_FALSE, 0, GL_READ_WRITE, GL_R32F);
+    
     // LOADING
     std::string computeReadData;
 
@@ -129,7 +138,6 @@ Bloom::ComputeShader::ComputeShader(const char* compute_source, glm::vec2 size)
         std::string errmsg = "FAILED TO LOAD COMPUTE SHADER FROM "; errmsg.append(compute_source);
         throw std::runtime_error(errmsg);
     }
-
     //COMPILING
     const char* computeData = computeReadData.c_str();
 
@@ -143,7 +151,6 @@ Bloom::ComputeShader::ComputeShader(const char* compute_source, glm::vec2 size)
     glGetShaderiv(computeID, GL_COMPILE_STATUS, &success);
     if (!success) { glGetShaderInfoLog(computeID, 512, NULL, info); std::string errmsg = "COMPUTE SHADER COMPILE ERROR: "; errmsg.append(info); throw std::runtime_error(errmsg); }
 
-
     //ATTACHING
     programID = glCreateProgram();
     glAttachShader(programID, computeID);
@@ -154,11 +161,16 @@ Bloom::ComputeShader::ComputeShader(const char* compute_source, glm::vec2 size)
     glDeleteShader(computeID);
 }
 
+Bloom::ComputeShader::~ComputeShader()
+{
+    delete this->texture;
+}
+
 void Bloom::ComputeShader::Use()
 {
     glUseProgram(programID);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, TextureID);
+    this->texture->bind();
 }
 
 void Bloom::ComputeShader::Dispatch(bool wait)
@@ -175,14 +187,14 @@ void Bloom::ComputeShader::SetValues(std::vector<float> values)
         throw std::runtime_error("COMPUTE SHADER DATA SIZE DOES NOT MATCH COMPUTE SHDAER SIZE!\n");
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, TextureID);
+    this->texture->bind();
     glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, size.x, size.y, 0, GL_RED, GL_FLOAT, values.data());
 }
 
-std::vector<float> Bloom::ComputeShader::ReadData()
+float* Bloom::ComputeShader::ReadData()
 {
-    std::vector<float> compute_data(size.x * size.y);
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_FLOAT, compute_data.data());
-    return compute_data;
+    float* data = new float[size.x * size.y];
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_FLOAT, data);
+    return data;
 }
 

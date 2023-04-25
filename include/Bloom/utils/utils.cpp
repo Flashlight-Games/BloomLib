@@ -145,12 +145,56 @@ void Utils::DisableWireframe()
     glPolygonMode(GL_BACK, GL_FILL);
 }
 
-int Utils::RandInt(int min, int max) {
-    return int(Lerp(min, max, (rand() % (int)max) / (float)max));
+std::string Utils::Black(bool background)
+{
+    return !background ? "\x1b[30m" : "\x1b[40m";
+}
+std::string Utils::Red(bool background)
+{
+    return !background ? "\x1b[31m" : "\x1b[41m";
+}
+std::string Utils::Green(bool background)
+{
+    return !background ? "\x1b[32m" : "\x1b[42m";
+}
+std::string Utils::Yellow(bool background)
+{
+    return !background ? "\x1b[33m" : "\x1b[43m";
+}
+std::string Utils::Blue(bool background)
+{
+    return !background ? "\x1b[34m" : "\x1b[44m";
+}
+std::string Utils::Magenta(bool background)
+{
+    return !background ? "\x1b[35m" : "\x1b[45m";
+}
+std::string Utils::Cyan(bool background)
+{
+    return !background ? "\x1b[36m" : "\x1b[46m";
+}
+std::string Utils::White(bool background)
+{
+    return !background ? "\x1b[37m" : "\x1b[47m";
+}
+std::string Utils::Default(bool background)
+{
+    return !background ? "\x1b[39m" : "\x1b[39m";
 }
 
-float Utils::RandFloat(float min, float max) {
-    return Lerp(min, max, (rand() % (int)ceil((max != 0) ? max : 100)) / (float)ceil((max!=0) ? max : 100));
+glm::vec2 Utils::rotateVector(glm::vec2 vector,  float degrees, glm::vec2 axis)
+{
+    float distance = Distance2D(axis, vector);
+    float angle = atan2(axis.y-vector.y, axis.x - vector.x);
+    return PointAtAngleAndDistance(angle + glm::radians(degrees), distance) + axis;
+}
+
+int Utils::RandInt(int min, int max) {
+    return int(Lerp(min, (max+1), (rand() % (int)(max+1)) / (float)(max+1)));
+}
+
+float Utils::RandFloat(float min, float max, int precision) {
+    return RandInt(min, max * precision) / (float)precision;
 }
 
 bool Utils::isDevelopmentConfiguration() { return *ENGINE_CONFIGURATION == *"Development"; }

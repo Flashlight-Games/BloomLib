@@ -22,19 +22,21 @@
 namespace Bloom{
     class Spritesheet{
         public:
-
-        Spritesheet(){};
         Spritesheet(const char* texture_path,int pixels_per_pixel,glm::vec2 tiling, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5,0.5));
         void Draw();
         int Advance(int step = 1);
         int TimedAdvance(float duration,int step = 1);
         void SetIdx(int idx);
 
-        Sprite* GetSprite(){return &sprite;};
+        void SetScale(glm::vec2 scale) { this->sprite->SetScale(scale); };
+        void SetLocation(glm::vec2 location) { this->sprite->SetLocation(location); };
+        void SetRotation(float rotation) { this->sprite->SetRotation(rotation); };
+
+        Sprite* GetSprite(){return sprite;};
         glm::vec2 GetTiling(){return tiling;};
 
         private:
-        Sprite sprite = Sprite("",1,new glm::mat4(),glm::mat4());;
+        Sprite* sprite;
         glm::vec2 tiling;
         int idx = 0;
         std::chrono::high_resolution_clock::time_point lastTime = std::chrono::high_resolution_clock::now();

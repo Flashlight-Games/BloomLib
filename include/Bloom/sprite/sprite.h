@@ -62,6 +62,8 @@ namespace Bloom{
                 shader->uniformMat4(shader->getUniformId("projection"), projection_matrix);
             };
 
+            void SetTexture(Bloom::Texture2D* new_texture) { delete this->texture; this->texture = new_texture; }
+
         private:
             void UpdateLocation();
 

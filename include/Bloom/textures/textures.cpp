@@ -39,12 +39,14 @@ Texture2D::Texture2D(const char* path,bool linear_scaling){
 
     glGenTextures(1, &this->id);
     glBindTexture(GL_TEXTURE_2D, this->id);
-    if(channels == 4)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size[0],size[1], 0, GL_RGBA, GL_UNSIGNED_BYTE,image);
-    else if(channels == 3)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size[0],size[1], 0, GL_RGB, GL_UNSIGNED_BYTE,image);
-    else
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size[0],size[1], 0, GL_RED, GL_UNSIGNED_BYTE,image);
+    if (channels == 4)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size[0], size[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+    else if (channels == 3)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, size[0], size[1], 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    else if (channels == 1)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, size[0], size[1], 0, GL_RED, GL_UNSIGNED_BYTE, image);
+    else if (stbi_failure_reason())
+        throw std::runtime_error(std::string(stbi_failure_reason()) + " \""+std::string(source)+"\"");
 
     if(linear_scaling){
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
