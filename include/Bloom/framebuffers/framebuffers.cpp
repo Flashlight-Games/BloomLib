@@ -85,8 +85,8 @@ void Framebuffer::draw(){
     glDrawArrays(GL_TRIANGLES,0,6);
 };
 
-void Framebuffer::drawToDefault(glm::vec2 window_size, bool clear,glm::vec2 offset) {
-    bindDefaultFramebuffer(clear, window_size.x, window_size.y,offset); draw();
+void Framebuffer::drawToDefault(glm::vec2 window_size, bool clear,glm::vec2 offset, float zoom) {
+    bindDefaultFramebuffer(clear, window_size.x, window_size.y,offset,zoom); draw();
 }
 
 void Framebuffer::setShader(const char* fragment_source){
@@ -102,9 +102,9 @@ void Bloom::Framebuffer::SetLocationOffset(glm::vec2 offset)
     this->offset = offset;
 }
 
-void bindDefaultFramebuffer(bool clear,int width, int height, glm::vec2 offset){
+void bindDefaultFramebuffer(bool clear,int width, int height, glm::vec2 offset,float zoom){
     if(width && height)
-        glViewport(offset.x, offset.y, width, height);
+        glViewport(offset.x+ width*(1-zoom), offset.y+ height * (1-zoom), width- width * (1 - zoom)*2, height- height * (1 - zoom)*2);
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     if(clear){
         glClear(GL_COLOR_BUFFER_BIT);

@@ -11,7 +11,8 @@ void main()
 {
     color = texture(uTexture,vTextureCoords);
     if(color.a <= 0.0)
-        discard;
+        //discard;
+        color = vec4(0.21,0.21,0.21,1);
     color = vec4(color.xyz,1.0);
     
 }

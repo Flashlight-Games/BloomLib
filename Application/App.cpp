@@ -10,6 +10,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             app->ExitGame();
         }
         break;
+    case GLFW_KEY_I:
+        if (action == GLFW_PRESS) {
+            app->SetZoomTarget(app->GetCameraZoom() * 1.25);
+        }
+        break;
+    case GLFW_KEY_K:
+        if (action == GLFW_PRESS) {
+            app->SetZoomTarget(app->GetCameraZoom() / 1.25);
+        }
+        break;
     }
 }
 
@@ -39,6 +49,8 @@ void Application::App::UILoop() {
 void Application::App::GameLoop() {
     // RENDERING
     EnablePixels();
+    this->SetCameraLocation(cam_loc);
+    this->SetCameraZoom(Utils::Lerp(GetCameraZoom(),zoom_target,0.01));
     this->test->Draw();
     DrawPixelsToDefault();
 }
@@ -55,7 +67,12 @@ void Application::App::InputLoop() {
         cam_loc += glm::vec2(0,5 * (1 / 1000.0));
     if (glfwGetKey(GetWindow(), GLFW_KEY_Q))
         this->test->SetRotation(this->test->GetRotation() + 0.01);
-    this->SetCameraLocation(cam_loc);
+
+
+    if (glfwGetKey(GetWindow(), GLFW_KEY_A))
+        this->test->SetLocation(this->test->GetLocation() + glm::vec2(-5 * (1 / 1000.0), 0));
+    if (glfwGetKey(GetWindow(), GLFW_KEY_D))
+        this->test->SetLocation(this->test->GetLocation() + glm::vec2(5 * (1 / 1000.0), 0));
 }
 
 void Application::App::Begin() {
@@ -65,7 +82,7 @@ void Application::App::Begin() {
     this->test->SetLocation(glm::vec2(20));
 
     update_thread = new std::thread(&Application::App::Update, this);
-    glClearColor(0.21, 0.21, 0.21, 1.0);
+    //glClearColor(0.21, 0.21, 0.21, 1.0);
 }
 
 void Application::App::Update() {
@@ -80,4 +97,9 @@ void Application::App::Update() {
 Application::App::~App()
 {
 
+}
+
+void Application::App::SetZoomTarget(float zoom)
+{
+    this->zoom_target = zoom;
 }

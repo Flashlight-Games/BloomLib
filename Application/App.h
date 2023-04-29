@@ -14,10 +14,12 @@ namespace Application {
         void Update();
 
         ~App();
+        void SetZoomTarget(float zoom);
     private:
         // HERE GO VARIABLES
         glm::vec2 cam_loc;
         Bloom::Sprite* test;
+        float zoom_target = 1.0;
     };
 }
 #endif
