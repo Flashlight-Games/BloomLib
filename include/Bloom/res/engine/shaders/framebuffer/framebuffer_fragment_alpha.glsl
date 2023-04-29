@@ -13,4 +13,5 @@ void main()
     if(color.a <= 0.0)
         discard;
     color = vec4(color.xyz,1.0);
+    
 }

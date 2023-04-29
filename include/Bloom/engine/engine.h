@@ -67,9 +67,11 @@ namespace Game{
             glm::vec2 GetScale() { return GetWindowSize() / GetPixelWindowSize(); };
 
             void EnablePixels(bool clear = true) { (*fb_pixels).use(clear); };
-            void DrawPixelsToDefault(bool clear = true) { (*fb_pixels).drawToDefault(glm::vec2(windowWidth, windowHeight),clear); bindDefaultFramebuffer(false, windowWidth, windowHeight); };
+            void DrawPixelsToDefault(bool clear = true) { (*fb_pixels).drawToDefault(glm::vec2(windowWidth, windowHeight)+glm::vec2(windowWidth/pixel_windowWidth,windowHeight/pixel_windowHeight), clear, glm::vec2(windowWidth / pixel_windowWidth, windowHeight / pixel_windowHeight) / -2.0f); };
             void DrawPixels() { (*fb_pixels).draw(); };
-            void SetCameraLocation(glm::vec2 location){ view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location.x, location.y, -1)); }
+            void SetCameraLocation(glm::vec2 location) { view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(glm::round(location.x), glm::round(location.y), -1)); 
+                fb_pixels->SetLocationOffset((glm::vec2(location.x, location.y) - glm::round(glm::vec2(location.x, location.y)))/GetPixelWindowSize()/0.5f);
+            }
 
             double GetDeltaTime() { return frame_time * delta_multiplier; };
             double GetGameSpeed() { return GetDeltaTime() / 16.67; };

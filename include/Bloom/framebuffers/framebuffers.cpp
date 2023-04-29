@@ -77,14 +77,16 @@ void Framebuffer::use(bool clear){
 };
 void Framebuffer::draw(){
     fbShader.use();
+    fbShader.uniformMat4(fbShader.getUniformId("offset"), (glm::translate(glm::mat4(1.0), glm::vec3(this->offset.x, this->offset.y, 0.0f))));
+
     glActiveTexture(GL_TEXTURE0);
     fbTexture->bind();
     glBindVertexArray(fbVao);
     glDrawArrays(GL_TRIANGLES,0,6);
 };
 
-void Framebuffer::drawToDefault(glm::vec2 window_size, bool clear) {
-    bindDefaultFramebuffer(clear, window_size.x, window_size.y); draw();
+void Framebuffer::drawToDefault(glm::vec2 window_size, bool clear,glm::vec2 offset) {
+    bindDefaultFramebuffer(clear, window_size.x, window_size.y,offset); draw();
 }
 
 void Framebuffer::setShader(const char* fragment_source){
@@ -95,9 +97,14 @@ void Framebuffer::setTextureUniform(const char* uniform){
     fbShader.uniformInt(fbShader.getUniformId(uniform),getTexture()->GetID());
 }
 
-void bindDefaultFramebuffer(bool clear,int width, int height){
+void Bloom::Framebuffer::SetLocationOffset(glm::vec2 offset)
+{
+    this->offset = offset;
+}
+
+void bindDefaultFramebuffer(bool clear,int width, int height, glm::vec2 offset){
     if(width && height)
-        glViewport(0, 0, width, height);
+        glViewport(offset.x, offset.y, width, height);
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     if(clear){
         glClear(GL_COLOR_BUFFER_BIT);

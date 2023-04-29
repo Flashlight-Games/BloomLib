@@ -10,12 +10,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             app->ExitGame();
         }
         break;
-    case GLFW_KEY_UP:
-        if (action == GLFW_PRESS)
-            Utils::EnableWireframe();
-        else if(action == GLFW_RELEASE)
-            Utils::DisableWireframe();
-        break;
     }
 }
 
@@ -45,16 +39,30 @@ void Application::App::UILoop() {
 void Application::App::GameLoop() {
     // RENDERING
     EnablePixels();
+    this->test->Draw();
     DrawPixelsToDefault();
 }
 
 void Application::App::InputLoop() {
     //pass
+    if (glfwGetKey(GetWindow(), GLFW_KEY_LEFT))
+        cam_loc += glm::vec2(5*(1/1000.0), 0);
+    if (glfwGetKey(GetWindow(), GLFW_KEY_RIGHT))
+        cam_loc += glm::vec2(-5*(1 / 1000.0), 0);
+    if (glfwGetKey(GetWindow(), GLFW_KEY_UP))
+        cam_loc += glm::vec2(0,-5 * (1 / 1000.0));
+    if (glfwGetKey(GetWindow(), GLFW_KEY_DOWN))
+        cam_loc += glm::vec2(0,5 * (1 / 1000.0));
+    if (glfwGetKey(GetWindow(), GLFW_KEY_Q))
+        this->test->SetRotation(this->test->GetRotation() + 0.01);
+    this->SetCameraLocation(cam_loc);
 }
 
 void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
+    this->test = new Bloom::Sprite("include/Bloom/res/engine/textures/detailTest16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
+    this->test->SetLocation(glm::vec2(20));
 
     update_thread = new std::thread(&Application::App::Update, this);
     glClearColor(0.21, 0.21, 0.21, 1.0);

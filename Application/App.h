@@ -16,6 +16,8 @@ namespace Application {
         ~App();
     private:
         // HERE GO VARIABLES
+        glm::vec2 cam_loc;
+        Bloom::Sprite* test;
     };
 }
 #endif

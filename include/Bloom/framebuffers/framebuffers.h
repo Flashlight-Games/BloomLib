@@ -6,8 +6,8 @@
 #include <iostream>
 #include <fstream>
 
-#include "Bloom/shaders/shaders.h"
-#include "Bloom/textures/textures.h"
+#include "../shaders/shaders.h"
+#include "../textures/textures.h"
 
 namespace Bloom{
     class Framebuffer{
@@ -19,7 +19,7 @@ namespace Bloom{
         Shader fbShader = Shader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_vertex.glsl","include/Bloom/res/engine/shaders/framebuffer/framebuffer_fragment_alpha.glsl");
         void use(bool clear);
         virtual void draw();
-        virtual void drawToDefault(glm::vec2 window_size,bool clear = true);
+        virtual void drawToDefault(glm::vec2 window_size,bool clear = true,glm::vec2 offset = glm::vec2(0));
 
         uint16_t getWidth(){return width;};
         uint16_t getHeight(){return height;};
@@ -40,6 +40,8 @@ namespace Bloom{
         void setShader(const char* fragment_source);
         void setTextureUniform(const char* uniform);
 
+        void SetLocationOffset(glm::vec2 offset);
+
         private:
         uint16_t width;
         uint16_t height;
@@ -50,9 +52,11 @@ namespace Bloom{
         uint32_t fbo;
         Texture2D* fbTexture;
         uint32_t rbo;
+
+        glm::vec2 offset = glm::vec2(0);
     };
 }
 
-void bindDefaultFramebuffer(bool clear,int width = -1, int height = -1);
+void bindDefaultFramebuffer(bool clear,int width = -1, int height = -1, glm::vec2 offset = glm::vec2(0,0));
 
 #endif
