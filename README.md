@@ -18,7 +18,7 @@ textures -> reading images and using them for sprites
 utils -> miscellaneous functions for general use  
 res/engine -> Resources required to use the engine: fonts, textures, shaders, etc...  
 
-![A](https://github.com/Flashlight-Games/BloomLib/assets/25566561/a5a80ef7-c96f-4e8d-990d-820e81c78577)
+https://github.com/Flashlight-Games/BloomLib/assets/25566561/a5a80ef7-c96f-4e8d-990d-820e81c78577
 
 
 https://github.com/Flashlight-Games/BloomLib/assets/25566561/e5713f8c-f65e-44f9-9d41-2af6c902cf06
