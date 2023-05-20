@@ -48,5 +48,6 @@
 #include "framebuffers/chromatic_aberration.h" // CHROMATIC ABERRATION
 #include "framebuffers/bloom.h" // BLOOM
 #include "SteamTools/steamtools.h" // STEAM TOOLS
+#include "waveFunctionCollapse/waveFunctionCollapse.h" // WAVE FUNCTION COLLAPSE
 
 #endif

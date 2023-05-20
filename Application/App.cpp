@@ -10,16 +10,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             app->ExitGame();
         }
         break;
-    case GLFW_KEY_I:
-        if (action == GLFW_PRESS) {
-            app->SetZoomTarget(app->GetCameraZoom() * 1.25);
-        }
-        break;
-    case GLFW_KEY_K:
-        if (action == GLFW_PRESS) {
-            app->SetZoomTarget(app->GetCameraZoom() / 1.25);
-        }
-        break;
     }
 }
 
@@ -49,37 +39,29 @@ void Application::App::UILoop() {
 void Application::App::GameLoop() {
     // RENDERING
     EnablePixels();
-    this->SetCameraLocation(cam_loc);
-    this->SetCameraZoom(Utils::Lerp(GetCameraZoom(),zoom_target,0.01));
     this->test->Draw();
     DrawPixelsToDefault();
 }
 
 void Application::App::InputLoop() {
-    //pass
-    if (glfwGetKey(GetWindow(), GLFW_KEY_LEFT))
-        cam_loc += glm::vec2(5*(1/1000.0), 0);
-    if (glfwGetKey(GetWindow(), GLFW_KEY_RIGHT))
-        cam_loc += glm::vec2(-5*(1 / 1000.0), 0);
-    if (glfwGetKey(GetWindow(), GLFW_KEY_UP))
-        cam_loc += glm::vec2(0,-5 * (1 / 1000.0));
-    if (glfwGetKey(GetWindow(), GLFW_KEY_DOWN))
-        cam_loc += glm::vec2(0,5 * (1 / 1000.0));
-    if (glfwGetKey(GetWindow(), GLFW_KEY_Q))
-        this->test->SetRotation(this->test->GetRotation() + 0.01);
-
-
-    if (glfwGetKey(GetWindow(), GLFW_KEY_A))
-        this->test->SetLocation(this->test->GetLocation() + glm::vec2(-5 * (1 / 1000.0), 0));
-    if (glfwGetKey(GetWindow(), GLFW_KEY_D))
-        this->test->SetLocation(this->test->GetLocation() + glm::vec2(5 * (1 / 1000.0), 0));
 }
 
 void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
-    this->test = new Bloom::Sprite("include/Bloom/res/engine/textures/detailTest16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
+    this->test = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
     this->test->SetLocation(glm::vec2(20));
+
+    std::vector<std::vector<int>> bitmap;
+    bitmap.push_back(std::vector<int>({ 0,0,0,0,0,0,0 }));
+    bitmap.push_back(std::vector<int>({ 0,1,0,5,0,1,0 }));
+    bitmap.push_back(std::vector<int>({ 0,2,0,4,0,2,0 }));
+    bitmap.push_back(std::vector<int>({ 0,3,0,3,0,3,0 }));
+    bitmap.push_back(std::vector<int>({ 0,4,0,2,0,4,0 }));
+    bitmap.push_back(std::vector<int>({ 0,5,0,1,0,5,0 }));
+    bitmap.push_back(std::vector<int>({ 0,0,0,0,0,0,0 }));
+
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(5), Bloom::WFC::findPatterns(bitmap));
 
     update_thread = new std::thread(&Application::App::Update, this);
     //glClearColor(0.21, 0.21, 0.21, 1.0);
@@ -96,10 +78,5 @@ void Application::App::Update() {
 
 Application::App::~App()
 {
-
-}
-
-void Application::App::SetZoomTarget(float zoom)
-{
-    this->zoom_target = zoom;
+    delete this->test;
 }

@@ -614,6 +614,9 @@
     <ClCompile Include="include\Bloom\sprite\sprite_subdivided.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\dearImGui\imconfig.h">
@@ -1892,6 +1895,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\HTTP\HTTPRequest.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Bloom\waveFunctionCollapse\waveFunctionCollapse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -228,6 +228,7 @@
     <ClCompile Include="include\Bloom\textures\textures.cpp" />
     <ClCompile Include="include\Bloom\text\text.cpp" />
     <ClCompile Include="include\Bloom\utils\utils.cpp" />
+    <ClCompile Include="include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp" />
     <ClCompile Include="include\soloud\dr_impl.cpp" />
     <ClCompile Include="include\soloud\soloud.cpp" />
     <ClCompile Include="include\soloud\soloud_audiosource.cpp" />
@@ -282,6 +283,7 @@
     <ClInclude Include="include\Bloom\textures\textures.h" />
     <ClInclude Include="include\Bloom\text\text.h" />
     <ClInclude Include="include\Bloom\utils\utils.h" />
+    <ClInclude Include="include\Bloom\waveFunctionCollapse\waveFunctionCollapse.h" />
     <ClInclude Include="include\FastNoise\FastNoise.h" />
     <ClInclude Include="include\FastNoise\FastNoise_C.h" />
     <ClInclude Include="include\FastNoise\FastNoise_Config.h" />
