@@ -17,7 +17,6 @@ Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vect
 		glm::vec2 least_entropy_idx = glm::vec2(-1, -1);
 		int least_entropy_value = 999999;
 
-		std::cout << "SEARCHING\n";
 		// FIND LEAST ENTROPY TILE
 		for (int y = 0; y < this->size.y; y++)
 		{
@@ -33,37 +32,34 @@ Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vect
 		// END IF NO LEAST IDX
 		if (least_entropy_idx == glm::vec2(-1, -1)) {
 			std::cout << "Done!\n";
+			std::cout << contradictions << "CONTRADICTIONS" << "\n";
 			doneFilling = true;
 			break;
 		}
 
 		// CHECK WHICH OPTIONS AVAILABLE
-		std::cout << least_entropy_idx.x << ", " << least_entropy_idx.y << "\n";
-		auto subset = GetSubset(least_entropy_idx, glm::vec2(3));
+		auto subset = GetSubset(least_entropy_idx, pattern_size);
 		this->grid.at(least_entropy_idx.y).at(least_entropy_idx.x).superposition.clear();
 		for (int i = 0; i < patterns.size(); i++) {
 			if (patterns.at(i).Match(subset) && !this->grid.at(least_entropy_idx.y).at(least_entropy_idx.x).Contains(patterns.at(i).GetCenter())) {
 				this->grid.at(least_entropy_idx.y).at(least_entropy_idx.x).superposition.push_back(patterns.at(i).GetCenter());
 			}
 		}
-		std::cout << "B\n";
 
 		// END/RESTART IF CONTRADICTION
 		if (this->grid.at(least_entropy_idx.y).at(least_entropy_idx.x).superposition.size() == 0 || this->grid.at(least_entropy_idx.y).at(least_entropy_idx.x).superposition.size() <= 0) {
 			contradictions++;
-			std::cout << "CONTRADICTION! " << contradictions << "\n";
+			//std::cout << "CONTRADICTION! " << contradictions << "\n";
 			doneFilling = false;
 			//break; // STOP FILLING
 			InitGrid(patterns); // RESTART
 			continue;
 		}
 
-		std::cout << "PICKING\n";
 		// PICK OPTION FROM ONE OF THE MATCHES AT RANDOM
 		this->grid.at(least_entropy_idx.y).at(least_entropy_idx.x).superposition = std::vector<int>({ this->grid.at(least_entropy_idx.y).at(least_entropy_idx.x).superposition.at(Utils::RandInt(0,this->grid.at(least_entropy_idx.y).at(least_entropy_idx.x).superposition.size() - 1)) });
 
 
-		std::cout << "PROPAGATING\n";
 		// PROPAGATE COLLAPSE
 		for (int y = -1; y <= 1; y++)
 		{
@@ -74,7 +70,7 @@ Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vect
 				if (this->grid.at((glm::vec2(x, y) + least_entropy_idx).y).at((glm::vec2(x, y) + least_entropy_idx).x).GetEntropy() <= 1)
 					continue; // DONT COLLAPSE IF COLLAPSED ALREADY
 
-				auto subset = GetSubset((glm::vec2(x, y) + least_entropy_idx), glm::vec2(3));
+				auto subset = GetSubset((glm::vec2(x, y) + least_entropy_idx), pattern_size);
 				this->grid.at((glm::vec2(x, y) + least_entropy_idx).y).at((glm::vec2(x, y) + least_entropy_idx).x).superposition.clear();
 				for (int i = 0; i < patterns.size(); i++) {
 					if (patterns.at(i).Match(subset) && !this->grid.at((glm::vec2(x, y) + least_entropy_idx).y).at((glm::vec2(x, y) + least_entropy_idx).x).Contains(patterns.at(i).GetCenter())) {
@@ -84,8 +80,8 @@ Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vect
 			}
 		}
 		
-		std::cout << "CURRENT GRID:\n";
-		this->Print(); std::cout << "\n";
+		//std::cout << "CURRENT GRID:\n";
+		//this->Print(); std::cout << "\n";
 		//break;
 	}
 	std::cout << "\n\nFINAL GRID:\n";

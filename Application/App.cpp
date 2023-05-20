@@ -54,14 +54,14 @@ void Application::App::Begin() {
 
     std::vector<std::vector<int>> bitmap;
     bitmap.push_back(std::vector<int>({ 0,0,0,0,0,0,0 }));
-    bitmap.push_back(std::vector<int>({ 0,1,0,5,0,1,0 }));
-    bitmap.push_back(std::vector<int>({ 0,2,0,4,0,2,0 }));
-    bitmap.push_back(std::vector<int>({ 0,3,0,3,0,3,0 }));
-    bitmap.push_back(std::vector<int>({ 0,4,0,2,0,4,0 }));
-    bitmap.push_back(std::vector<int>({ 0,5,0,1,0,5,0 }));
+    bitmap.push_back(std::vector<int>({ 0,0,0,5,0,0,0 }));
+    bitmap.push_back(std::vector<int>({ 0,0,0,4,0,0,0 }));
+    bitmap.push_back(std::vector<int>({ 0,0,0,3,0,0,0 }));
+    bitmap.push_back(std::vector<int>({ 0,0,0,2,0,0,0 }));
+    bitmap.push_back(std::vector<int>({ 0,0,0,1,0,0,0 }));
     bitmap.push_back(std::vector<int>({ 0,0,0,0,0,0,0 }));
 
-    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(5), Bloom::WFC::findPatterns(bitmap));
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(10), Bloom::WFC::findPatterns(bitmap,glm::vec2(3)));
 
     update_thread = new std::thread(&Application::App::Update, this);
     //glClearColor(0.21, 0.21, 0.21, 1.0);
