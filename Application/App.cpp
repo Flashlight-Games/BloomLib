@@ -53,15 +53,15 @@ void Application::App::Begin() {
     this->test->SetLocation(glm::vec2(20));
 
     std::vector<std::vector<int>> bitmap;
-    bitmap.push_back(std::vector<int>({ 0,0,0,0,0,0,0 }));
-    bitmap.push_back(std::vector<int>({ 0,0,0,5,0,0,0 }));
-    bitmap.push_back(std::vector<int>({ 0,0,0,4,0,0,0 }));
-    bitmap.push_back(std::vector<int>({ 0,0,0,3,0,0,0 }));
-    bitmap.push_back(std::vector<int>({ 0,0,0,2,0,0,0 }));
-    bitmap.push_back(std::vector<int>({ 0,0,0,1,0,0,0 }));
-    bitmap.push_back(std::vector<int>({ 0,0,0,0,0,0,0 }));
+    bitmap.push_back(std::vector<int>({ 0,2,0,1,0,0,1 }));
+    bitmap.push_back(std::vector<int>({ 0,1,0,0,2,0,0 }));
+    bitmap.push_back(std::vector<int>({ 0,0,2,0,1,0,0 }));
+    bitmap.push_back(std::vector<int>({ 2,0,1,0,0,0,2 }));
+    bitmap.push_back(std::vector<int>({ 1,0,0,0,0,0,1 }));
+    bitmap.push_back(std::vector<int>({ 0,0,2,0,2,0,0 }));
+    bitmap.push_back(std::vector<int>({ 0,0,1,0,1,0,0 }));
 
-    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(10), Bloom::WFC::findPatterns(bitmap,glm::vec2(3)));
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(8), Bloom::WFC::findPatterns(bitmap,glm::vec2(3)));
 
     update_thread = new std::thread(&Application::App::Update, this);
     //glClearColor(0.21, 0.21, 0.21, 1.0);

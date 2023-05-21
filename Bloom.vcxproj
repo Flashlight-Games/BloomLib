@@ -718,6 +718,7 @@
     <Image Include="include\Bloom\res\engine\textures\tilemap.png" />
     <Image Include="include\Bloom\res\engine\textures\vLine.png" />
     <Image Include="include\Bloom\res\engine\textures\wall.jpeg" />
+    <Image Include="include\Bloom\res\engine\textures\wfc_house.png" />
     <Image Include="include\Bloom\res\engine\textures\window.png" />
   </ItemGroup>
   <ItemGroup>

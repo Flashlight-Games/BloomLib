@@ -1953,6 +1953,9 @@
     <Image Include="include\Bloom\res\engine\textures\window.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="include\Bloom\res\engine\textures\wfc_house.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="include\Bloom\res\engine\fonts\Alagard\alagard.ttf" />
