@@ -61,7 +61,7 @@ void Application::App::Begin() {
     bitmap.push_back(std::vector<int>({ 0,0,2,0,2,0,0 }));
     bitmap.push_back(std::vector<int>({ 0,0,1,0,1,0,0 }));
 
-    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(8), Bloom::WFC::findPatterns(bitmap,glm::vec2(3)));
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(8), Bloom::WFC::findPatterns(Bloom::WFC::CreateBitmapFromImage("include/Bloom/res/engine/textures/wfc_test.png"), glm::vec2(3)));
 
     update_thread = new std::thread(&Application::App::Update, this);
     //glClearColor(0.21, 0.21, 0.21, 1.0);

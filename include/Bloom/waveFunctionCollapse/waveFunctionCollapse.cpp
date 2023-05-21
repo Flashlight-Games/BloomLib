@@ -293,7 +293,7 @@ std::vector<std::vector<int>> Bloom::WFC::CreateBitmapFromImage(const char* sour
 			unsigned char pixelValue = image[pixelIndex];
 
 			// Assign pixel value to the corresponding position in the bitmap
-			bitmap[y][x] = static_cast<int>(pixelValue);
+			bitmap[height-y-1][x] = static_cast<int>(pixelValue);
 		}
 	}
 
