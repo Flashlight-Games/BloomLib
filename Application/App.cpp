@@ -60,7 +60,7 @@ void Application::App::Begin() {
 }
 
 void Application::App::Update() {
-    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(10), Bloom::WFC::findPatterns(Bloom::WFC::CreateBitmapFromImage("include/Bloom/res/engine/textures/wfc_house.png"), glm::vec2(3)));
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(5), Bloom::WFC::findPatterns(Bloom::WFC::CreateBitmapFromImage("include/Bloom/res/engine/textures/wfc_house.png"), glm::vec2(3)));
     while (!glfwWindowShouldClose(GetWindow())) {
 
     }

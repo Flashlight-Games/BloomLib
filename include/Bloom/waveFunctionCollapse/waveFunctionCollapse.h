@@ -16,7 +16,7 @@ namespace Bloom {
 					this->superposition.push_back(i);
 				}
 			}
-			void Print();
+			void Print() const;
 			int GetEntropy() { return this->superposition.size(); };
 			bool Contains(int contains);
 			std::vector<int> superposition;
@@ -45,6 +45,8 @@ namespace Bloom {
 		private:
 			std::vector<std::vector<Tile>> GetSubset(std::vector<std::vector<Tile>> grid, glm::vec2 center, glm::vec2 size);
 			bool RecursiveCollapse(std::vector<std::vector<Tile>>& grid, int depth = 0);
+			bool Collapse(std::vector<std::vector<Tile>>& grid);
+			bool Propagate(std::vector<std::vector<Tile>>& grid, glm::vec2 idx, int depth = 0);
 			void shufflePatterns();
 			void InitGrid(std::vector<Pattern> patterns);
 			bool isGridDone(const std::vector<std::vector<Tile>>& grid);
