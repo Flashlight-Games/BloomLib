@@ -18,6 +18,7 @@ namespace Application {
         // HERE GO VARIABLES
         Bloom::Sprite* test;
         Bloom::WFC::WaveFunctionCollapse* wfc;
+        void showgrid();
     };
 }
 #endif

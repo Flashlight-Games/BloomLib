@@ -1,5 +1,7 @@
 #include "waveFunctionCollapse.h"
 #include <random>
+#include <chrono>
+
 
 Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vector<Pattern> patterns)
 {
@@ -8,7 +10,6 @@ Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vect
 	this->max_val = 0;
 	std::cout << "WFC INIT!\n";
 	this->pattern_size = glm::vec2(patterns.at(0).GetSize());
-
 	this->patterns = patterns;
 	shufflePatterns();
 
@@ -17,22 +18,33 @@ Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vect
 	auto originalGrid = this->grid;
 
 	bool success = false;
-	while (!success) {
-		//Print(this->grid);
+	auto start = std::chrono::high_resolution_clock::now();
+	RecursiveCollapse(this->grid);
+	auto end = std::chrono::high_resolution_clock::now();
+	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() / 1000.0;
+	std::cout << "COLLAPSE DURATION " << duration << "s\n";
+
+	/*while (!success) {
+		std::cout << "FULL RESTART\n";
+		Print(this->grid);
 		contradictions++;
-		std::cout << "FAIL\n";
+		
 		this->grid = originalGrid;
-		success = Collapse(this->grid);
-	}
+		success = RecursiveCollapse(this->grid);
+	}*/
 
 	std::cout << "\n\nFINAL GRID:\n";
 	this->Print(this->grid);
 }
 
-void Bloom::WFC::WaveFunctionCollapse::Print(std::vector<std::vector<Tile>> grid)
+void Bloom::WFC::WaveFunctionCollapse::Print(std::vector<std::vector<Tile>> grid, int depth)
 {
 	for (int y = 0; y < this->size.y; y++)
 	{
+		for (int i = 0; i < depth; i++)
+		{
+			std::cout << " ";
+		}
 		for (int x = 0; x < this->size.x; x++)
 		{
 			grid.at(y).at(x).Print();
@@ -60,17 +72,22 @@ std::vector<std::vector<Bloom::WFC::Tile>> Bloom::WFC::WaveFunctionCollapse::Get
 	return retval;
 }
 
-bool Bloom::WFC::WaveFunctionCollapse::Collapse(std::vector<std::vector<Tile>>& grid) {
+bool Bloom::WFC::WaveFunctionCollapse::RecursiveCollapse(std::vector<std::vector<Tile>>& grid, int depth) {
 	if (isGridDone(grid)) {
 		this->grid = grid;
 		return true;
 	}
 
+	std::cout << "Current Grid:\n";
+	Print(grid,depth);
+
 	auto idx = leastEntropyTileIdx(grid);
 	auto& cell = grid[idx.y][idx.x];
+	
 	//Print(grid);
 	//std::cout << "TILE (" << idx.x << "," << idx.y << ") MATCHES:\n";
 	shufflePatterns();
+
 	for (const auto& option : cell.superposition)
 	{
 		const auto& subset = GetSubset(grid, idx, this->pattern_size);
@@ -80,13 +97,14 @@ bool Bloom::WFC::WaveFunctionCollapse::Collapse(std::vector<std::vector<Tile>>& 
 			auto patternCopy = pattern;  // Create a non-const copy
 			if (patternCopy.Match(subset)) {
 				grid[idx.y][idx.x].superposition = std::vector<int>({ patternCopy.GetCenter() });
-				auto res = Collapse(grid);
+				auto res = RecursiveCollapse(grid,depth+1);
 				if (res)
 					return res;
 			}
 		}
+
 	}
-	//std::cout << "\n";
+
 	return false;
 }
 
@@ -112,6 +130,7 @@ void Bloom::WFC::WaveFunctionCollapse::InitGrid(std::vector<Pattern> patterns)
 			this->grid.at(y).push_back(Tile(this->max_val));
 		}
 	}
+	ready = true;
 }
 
 bool Bloom::WFC::WaveFunctionCollapse::isGridDone(const std::vector<std::vector<Tile>>& grid)
@@ -160,17 +179,16 @@ Bloom::WFC::Pattern::Pattern(std::vector<std::vector<int>> pattern)
 }
 
 bool Bloom::WFC::Pattern::Match(const std::vector<std::vector<Bloom::WFC::Tile>>& target) const {
-	if (glm::vec2(target.at(0).size(), target.size()) != glm::vec2(pattern.at(0).size(), pattern.size())) {
-		throw std::runtime_error("PATTERN SIZE NOT EQUAL TO TARGET SIZE!");
-	}
+	const int patternHeight = pattern.size();
+	const int patternWidth = pattern[0].size();
 
-	// MATCH VALUES
-	for (int y = 0; y < this->pattern.size(); y++)
-	{
-		for (int x = 0; x < this->pattern.at(y).size(); x++)
-		{
-			auto& currentTarget = target.at(y).at(x);
-			if (std::find(currentTarget.superposition.begin(), currentTarget.superposition.end(), this->pattern.at(y).at(x)) == currentTarget.superposition.end()) {
+	for (int y = 0; y < patternHeight; y++) {
+		for (int x = 0; x < patternWidth; x++) {
+			const int targetX = x + target[0].size() / 2 - patternWidth / 2;
+			const int targetY = y + target.size() / 2 - patternHeight / 2;
+			const auto& currentTarget = target[targetY][targetX];
+
+			if (std::find(currentTarget.superposition.begin(), currentTarget.superposition.end(), pattern[y][x]) == currentTarget.superposition.end()) {
 				return false;
 			}
 		}
@@ -239,12 +257,12 @@ std::vector<Bloom::WFC::Pattern> Bloom::WFC::findPatterns(std::vector<std::vecto
 {
 	std::vector<Pattern> patterns;
 	int counter = 0;
-	for (int i = pattern_size.y/2; i < bitmap.size() - (pattern_size.y - pattern_size.y/2); i++)
+
+	for (int i = pattern_size.y / 2; i < bitmap.size() - (pattern_size.y - pattern_size.y / 2); i++)
 	{
 		for (int j = pattern_size.x / 2; j < bitmap.at(i).size() - (pattern_size.x - pattern_size.x / 2); j++)
 		{
 			counter++;
-			std::cout << counter << " " << i << " " << j << "\n";
 			std::vector<std::vector<int>> pattern;
 
 			for (int y = -pattern_size.y / 2; y <= pattern_size.y / 2; y++)
@@ -256,19 +274,27 @@ std::vector<Bloom::WFC::Pattern> Bloom::WFC::findPatterns(std::vector<std::vecto
 				}
 				pattern.push_back(row);
 			}
-			patterns.push_back(pattern);
 
-			for (int y = 0; y < pattern.size(); y++)
+			Pattern newPattern(pattern);
+
+			// Check if the pattern already exists in the vector
+			bool isDuplicate = false;
+			for (const auto& existingPattern : patterns)
 			{
-				for (int x = 0; x < pattern.at(y).size(); x++)
+				if (existingPattern.getPattern() == newPattern.getPattern())
 				{
-					std::cout << pattern.at(y).at(x) << ",";
+					isDuplicate = true;
+					break;
 				}
-				std::cout << "\n";
 			}
-			std::cout << "\n";
+
+			if (!isDuplicate)
+			{
+				patterns.push_back(newPattern);
+			}
 		}
 	}
+
 	return patterns;
 }
 
