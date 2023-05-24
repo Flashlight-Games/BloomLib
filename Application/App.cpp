@@ -50,7 +50,7 @@ void Application::App::GameLoop() {
     // RENDERING
     EnablePixels();
     //this->test->Draw();
-    this->step();
+    //this->step();
     showbitmap(this->bitmap);
     showgrid();
     DrawPixelsToDefault();
@@ -97,7 +97,7 @@ void Application::App::step()
         std::cout << "STEP!\n";
         wfc->Print();
         if (!wfc->Collapse()) {
-            failed = true;
+            //failed = true;
             //wfc->InitGrid();
         }
     }
