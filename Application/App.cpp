@@ -10,6 +10,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             app->ExitGame();
         }
         break;
+    case GLFW_KEY_SPACE:
+        if (action == GLFW_PRESS) {
+            app->step();
+        }
+        break;
     }
 }
 
@@ -39,7 +44,8 @@ void Application::App::UILoop() {
 void Application::App::GameLoop() {
     // RENDERING
     EnablePixels();
-    this->test->Draw();
+    //this->test->Draw();
+    this->step();
     showgrid();
     DrawPixelsToDefault();
 }
@@ -53,14 +59,13 @@ void Application::App::Begin() {
     this->test = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
     this->test->SetLocation(glm::vec2(20));
 
-    std::vector<std::vector<int>> bitmap;
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(10), Bloom::WFC::findPatterns(Bloom::WFC::CreateBitmapFromImage("include/Bloom/res/engine/textures/wfc_test.png"), glm::vec2(3)));
 
     update_thread = new std::thread(&Application::App::Update, this);
     //glClearColor(0.21, 0.21, 0.21, 1.0);
 }
 
 void Application::App::Update() {
-    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(5), Bloom::WFC::findPatterns(Bloom::WFC::CreateBitmapFromImage("include/Bloom/res/engine/textures/wfc_house.png"), glm::vec2(3)));
     while (!glfwWindowShouldClose(GetWindow())) {
 
     }
@@ -74,14 +79,23 @@ Application::App::~App()
     delete this->test;
 }
 
+void Application::App::step()
+{
+    if (!wfc->Collapse())
+        wfc->InitGrid();
+    if (wfc->isGridDone())
+        wfc->Print();
+}
+
 void Application::App::showgrid()
 {
-    if (GetTime() > 100) {
-        for (int y = 0; y < this->wfc->getGrid().size(); y++)
+    auto grid = *this->wfc->getGrid();
+    if (true) {
+        for (int y = 0; y < grid.size(); y++)
         {
-            for (int x = 0; x < this->wfc->getGrid().at(0).size(); x++)
+            for (int x = 0; x < grid.size(); x++)
             {
-                DrawDebugPoint(glm::vec2(x, y), 1, glm::vec3(this->wfc->getGrid().at(y).at(x).GetEntropy() / 5.0) * 255.0f);
+                DrawDebugPoint((glm::vec2(x, y))*1.0f + glm::vec2(10), 1, glm::vec3(grid.at(y).at(x).GetEntropy() / (float)wfc->getMaxVal(), 0.0, 0.0));
             }
         }
     }

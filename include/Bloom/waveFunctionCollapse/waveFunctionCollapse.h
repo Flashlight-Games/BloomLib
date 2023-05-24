@@ -33,23 +33,24 @@ namespace Bloom {
 			auto getPattern() const { return this->pattern; };
 		private:
 			std::vector<std::vector<int>> pattern;
+			int patternHeight;
+			int patternWidth;
 		};
 
 		class WaveFunctionCollapse {
 		public:
 			WaveFunctionCollapse(glm::vec2 size, std::vector<Pattern> patterns);
 			~WaveFunctionCollapse();
-			void Print(std::vector<std::vector<Tile>> grid,int depth = 0);
-			auto getGrid() { return this->grid; };
-			auto isReady() { return this->ready; };
+			void InitGrid();
+			void Print(int depth = 0);
+			auto getGrid() { return &this->grid; };
+			bool Collapse();
+			bool isGridDone();
+			auto getMaxVal() { return this->max_val; };
 		private:
 			std::vector<std::vector<Tile>> GetSubset(std::vector<std::vector<Tile>> grid, glm::vec2 center, glm::vec2 size);
-			bool RecursiveCollapse(std::vector<std::vector<Tile>>& grid, int depth = 0);
-			bool Collapse(std::vector<std::vector<Tile>>& grid);
-			bool Propagate(std::vector<std::vector<Tile>>& grid, glm::vec2 idx, int depth = 0);
 			void shufflePatterns();
-			void InitGrid(std::vector<Pattern> patterns);
-			bool isGridDone(const std::vector<std::vector<Tile>>& grid);
+			bool Propagate(glm::vec2 idx);
 			glm::vec2 leastEntropyTileIdx(const std::vector<std::vector<Tile>>& grid) const;
 			glm::vec2 size;
 			std::vector<std::vector<Tile>> grid;
