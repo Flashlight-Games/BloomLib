@@ -51,8 +51,8 @@ void Application::App::GameLoop() {
     EnablePixels();
     //this->test->Draw();
     this->step();
-    showgrid();
     showbitmap(this->bitmap);
+    showgrid();
     DrawPixelsToDefault();
 }
 
@@ -70,7 +70,7 @@ void Application::App::Begin() {
     this->test->SetLocation(this->test->GetSize());
     
     this->bitmap = Bloom::WFC::CreateBitmapFromImage(input);
-    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(16), Bloom::WFC::findPatterns(bitmap, glm::vec2(5)));
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(15), Bloom::WFC::findPatterns(bitmap, glm::vec2(3)),Bloom::WFC::CalculateWeights(bitmap));
 
     update_thread = new std::thread(&Application::App::Update, this);
     //glClearColor(0.21, 0.21, 0.21, 1.0);

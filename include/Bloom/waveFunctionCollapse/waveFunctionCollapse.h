@@ -40,15 +40,16 @@ namespace Bloom {
 		class WaveFunctionCollapse {
 		public:
 			WaveFunctionCollapse(glm::vec2 size, std::vector<Pattern> patterns);
+			WaveFunctionCollapse(glm::vec2 size, std::vector<Pattern> patterns, std::vector<int> weights);
 			~WaveFunctionCollapse();
-			void InitGrid();
+			void InitGrid(bool start_center = true);
 			void Print(int depth = 0);
 			auto getGrid() { return &this->grid; };
 			bool Collapse();
 			bool isGridDone();
 			auto getMaxVal() { return this->max_val; };
 		private:
-			std::vector<int> CalculateWeights(const std::vector<Pattern>& patterns);
+			void RandomCollapseCenter();
 			std::vector<std::vector<Tile>> GetSubset(std::vector<std::vector<Tile>> grid, glm::vec2 center, glm::vec2 size);
 			void shufflePatterns();
 			bool Propagate(glm::vec2 idx);
@@ -65,6 +66,8 @@ namespace Bloom {
 	
 		std::vector<Bloom::WFC::Pattern> findPatterns(std::vector <std::vector<int>> bitmap,glm::vec2 pattern_size = glm::vec3(3));
 		std::vector<std::vector<int>> CreateBitmapFromImage(const char* source);
+		std::vector<int> CalculateWeights(const std::vector<Pattern>& patterns);
+		std::vector<int> CalculateWeights(const std::vector<std::vector<int>>& bitmap);
 	}
 }
 

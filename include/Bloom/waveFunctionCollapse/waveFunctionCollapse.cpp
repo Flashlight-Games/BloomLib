@@ -2,7 +2,7 @@
 #include <random>
 #include <chrono>
 
-std::vector<int> Bloom::WFC::WaveFunctionCollapse::CalculateWeights(const std::vector<Pattern>& patterns) {
+std::vector<int> Bloom::WFC::CalculateWeights(const std::vector<Pattern>& patterns) {
 	// Count the frequency of each number appearing in the center of the patterns
 	std::unordered_map<int, int> frequencyMap;
 	for (const Pattern& pattern : patterns) {
@@ -18,6 +18,26 @@ std::vector<int> Bloom::WFC::WaveFunctionCollapse::CalculateWeights(const std::v
 	return weights;
 }
 
+std::vector<int> Bloom::WFC::CalculateWeights(const std::vector<std::vector<int>>& bitmap) {
+	// Count the frequency of each number appearing in the bitmap
+	std::unordered_map<int, int> frequencyMap;
+	for (const auto& row : bitmap) {
+		for (int number : row) {
+			frequencyMap[number]++;
+		}
+	}
+
+	// Create a vector of weights based on the frequencies
+	std::vector<int> weights;
+	for (const auto& row : bitmap) {
+		for (int number : row) {
+			weights.push_back(frequencyMap[number]);
+		}
+	}
+
+	return weights;
+}
+
 Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vector<Pattern> patterns)
 {
 	// INITIALIZATION
@@ -28,6 +48,21 @@ Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vect
 	this->patterns = patterns;
 	this->weights = CalculateWeights(this->patterns);
 	InitGrid();
+
+	Print();
+}
+
+Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vector<Pattern> patterns, std::vector<int> weights)
+{
+	// INITIALIZATION
+	this->size = size;
+	this->max_val = 0;
+	std::cout << "WFC INIT!\n";
+	this->pattern_size = glm::vec2(patterns.at(0).GetSize());
+	this->patterns = patterns;
+	this->weights = weights;
+	InitGrid();
+
 	Print();
 }
 
@@ -74,7 +109,7 @@ void Bloom::WFC::WaveFunctionCollapse::shufflePatterns()
 	std::shuffle(std::begin(this->patterns), std::end(this->patterns), rng);
 }
 
-void Bloom::WFC::WaveFunctionCollapse::InitGrid()
+void Bloom::WFC::WaveFunctionCollapse::InitGrid(bool start_center)
 {
 	this->grid.clear();
 	for (int i = 0; i < patterns.size(); i++)
@@ -89,6 +124,10 @@ void Bloom::WFC::WaveFunctionCollapse::InitGrid()
 			this->grid.at(y).push_back(Tile(this->max_val));
 		}
 	}
+
+	if (start_center)
+		RandomCollapseCenter();
+
 	ready = true;
 	shufflePatterns();
 }
@@ -107,6 +146,19 @@ bool Bloom::WFC::WaveFunctionCollapse::isGridDone()
 	}
 
 	return true;
+}
+
+void Bloom::WFC::WaveFunctionCollapse::RandomCollapseCenter()
+{
+	auto least_entropy = this->size / 2.0f;
+
+	int index = Utils::WeightedRandom(this->grid.at(least_entropy.y).at(least_entropy.x).superposition, this->weights);
+	this->grid.at(least_entropy.y).at(least_entropy.x).superposition = std::vector<int>({ this->grid.at(least_entropy.y).at(least_entropy.x).superposition.at(index) });
+
+	// PROPAGATE
+	if (!(Propagate(least_entropy + glm::vec2(0, 1)) && Propagate(least_entropy + glm::vec2(0, -1)) && Propagate(least_entropy + glm::vec2(1, 0)) && Propagate(least_entropy + glm::vec2(-1, 0)))) {
+		InitGrid();
+	}
 }
 
 glm::vec2 Bloom::WFC::WaveFunctionCollapse::leastEntropyTileIdx(const std::vector<std::vector<Tile>>& grid) const {
@@ -169,7 +221,6 @@ bool Bloom::WFC::Pattern::Match(const std::vector<std::vector<Bloom::WFC::Tile>>
 			}
 		}
 	}
-
 	return true;
 }
 
