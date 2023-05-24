@@ -70,7 +70,7 @@ void Application::App::Begin() {
     this->test->SetLocation(this->test->GetSize());
     
     this->bitmap = Bloom::WFC::CreateBitmapFromImage(input);
-    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(15), Bloom::WFC::findPatterns(bitmap, glm::vec2(3)),Bloom::WFC::CalculateWeights(bitmap));
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(15), Bloom::WFC::findPatterns(bitmap, glm::vec2(5)),Bloom::WFC::CalculateWeights(bitmap));
 
     update_thread = new std::thread(&Application::App::Update, this);
     //glClearColor(0.21, 0.21, 0.21, 1.0);
@@ -92,8 +92,9 @@ Application::App::~App()
 
 void Application::App::step()
 {
-    if (!wfc->Collapse())
+    if (!wfc->Collapse()) {
         wfc->InitGrid();
+    }
     /*if (wfc->isGridDone())
         wfc->Print();*/
 }

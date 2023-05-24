@@ -365,30 +365,74 @@ bool isElementInVector(const std::vector<int>& vec, int element) {
 	return false;
 }
 
+glm::vec2 Bloom::WFC::WaveFunctionCollapse::findBacktrackTile(const glm::vec2& currentTile) const {
+	int startY = static_cast<int>(currentTile.y);
+	int startX = static_cast<int>(currentTile.x);
+
+	if (startY >= grid.size() || startX >= grid[startY].size()) {
+		return glm::vec2(-1);
+	}
+	for (int y = startY; y >= 0; y--) {
+		for (int x = (y == startY ? startX : grid[y].size() - 1); x >= 0; x--) {
+			if (!grid[y][x].superposition.empty() && grid[y][x].superposition.size() > 1) {
+				return glm::vec2(x, y);
+			}
+		}
+	}
+
+	return glm::vec2(-1);
+}
+
+bool Bloom::WFC::WaveFunctionCollapse::Backtrack(const glm::vec2& currentTile) {
+	this->grid.at(currentTile.y).at(currentTile.x).superposition.clear(); // Reset the current tile
+
+	// Continue backtracking to the previous tile
+	glm::vec2 prevTile = findBacktrackTile(currentTile);
+	if (prevTile != glm::vec2(-1)) {
+		if (!this->grid.at(prevTile.y).at(prevTile.x).superposition.empty()) {
+			int prevIndex = Utils::RandInt(0, this->grid.at(prevTile.y).at(prevTile.x).superposition.size() - 1);
+			this->grid.at(prevTile.y).at(prevTile.x).superposition = std::vector<int>({ this->grid.at(prevTile.y).at(prevTile.x).superposition.at(prevIndex) });
+			return Propagate(prevTile + glm::vec2(0, 1)) && Propagate(prevTile + glm::vec2(0, -1)) && Propagate(prevTile + glm::vec2(1, 0)) && Propagate(prevTile + glm::vec2(-1, 0));
+		}
+		else {
+			// No more options available for backtracking, continue backtracking to the previous tile
+			return Backtrack(prevTile);
+		}
+	}
+	else {
+		// No more tiles to backtrack, the algorithm has failed
+		std::cout << "No more tiles to backtrack, the algorithm has failed\n";
+		return false;
+	}
+}
+
 bool Bloom::WFC::WaveFunctionCollapse::Collapse() {
 	glm::vec2 least_entropy;
-	
+
 	// FIND LEAST ENTROPY
 	least_entropy = leastEntropyTileIdx(this->grid);
 	if (least_entropy == glm::vec2(-1)) {
 		return true;
 	}
-
-	// COLLAPSE LEAST ENTROPY RANDOMLY
-	//this->grid.at(least_entropy.y).at(least_entropy.x).superposition = std::vector<int>({ this->grid.at(least_entropy.y).at(least_entropy.x).superposition.at(Utils::RandInt(0, this->grid.at(least_entropy.y).at(least_entropy.x).superposition.size() - 1)) });
-
+	
 	// COLLAPSE LEAST ENTROPY BY WEIGHT
 	int index = Utils::WeightedRandom(this->grid.at(least_entropy.y).at(least_entropy.x).superposition, this->weights);
 	this->grid.at(least_entropy.y).at(least_entropy.x).superposition = std::vector<int>({ this->grid.at(least_entropy.y).at(least_entropy.x).superposition.at(index) });
 	
 	// PROPAGATE
-	if (!(Propagate(least_entropy + glm::vec2(0,1)) && Propagate(least_entropy + glm::vec2(0, -1)) && Propagate(least_entropy + glm::vec2(1, 0)) && Propagate(least_entropy + glm::vec2(-1, 0)))) {
-		std::cout << "FAIL\n";
-		return false;
+	if (!(Propagate(least_entropy + glm::vec2(0, 1)) && Propagate(least_entropy + glm::vec2(0, -1)) && Propagate(least_entropy + glm::vec2(1, 0)) && Propagate(least_entropy + glm::vec2(-1, 0)))) {
+		// Backtrack
+		glm::vec2 backtrackTile = findBacktrackTile(least_entropy);
+		if (backtrackTile != glm::vec2(-1)) {
+			auto res = Backtrack(backtrackTile);
+			return res;
+		}
+		else {
+			return false;
+		}
 	}
 
 	//Print(this->grid);
-
 	return true;
 }
 
@@ -404,16 +448,25 @@ bool Bloom::WFC::WaveFunctionCollapse::Propagate(glm::vec2 idx)
 		for (int i = 0; i < patterns.size(); i++)
 		{
 			pattern = &patterns.at(i);
+			if (isElementInVector(newOptions, pattern->GetCenter()))
+				continue;
+			
 			auto subset = GetSubset(this->grid, curridx, pattern->GetSize());
-			if (pattern->Match(subset) && !isElementInVector(newOptions,pattern->GetCenter())) {
+			
+			if (pattern->Match(subset)) {
 				newOptions.push_back(pattern->GetCenter());
 				matches = true;
 			}
 		}
+		
 		this->grid.at(curridx.y).at(curridx.x).superposition = newOptions;
 		
-		if (!matches)
+		if (!matches) {
+			std::cout << "ERROR: No matches found for index (" << curridx.x << ", " << curridx.y << ")\n";
 			return false;
+		}
+		return true;
 	}
-	return true;
+
+	return false;
 }
