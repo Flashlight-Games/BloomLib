@@ -10,6 +10,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             app->ExitGame();
         }
         break;
+    case GLFW_KEY_M:
+        if (action == GLFW_PRESS) {
+            app->step();
+        }
+        break;
     case GLFW_KEY_SPACE:
         if (action == GLFW_PRESS) {
             app->print();
@@ -47,6 +52,7 @@ void Application::App::GameLoop() {
     //this->test->Draw();
     this->step();
     showgrid();
+    showbitmap(this->bitmap);
     DrawPixelsToDefault();
 }
 
@@ -62,8 +68,9 @@ void Application::App::Begin() {
     this->test = new Bloom::Sprite(input, 1, GetViewMatrix(), GetPixelProjectionMatrix());
     this->test->SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/sprite/spriteshader_vertex.glsl", "include/Bloom/res/engine/shaders/sprite/spriteshader_wfc_fragment.glsl"),GetPixelProjectionMatrix());
     this->test->SetLocation(this->test->GetSize());
-
-    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(16), Bloom::WFC::findPatterns(Bloom::WFC::CreateBitmapFromImage(input), glm::vec2(5)));
+    
+    this->bitmap = Bloom::WFC::CreateBitmapFromImage(input);
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(16), Bloom::WFC::findPatterns(bitmap, glm::vec2(5)));
 
     update_thread = new std::thread(&Application::App::Update, this);
     //glClearColor(0.21, 0.21, 0.21, 1.0);
@@ -113,3 +120,15 @@ void Application::App::showgrid()
         }
     }
 }
+
+void Application::App::showbitmap(std::vector<std::vector<int>> bitmap)
+{
+    for (int y = 0; y < bitmap.size(); y++)
+    {
+        for (int x = 0; x < bitmap.at(y).size(); x++)
+        {
+            DrawDebugPoint((glm::vec2(x, bitmap.size() - y)) * 1.0f + glm::vec2(30,10), 1, Utils::HSVtoRGB(glm::vec3(bitmap.at(y).at(x) / (float)wfc->getMaxVal() * 180.0f, 100, 100)));
+        }
+    }
+}
+

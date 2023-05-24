@@ -21,6 +21,8 @@ namespace Application {
         Bloom::Sprite* test;
         Bloom::WFC::WaveFunctionCollapse* wfc;
         void showgrid();
+        void showbitmap(std::vector<std::vector<int>> bitmap);
+        std::vector<std::vector<int>> bitmap;
     };
 }
 #endif

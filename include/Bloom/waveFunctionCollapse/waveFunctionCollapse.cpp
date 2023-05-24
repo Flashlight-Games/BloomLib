@@ -143,37 +143,28 @@ Bloom::WFC::Pattern::Pattern(std::vector<std::vector<int>> pattern)
 }
 
 bool Bloom::WFC::Pattern::Match(const std::vector<std::vector<Bloom::WFC::Tile>>& target) const {
-
-
-	////PRINT TARGET
-	//std::cout << "\n";
-	//for (int y = 0; y < target.size(); y++)
-	//{
-	//	for (int x = 0; x < target.at(y).size(); x++)
-	//	{
-	//		target.at(y).at(x).Print();
-	//		std::cout << ",";
-	//	}
-	//	std::cout << "\n";
-	//}
-
-	//// PRINT PATTERN
-	//for (int y = 0; y < this->pattern.size(); y++)
-	//{
-	//	for (int x = 0; x < this->pattern.at(y).size(); x++)
-	//	{
-	//		std::cout << this->pattern.at(y).at(x) << ",";
-	//	}
-	//	std::cout << "\n";
-	//}
+	const int targetWidth = target[0].size();
+	const int targetHeight = target.size();
+	const int offsetX = targetWidth / 2 - patternWidth / 2;
+	const int offsetY = targetHeight / 2 - patternHeight / 2;
 
 	for (int y = 0; y < patternHeight; y++) {
-		for (int x = 0; x < patternWidth; x++) {
-			const int targetX = x + target[0].size() / 2 - patternWidth / 2;
-			const int targetY = y + target.size() / 2 - patternHeight / 2;
-			const auto& currentTarget = target[targetY][targetX];
+		const int targetY = y + offsetY;
+		if (targetY < 0 || targetY >= targetHeight) {
+			// Pattern exceeds the target boundary, no match possible
+			return false;
+		}
 
+		for (int x = 0; x < patternWidth; x++) {
+			const int targetX = x + offsetX;
+			if (targetX < 0 || targetX >= targetWidth) {
+				// Pattern exceeds the target boundary, no match possible
+				return false;
+			}
+
+			const auto& currentTarget = target[targetY][targetX];
 			if (std::find(currentTarget.superposition.begin(), currentTarget.superposition.end(), pattern[y][x]) == currentTarget.superposition.end()) {
+				// Pattern element not found in the target superposition
 				return false;
 			}
 		}
