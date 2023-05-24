@@ -12,7 +12,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         break;
     case GLFW_KEY_SPACE:
         if (action == GLFW_PRESS) {
-            app->step();
+            app->print();
         }
         break;
     }
@@ -56,10 +56,14 @@ void Application::App::InputLoop() {
 void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
-    this->test = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
-    this->test->SetLocation(glm::vec2(20));
 
-    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(10), Bloom::WFC::findPatterns(Bloom::WFC::CreateBitmapFromImage("include/Bloom/res/engine/textures/wfc_test.png"), glm::vec2(3)));
+    const char* input = "include/Bloom/res/engine/textures/wfc_house.png";
+
+    this->test = new Bloom::Sprite(input, 1, GetViewMatrix(), GetPixelProjectionMatrix());
+    this->test->SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/sprite/spriteshader_vertex.glsl", "include/Bloom/res/engine/shaders/sprite/spriteshader_wfc_fragment.glsl"),GetPixelProjectionMatrix());
+    this->test->SetLocation(this->test->GetSize());
+
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(16), Bloom::WFC::findPatterns(Bloom::WFC::CreateBitmapFromImage(input), glm::vec2(5)));
 
     update_thread = new std::thread(&Application::App::Update, this);
     //glClearColor(0.21, 0.21, 0.21, 1.0);
@@ -83,8 +87,13 @@ void Application::App::step()
 {
     if (!wfc->Collapse())
         wfc->InitGrid();
-    if (wfc->isGridDone())
-        wfc->Print();
+    /*if (wfc->isGridDone())
+        wfc->Print();*/
+}
+
+void Application::App::print()
+{
+    this->wfc->Print();
 }
 
 void Application::App::showgrid()
@@ -95,7 +104,11 @@ void Application::App::showgrid()
         {
             for (int x = 0; x < grid.size(); x++)
             {
-                DrawDebugPoint((glm::vec2(x, y))*1.0f + glm::vec2(10), 1, glm::vec3(grid.at(y).at(x).GetEntropy() / (float)wfc->getMaxVal(), 0.0, 0.0));
+                if(grid.at(y).at(x).GetEntropy()>1)
+                    DrawDebugPoint((glm::vec2(x, grid.size()-y))*1.0f + glm::vec2(10), 1, glm::vec3(grid.at(y).at(x).GetEntropy() / (float)wfc->getMaxVal()));
+                else {
+                    DrawDebugPoint((glm::vec2(x, grid.size()-y)) * 1.0f + glm::vec2(10), 1, Utils::HSVtoRGB(glm::vec3((grid.at(y).at(x).superposition.at(0) / (float)wfc->getMaxVal()) * 180.0f, 100, 100)));
+                }
             }
         }
     }

@@ -62,6 +62,8 @@ namespace Utils {
     std::string Default(bool background = false);
 
     glm::vec2 rotateVector(glm::vec2 vector, float degrees, glm::vec2 axis = glm::vec2(0));
+
+    int WeightedRandom(const std::vector<int>& options, const std::vector<int>& weights);
 }
 
 #endif

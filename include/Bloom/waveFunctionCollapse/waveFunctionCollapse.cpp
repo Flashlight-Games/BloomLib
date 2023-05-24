@@ -2,6 +2,21 @@
 #include <random>
 #include <chrono>
 
+std::vector<int> Bloom::WFC::WaveFunctionCollapse::CalculateWeights(const std::vector<Pattern>& patterns) {
+	// Count the frequency of each number appearing in the center of the patterns
+	std::unordered_map<int, int> frequencyMap;
+	for (const Pattern& pattern : patterns) {
+		int centerNumber = pattern.GetCenter();
+		frequencyMap[centerNumber]++;
+	}
+	// Create a vector of weights based on the frequencies
+	std::vector<int> weights;
+	for (const Pattern& pattern : patterns) {
+		int centerNumber = pattern.GetCenter();
+		weights.push_back(frequencyMap[centerNumber]);
+	}
+	return weights;
+}
 
 Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vector<Pattern> patterns)
 {
@@ -11,6 +26,7 @@ Bloom::WFC::WaveFunctionCollapse::WaveFunctionCollapse(glm::vec2 size, std::vect
 	std::cout << "WFC INIT!\n";
 	this->pattern_size = glm::vec2(patterns.at(0).GetSize());
 	this->patterns = patterns;
+	this->weights = CalculateWeights(this->patterns);
 	InitGrid();
 	Print();
 }
@@ -184,7 +200,7 @@ glm::vec2 Bloom::WFC::Pattern::GetSize()
 	return glm::vec2(this->pattern.size(), this->pattern[0].size());
 }
 
-int Bloom::WFC::Pattern::GetCenter()
+int Bloom::WFC::Pattern::GetCenter() const
 {
 	auto center = this->pattern.at(this->pattern.size() / 2).at(this->pattern.at(this->pattern.size() / 2).size() / 2);
 	return center;
@@ -316,8 +332,12 @@ bool Bloom::WFC::WaveFunctionCollapse::Collapse() {
 		return true;
 	}
 
-	// COLLAPSE LEAST ENTROPY
-	this->grid.at(least_entropy.y).at(least_entropy.x).superposition = std::vector<int>({ this->grid.at(least_entropy.y).at(least_entropy.x).superposition.at(Utils::RandInt(0, this->grid.at(least_entropy.y).at(least_entropy.x).superposition.size() - 1)) });
+	// COLLAPSE LEAST ENTROPY RANDOMLY
+	//this->grid.at(least_entropy.y).at(least_entropy.x).superposition = std::vector<int>({ this->grid.at(least_entropy.y).at(least_entropy.x).superposition.at(Utils::RandInt(0, this->grid.at(least_entropy.y).at(least_entropy.x).superposition.size() - 1)) });
+
+	// COLLAPSE LEAST ENTROPY BY WEIGHT
+	int index = Utils::WeightedRandom(this->grid.at(least_entropy.y).at(least_entropy.x).superposition, this->weights);
+	this->grid.at(least_entropy.y).at(least_entropy.x).superposition = std::vector<int>({ this->grid.at(least_entropy.y).at(least_entropy.x).superposition.at(index) });
 	
 	// PROPAGATE
 	if (!(Propagate(least_entropy + glm::vec2(0,1)) && Propagate(least_entropy + glm::vec2(0, -1)) && Propagate(least_entropy + glm::vec2(1, 0)) && Propagate(least_entropy + glm::vec2(-1, 0)))) {

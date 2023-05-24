@@ -15,6 +15,7 @@ namespace Application {
 
         ~App();
         void step();
+        void print();
     private:
         // HERE GO VARIABLES
         Bloom::Sprite* test;

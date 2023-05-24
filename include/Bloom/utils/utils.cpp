@@ -198,3 +198,34 @@ float Utils::RandFloat(float min, float max, int precision) {
 }
 
 bool Utils::isDevelopmentConfiguration() { return *ENGINE_CONFIGURATION == *"Development"; }
+
+int Utils::WeightedRandom(const std::vector<int>& options, const std::vector<int>& weights) {
+    // Create a vector of valid weights based on the provided options
+    std::vector<int> validWeights;
+    for (int option : options) {
+        validWeights.push_back(weights[option]);
+    }
+
+    // Calculate the total weight for the valid options
+    int totalWeight = 0;
+    for (int weight : validWeights) {
+        totalWeight += weight;
+    }
+
+    // Generate a random number within the total weight range
+    int randomNumber = Utils::RandInt(0, totalWeight - 1);
+
+    // Find the index corresponding to the random number
+    int currentIndex = 0;
+    int index = 0;
+    for (int option : options) {
+        currentIndex += validWeights[index];
+        if (randomNumber < currentIndex) {
+            return index;
+        }
+        index++;
+    }
+
+    // Default case: return the index of the last option
+    return options.size() - 1;
+}
