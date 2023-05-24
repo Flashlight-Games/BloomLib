@@ -200,6 +200,28 @@ bool Bloom::WFC::Pattern::Match(const std::vector<std::vector<Bloom::WFC::Tile>>
 	const int offsetX = targetWidth / 2 - patternWidth / 2;
 	const int offsetY = targetHeight / 2 - patternHeight / 2;
 
+	//PRINT TARGET
+	std::cout << "\n";
+	for (int y = 0; y < target.size(); y++)
+	{
+		for (int x = 0; x < target.at(y).size(); x++)
+		{
+			target.at(y).at(x).Print();
+			std::cout << ",";
+		}
+		std::cout << "\n";
+	}
+
+	// PRINT PATTERN
+	for (int y = 0; y < this->pattern.size(); y++)
+	{
+		for (int x = 0; x < this->pattern.at(y).size(); x++)
+		{
+			std::cout << this->pattern.at(y).at(x) << ",";
+		}
+		std::cout << "\n";
+	}
+
 	for (int y = 0; y < patternHeight; y++) {
 		const int targetY = y + offsetY;
 		if (targetY < 0 || targetY >= targetHeight) {
@@ -217,10 +239,12 @@ bool Bloom::WFC::Pattern::Match(const std::vector<std::vector<Bloom::WFC::Tile>>
 			const auto& currentTarget = target[targetY][targetX];
 			if (std::find(currentTarget.superposition.begin(), currentTarget.superposition.end(), pattern[y][x]) == currentTarget.superposition.end()) {
 				// Pattern element not found in the target superposition
+				std::cout << "NO MATCH\n";
 				return false;
 			}
 		}
 	}
+	std::cout << "MATCH\n";
 	return true;
 }
 
@@ -286,9 +310,9 @@ std::vector<Bloom::WFC::Pattern> Bloom::WFC::findPatterns(std::vector<std::vecto
 	std::vector<Pattern> patterns;
 	int counter = 0;
 
-	for (int i = pattern_size.y / 2; i < bitmap.size() - (pattern_size.y - pattern_size.y / 2); i++)
+	for (int i = 0; i < bitmap.size(); i++)
 	{
-		for (int j = pattern_size.x / 2; j < bitmap.at(i).size() - (pattern_size.x - pattern_size.x / 2); j++)
+		for (int j = 0; j < bitmap.at(i).size(); j++)
 		{
 			counter++;
 			std::vector<std::vector<int>> pattern;
@@ -298,7 +322,11 @@ std::vector<Bloom::WFC::Pattern> Bloom::WFC::findPatterns(std::vector<std::vecto
 				auto row = std::vector<int>();
 				for (int x = -pattern_size.x / 2; x <= pattern_size.x / 2; x++)
 				{
-					row.push_back(bitmap.at(y + i).at(x + j));
+					if (y + i >= bitmap.size() || y + i < 0 || x + j >= bitmap.at(y+i).size() || x + j < 0) {
+						row.push_back(0);
+					} else{
+						row.push_back(bitmap.at(y + i).at(x + j));
+					}
 				}
 				pattern.push_back(row);
 			}
@@ -451,6 +479,7 @@ bool Bloom::WFC::WaveFunctionCollapse::Propagate(glm::vec2 idx)
 			if (isElementInVector(newOptions, pattern->GetCenter()))
 				continue;
 			
+			std::cout << curridx.x << ", " << curridx.y << "\n";
 			auto subset = GetSubset(this->grid, curridx, pattern->GetSize());
 			
 			if (pattern->Match(subset)) {
@@ -459,14 +488,15 @@ bool Bloom::WFC::WaveFunctionCollapse::Propagate(glm::vec2 idx)
 			}
 		}
 		
-		this->grid.at(curridx.y).at(curridx.x).superposition = newOptions;
-		
 		if (!matches) {
 			std::cout << "ERROR: No matches found for index (" << curridx.x << ", " << curridx.y << ")\n";
 			return false;
 		}
+
+		this->grid.at(curridx.y).at(curridx.x).superposition = newOptions;
+		std::cout << "UPDATED SUPOS\n";
 		return true;
 	}
-
-	return false;
+	
+	return true;
 }

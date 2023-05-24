@@ -63,7 +63,7 @@ void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
 
-    const char* input = "include/Bloom/res/engine/textures/wfc_house.png";
+    const char* input = "include/Bloom/res/engine/textures/wfc_test.png";
 
     this->test = new Bloom::Sprite(input, 1, GetViewMatrix(), GetPixelProjectionMatrix());
     this->test->SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/sprite/spriteshader_vertex.glsl", "include/Bloom/res/engine/shaders/sprite/spriteshader_wfc_fragment.glsl"),GetPixelProjectionMatrix());
@@ -92,8 +92,14 @@ Application::App::~App()
 
 void Application::App::step()
 {
-    if (!wfc->Collapse()) {
-        wfc->InitGrid();
+    
+    if (!failed) {
+        std::cout << "STEP!\n";
+        wfc->Print();
+        if (!wfc->Collapse()) {
+            failed = true;
+            //wfc->InitGrid();
+        }
     }
     /*if (wfc->isGridDone())
         wfc->Print();*/

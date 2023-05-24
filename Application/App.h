@@ -23,6 +23,7 @@ namespace Application {
         void showgrid();
         void showbitmap(std::vector<std::vector<int>> bitmap);
         std::vector<std::vector<int>> bitmap;
+        bool failed = false;
     };
 }
 #endif
