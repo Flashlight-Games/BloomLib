@@ -243,7 +243,6 @@ bool Bloom::WFC::Pattern::Match(const std::vector<std::vector<Bloom::WFC::Tile>>
 			}
 		}
 	}
-	std::cout << "MATCH\n";
 	return true;
 }
 
@@ -392,48 +391,6 @@ bool isElementInVector(const std::vector<int>& vec, int element) {
 	return false;
 }
 
-glm::vec2 Bloom::WFC::WaveFunctionCollapse::findBacktrackTile(const glm::vec2& currentTile) const {
-	int startY = static_cast<int>(currentTile.y);
-	int startX = static_cast<int>(currentTile.x);
-
-	if (startY >= grid.size() || startX >= grid[startY].size()) {
-		return glm::vec2(-1);
-	}
-	for (int y = startY; y >= 0; y--) {
-		for (int x = (y == startY ? startX : grid[y].size() - 1); x >= 0; x--) {
-			if (!grid[y][x].superposition.empty() && grid[y][x].superposition.size() > 1) {
-				return glm::vec2(x, y);
-			}
-		}
-	}
-
-	return glm::vec2(-1);
-}
-
-bool Bloom::WFC::WaveFunctionCollapse::Backtrack(const glm::vec2& currentTile) {
-	std::cout << "backtracking\n";
-	this->grid.at(currentTile.y).at(currentTile.x).superposition.clear(); // Reset the current tile
-
-	// Continue backtracking to the previous tile
-	glm::vec2 prevTile = findBacktrackTile(currentTile);
-	if (prevTile != glm::vec2(-1)) {
-		if (!this->grid.at(prevTile.y).at(prevTile.x).superposition.empty()) {
-			int prevIndex = Utils::RandInt(0, this->grid.at(prevTile.y).at(prevTile.x).superposition.size() - 1);
-			this->grid.at(prevTile.y).at(prevTile.x).superposition = std::vector<int>({ this->grid.at(prevTile.y).at(prevTile.x).superposition.at(prevIndex) });
-			return Propagate(prevTile + glm::vec2(0, 1)) && Propagate(prevTile + glm::vec2(0, -1)) && Propagate(prevTile + glm::vec2(1, 0)) && Propagate(prevTile + glm::vec2(-1, 0));
-		}
-		else {
-			// No more options available for backtracking, continue backtracking to the previous tile
-			return Backtrack(prevTile);
-		}
-	}
-	else {
-		// No more tiles to backtrack, the algorithm has failed
-		std::cout << "No more tiles to backtrack, the algorithm has failed\n";
-		return false;
-	}
-}
-
 bool Bloom::WFC::WaveFunctionCollapse::Collapse() {
     glm::vec2 least_entropy;
 
@@ -457,18 +414,16 @@ bool Bloom::WFC::WaveFunctionCollapse::Collapse() {
         return Collapse();
     } else {
         // Collapse failed, revert the grid to the backup
-        std::cout << "Collapse failed, reverting the grid\n";
         this->grid = gridBackup;
     }
 
     // No more options available, remove the selected option for the tile and try a different one
-    std::cout << "Selecting a different option for (" << least_entropy.x << ", " << least_entropy.y << ")\n";
     auto& superposition = this->grid.at(least_entropy.y).at(least_entropy.x).superposition;
     superposition.erase(std::remove(superposition.begin(), superposition.end(), selectedOption), superposition.end());
     
     if (superposition.empty()) {
         // No more options available for the tile, backtrack to the previous tile
-        return Collapse();
+        return false;
     }
     
     return Collapse();
@@ -497,7 +452,6 @@ bool Bloom::WFC::WaveFunctionCollapse::Propagate(glm::vec2 idx) {
 		}
 
 		if (!matches) {
-			std::cout << "ERROR: No matches found for index (" << curridx.x << ", " << curridx.y << ")\n";
 			return false;
 		}
 

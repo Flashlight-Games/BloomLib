@@ -49,9 +49,6 @@ namespace Bloom {
 			bool isGridDone();
 			auto getMaxVal() { return this->max_val; };
 		private:
-			glm::vec2 findBacktrackTile(const glm::vec2& currentTile) const;
-			bool Backtrack(const glm::vec2& currentTile);
-
 			void RandomCollapseCenter();
 			std::vector<std::vector<Tile>> GetSubset(std::vector<std::vector<Tile>> grid, glm::vec2 center, glm::vec2 size);
 			void shufflePatterns();
