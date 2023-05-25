@@ -14,16 +14,9 @@ namespace Application {
         void Update();
 
         ~App();
-        void step();
-        void print();
     private:
         // HERE GO VARIABLES
         Bloom::Sprite* test;
-        Bloom::WFC::WaveFunctionCollapse* wfc;
-        void showgrid();
-        void showbitmap(std::vector<std::vector<int>> bitmap);
-        std::vector<std::vector<int>> bitmap;
-        bool failed = false;
     };
 }
 #endif

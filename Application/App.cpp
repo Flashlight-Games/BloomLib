@@ -65,7 +65,6 @@ void Application::App::Begin() {
     const char* input = "include/Bloom/res/engine/textures/wfc_dungeon.png";
 
     this->test = new Bloom::Sprite(input, 1, GetViewMatrix(), GetPixelProjectionMatrix());
-    this->test->SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/sprite/spriteshader_vertex.glsl", "include/Bloom/res/engine/shaders/sprite/spriteshader_wfc_fragment.glsl"),GetPixelProjectionMatrix());
     this->test->SetLocation(this->test->GetSize());
     
     this->bitmap = Bloom::WFC::CreateBitmapFromImage(input);
