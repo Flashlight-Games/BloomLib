@@ -409,7 +409,7 @@ bool Bloom::WFC::WaveFunctionCollapse::Collapse() {
     this->grid.at(least_entropy.y).at(least_entropy.x).superposition = std::vector<int>({ selectedOption });
 
     // PROPAGATE
-    if (Propagate(least_entropy + glm::vec2(0, 1)) && Propagate(least_entropy + glm::vec2(0, -1)) && Propagate(least_entropy + glm::vec2(1, 0)) && Propagate(least_entropy + glm::vec2(-1, 0))) {
+    if (Propagate(least_entropy + glm::vec2(0, 1)) && Propagate(least_entropy + glm::vec2(0, -1)) && Propagate(least_entropy + glm::vec2(1, 0)) && Propagate(least_entropy + glm::vec2(-1, 0)) && Propagate(least_entropy + glm::vec2(-1, -1)) && Propagate(least_entropy + glm::vec2(-1, 1)) && Propagate(least_entropy + glm::vec2(1, 1)) && Propagate(least_entropy + glm::vec2(1,-1)) && Propagate(least_entropy)) {
         // Collapse successful, continue with the next tile
         return Collapse();
     } else {
@@ -423,6 +423,7 @@ bool Bloom::WFC::WaveFunctionCollapse::Collapse() {
     
     if (superposition.empty()) {
         // No more options available for the tile, backtrack to the previous tile
+		InitGrid();
         return false;
     }
     

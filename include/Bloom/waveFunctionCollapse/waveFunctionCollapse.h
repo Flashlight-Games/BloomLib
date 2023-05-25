@@ -41,7 +41,6 @@ namespace Bloom {
 		public:
 			WaveFunctionCollapse(glm::vec2 size, std::vector<Pattern> patterns);
 			WaveFunctionCollapse(glm::vec2 size, std::vector<Pattern> patterns, std::vector<int> weights);
-			~WaveFunctionCollapse();
 			void InitGrid(bool start_center = true);
 			void Print(int depth = 0);
 			auto getGrid() { return &this->grid; };

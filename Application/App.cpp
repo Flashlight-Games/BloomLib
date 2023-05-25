@@ -50,7 +50,6 @@ void Application::App::GameLoop() {
     // RENDERING
     EnablePixels();
     //this->test->Draw();
-    //this->step();
     showbitmap(this->bitmap);
     showgrid();
     DrawPixelsToDefault();
@@ -63,20 +62,21 @@ void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
 
-    const char* input = "include/Bloom/res/engine/textures/wfc_house.png";
+    const char* input = "include/Bloom/res/engine/textures/wfc_test.png";
 
     this->test = new Bloom::Sprite(input, 1, GetViewMatrix(), GetPixelProjectionMatrix());
     this->test->SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/sprite/spriteshader_vertex.glsl", "include/Bloom/res/engine/shaders/sprite/spriteshader_wfc_fragment.glsl"),GetPixelProjectionMatrix());
     this->test->SetLocation(this->test->GetSize());
     
     this->bitmap = Bloom::WFC::CreateBitmapFromImage(input);
-    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(8), Bloom::WFC::findPatterns(bitmap, glm::vec2(3)),Bloom::WFC::CalculateWeights(bitmap));
+    this->wfc = new Bloom::WFC::WaveFunctionCollapse(glm::vec2(16), Bloom::WFC::findPatterns(bitmap, glm::vec2(3)),Bloom::WFC::CalculateWeights(bitmap));
 
     update_thread = new std::thread(&Application::App::Update, this);
     //glClearColor(0.21, 0.21, 0.21, 1.0);
 }
 
 void Application::App::Update() {
+    this->step();
     while (!glfwWindowShouldClose(GetWindow())) {
 
     }
@@ -88,6 +88,7 @@ void Application::App::Update() {
 Application::App::~App()
 {
     delete this->test;
+    delete this->wfc;
 }
 
 void Application::App::step()

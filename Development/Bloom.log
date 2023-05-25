@@ -136,23 +136,23 @@ I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCo
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(436,24): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(437,24): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(436,34): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(437,34): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(441,21): warning C4018: '<': signed/unsigned mismatch
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(458,24): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(442,21): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(459,24): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(458,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(459,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
