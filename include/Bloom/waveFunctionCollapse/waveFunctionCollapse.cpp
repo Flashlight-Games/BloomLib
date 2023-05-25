@@ -438,12 +438,11 @@ bool Bloom::WFC::WaveFunctionCollapse::Collapse() {
 	auto& superposition = this->grid.at(least_entropy.y).at(least_entropy.x).superposition;
 	superposition.erase(std::remove(superposition.begin(), superposition.end(), selectedOption), superposition.end());
 
-	if (superposition.empty()) {
-		// No more options available for the tile, backtrack to the previous tile
+	if (superposition.size() == 0) {
+		// No more options available for the tile, full restart
 		InitGrid();
-		return false;
+		return Collapse();
 	}
-
 	return Collapse();
 }
 

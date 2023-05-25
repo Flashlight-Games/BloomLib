@@ -1954,16 +1954,13 @@
     <Image Include="include\Bloom\res\engine\textures\window.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="include\Bloom\res\engine\textures\wfc_house.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="include\Bloom\res\engine\textures\wfc_test.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="include\Bloom\res\engine\textures\wfc_dungeon.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="include\Bloom\res\engine\textures\wfc_flowers.png">
+    <Image Include="include\Bloom\res\engine\textures\wfc_water.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
