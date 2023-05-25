@@ -62,7 +62,7 @@ void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
 
-    const char* input = "include/Bloom/res/engine/textures/wfc_test.png";
+    const char* input = "include/Bloom/res/engine/textures/wfc_water.png";
 
     this->test = new Bloom::Sprite(input, 1, GetViewMatrix(), GetPixelProjectionMatrix());
     this->test->SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/sprite/spriteshader_vertex.glsl", "include/Bloom/res/engine/shaders/sprite/spriteshader_wfc_fragment.glsl"),GetPixelProjectionMatrix());

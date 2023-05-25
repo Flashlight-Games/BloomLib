@@ -52,6 +52,7 @@ namespace Bloom {
 			std::vector<std::vector<Tile>> GetSubset(std::vector<std::vector<Tile>> grid, glm::vec2 center, glm::vec2 size);
 			void shufflePatterns();
 			bool Propagate(glm::vec2 idx);
+			bool PropagateUntilEnd(glm::vec2 idx, std::vector<std::vector<bool>>& visited);
 			glm::vec2 leastEntropyTileIdx(const std::vector<std::vector<Tile>>& grid) const;
 			glm::vec2 size;
 			std::vector<std::vector<Tile>> grid;

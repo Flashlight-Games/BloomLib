@@ -306,24 +306,27 @@ bool Bloom::WFC::Tile::Contains(int contains)
 std::vector<Bloom::WFC::Pattern> Bloom::WFC::findPatterns(std::vector<std::vector<int>> bitmap, glm::vec2 pattern_size)
 {
 	std::vector<Pattern> patterns;
-	int counter = 0;
 
-	for (int i = 0; i < bitmap.size(); i++)
+	for (int i = pattern_size.y / 2.0; i < bitmap.size() - pattern_size.y / 2.0; i += pattern_size.y / 2.0)
 	{
-		for (int j = 0; j < bitmap.at(i).size(); j++)
+		for (int j = pattern_size.y / 2.0; j < bitmap.at(i).size() - pattern_size.y / 2.0; j += pattern_size.x / 2.0)
 		{
-			counter++;
 			std::vector<std::vector<int>> pattern;
 
-			for (int y = -pattern_size.y / 2; y <= pattern_size.y / 2; y++)
+			for (int y = 0; y < pattern_size.y; ++y)
 			{
 				auto row = std::vector<int>();
-				for (int x = -pattern_size.x / 2; x <= pattern_size.x / 2; x++)
+				for (int x = 0; x < pattern_size.x; ++x)
 				{
-					if (y + i >= bitmap.size() || y + i < 0 || x + j >= bitmap.at(y+i).size() || x + j < 0) {
+					const int row_index = y + i;
+					const int col_index = x + j;
+					if (row_index >= 0 && row_index < bitmap.size() && col_index >= 0 && col_index < bitmap.at(row_index).size())
+					{
+						row.push_back(bitmap.at(row_index).at(col_index));
+					}
+					else
+					{
 						row.push_back(0);
-					} else{
-						row.push_back(bitmap.at(y + i).at(x + j));
 					}
 				}
 				pattern.push_back(row);
@@ -333,9 +336,9 @@ std::vector<Bloom::WFC::Pattern> Bloom::WFC::findPatterns(std::vector<std::vecto
 
 			// Check if the pattern already exists in the vector
 			bool isDuplicate = false;
-			for (const auto& existingPattern : patterns)
+			for (int k = 0; k < patterns.size(); ++k)
 			{
-				if (existingPattern.getPattern() == newPattern.getPattern())
+				if (patterns[k].getPattern() == newPattern.getPattern())
 				{
 					isDuplicate = true;
 					break;
@@ -392,71 +395,120 @@ bool isElementInVector(const std::vector<int>& vec, int element) {
 }
 
 bool Bloom::WFC::WaveFunctionCollapse::Collapse() {
-    glm::vec2 least_entropy;
+	glm::vec2 least_entropy;
 
-    // FIND LEAST ENTROPY
-    least_entropy = leastEntropyTileIdx(this->grid);
-    if (least_entropy == glm::vec2(-1)) {
-        return true;
-    }
+	// FIND LEAST ENTROPY
+	least_entropy = leastEntropyTileIdx(this->grid);
+	if (least_entropy == glm::vec2(-1)) {
+		return true;
+	}
 
-    // Save the state of the grid before collapsing
-    std::vector<std::vector<Tile>> gridBackup = this->grid;
+	// Save the state of the grid before collapsing
+	std::vector<std::vector<Tile>> gridBackup = this->grid;
 
-    // COLLAPSE LEAST ENTROPY BY WEIGHT
-    int index = Utils::WeightedRandom(this->grid.at(least_entropy.y).at(least_entropy.x).superposition, this->weights);
-    int selectedOption = this->grid.at(least_entropy.y).at(least_entropy.x).superposition.at(index);
-    this->grid.at(least_entropy.y).at(least_entropy.x).superposition = std::vector<int>({ selectedOption });
+	// COLLAPSE LEAST ENTROPY BY WEIGHT
+	int index = Utils::WeightedRandom(this->grid.at(least_entropy.y).at(least_entropy.x).superposition, this->weights);
+	int selectedOption = this->grid.at(least_entropy.y).at(least_entropy.x).superposition.at(index);
+	this->grid.at(least_entropy.y).at(least_entropy.x).superposition = std::vector<int>({ selectedOption });
 
-    // PROPAGATE
-    if (Propagate(least_entropy + glm::vec2(0, 1)) && Propagate(least_entropy + glm::vec2(0, -1)) && Propagate(least_entropy + glm::vec2(1, 0)) && Propagate(least_entropy + glm::vec2(-1, 0)) && Propagate(least_entropy + glm::vec2(-1, -1)) && Propagate(least_entropy + glm::vec2(-1, 1)) && Propagate(least_entropy + glm::vec2(1, 1)) && Propagate(least_entropy + glm::vec2(1,-1)) && Propagate(least_entropy)) {
-        // Collapse successful, continue with the next tile
-        return Collapse();
-    } else {
-        // Collapse failed, revert the grid to the backup
-        this->grid = gridBackup;
-    }
+	// PROPAGATE
+	bool propagateSuccess = true;
+	std::vector<std::vector<bool>> visited(size.y, std::vector<bool>(size.x, false));
 
-    // No more options available, remove the selected option for the tile and try a different one
-    auto& superposition = this->grid.at(least_entropy.y).at(least_entropy.x).superposition;
-    superposition.erase(std::remove(superposition.begin(), superposition.end(), selectedOption), superposition.end());
-    
-    if (superposition.empty()) {
-        // No more options available for the tile, backtrack to the previous tile
+	propagateSuccess = propagateSuccess && PropagateUntilEnd(least_entropy + glm::vec2(0, 1), visited);
+	propagateSuccess = propagateSuccess && PropagateUntilEnd(least_entropy + glm::vec2(0, -1), visited);
+	propagateSuccess = propagateSuccess && PropagateUntilEnd(least_entropy + glm::vec2(1, 0), visited);
+	propagateSuccess = propagateSuccess && PropagateUntilEnd(least_entropy + glm::vec2(-1, 0), visited);
+	propagateSuccess = propagateSuccess && PropagateUntilEnd(least_entropy + glm::vec2(-1, -1), visited);
+	propagateSuccess = propagateSuccess && PropagateUntilEnd(least_entropy + glm::vec2(-1, 1), visited);
+	propagateSuccess = propagateSuccess && PropagateUntilEnd(least_entropy + glm::vec2(1, 1), visited);
+	propagateSuccess = propagateSuccess && PropagateUntilEnd(least_entropy + glm::vec2(1, -1), visited);
+	propagateSuccess = propagateSuccess && PropagateUntilEnd(least_entropy, visited);
+
+	if (propagateSuccess) {
+		// Collapse successful, continue with the next tile
+		return Collapse();
+	}
+	else {
+		// Collapse failed, revert the grid to the backup
+		this->grid = gridBackup;
+	}
+
+	// No more options available, remove the selected option for the tile and try a different one
+	auto& superposition = this->grid.at(least_entropy.y).at(least_entropy.x).superposition;
+	superposition.erase(std::remove(superposition.begin(), superposition.end(), selectedOption), superposition.end());
+
+	if (superposition.empty()) {
+		// No more options available for the tile, backtrack to the previous tile
 		InitGrid();
-        return false;
-    }
-    
-    return Collapse();
+		return false;
+	}
+
+	return Collapse();
 }
 
-
-bool Bloom::WFC::WaveFunctionCollapse::Propagate(glm::vec2 idx) {
-	Pattern* pattern = nullptr;
+bool Bloom::WFC::WaveFunctionCollapse::PropagateUntilEnd(glm::vec2 idx, std::vector<std::vector<bool>>& visited) {
 	if (idx.y < this->size.y && idx.y >= 0 && idx.x < this->size.x && idx.x >= 0) {
+		if (visited[idx.y][idx.x])
+			return true;
+
+		visited[idx.y][idx.x] = true;
+
 		if (this->grid.at(idx.y).at(idx.x).GetEntropy() <= 1)
 			return true;
-		auto curridx = idx;
-		bool matches = false;
+
 		std::vector<int> newOptions;
-		for (int i = 0; i < patterns.size(); i++) {
-			pattern = &patterns.at(i);
-			if (isElementInVector(newOptions, pattern->GetCenter()))
+
+		for (const Pattern& pattern : patterns) {
+			if (isElementInVector(newOptions, pattern.GetCenter()))
 				continue;
 
-			auto subset = GetSubset(this->grid, curridx, pattern->GetSize());
+			auto subset = GetSubset(this->grid, idx, glm::vec2(pattern.getPattern().size()));
 
-			if (pattern->Match(subset)) {
-				newOptions.push_back(pattern->GetCenter());
-				matches = true;
+			if (pattern.Match(subset)) {
+				newOptions.push_back(pattern.GetCenter());
 			}
 		}
 
-		if (!matches) {
+		if (newOptions.empty()) {
 			return false;
 		}
 
-		this->grid.at(curridx.y).at(curridx.x).superposition = newOptions;
+		this->grid.at(idx.y).at(idx.x).superposition = newOptions;
+
+		// Continue propagating to the next neighbor until an end is reached
+		return PropagateUntilEnd(idx + glm::vec2(0, 1), visited) &&
+			PropagateUntilEnd(idx + glm::vec2(0, -1), visited) &&
+			PropagateUntilEnd(idx + glm::vec2(1, 0), visited) &&
+			PropagateUntilEnd(idx + glm::vec2(-1, 0), visited);
+	}
+
+	return true;
+}
+
+bool Bloom::WFC::WaveFunctionCollapse::Propagate(glm::vec2 idx) {
+	if (idx.y < this->size.y && idx.y >= 0 && idx.x < this->size.x && idx.x >= 0) {
+		if (this->grid.at(idx.y).at(idx.x).GetEntropy() <= 1)
+			return true;
+
+		std::vector<int> newOptions;
+
+		for (const Pattern& pattern : patterns) {
+			if (isElementInVector(newOptions, pattern.GetCenter()))
+				continue;
+
+			auto subset = GetSubset(this->grid, idx, glm::vec2(pattern.getPattern().size()));
+
+			if (pattern.Match(subset)) {
+				newOptions.push_back(pattern.GetCenter());
+			}
+		}
+
+		if (newOptions.empty()) {
+			return false;
+		}
+
+		this->grid.at(idx.y).at(idx.x).superposition = newOptions;
 		return true;
 	}
 

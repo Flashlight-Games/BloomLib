@@ -1,4 +1,321 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(500,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  App.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\include\Bloom\text\text.h(39,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\framebuffers.h(33,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\framebuffers.h(34,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite.h(58,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite.h(59,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite_subdivided.h(56,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite_subdivided.h(57,47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.h(41,129): warning C4244: '=': conversion from 'float' to 'int16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(63,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(85,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(92,255): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(95,34): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(99,103): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\Application\App.cpp(118,27): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\Application\App.cpp(120,31): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\Application\App.cpp(134,23): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\Application\App.cpp(136,27): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\include\Bloom\text\text.h(39,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\framebuffers.h(33,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\framebuffers.h(34,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite.h(58,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite.h(59,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite_subdivided.h(56,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite_subdivided.h(57,47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.h(41,129): warning C4244: '=': conversion from 'float' to 'int16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(63,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(85,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(92,255): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(95,34): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(99,103): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  collision.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\include\Bloom\text\text.h(39,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\framebuffers.h(33,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\framebuffers.h(34,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite.h(58,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite.h(59,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite_subdivided.h(56,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite_subdivided.h(57,47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.h(41,129): warning C4244: '=': conversion from 'float' to 'int16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(16,41): warning C4244: '=': conversion from 'float' to 'int16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(24,49): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(114,41): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(118,40): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(137,30): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(139,30): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(147,31): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(149,31): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(199,30): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(201,30): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(209,31): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(211,31): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(261,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(262,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(266,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(267,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(273,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(276,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(281,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(284,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(295,30): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(297,30): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(310,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(358,30): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(360,30): warning C4305: '=': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(373,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.cpp(419,63): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+  engine.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\include\Bloom\text\text.h(39,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\framebuffers.h(33,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\framebuffers.h(34,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite.h(58,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite.h(59,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite_subdivided.h(56,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite_subdivided.h(57,47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.h(41,129): warning C4244: '=': conversion from 'float' to 'int16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(63,35): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(85,85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(92,255): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(95,34): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.h(99,103): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.cpp(33,65): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.cpp(34,66): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.cpp(35,71): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.cpp(36,72): warning C4244: '=': conversion from 'T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.cpp(136,20): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\engine\engine.cpp(140,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  utils.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+I:\TomerSoftware\Code\BloomLib\include\Bloom\text\text.h(39,27): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\framebuffers.h(33,41): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\framebuffers.h(34,42): warning C4244: '=': conversion from 'const T' to 'uint16_t', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite.h(58,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite.h(59,51): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite_subdivided.h(56,45): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\sprite\sprite_subdivided.h(57,47): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\collision\collision.h(41,129): warning C4244: '=': conversion from 'float' to 'int16_t', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\framebuffers\chromatic_aberration.h(13,14): warning C4305: 'initializing': truncation from 'double' to 'float'
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(5,21): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(44,64): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(44,52): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(51,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(52,80): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(52,72): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(52,64): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(52,52): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(60,64): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(60,52): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(67,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(68,80): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(68,72): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(68,64): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(68,52): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(88,26): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(105,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(133,35): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(197,29): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(197,20): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.h(8,18): warning C4244: 'return': conversion from 'float' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\utils\utils.cpp(193): message : see reference to function template instantiation 'T Utils::Lerp<int>(T,T,float)' being compiled
+          with
+          [
+              T=int
+          ]
   waveFunctionCollapse.cpp
   The contents of <filesystem> are available only with C++17 or later.
 I:\TomerSoftware\Code\BloomLib\include\Bloom\text\text.h(39,27): warning C4305: 'initializing': truncation from 'double' to 'float'
@@ -82,81 +399,134 @@ I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCo
 I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(278,21): warning C4018: '<': signed/unsigned mismatch
 I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(289,20): warning C4018: '<': signed/unsigned mismatch
 I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(298,20): warning C4018: '<': signed/unsigned mismatch
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(311,20): warning C4018: '<': signed/unsigned mismatch
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(313,21): warning C4018: '<': signed/unsigned mismatch
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(318,15): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(310,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(310,99): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(312,14): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(312,106): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(323,38): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(323,85): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(339,22): warning C4018: '<': signed/unsigned mismatch
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(410,63): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(321,16): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(410,83): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(323,16): warning C4018: '>=': signed/unsigned mismatch
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(323,55): warning C4018: '>=': signed/unsigned mismatch
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(407,66): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(411,50): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(407,86): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(411,70): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(408,53): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(412,29): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(408,73): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(412,49): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(409,32): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(416,71): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(409,52): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(416,45): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(421,54): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(438,51): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(421,74): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(438,71): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(437,24): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(452,18): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(437,34): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(452,25): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(442,21): warning C4018: '<': signed/unsigned mismatch
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(459,24): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(455,14): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
           with
           [
               T=float
           ]
-I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(459,38): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(455,21): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
           with
           [
               T=float
           ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(457,24): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(457,34): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(466,80): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(477,20): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(477,30): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(491,24): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(491,34): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(500,80): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(511,20): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+I:\TomerSoftware\Code\BloomLib\include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp(511,30): warning C4244: 'argument': conversion from 'T' to 'const unsigned int', possible loss of data
+          with
+          [
+              T=float
+          ]
+  Generating Code...
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
   Bloom.vcxproj -> I:\TomerSoftware\Code\BloomLib\Output\Development\Bloom.exe
