@@ -77,7 +77,7 @@ namespace Bloom{
             }
             return new_particles;
         };
-        void Draw(float Gametime, float Gamespeed) {
+        void Draw(float Gametime, float Gamespeed, float depth) {
             if (particles.size() > 0) {
                 for (int i = 0; i < particles.size(); i++)
                 {
@@ -89,7 +89,7 @@ namespace Bloom{
                     p_sprite->GetShader()->uniformVec4(p_sprite->GetShader()->getUniformId(("color[" + std::to_string(i % 101) + "]").c_str()), p->GetColor());
 
                     if(i > 0 && i % 101 == 100)
-                        p_sprite->DrawInstanced(p_view_matrix, (int)std::min((int)particles.size(), 100));
+                        p_sprite->DrawInstanced((int)std::min((int)particles.size(), 100),depth);
 
                     if (p->GetAge() > p->GetLifetime()) {
                         delete particles.begin() + i;
@@ -99,7 +99,7 @@ namespace Bloom{
                     }
                 }
                 
-                p_sprite->DrawInstanced(p_view_matrix, (int)std::min((int)particles.size(), (int)particles.size() % 101));
+                p_sprite->DrawInstanced((int)std::min((int)particles.size(), (int)particles.size() % 101),depth);
                 
             }
         };

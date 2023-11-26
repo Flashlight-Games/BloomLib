@@ -1,22 +1,27 @@
 #include "bones.h"
 
-Bloom::Bone::Bone(Bone* parent,int16_t length){
+Bloom::Bone::Bone(Bone* parent,float length){
     this->Parent = parent; this->length = length;
     if(parent != NULL)
         parent->SetChild(this);
 }
 
-Bloom::Bone::~Bone()
-{
-    delete Parent;
-    delete Child;
-}
-
 glm::vec2 Bloom::Bone::GetEndLocation(){
+    if (this->length == 0)
+        return this->location;
     int offset = 0;
     if(this->Parent != NULL)
         offset = Parent->GetRotation();
-    return glm::vec2(location[0] + length*cos((offset + rotation-90)*(PI/180)),location[1] + length*sin((offset + rotation-90)*(PI/180)));
+    return glm::vec2(location[0] + length*cos((offset + rotation-90.0)*(PI/180.0)),location[1] + length*sin((offset + rotation-90.0)*(PI/180.0)));
+}
+
+glm::vec2 Bloom::Bone::GetEndLocation(float length) {
+    if (length == 0)
+        return this->location;
+    int offset = 0;
+    if (this->Parent != NULL)
+        offset = Parent->GetRotation();
+    return glm::vec2(location[0] + length * cos((offset + rotation - 90.0) * (PI / 180.0)), location[1] + length * sin((offset + rotation - 90.0) * (PI / 180.0)));
 }
 
 std::vector<Bloom::Bone*> Bloom::Bone::Bones(int amount,int length){

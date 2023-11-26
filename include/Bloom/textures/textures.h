@@ -23,6 +23,8 @@ namespace Bloom{
             Texture2D(const char* path,bool linear_scaling = true);
             Texture2D(const void* data,glm::vec2 size,int format = GL_RGBA,bool linear_scaling = true);
             Texture2D();
+            Texture2D(Texture2D& copy);
+            ~Texture2D();
             void ImGui(float scale = 1) {
                 ImGui::Image((void*)GetID(), ImVec2(GetSize().x * scale, GetSize().y * scale));
             };
@@ -32,6 +34,7 @@ namespace Bloom{
             const glm::vec2 GetSize(){return size;};
             GLuint GetID(){return id;};
 
+            auto GetPath() { return path; };
         private:
             const char* path;
             glm::vec2 size;

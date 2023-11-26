@@ -40,6 +40,19 @@ glm::vec2 getRotatedRectPoint_RT(glm::vec2 center,glm::vec2 size,uint16_t angle)
     return glm::vec2(center.x + ((size.x / 2) * cos(angle*PI/180)) - ((size.y / 2) * sin(angle*PI/180)),center.y + ((size.x / 2) * sin(angle*PI/180)) + ((size.y / 2) * cos(angle*PI/180)));
 }
 
+void PhysX::collisionBox::updatePoints()
+{
+    glm::vec2 this_origin = getOrigin(); glm::vec2 this_scale = getScale();
+    if (this_origin.x == 0)
+        this_origin.x = 0.001;
+    if (this_origin.y == 0)
+        this_origin.y = 0.001;
+    thisA = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+    thisB = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    thisC = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    thisD = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+}
+
 glm::mat4 collisionBox::makeTransformationMatrix(){
     glm::mat4 result = glm::mat4(1);
     result           = glm::translate(result,glm::vec3(location[0],location[1],0.0f));
@@ -128,6 +141,22 @@ bool collisionBox::check_SAT(collisionBox* other){
     return check_SAT(other, transMatrix, otherTransMatrix);
 }
 
+bool PhysX::collisionBox::check_Point(glm::vec2 point)
+{
+    glm::vec2 this_origin = getOrigin(); glm::vec2 this_scale = getScale();
+    if (this_origin.x == 0)
+        this_origin.x = 0.001;
+    if (this_origin.y == 0)
+        this_origin.y = 0.001;
+    auto this_transformation = makeTransformationMatrix();
+    thisA = this_transformation * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+    thisB = this_transformation * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    thisC = this_transformation * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    thisD = this_transformation * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+
+    return (point.x >= glm::min(glm::min(thisA, thisB), glm::min(thisC, thisD)).x && point.y >= glm::min(glm::min(thisA, thisB), glm::min(thisC, thisD)).y && point.x <= glm::max(glm::max(thisA, thisB), glm::max(thisC, thisD)).x && point.y <= glm::max(glm::max(thisA, thisB), glm::max(thisC, thisD)).y);
+}
+
 glm::vec2 collisionBox::check_Traced(collisionBox* other, glm::mat4 transformationMatrix, glm::mat4 otherTransformationMatrix) {
     if (this->channel != other->channel)
         return glm::vec2(INFINITY);
@@ -137,10 +166,10 @@ glm::vec2 collisionBox::check_Traced(collisionBox* other, glm::mat4 transformati
         this_origin.x = 0.001;
     if (this_origin.y == 0)
         this_origin.y = 0.001;
-    glm::vec2 thisA = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0] - 1) * this_scale[0], (this_origin [1]) * this_scale[1]), 0, 1);
-    glm::vec2 thisB = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0]) * this_scale[0], (this_origin [1] - 1) * this_scale[1]), 0, 1);
-    glm::vec2 thisC = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0] - 1) * this_scale[0], (this_origin [1] - 1) * this_scale[1]), 0, 1);
-    glm::vec2 thisD = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0]) * this_scale[0], (this_origin [1]) * this_scale[1]), 0, 1);
+    thisA = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0] - 1) * this_scale[0], (this_origin [1]) * this_scale[1]), 0, 1);
+    thisB = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0]) * this_scale[0], (this_origin [1] - 1) * this_scale[1]), 0, 1);
+    thisC = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0] - 1) * this_scale[0], (this_origin [1] - 1) * this_scale[1]), 0, 1);
+    thisD = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin [0]) * this_scale[0], (this_origin [1]) * this_scale[1]), 0, 1);
 
     glm::vec2 other_origin = other->getOrigin(); glm::vec2 other_scale = other->getScale();
     if (other_origin.x == 0)
@@ -199,20 +228,22 @@ glm::vec2 PhysX::collisionBox::check_TracedNormal(collisionBox* other, glm::mat4
         this_origin.x = 0.001;
     if (this_origin.y == 0)
         this_origin.y = 0.001;
-    glm::vec2 thisA = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
-    glm::vec2 thisB = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
-    glm::vec2 thisC = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
-    glm::vec2 thisD = makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+    auto this_transformation = makeTransformationMatrix();
+    thisA = this_transformation * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+    thisB = this_transformation * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    thisC = this_transformation * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    thisD = this_transformation * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
 
     glm::vec2 other_origin = other->getOrigin(); glm::vec2 other_scale = other->getScale();
     if (other_origin.x == 0)
         other_origin.x = 0.001;
     if (other_origin.y == 0)
         other_origin.y = 0.001;
-    glm::vec2 otherA = other->makeTransformationMatrix() * glm::vec4(glm::vec2((other_origin[0] - 1) * other_scale[0], (other_origin[1]) * other_scale[1]), 0, 1);
-    glm::vec2 otherB = other->makeTransformationMatrix() * glm::vec4(glm::vec2((other_origin[0]) * other_scale[0], (other_origin[1] - 1) * other_scale[1]), 0, 1);
-    glm::vec2 otherC = other->makeTransformationMatrix() * glm::vec4(glm::vec2((other_origin[0] - 1) * other_scale[0], (other_origin[1] - 1) * other_scale[1]), 0, 1);
-    glm::vec2 otherD = other->makeTransformationMatrix() * glm::vec4(glm::vec2((other_origin[0]) * other_scale[0], (other_origin[1]) * other_scale[1]), 0, 1);
+    auto other_transformation = other->makeTransformationMatrix();
+    glm::vec2 otherA = other_transformation * glm::vec4(glm::vec2((other_origin[0] - 1) * other_scale[0], (other_origin[1]) * other_scale[1]), 0, 1);
+    glm::vec2 otherB = other_transformation * glm::vec4(glm::vec2((other_origin[0]) * other_scale[0], (other_origin[1] - 1) * other_scale[1]), 0, 1);
+    glm::vec2 otherC = other_transformation * glm::vec4(glm::vec2((other_origin[0] - 1) * other_scale[0], (other_origin[1] - 1) * other_scale[1]), 0, 1);
+    glm::vec2 otherD = other_transformation * glm::vec4(glm::vec2((other_origin[0]) * other_scale[0], (other_origin[1]) * other_scale[1]), 0, 1);
 
 
     glm::vec2 hitpoint;
@@ -290,15 +321,25 @@ glm::vec2 PhysX::GetLineInterceptionPoint(glm::vec2 startA, glm::vec2 endA, glm:
 
 glm::vec2 PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end)
 {
+    if (other->getChannel() != channel)
+        return glm::vec2(INFINITY);
+
+    if (other->check_Point(start))
+        return start;
+
+    if (other->check_Point(end))
+        return end;
+
     glm::vec2 this_origin = other->getOrigin(); glm::vec2 this_scale = other->getScale();
     if (this_origin.x == 0)
         this_origin.x = 0.001;
     if (this_origin.y == 0)
         this_origin.y = 0.001;
-    glm::vec2 pointA = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
-    glm::vec2 pointB = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
-    glm::vec2 pointC = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
-    glm::vec2 pointD = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+    auto other_transformation = other->makeTransformationMatrix();
+    glm::vec2 pointA = other_transformation * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+    glm::vec2 pointB = other_transformation * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 pointC = other_transformation * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 pointD = other_transformation * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
 
     auto BC = GetLineInterceptionPoint(start, end, pointB, pointC);
     auto CA = GetLineInterceptionPoint(start, end, pointC, pointA);
@@ -339,7 +380,71 @@ glm::vec2 PhysX::LineTrace(std::string channel, collisionBox* other, glm::vec2 s
     else {
         return glm::vec2(INFINITY);
     }
-    
+}
+
+glm::vec2 PhysX::LineTrace(std::vector<std::string> channels, collisionBox* other, glm::vec2 start, glm::vec2 end)
+{
+    if (channels.size() > 0) {
+        if (std::find(channels.begin(), channels.end(), other->getChannel()) == channels.end())
+            return glm::vec2(INFINITY);
+    }
+
+    if (other->check_Point(start))
+        return start;
+
+    if (other->check_Point(end))
+        return end;
+
+    glm::vec2 this_origin = other->getOrigin(); glm::vec2 this_scale = other->getScale();
+    if (this_origin.x == 0)
+        this_origin.x = 0.001;
+    if (this_origin.y == 0)
+        this_origin.y = 0.001;
+    auto other_transformation = other->makeTransformationMatrix();
+    glm::vec2 pointA = other_transformation * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+    glm::vec2 pointB = other_transformation * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 pointC = other_transformation * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 pointD = other_transformation * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+
+    auto BC = GetLineInterceptionPoint(start, end, pointB, pointC);
+    auto CA = GetLineInterceptionPoint(start, end, pointC, pointA);
+    auto AD = GetLineInterceptionPoint(start, end, pointA, pointD);
+    auto DB = GetLineInterceptionPoint(start, end, pointD, pointB);
+
+    float minDist = INFINITY;
+    float tolerance = 0;
+    float radius = std::sqrt(std::pow(other->getScale().x * 0.5, 2) + std::pow(other->getScale().y * 0.5, 2)) + tolerance;
+
+    if (Utils::Distance2D(other->getCenter(), BC) <= radius && Utils::Distance2D(start, BC) <= minDist) {
+        minDist = Utils::Distance2D(start, BC);
+    } if (Utils::Distance2D(other->getCenter(), CA) <= radius && Utils::Distance2D(start, CA) <= minDist) {
+        minDist = Utils::Distance2D(start, CA);
+    } if (Utils::Distance2D(other->getCenter(), AD) <= radius && Utils::Distance2D(start, AD) <= minDist) {
+        minDist = Utils::Distance2D(start, AD);
+    } if (Utils::Distance2D(other->getCenter(), DB) <= radius && Utils::Distance2D(start, DB) <= minDist) {
+        minDist = Utils::Distance2D(start, DB);
+    }
+
+    glm::vec2 return_point = glm::vec2(INFINITY);
+
+
+    if (minDist == Utils::Distance2D(start, BC))
+        return_point = BC;
+    else if (minDist == Utils::Distance2D(start, CA))
+        return_point = CA;
+    else if (minDist == Utils::Distance2D(start, AD))
+        return_point = AD;
+    else if (minDist == Utils::Distance2D(start, DB))
+        return_point = DB;
+    else
+        return return_point;
+
+    if (return_point.x >= std::min(start.x, end.x) && return_point.x <= std::max(start.x, end.x) && return_point.y >= std::min(start.y, end.y) && return_point.y <= std::max(start.y, end.y)) {
+        return return_point;
+    }
+    else {
+        return glm::vec2(INFINITY);
+    }
 }
 
 glm::vec2 PhysX::GetNormal(glm::vec2 pointA, glm::vec2 pointB) {
@@ -358,10 +463,11 @@ glm::vec2 PhysX::LineTraceNormal(std::string channel, collisionBox* other, glm::
         this_origin.x = 0.001;
     if (this_origin.y == 0)
         this_origin.y = 0.001;
-    glm::vec2 pointA = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
-    glm::vec2 pointB = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
-    glm::vec2 pointC = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
-    glm::vec2 pointD = other->makeTransformationMatrix() * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+    auto other_transformation = other->makeTransformationMatrix();
+    glm::vec2 pointA = other_transformation * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
+    glm::vec2 pointB = other_transformation * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 pointC = other_transformation * glm::vec4(glm::vec2((this_origin[0] - 1) * this_scale[0], (this_origin[1] - 1) * this_scale[1]), 0, 1);
+    glm::vec2 pointD = other_transformation * glm::vec4(glm::vec2((this_origin[0]) * this_scale[0], (this_origin[1]) * this_scale[1]), 0, 1);
 
     auto BC = GetLineInterceptionPoint(start, end, pointB, pointC);
     auto CA = GetLineInterceptionPoint(start, end, pointC, pointA);

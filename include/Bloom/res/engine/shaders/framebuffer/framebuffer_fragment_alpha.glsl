@@ -6,12 +6,12 @@ in vec3 vertexPosi;
 
 out vec4 color;
 uniform sampler2D uTexture;
+uniform float custom_depth = 0.0;
 
 void main()
 {
+    gl_FragDepth = custom_depth;
     color = texture(uTexture,vTextureCoords);
     if(color.a <= 0.0)
         discard;
-    color = vec4(color.xyz,1.0);
-    
 }

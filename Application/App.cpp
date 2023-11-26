@@ -1,7 +1,5 @@
 #include "App.h"
 
-//using namespace Application;
-
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     auto app = Utils::GetApp<Application::App>(window);
     switch (key) {
@@ -15,58 +13,70 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
     auto app = Utils::GetApp<Application::App>(window);
-    switch (key) {
-    case GLFW_MOUSE_BUTTON_LEFT:
-        break;
-    }
 }
 
-void Application::App::UILoop() {
-    ImGui::Begin("Control window"); {
-        if (Utils::isDevelopmentConfiguration()) {
-            ImGui::TextColored(ImVec4(1, 0.5, 0.0, 1), (std::string("GLFW v_").c_str() + std::string(glfwGetVersionString())).c_str());
-        }
-    } ImGui::End();
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    auto app = Utils::GetApp<Application::App>(window);
+}
 
-    if (Utils::isDevelopmentConfiguration()) {
-        ImGui::Begin("Performance window");
-        ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "Time is %s", std::to_string((int)GetTime()).c_str());
-        ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS", std::to_string(GetFPS()).c_str());
+
+void Application::App::UILoop() {
+    auto pos = (GetCursorPosition() / GetPixelWindowSize()) * GetWindowSize();
+    pos = glm::vec2(pos.x, GetWindowSize().y - pos.y);
+    SetImGuiCursorPosition(pos);
+
+    #ifdef DEBUG
+        ImVec2 last_size;
+        ImVec2 last_pos;
+        ImGui::SetNextWindowPos(ImVec2(10, 10));
+        ImGui::SetNextWindowSize(ImVec2(400, 75));
+        ImGui::Begin("Performance window", nullptr, ImGuiWindowFlags_NoCollapse); {
+            ImGui::TextColored(ImVec4(1, 0.5, 0, 1), "Time is %s", std::to_string((int)GetTime()).c_str());
+            ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS", std::to_string(GetFPS()).c_str());
+            ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s FPS Average", std::to_string(GetAverageFPS()).c_str());
+            last_size = ImGui::GetWindowSize(); last_pos = ImGui::GetWindowPos();
+        }ImGui::End();
+
+
+        ImGui::SetNextWindowPos(ImVec2(10, last_pos.y+10+last_size.y));
+        ImGui::SetNextWindowSize(ImVec2(400, 75));
+        ImGui::Begin("Control window", nullptr, ImGuiWindowFlags_NoCollapse); {
+            ImGui::TextColored(ImVec4(1, 0.5, 0.0, 1), (std::string("GLFW v_").c_str() + std::string(glfwGetVersionString())).c_str());
+            last_size = ImGui::GetWindowSize(); last_pos = ImGui::GetWindowPos();
+        } 
         ImGui::End();
-    }
+    #endif
 }
 
 void Application::App::GameLoop() {
-    // RENDERING
+    // RENDER PIXEL BACKGROUND
     EnablePixels();
     this->test->Draw();
-    DrawPixelsToDefault();
+    DrawPixelsToDefault(false, 0.0);
 }
 
 void Application::App::InputLoop() {
+    
 }
 
 void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
+    glfwSetScrollCallback(GetWindow(), scroll_callback);
 
     this->test = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
     this->test->SetLocation(this->test->GetSize());
 
-    update_thread = new std::thread(&Application::App::Update, this);
-    glClearColor(0.21, 0.21, 0.21, 1.0);
+    //SetGameSpeedMultiplier(0.1);    
 }
 
-void Application::App::Update() {
-    while (!glfwWindowShouldClose(GetWindow())) {
+void Application::App::Update() { // SUB-FRAME UPDATE
 
-    }
-
-    std::terminate();
-    delete update_thread;
 }
 
 Application::App::~App()
 {
-    delete this->test;
+    #ifdef DEBUG
+        std::cout << Utils::Green() << "APP CLOSED SUCCESSFULY\n" << Utils::Default();
+    #endif
 }

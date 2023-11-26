@@ -44,16 +44,23 @@ Text::Text(const char* path, glm::mat4* view_matrix, glm::mat4 projection_matrix
     glGenBuffers(1,&ebo); // Set ebo id
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo); // bind the ebo as an element array buffer
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),&indices,GL_STATIC_DRAW);
+
+    color_uid = qShader.getUniformId("uColor");
+    model_uid = qShader.getUniformId("model");
+    view_uid = qShader.getUniformId("view");
+    projection_uid = qShader.getUniformId("projection");
+    depth_uid = qShader.getUniformId("custom_depth");
 }
 
 Bloom::Text::~Text()
 {
     delete texture;
-    delete path;
-    delete projection_matrix;
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ebo);
 }
 
-void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 screen_size, glm::vec4 color,bool centered){
+void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 screen_size, glm::vec4 color,bool centered, float depth){
     const char* ctext = text.c_str();
     texture->bind();
     qShader.use();
@@ -67,10 +74,11 @@ void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 scr
     //model_matrix = glm::rotate(model_matrix, (float)glm::radians(0.0), glm::vec3(0.0f, 0.0f, 1.0f));
     model_matrix = glm::scale(model_matrix, glm::vec3(size, size, 1.0f));
 
-    qShader.uniformVec4(qShader.getUniformId("uColor"), color);
-    qShader.uniformMat4(qShader.getUniformId("model"), model_matrix);
-    qShader.uniformMat4(qShader.getUniformId("view"), *view_matrix);
-    qShader.uniformMat4(qShader.getUniformId("projection"), *projection_matrix);
+    qShader.uniformVec4(color_uid, color);
+    qShader.uniformMat4(model_uid, model_matrix);
+    qShader.uniformMat4(view_uid, *view_matrix);
+    qShader.uniformMat4(projection_uid, *projection_matrix);
+    qShader.uniformFloat(depth_uid, depth);
 
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER,vbo);

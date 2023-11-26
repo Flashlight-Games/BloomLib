@@ -23,7 +23,7 @@ namespace Bloom{
     class Spritesheet{
         public:
         Spritesheet(const char* texture_path,int pixels_per_pixel,glm::vec2 tiling, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5,0.5));
-        void Draw();
+        void Draw(float depth = 0.99);
         int Advance(int step = 1);
         int TimedAdvance(float duration,int step = 1);
         void SetIdx(int idx);

@@ -17,6 +17,7 @@ namespace Bloom{
         public:
             void static forwardKinematics(Bloom::Bone* parent,bool propagate = false);
             void static twoBoneIK(Bloom::Bone* parent, glm::vec2 end_effector,bool inverted = false);
+            glm::vec2 static twoBoneIK_Angles(Bloom::Bone* parent, glm::vec2 end_effector, bool inverted = false); // returns (parent_angle,child_angle)
     };
 }
 #endif

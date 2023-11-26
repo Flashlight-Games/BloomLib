@@ -6,9 +6,11 @@ out vec4 color;
 
 uniform vec4 uColor = vec4(1,1,1,1);
 uniform sampler2D uTexture;
+uniform float custom_depth = 0.0;
 
 void main()
 {
+    gl_FragDepth = custom_depth;
     vec4 texColor = texture(uTexture,vTextureCoords);
     color = vec4(texColor) * uColor;
     float brightness = dot(color.rgb, vec3(0.2126, 0.7152, 0.0722));

@@ -129,8 +129,8 @@ glm::vec3 Utils::HSVtoRGB(glm::vec3 hsv)
     return glm::vec3(R, G, B);
 }
 
-glm::vec2 Utils::PixelateResolution(glm::vec2 resolution, int pixels_per_pixel){
-    return resolution / glm::vec2(pixels_per_pixel);
+glm::vec2 Utils::PixelateResolution(glm::vec2 resolution, int new_height){
+    return glm::vec2(resolution.x / (resolution.y / new_height), new_height);
 }
 
 void Utils::EnableWireframe()
@@ -194,10 +194,10 @@ int Utils::RandInt(int min, int max) {
 }
 
 float Utils::RandFloat(float min, float max, int precision) {
-    return RandInt(min, max * precision) / (float)precision;
+    float normalizedRand = static_cast<float>(rand()) / RAND_MAX;
+    float scaledRand = min + normalizedRand * (max - min);
+    return scaledRand;
 }
-
-bool Utils::isDevelopmentConfiguration() { return *ENGINE_CONFIGURATION == *"Development"; }
 
 int Utils::WeightedRandom(const std::vector<int>& options, const std::vector<int>& weights) {
     // Create a vector of valid weights based on the provided options
@@ -229,3 +229,63 @@ int Utils::WeightedRandom(const std::vector<int>& options, const std::vector<int
     // Default case: return the index of the last option
     return options.size() - 1;
 }
+
+float Utils::Deadzone(float value, float range)
+{
+    if (abs(value) > range)
+        return value;
+    return 0.0;
+}
+
+glm::vec2 Utils::Deadzone(glm::vec2 value, glm::vec2 range)
+{
+    auto retval = glm::vec2(0);
+    if (abs(value.x) > range.x)
+        retval.x = value.x;
+    if (abs(value.y) > range.y)
+        retval.y = value.y;
+    return retval;
+}
+
+glm::vec2 Utils::MovePointInDistance(const glm::vec2 point, const glm::vec2 center,const float distance)
+{
+    if (Utils::Distance2D(point, center) <= distance) {
+        return point;
+    }
+    return glm::normalize(point - center) * distance + center;
+}
+
+bool Utils::CreateDirectories(std::string path) {
+    unsigned int pos = 0;
+    do
+    {
+        pos = path.find_first_of("\\/", pos + 1);
+
+
+        wchar_t wtext[128];
+        mbstowcs(wtext, path.substr(0, pos).c_str(), path.substr(0, pos).length() + 1);//Plus null
+
+        if (!(CreateDirectory(wtext, NULL) ||
+            ERROR_ALREADY_EXISTS == GetLastError())) {
+            return false;
+        }
+    } while (pos != std::string::npos);
+    return true;
+}
+
+bool Utils::DeleteDirectory(const std::string& path) {
+    std::string command = "rmdir /s /q \"" + path + "\" 2>NUL";
+    int result = std::system(command.c_str());
+    return (result == 0 || result == 2);
+}
+
+void Utils::printBits(unsigned int value) {
+    int numBits = sizeof(value) * 8; // Assuming 8 bits per byte
+
+    for (int i = numBits - 1; i >= 0; i--) {
+        bool bit = (value & (1u << i)) != 0;
+        std::cout << bit;
+    }
+    std::cout << std::endl;
+}
+

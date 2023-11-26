@@ -14,7 +14,7 @@ void Engine::Prep_InputLoop(){
         InputLoop();
     }
     catch (const std::exception& ex) {
-        std::cout << "Encountered Bloom Exception during InputLoop : " << ex.what() << std::endl;
+        std::cerr << "Encountered Bloom Exception during InputLoop : " << ex.what() << std::endl;
         CloseGame();
     }
 }
@@ -51,8 +51,8 @@ int Engine::Init(){
         glfwWindowHint(GLFW_DECORATED,               engine_config.glfw_decorated);
         glfwWindowHint(GLFW_FLOATING,                engine_config.glfw_topmost);
         glfwWindowHint(GLFW_MAXIMIZED,               engine_config.glfw_maximized);
-        glfwWindowHint(GLFW_CENTER_CURSOR,           engine_config.glfw_center_cursor);
         glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, engine_config.glfw_transparent);
+        glfwWindowHint(GLFW_DEPTH_BITS,              24);
     
         window = glfwCreateWindow(windowWidth, windowHeight, engine_config.window_name.c_str(), NULL, NULL);
         if (window == NULL)
@@ -62,14 +62,22 @@ int Engine::Init(){
         }
         glfwSetFramebufferSizeCallback(window, ResizeLoop);  
         glfwMakeContextCurrent(window);
-    
+
+        if (!engine_config.glfw_show_cursor) {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // HIDE CURSOR
+            auto center = GetWindowSize() / 2.0f;
+            glfwSetCursorPos(GetWindow(), center.x, center.y);
+        }
 
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) // GLAD INIT, GL Context init
         {
             throw std::runtime_error("Failed to initialize GLAD");
             return -1;
         }    
-        std::cout << "GL Version " <<  glGetString(GL_VERSION) << " [Bloom " << ENGINE_CONFIGURATION << "]\n"; // Requires GL Context
+        #ifdef DEBUG
+            std::cout << "GL Version " <<  glGetString(GL_VERSION) << " [Bloom " << ENGINE_CONFIGURATION << "]\n"; // Requires GL Context
+        #endif
+
         stbi_set_flip_vertically_on_load(true);
 
         glEnable(GL_BLEND);
@@ -85,11 +93,21 @@ int Engine::Init(){
         else
             glDisable(GL_MULTISAMPLE);          // Disable ANTI-ALIASING
 
+        if(engine_config.glfw_use_depth)
+            glEnable(GL_DEPTH_TEST);            // ENABLE DEPTH TESTING
+        else
+            glDisable(GL_DEPTH_TEST);           // DISABLE DEPTH TESTING
+
+        glDepthFunc(GL_LESS);
+        glClearDepth(1.0);
+        glDepthMask(GL_TRUE);
+
         glfwSwapInterval(engine_config.rendering_enable_vsync);    // Enble VSYNC
     
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO &io = ImGui::GetIO(); (void)io;
+        ImGuiIO &io = ImGui::GetIO();
+        
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(window,true);
         ImGui_ImplOpenGL3_Init("#version 330");
@@ -100,17 +118,29 @@ int Engine::Init(){
         view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0)); 
 
         fb_pixels = new Bloom::Framebuffer(GetPixelWindowSize(), false);
-        fb_pixels->setTextureUniform("uTexture");
 
         soloud.init();
 
         glfwSetWindowUserPointer(GetWindow(), this);
 
+        GLFWimage images[1];
+        images[0].pixels = stbi_load(engine_config.icon_path, &images[0].width, &images[0].height, 0, 4); //rgba channels 
+        glfwSetWindowIcon(window, 1, images);
+        stbi_image_free(images[0].pixels);
+
         steam_manager = new SteamTools::SteamManager();
         debug_sprite = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
+
+        this->font_alagard = new Bloom::Text("include/Bloom/res/engine/fonts/Alagard/alagard.ttf", GetViewMatrix(), GetWindowProjectionMatrix(),-0.5f,256);
+        this->font_roboto= new Bloom::Text("include/Bloom/res/engine/fonts/Roboto/Roboto-Black.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
+        this->font_pressstart= new Bloom::Text("include/Bloom/res/engine/fonts/PressStart/PressStart.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
+
+        this->fb_bloom = new Bloom::Bloom_Framebuffer(GetWindowSize());
+
+        glClearColor(0.1, 0.1, 0.1, 1.0); // THIS IS RESET BY THE SPLASH SCREEN
     }
     catch (const std::exception& ex) {
-        std::cout << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;
+        std::cerr << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;
         CloseGame();
         return -1;
     }
@@ -119,10 +149,12 @@ int Engine::Init(){
 
 int Engine::Prep_Begin(){
     try {
+        if(engine_config.feature_enable_parallel_loop)
+            update_thread = new std::thread(&Engine::UpdateLoop, this);
         Begin();
     }
     catch (const std::exception& ex) {
-            std::cout << "Encountered Bloom Exception during Beginning : " << ex.what() << std::endl;
+            std::cerr << "Encountered Bloom Exception during Beginning : " << ex.what() << std::endl;
             CloseGame();
             return -1;
     }
@@ -131,9 +163,22 @@ int Engine::Prep_Begin(){
 
 int Engine::Prep_GameLoop(){
     try {
+        if (!window_init_ready) {
+            window_init_ready = true;
+            glfwSetTime(0.0);
+            return 0;
+        }
+
         // PREPARE LOOP
         SteamTools::SteamManager::ProcessCallbacks();
         fps = 1000 / GetDeltaTime();
+
+        if (glfwGetTime() >= last_fps_time + 1) {
+            this->last_fps_time = glfwGetTime();
+            this->average_fps = (fps + prev_fps) / 2.0;
+            this->prev_fps = fps;
+        }
+
         glfwPollEvents(); 
         Prep_InputLoop();
         if (!isLocked)
@@ -149,10 +194,25 @@ int Engine::Prep_GameLoop(){
 
         // BINDING AND CLEARING PIXEL FRAMEBUFFER
         bindDefaultFramebuffer(true);
-        GameLoop(); // ACTUAL GAME CODE
+
+        if (!loaded){
+            #ifndef DEBUG
+                if (GetTime() < (splash_screen_time + 1.0)) {
+                    this->font_pressstart->Print(GetWindowSize() / 2.0f, "BLOOM", 3, GetWindowSize(), glm::vec4(Utils::HSVtoRGB(glm::vec3(sin(GetTime() / splash_screen_time) * 360, 25, 100)), GetTime() < splash_screen_time ? 1 : 1 - (GetTime() - splash_screen_time)), true);
+                    this->font_pressstart->Print(GetWindowSize() / 2.0f - glm::vec2(0, 100), "ENGINE", 0.5, GetWindowSize(), glm::vec4(glm::vec3(0.9), GetTime() < splash_screen_time ? 1 : 1 - (GetTime() - splash_screen_time)), true);
+                } else {
+                    loaded = true;
+                }
+            #else
+                loaded = true;
+            #endif // DEBUG
+            glClearColor(0.0, 0.0, 0.0, 0.0);
+        } else {
+            GameLoop(); // ACTUAL GAME CODE
+        }
     }
     catch (const std::exception& ex) {
-            std::cout << "Encountered Bloom Exception during GameLoop : " << ex.what() << std::endl;
+            std::cerr << "Encountered Bloom Exception during GameLoop : " << ex.what() << std::endl;
             CloseGame();
             return -1;
     }
@@ -163,11 +223,13 @@ int Engine::Prep_UILoop(){
     try {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
+        ImGuiIO& io = ImGui::GetIO();
+        io.MousePos = ImVec2(ImGui_Cursor_Position.x, ImGui_Cursor_Position.y);
         ImGui::NewFrame();
         UILoop();
     }
     catch (const std::exception& ex) {
-        std::cout << "Encountered Bloom Exception during UILoop : " << ex.what() << std::endl;
+        std::cerr << "Encountered Bloom Exception during UILoop : " << ex.what() << std::endl;
         CloseGame();
         return -1;
     }
@@ -182,16 +244,25 @@ int Engine::EndLoop(){
         // Rendering pipeline end
         glfwSwapBuffers(window); // Render buffer to screen
 
-        if (glfwWindowShouldClose(GetWindow())) { // END IF SHOULD CLOSE
+        if (glfwWindowShouldClose(GetWindow()) && running) { // END IF SHOULD CLOSE
             return CloseGame();
         }
     }
     catch (const std::exception& ex) {
-        std::cout << "Encountered Bloom Exception during EndLoop : " << ex.what() << std::endl;
+        std::cerr << "Encountered Bloom Exception during EndLoop : " << ex.what() << std::endl;
         CloseGame();
         return -1;
     }
     return 0;
+}
+
+void Game::Engine::UpdateLoop()
+{
+    while (!glfwWindowShouldClose(GetWindow())) {
+        Update();
+    }
+    update_thread->detach();
+    delete update_thread;
 }
 
 void Engine::Begin() {
@@ -211,20 +282,19 @@ void Engine::GameLoop() {
 
 int Game::Engine::CloseGame()
 {
-    glfwSetWindowShouldClose(GetWindow(), true);
+    running = false;
+
     soloud.deinit();
     SteamAPI_Shutdown();
     glfwDestroyWindow(GetWindow());
     glfwTerminate();
-    update_thread->detach();
 
     delete fb_pixels;
     delete steam_manager;
     delete debug_sprite;
 
     std::cout << Utils::Default() << Utils::Default(true);
-
-    return -1;
+    return 0;
 }
 
 void Engine::InputLoop() {

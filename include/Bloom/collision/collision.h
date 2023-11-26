@@ -19,6 +19,8 @@ namespace PhysX
         bool check_SAT(collisionBox* other,glm::mat4 transformationMatrix,glm::mat4 otherTransformationMatrix);
         bool check_SAT(collisionBox* other);
 
+        bool check_Point(glm::vec2 point);
+
         glm::vec2 check_Traced(collisionBox* other, glm::mat4 transformationMatrix, glm::mat4 otherTransformationMatrix);
         glm::vec2 check_Traced(collisionBox* other);
 
@@ -32,15 +34,16 @@ namespace PhysX
         glm::vec2 getOrigin(){return origin;};
         std::string getChannel() { return channel; };
 
-        void setLocation(glm::vec2 location){this->location = location;};
-        void setScale(glm::vec2 scale){this->scale = scale;};
-        void setRotation(uint16_t rotation){this->rotation = rotation;};
+        void setLocation(glm::vec2 location) { if (location != this->location) { this->location = location; updatePoints(); } };
+        void setScale(glm::vec2 scale){this->scale = scale; updatePoints();};
+        void setRotation(uint16_t rotation) { this->rotation = rotation; updatePoints(); };
 
         glm::mat4 makeTransformationMatrix();
 
         void copyTransform(Bloom::Sprite* sprite) { this->location = sprite->GetLocation(); this->rotation = sprite->GetRotation(); this->scale = sprite->GetSize(); }
 
         private:
+        void updatePoints();
         int16_t rotation = 0;
         glm::vec2 location = glm::vec2(0,0);
         glm::vec2 scale = glm::vec2(1,1);
@@ -48,9 +51,14 @@ namespace PhysX
 
         std::string channel;
 
+        glm::vec2 thisA;
+        glm::vec2 thisB;
+        glm::vec2 thisC;
+        glm::vec2 thisD;
     };
 
     glm::vec2 LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end);
+    glm::vec2 LineTrace(std::vector<std::string> channels, collisionBox* other, glm::vec2 start, glm::vec2 end);
     glm::vec2 LineTraceNormal(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end);
     bool AreaCheck_SAT(std::string channel, collisionBox* other,glm::vec2 position,glm::vec2 size);
     bool PointCheck_SAT(std::string chanel, collisionBox* other, glm::vec2 position);

@@ -46,7 +46,7 @@ void Bloom::Bloom_Framebuffer::SetSize(float size) {
 	this->size = size * 10;
 }
 
-void Bloom::Bloom_Framebuffer::Draw( bool include_objects) { // TWO PASS 
+void Bloom::Bloom_Framebuffer::Draw( bool include_objects, float depth) { // TWO PASS 
 	bloom_f->GetShader().use();
 	bloom_f->GetShader().uniformFloat(intensity_uid, 1.0);
 
@@ -78,13 +78,14 @@ void Bloom::Bloom_Framebuffer::Draw( bool include_objects) { // TWO PASS
 	}
 	bloom_f->GetShader().use();
 	bloom_f->GetShader().uniformFloat(intensity_uid, this->size);
-	bloom_f->draw();
+	bloom_f->draw(depth);
 
-	if (include_objects)
-		bloom_o->draw();
+	if (include_objects) {
+		bloom_o->draw(depth);
+	}
 };
 
-void Bloom::Bloom_Framebuffer::DrawToDefault(glm::vec2 window_size,bool include_objects) {
+void Bloom::Bloom_Framebuffer::DrawToDefault(glm::vec2 window_size,bool include_objects, float depth) {
 	bloom_f->GetShader().use();
 	bloom_f->GetShader().uniformFloat(intensity_uid, 1.0);
 
@@ -118,10 +119,11 @@ void Bloom::Bloom_Framebuffer::DrawToDefault(glm::vec2 window_size,bool include_
 
 	bloom_f->GetShader().use();
 	bloom_f->GetShader().uniformFloat(intensity_uid, this->size);
-	bloom_f->drawToDefault(window_size);
+	bloom_f->drawToDefault(window_size,true,glm::vec2(0),1.0,depth);
 	
-	if(include_objects)
-		bloom_o->draw();
+	if (include_objects) {
+		bloom_o->draw(depth);
+	}
 }
 
 void Bloom::Bloom_Framebuffer::Use(bool clear) {

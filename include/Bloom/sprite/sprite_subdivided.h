@@ -22,8 +22,8 @@ namespace Bloom {
         SubdividedSprite() {};
         SubdividedSprite(const char* texture_path, int pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 subdivision, glm::vec2 origin = glm::vec2(0.5, 0.5));
         ~SubdividedSprite();
-        void Draw();
-        void DrawInstanced(int amount);
+        void Draw(float depth = 0.99);
+        void DrawInstanced(int amount, float depth = 0.99);
 
         void SetLocation(glm::vec2 location) { transformation[0] = location[0]; transformation[1] = location[1]; UpdateLocation(); };
         glm::vec2 GetLocation() { return glm::vec2(transformation[0], transformation[1]); };
@@ -93,6 +93,10 @@ namespace Bloom {
         bool original_shader;
         float uColorUni;
         float uTextureUni;
+
+        uint8_t model_uid;
+        uint8_t view_uid;
+        uint8_t depth_uid;
     };
 }
 

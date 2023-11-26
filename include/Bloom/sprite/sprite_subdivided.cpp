@@ -76,6 +76,10 @@ SubdividedSprite::SubdividedSprite(const char* texture_path, int pixels_per_pixe
     model_matrix = glm::translate(model_matrix, glm::vec3(this->transformation[0], this->transformation[1], 0.0f));
     model_matrix = glm::rotate(model_matrix, (float)glm::radians(this->transformation[2]), glm::vec3(0.0f, 0.0f, 1.0f));
     model_matrix = glm::scale(model_matrix, glm::vec3(this->transformation[3], this->transformation[4], 1.0f));
+
+    this->model_uid = shader->getUniformId("model");
+    this->view_uid = shader->getUniformId("view");
+    this->depth_uid = shader->getUniformId("custom_depth");
 }
 
 Bloom::SubdividedSprite::~SubdividedSprite()
@@ -83,6 +87,9 @@ Bloom::SubdividedSprite::~SubdividedSprite()
     if (original_shader)
         delete shader;
     delete texture;
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ebo);
 }
 
 
@@ -128,12 +135,13 @@ void SubdividedSprite::UpdateLocation() {
     model_matrix = glm::scale(model_matrix, glm::vec3(this->transformation[3], this->transformation[4], 1.0f));
 }
 
-void SubdividedSprite::Draw() {
+void SubdividedSprite::Draw(float depth) {
     shader->use();
     shader->uniformFloat(uColorUni, 1);
     setTextureAtLocation(GL_TEXTURE0, this->texture->GetID()); shader->uniformInt(uTextureUni, 0);
-    shader->uniformMat4(shader->getUniformId("model"), model_matrix);
-    shader->uniformMat4(shader->getUniformId("view"), (*(view_matrix)));
+    shader->uniformMat4(model_uid, model_matrix);
+    shader->uniformMat4(view_uid, (*(view_matrix)));
+    shader->uniformFloat(depth_uid, depth);
 
     UpdateLocation();
 
@@ -142,12 +150,13 @@ void SubdividedSprite::Draw() {
     glDrawElements(GL_TRIANGLES, indicesAmount, GL_UNSIGNED_INT, 0);
 }
 
-void Bloom::SubdividedSprite::DrawInstanced(int amount)
+void Bloom::SubdividedSprite::DrawInstanced(int amount, float depth)
 {
     shader->use();
     shader->uniformFloat(uColorUni, 1);
     setTextureAtLocation(GL_TEXTURE0, this->texture->GetID()); shader->uniformInt(uTextureUni, 0);
-    shader->uniformMat4(shader->getUniformId("view"), *(view_matrix));
+    shader->uniformMat4(view_uid, *(view_matrix));
+    shader->uniformFloat(depth_uid, depth);
 
     UpdateLocation();
 

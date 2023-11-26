@@ -13,16 +13,19 @@ namespace Game{
         bool glfw_decorated = true;
         bool glfw_topmost = false;
         bool glfw_maximized = false;
-        bool glfw_center_cursor = false;
         bool glfw_transparent = false;
+        bool glfw_show_cursor = true;
+        bool glfw_use_depth = true;
 
         bool rendering_face_culling = false;
         bool rendering_anti_aliasing = false;
         bool rendering_enable_vsync = true;
 
         bool feature_enable_steam = true;
+        bool feature_enable_parallel_loop = false;
 
         std::string window_name = "Bloom";
+        const char* icon_path = "include/Bloom/res/engine/textures/BloomLogo.png";
     };
 
     class Engine{
@@ -38,7 +41,7 @@ namespace Game{
                     retval = Init();
                     retval = Prep_Begin();
 
-                    while (retval == 0) {
+                    while (retval == 0 && running) {
                         retval = Prep_GameLoop();
                         if (retval != 0)
                             return retval;
@@ -61,20 +64,21 @@ namespace Game{
             glm::vec2 GetPixelWindowSize() { return glm::vec2(pixel_windowWidth, pixel_windowHeight); };
 
             int GetFPS() { return fps; };
-            float GetTime() { return game_time; };
+            int GetAverageFPS() { return average_fps; };
+            float GetTime() { return game_time * delta_multiplier; };
             GLFWwindow* GetWindow() { return window; };
             glm::vec2 GetCursorPosition() { return cursor_position; };
             glm::vec2 GetScale() { return GetWindowSize() / GetPixelWindowSize(); };
 
             void EnablePixels(bool clear = true) { (*fb_pixels).use(clear); };
-            void DrawPixelsToDefault(bool clear = true) { (*fb_pixels).drawToDefault((glm::vec2(windowWidth, windowHeight) + glm::vec2(windowWidth / pixel_windowWidth, windowHeight / pixel_windowHeight)), clear, (glm::vec2(windowWidth / pixel_windowWidth, windowHeight / pixel_windowHeight) / -2.0f),zoom); };
+            void DrawPixelsToDefault(bool clear = true, float depth = 0.99) { (*fb_pixels).drawToDefault((glm::vec2(windowWidth, windowHeight) + glm::vec2(windowWidth / pixel_windowWidth, windowHeight / pixel_windowHeight)), clear, (glm::vec2(windowWidth / pixel_windowWidth, windowHeight / pixel_windowHeight) / -2.0f),zoom,depth); };
             void DrawPixels() { (*fb_pixels).draw(); };
-            void SetCameraLocation(glm::vec2 location) { view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(glm::round(location.x), glm::round(location.y), -1)); 
+            void SetCameraLocation(glm::vec2 location) { location = -location; view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(glm::round(location.x), glm::round(location.y), -1)); 
                 fb_pixels->SetLocationOffset((glm::vec2(location.x, location.y) - glm::round(glm::vec2(location.x, location.y)))/GetPixelWindowSize()/0.5f);
             }
 
             double GetDeltaTime() { return frame_time * delta_multiplier; };
-            double GetGameSpeed() { return GetDeltaTime() / 16.67; };
+            double GetGameSpeed() { return GetDeltaTime() / (1000.0 / 60.0); };
 
             int PlaySound(SoLoud::Wav* sample) { return soloud.play(*sample); };
             int PlaySound(SoLoud::Wav* sample, float pitch) { int id = soloud.play(*sample); soloud.setRelativePlaySpeed(id, pitch); return id; };
@@ -89,18 +93,22 @@ namespace Game{
             float GetGameSpeedMultiplier() { return delta_multiplier; };
 
             auto GetSteamManager() { return steam_manager; };
-            void DrawDebugPoint(glm::vec2 position, int size = 1, glm::vec3 color = glm::vec3(1, 1, 1)) { if (Utils::isDevelopmentConfiguration()) { debug_sprite->SetLocation(position); debug_sprite->SetRotation(0); debug_sprite->SetScale(glm::vec2(size / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(); } };
+            void DrawDebugPoint(glm::vec2 position, int size = 1, glm::vec3 color = glm::vec3(1, 1, 1)) {
+                #ifdef DEBUG
+                    debug_sprite->SetLocation(position); debug_sprite->SetRotation(0); debug_sprite->SetScale(glm::vec2(size / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(0.0f); 
+                #endif
+            };
             void DrawDebugLine(glm::vec2 positionA, glm::vec2 positionB, int thickness = 1, glm::vec3 color = glm::vec3(1, 1, 1)) {
-                if (Utils::isDevelopmentConfiguration()) {
+                #ifdef DEBUG
                     float height = (std::sqrt(std::pow(positionA.x - positionB.x, 2) + std::pow(positionA.y - positionB.y, 2)));
                     
                     float angle = glm::degrees(atan2(positionA.y - positionB.y, positionA.x - positionB.x)) - 90;
                     glm::vec2 position = (positionA + positionB) / glm::vec2(2);
-                    debug_sprite->SetLocation(position); debug_sprite->SetRotation((int)(angle + 180) % 180); debug_sprite->SetScale(glm::vec2(thickness / 16.0, height / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw();
-                }
+                    debug_sprite->SetLocation(position); debug_sprite->SetRotation((int)(angle + 180) % 180); debug_sprite->SetScale(glm::vec2(thickness / 16.0, height / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(0.0);
+                #endif // DEBUG
             }
             void DrawDebugCollision(PhysX::collisionBox* collision,int thickness = 1, glm::vec3 color = glm::vec3(1,1,1)) {
-                if (Utils::isDevelopmentConfiguration()) {
+                #ifdef DEBUG
                     glm::vec2 location = collision->getLocation();
                     glm::vec2 rotation_axis = collision->getLocation() + (collision->getOrigin() - glm::vec2(0.5)) * collision->getScale();
                     glm::vec2 offset = -(collision->getOrigin() - glm::vec2(0.5)) * collision->getScale();
@@ -108,8 +116,7 @@ namespace Game{
                     DrawDebugLine(offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(0.5, -0.5),collision->getRotation(), rotation_axis), offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(-0.5, -0.5), collision->getRotation(), rotation_axis), thickness, color);
                     DrawDebugLine(offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(-0.5, -0.5),collision->getRotation(), rotation_axis), offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(-0.5, 0.5), collision->getRotation(), rotation_axis), thickness, color);
                     DrawDebugLine(offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(-0.5, 0.5),collision->getRotation(), rotation_axis), offset + Utils::rotateVector(location + collision->getScale() * glm::vec2(0.5, 0.5), collision->getRotation(), rotation_axis), thickness, color);
-
-                }
+                #endif // DEBUG
             }
             std::chrono::steady_clock::time_point GetHighResTime() { return std::chrono::high_resolution_clock::now(); };
 
@@ -119,11 +126,16 @@ namespace Game{
 
             glm::vec2 GetCursorWorldPosition(glm::vec2 camera_location);
             glm::vec2 GetCameraWorldPosition(glm::vec2 camera_location);
+            void SetImGuiCursorPosition(glm::vec2 imgui_cursor_position) { this->ImGui_Cursor_Position = imgui_cursor_position; };
 
             void SetCameraZoom(float zoom) { this->zoom = zoom; };
             auto GetCameraZoom() { return this->zoom; };
 
             void ExitGame();
+
+            auto GetFontAlagard() { return this->font_alagard; };
+            auto GetFontRoboto() { return this->font_roboto; };
+            auto GetFontPressStart() { return this->font_pressstart; };
         private:
             // EVENTS
             int Init();
@@ -140,6 +152,8 @@ namespace Game{
             virtual void InputLoop();
             // BACK
             int EndLoop();
+            void UpdateLoop();
+            virtual void Update() {};
 
             int CloseGame();
 
@@ -156,8 +170,12 @@ namespace Game{
             Bloom::Framebuffer* fb_pixels;                                      // PIXEL FRAMEBUFFER
             GLFWwindow* window;                                                 // APPLICATION WINDOW
             float fps = 0;                                                      // FRAMES PER SECOND
+            float prev_fps = 0;                                                 // PREVIOUS FRAMES PER SECOND
+            float average_fps = 0;                                              // AVERAGE FRAMES PER SECOND
+            float last_fps_time = 0;                                            // LAST TIME AVERAGE FPS WAS RECORDED
             float game_time = 0;                                                // APP TIME
             bool isLocked = false;                                              // TIME IS LOCKED
+            bool window_init_ready = false;                                     // PROTECTION FOR WINDOW STARTUP TIME
 
             glm::vec2 cursor_position = glm::vec2(0, 0);                        // CURSOR POSITION
 
@@ -173,6 +191,18 @@ namespace Game{
             bool should_close = false;                                          // SHOULD THE GAME CLOSE
 
             float zoom = 1.0;                                                   // CURRENT CAMERA ZOOM
+
+            bool running = true;                                                // IS THE GAME RUNNING
+            bool loaded = false;                                                // SET TO TRUE WHEN GAME LOADS
+
+            Bloom::Text* font_alagard;                                          // ALAGARD FONT
+            Bloom::Text* font_roboto;                                           // ROBOTO FONT
+            Bloom::Text* font_pressstart;                                       // PRESS STARTFONT
+
+            Bloom::Bloom_Framebuffer* fb_bloom;                                  // BLOOM FRAMEBUFFER
+
+            glm::vec2 ImGui_Cursor_Position;                                    // CURSOR POSITION FOR IMGUI
+            float splash_screen_time = 1.0;                                     // SPLASH SCREEN DURATION
     };
 
     void ResizeLoop(GLFWwindow* window, int width, int height); // GLFW RESIZING

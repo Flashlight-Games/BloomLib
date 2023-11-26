@@ -15,8 +15,7 @@
 namespace Bloom{
     class Bone{
         public:
-            Bone(Bone* parent,int16_t length);
-            ~Bone();
+            Bone(Bone* parent,float length);
             static std::vector<Bloom::Bone*> Bones(int amount,int length);
 
             glm::vec2 GetLocation(){return location;};
@@ -32,13 +31,14 @@ namespace Bloom{
             Bone* GetChild(){return Child;};
 
             glm::vec2 GetEndLocation();
+            glm::vec2 GetEndLocation(float length);
             void SetChild(Bone* child){this->Child = child;};
             
 
         private:
             glm::vec2 location;
-            int16_t length;
-            int16_t rotation;
+            float length;
+            float rotation;
 
             glm::mat4 transform;
             Bone* Parent = NULL;

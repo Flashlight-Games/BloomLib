@@ -13,8 +13,8 @@ namespace Bloom {
 		int GetSize() { return size; };
 
 		void Use(bool clear);
-		void Draw(bool include_objects = false);
-		void DrawToDefault(glm::vec2 window_size, bool include_objects = false);
+		void Draw(bool include_objects = false, float depth = 0.99);
+		void DrawToDefault(glm::vec2 window_size, bool include_objects = false, float depth = 0.99);
 		void HTextureGUI() { return bloom_h->getTexture()->ImGui(); };
 		void VTextureGUI() { return bloom_v->getTexture()->ImGui(); };
 

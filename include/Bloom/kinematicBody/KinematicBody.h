@@ -6,9 +6,12 @@ namespace PhysX {
 	class KinematicBody
 	{
 	public:
-		KinematicBody(std::string channel,float mass,Bloom::Sprite* source,glm::vec2 gravity = glm::vec2(0, - 9.8),float bounce = 0.05f, float drag = 100.0f);
+		KinematicBody(std::string channel,float mass,Bloom::Sprite* source, float pixels_to_meters, glm::vec2 gravity = glm::vec2(0, - 9.8),float bounce = 0.05f, float drag = 100.0f);
+		KinematicBody(float mass, float pixels_to_meters, glm::vec2 gravity = glm::vec2(0, -9.8), float bounce = 0.05f, float drag = 100.0f);
+
 		~KinematicBody();
-		glm::vec2 GetLocation(float DeltaTime, std::vector<PhysX::collisionBox*> other_boxes); // CLEAR FORCES AND GET LOCATION
+		glm::vec2 GetLocation(float DeltaTime_ms, std::vector<PhysX::collisionBox*> other_boxes = std::vector<PhysX::collisionBox*>()); // CLEAR FORCES AND GET LOCATION
+		glm::vec2 GetLocationSmooth(float DeltaTime_s, std::vector<PhysX::collisionBox*> other_boxes = std::vector<PhysX::collisionBox*>()); // CLEAR FORCES AND GET LOCATION
 		void ApplyForce(glm::vec2 force) { applied_forces.push_back(force); };
 		void ApplyVelocity(glm::vec2 velocity) { this->velocity += velocity; };
 		auto GetVelocity() { return velocity; };
@@ -16,8 +19,10 @@ namespace PhysX {
 		glm::vec2 GetDepth(std::vector<PhysX::collisionBox*> other_boxes);
 		auto GetSpeed() { return glm::length(velocity); };
 		void SetDrag(float drag) { this->drag = drag; };
+		auto GetDrag() { return this->drag; };
 		auto GetAcceleration() { return acceleration; };
 		void SetVelocity(glm::vec2 velocity) { this->velocity = velocity; };
+		auto GetMass() { return mass; };
 
 		void SetGravity(glm::vec2 gravity) { this->gravity = gravity; };
 		auto GetGravity() { return this->gravity; };

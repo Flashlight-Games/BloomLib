@@ -27,6 +27,19 @@ Texture2D::Texture2D(const void* data,glm::vec2 size,int format,bool linear_scal
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 }
 
+Bloom::Texture2D::Texture2D(Texture2D& copy)
+{
+    this->path = copy.path;
+    this->size = copy.size;
+    this->id = copy.id;
+    this->format = copy.format;
+}
+
+Bloom::Texture2D::~Texture2D()
+{
+    glDeleteTextures(1, &this->id);
+}
+
 Texture2D::Texture2D(const char* path,bool linear_scaling){
     this->path = path;
 

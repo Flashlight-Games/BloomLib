@@ -4,8 +4,6 @@
 
 # define PI 3.14159265358979323846
 
-#include "HTTP/HTTPRequest.hpp" // HTTP Requests
-
 #include "soloud/soloud.h" // SOUND
 #include "soloud/soloud_wav.h" // WAV FILES	
 

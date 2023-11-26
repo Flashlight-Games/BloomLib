@@ -18,8 +18,8 @@ namespace Bloom{
         
         Shader fbShader = Shader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_vertex.glsl","include/Bloom/res/engine/shaders/framebuffer/framebuffer_fragment_alpha.glsl");
         void use(bool clear);
-        virtual void draw();
-        virtual void drawToDefault(glm::vec2 window_size,bool clear = true,glm::vec2 offset = glm::vec2(0),float zoom=1.0);
+        virtual void draw(float depth = 0.99);
+        virtual void drawToDefault(glm::vec2 window_size,bool clear = true,glm::vec2 offset = glm::vec2(0),float zoom=1.0, float depth = 0.99);
 
         uint16_t getWidth(){return width;};
         uint16_t getHeight(){return height;};
@@ -54,6 +54,8 @@ namespace Bloom{
         uint32_t rbo;
 
         glm::vec2 offset = glm::vec2(0);
+        uint8_t offset_uid;
+        uint8_t depth_uid;
     };
 }
 

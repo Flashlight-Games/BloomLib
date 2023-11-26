@@ -60,7 +60,7 @@ Shader::Shader(const char* vertex_source, const char* fragment_source){
     glShaderSource(fragmentID,1,&fragmentData,NULL);
     glCompileShader(fragmentID);
 
-    glGetShaderiv(fragmentID, GL_COMPILE_STATUS,&success);
+    glGetShaderiv(fragmentID, GL_COMPILE_STATUS,&success); // FORCE COMPILE SHADERS
     if(!success) {glGetShaderInfoLog(fragmentID,512,NULL,info); std::string errmsg = "FRAGMENT SHADER COMPILE ERROR: "; errmsg.append(info); throw std::runtime_error(errmsg);}
 
     //ATTACHING

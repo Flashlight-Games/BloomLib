@@ -9,8 +9,8 @@ Spritesheet::Spritesheet(const char* texture_path,int pixels_per_pixel,glm::vec2
     SetIdx(0);
 }
 
-void Spritesheet::Draw(){
-    this->sprite->Draw();
+void Spritesheet::Draw(float depth){
+    this->sprite->Draw(depth);
 }
 
 int Spritesheet::Advance(int step){

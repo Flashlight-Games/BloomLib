@@ -20,10 +20,12 @@ namespace Bloom{
         public:
             
             Sprite(){};
-            Sprite(const char* texture_path,int pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5,0.5),glm::vec2 size = glm::vec2(1,1),glm::vec2 textureUVScale = glm::vec2(1,1),glm::vec2 textureUVOffset = glm::vec2(0,0));
+            Sprite(const char* texture_path,float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5,0.5),glm::vec2 size = glm::vec2(1,1),glm::vec2 textureUVScale = glm::vec2(1,1),glm::vec2 textureUVOffset = glm::vec2(0,0));
+            Sprite(const char* texture_path, float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, Bloom::Shader* shader, glm::vec2 origin = glm::vec2(0.5, 0.5), glm::vec2 size = glm::vec2(1, 1), glm::vec2 textureUVScale = glm::vec2(1, 1), glm::vec2 textureUVOffset = glm::vec2(0, 0));
             ~Sprite();
-            void Draw();
-            void DrawInstanced(int amount);
+            void Draw(float depth = 0.99, bool shader_bound = false);
+            void DrawInstanced(int amount, float depth = 0.99);
+            void DrawInstanced(int amount, std::vector<GLuint> buffers_to_bind, float depth = 0.99);
 
             void SetLocation(glm::vec2 location){transformation[0] = location[0];transformation[1] = location[1];UpdateLocation();};
             glm::vec2 GetLocation(){return glm::vec2(transformation[0],transformation[1]);};
@@ -47,6 +49,8 @@ namespace Bloom{
 
             void SetUVOffset(glm::vec2 offset);
 
+            void SetInstanced(glm::mat4 projection_matrix);
+
             Bloom::Texture2D* GetTexture(){return texture;};
             Bloom::Shader* GetShader(){return shader;};
             glm::mat4 GetModelMatrix(){return model_matrix;};
@@ -57,14 +61,20 @@ namespace Bloom{
                 shader->use();
                 uColorUni = shader->getUniformId("uColor");
                 uTextureUni = shader->getUniformId("uTexture");
+                this->model_uid = shader->getUniformId("model");
+                this->view_uid = shader->getUniformId("view");
+                this->depth_uid = shader->getUniformId("custom_depth");
 
-                shader->uniformMat4(shader->getUniformId("view"), *view_matrix);
+                shader->uniformMat4(view_uid, *view_matrix);
                 shader->uniformMat4(shader->getUniformId("projection"), projection_matrix);
             };
 
-            void SetTexture(Bloom::Texture2D* new_texture) { delete this->texture; this->texture = new_texture; }
+            void SetTexture(Bloom::Texture2D& new_texture) { delete this->texture; this->texture = new Bloom::Texture2D(new_texture); }
+
+            auto GetVAO(){return this->vao;}
 
         private:
+            void Init(const char* texture_path, float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5, 0.5), glm::vec2 size = glm::vec2(1, 1), glm::vec2 textureUVScale = glm::vec2(1, 1), glm::vec2 textureUVOffset = glm::vec2(0, 0));
             void UpdateLocation();
 
             glm::vec2 UVoffset;
@@ -72,7 +82,7 @@ namespace Bloom{
             glm::vec2 Origin;
 
             uint32_t vao;
-            int ppp = 2; // pixels per pixel ( detail level )
+            float ppp = 2; // pixels per pixel ( detail level )
             
             int indices[6] = {
                 0,1,2,
@@ -95,6 +105,10 @@ namespace Bloom{
             bool original_shader;
             float uColorUni;
             float uTextureUni;
+
+            uint8_t model_uid;
+            uint8_t view_uid;
+            uint8_t depth_uid;
     };
 }
 

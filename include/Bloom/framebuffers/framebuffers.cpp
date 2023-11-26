@@ -54,11 +54,20 @@ Framebuffer::Framebuffer(glm::vec2 size,bool linear_scaling,bool HDR){
 
     glBindFramebuffer(GL_FRAMEBUFFER,0); // BIND RENDER BUFFER
     setTextureUniform("uTexture");
+
+    this->offset_uid = fbShader.getUniformId("offset");
+    this->depth_uid = fbShader.getUniformId("custom_depth");
 }
 
 Bloom::Framebuffer::~Framebuffer()
 {
-    delete fbTexture;
+    if (fbTexture != nullptr) {
+        delete this->fbTexture;
+    }
+    glDeleteVertexArrays(1, &fbVao);
+    glDeleteBuffers(1, &fbVbo);
+    glDeleteFramebuffers(1, &fbo);
+    glDeleteRenderbuffers(1, &rbo);
 }
 
 void Framebuffer::use(bool clear){
@@ -69,15 +78,16 @@ void Framebuffer::use(bool clear){
     glBindFramebuffer(GL_FRAMEBUFFER,fbo);
     glActiveTexture(GL_TEXTURE0);
     fbTexture->bind();
-    if(clear){
-        glClear(GL_COLOR_BUFFER_BIT);
-    }
+    fbShader.use();
 
-    fbShader.use();
+    if (clear) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 };
-void Framebuffer::draw(){
+void Framebuffer::draw(float depth){
     fbShader.use();
-    fbShader.uniformMat4(fbShader.getUniformId("offset"), (glm::translate(glm::mat4(1.0), glm::vec3(this->offset.x, this->offset.y, 0.0f))));
+    fbShader.uniformMat4(offset_uid, (glm::translate(glm::mat4(1.0), glm::vec3(this->offset.x, this->offset.y, 0.0f))));
+    fbShader.uniformFloat(depth_uid, depth);
 
     glActiveTexture(GL_TEXTURE0);
     fbTexture->bind();
@@ -85,8 +95,8 @@ void Framebuffer::draw(){
     glDrawArrays(GL_TRIANGLES,0,6);
 };
 
-void Framebuffer::drawToDefault(glm::vec2 window_size, bool clear,glm::vec2 offset, float zoom) {
-    bindDefaultFramebuffer(clear, window_size.x, window_size.y,offset,zoom); draw();
+void Framebuffer::drawToDefault(glm::vec2 window_size, bool clear,glm::vec2 offset, float zoom, float depth) {
+    bindDefaultFramebuffer(clear, window_size.x, window_size.y,offset,zoom); draw(depth);
 }
 
 void Framebuffer::setShader(const char* fragment_source){
@@ -103,10 +113,17 @@ void Bloom::Framebuffer::SetLocationOffset(glm::vec2 offset)
 }
 
 void bindDefaultFramebuffer(bool clear,int width, int height, glm::vec2 offset,float zoom){
-    if(width && height)
-        glViewport(offset.x+ width*(1-zoom), offset.y+ height * (1-zoom), width- width * (1 - zoom)*2, height- height * (1 - zoom)*2);
+    if (width && height) {
+        float newWidth = width * (zoom);  // Divide by (zoom * 2) to account for doubled resolution
+        float newHeight = height * (zoom);
+
+        float newOffsetX = offset.x + (width - newWidth) / 2;
+        float newOffsetY = offset.y + (height - newHeight) / 2;
+
+        glViewport(newOffsetX, newOffsetY, newWidth, newHeight);
+    }
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     if(clear){
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 };
