@@ -11,6 +11,7 @@ namespace Game{
 
         bool glfw_resizeable = false;
         bool glfw_decorated = true;
+        bool glfw_full_screen = false;
         bool glfw_topmost = false;
         bool glfw_maximized = false;
         bool glfw_transparent = false;
@@ -50,14 +51,17 @@ namespace Game{
                             return retval;
                         retval = EndLoop();
                     }
+                    if (retval != 0) {
+                        CloseGame();
+                    }
                     return retval;
                 }
 
                 return false;
             };
             
-            glm::mat4 GetWindowProjectionMatrix() { return window_projection_matrix; };
-            glm::mat4 GetPixelProjectionMatrix() { return pixel_projection_matrix; };
+            glm::mat4* GetWindowProjectionMatrix() { return &window_projection_matrix; };
+            glm::mat4* GetPixelProjectionMatrix() { return &pixel_projection_matrix; };
             glm::mat4* GetViewMatrix() { return &view_matrix; };
 
             glm::vec2 GetWindowSize() { return glm::vec2(windowWidth, windowHeight); };
@@ -68,11 +72,12 @@ namespace Game{
             float GetTime() { return game_time * delta_multiplier; };
             GLFWwindow* GetWindow() { return window; };
             glm::vec2 GetCursorPosition() { return cursor_position; };
+            glm::vec2 GetCursorWindowPosition() { return this->cursor_position_window; };
             glm::vec2 GetScale() { return GetWindowSize() / GetPixelWindowSize(); };
 
             void EnablePixels(bool clear = true) { (*fb_pixels).use(clear); };
             void DrawPixelsToDefault(bool clear = true, float depth = 0.99) { (*fb_pixels).drawToDefault((glm::vec2(windowWidth, windowHeight) + glm::vec2(windowWidth / pixel_windowWidth, windowHeight / pixel_windowHeight)), clear, (glm::vec2(windowWidth / pixel_windowWidth, windowHeight / pixel_windowHeight) / -2.0f),zoom,depth); };
-            void DrawPixels() { (*fb_pixels).draw(); };
+            void DrawPixels( float depth = 0.99) { (*fb_pixels).draw(depth); };
             void SetCameraLocation(glm::vec2 location) { location = -location; view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(glm::round(location.x), glm::round(location.y), -1)); 
                 fb_pixels->SetLocationOffset((glm::vec2(location.x, location.y) - glm::round(glm::vec2(location.x, location.y)))/GetPixelWindowSize()/0.5f);
             }
@@ -96,6 +101,11 @@ namespace Game{
             void DrawDebugPoint(glm::vec2 position, int size = 1, glm::vec3 color = glm::vec3(1, 1, 1)) {
                 #ifdef DEBUG
                     debug_sprite->SetLocation(position); debug_sprite->SetRotation(0); debug_sprite->SetScale(glm::vec2(size / 16.0)); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(0.0f); 
+                #endif
+            };
+            void DrawDebugPoint(glm::vec2 position, glm::vec2 size = glm::vec2(1), glm::vec3 color = glm::vec3(1, 1, 1)) {
+                #ifdef DEBUG
+                    debug_sprite->SetLocation(position); debug_sprite->SetRotation(0); debug_sprite->SetScale(size / 16.0f); debug_sprite->GetShader()->use(); debug_sprite->GetShader()->uniformVec4(debug_sprite->GetShader()->getUniformId("uColor"), glm::vec4(color, 1)); debug_sprite->Draw(0.0f);
                 #endif
             };
             void DrawDebugLine(glm::vec2 positionA, glm::vec2 positionB, int thickness = 1, glm::vec3 color = glm::vec3(1, 1, 1)) {
@@ -136,6 +146,11 @@ namespace Game{
             auto GetFontAlagard() { return this->font_alagard; };
             auto GetFontRoboto() { return this->font_roboto; };
             auto GetFontPressStart() { return this->font_pressstart; };
+
+            void SetViewportSize(glm::vec2 size);
+        protected:
+            virtual int CloseGame();
+
         private:
             // EVENTS
             int Init();
@@ -148,14 +163,12 @@ namespace Game{
             virtual void GameLoop();
             int Prep_UILoop();
             virtual void UILoop();
-            void Prep_InputLoop();
+            int Prep_InputLoop();
             virtual void InputLoop();
             // BACK
             int EndLoop();
             void UpdateLoop();
             virtual void Update() {};
-
-            int CloseGame();
 
             glm::mat4 window_projection_matrix;                                 // PROJECTION MATRIX FOR WINDOW
             glm::mat4 pixel_projection_matrix;                                  // PROJECTION MATRIX FOR PIXELS
@@ -163,6 +176,7 @@ namespace Game{
 
             uint16_t windowWidth = 960; uint16_t windowHeight = 960;            // WINDOW SIZE
             uint16_t pixel_windowWidth = 64*3; uint16_t pixel_windowHeight = 64*3;  // PIXEL SIZE
+            glm::vec2 pixel_ratio = glm::vec2(pixel_windowWidth / (float)windowWidth, pixel_windowHeight / (float)windowHeight);
 
             SoLoud::Soloud soloud;                                              // AUDIO MANAGER
 
@@ -177,7 +191,8 @@ namespace Game{
             bool isLocked = false;                                              // TIME IS LOCKED
             bool window_init_ready = false;                                     // PROTECTION FOR WINDOW STARTUP TIME
 
-            glm::vec2 cursor_position = glm::vec2(0, 0);                        // CURSOR POSITION
+            glm::vec2 cursor_position_window = glm::vec2(0, 0);                        // CURSOR POSITION
+            glm::vec2 cursor_position = glm::vec2(0, 0);                        // CURSOR POSITION IN PIXEL
 
             std::chrono::steady_clock::time_point last_time = GetHighResTime(); // TIME AT LAST FRAME
             double frame_time = 0.0;                                            // DELTA TIME BETWEEN FRAMES IN MS

@@ -16,6 +16,7 @@
 #include <glad/glad.h> // OPENGL
 #include <GLFW/glfw3.h>
 
+#define GLM_FORCE_INTRINSICS
 #include <GLM/glm.hpp> // MATRICES
 #include <GLM/gtc/matrix_transform.hpp>
 #include <GLM/gtc/type_ptr.hpp>

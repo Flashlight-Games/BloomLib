@@ -20,6 +20,15 @@ collisionBox::collisionBox(std::string channel, Bloom::Sprite* sprite) {
     this->channel = channel;
 }
 
+PhysX::collisionBox::collisionBox(std::string channel, Bloom::Spritesheet* sprite) {
+    this->location = sprite->GetSprite()->GetLocation();
+    this->rotation = sprite->GetSprite()->GetRotation();
+    this->scale = sprite->GetSprite()->GetSize() / sprite->GetTiling();
+    this->origin = sprite->GetSprite()->GetOrigin();
+
+    this->channel = channel;
+}
+
 float getPointOnLineAtAngle(glm::vec2 point, uint16_t angle){
     return (point.x+(point.y*tan(angle*PI/180)))/(1+pow(tan(angle*PI/180),2));
 }

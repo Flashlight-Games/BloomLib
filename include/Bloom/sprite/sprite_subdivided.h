@@ -20,9 +20,9 @@ namespace Bloom {
     public:
 
         SubdividedSprite() {};
-        SubdividedSprite(const char* texture_path, int pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 subdivision, glm::vec2 origin = glm::vec2(0.5, 0.5));
+        SubdividedSprite(const char* texture_path, int pixels_per_pixel, glm::mat4* view_matrix, glm::mat4* pixel_projection_matrix, glm::vec2 subdivision, glm::vec2 origin = glm::vec2(0.5, 0.5));
         ~SubdividedSprite();
-        void Draw(float depth = 0.99);
+        void Draw(float depth = 0.99, bool shader_bound = false);
         void DrawInstanced(int amount, float depth = 0.99);
 
         void SetLocation(glm::vec2 location) { transformation[0] = location[0]; transformation[1] = location[1]; UpdateLocation(); };
@@ -49,7 +49,7 @@ namespace Bloom {
         Bloom::Shader* GetShader() { return shader; };
         glm::mat4 GetModelMatrix() { return model_matrix; };
 
-        void SetShader(Bloom::Shader* new_shader, glm::mat4 projection_matrix) {
+        void SetShader(Bloom::Shader* new_shader, glm::mat4* projection_matrix) {
             this->shader = new_shader; original_shader = false;
 
             shader->use();
@@ -57,7 +57,7 @@ namespace Bloom {
             uTextureUni = shader->getUniformId("uTexture");
 
             shader->uniformMat4(shader->getUniformId("view"), *view_matrix);
-            shader->uniformMat4(shader->getUniformId("projection"), projection_matrix);
+            shader->uniformMat4(shader->getUniformId("projection"), *projection_matrix);
         };
 
         void SetVertexPositionOffset(int idx, glm::vec2 positionOffset);

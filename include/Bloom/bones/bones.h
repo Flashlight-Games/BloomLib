@@ -26,6 +26,7 @@ namespace Bloom{
             void SetLocation(glm::vec2 location){this->location = location;};
             void SetRotation(int16_t rotation){this->rotation = rotation;};
             void SetLength(int16_t length){this->length = length;};
+            void SetInverted(bool inverted);
 
             Bone* GetParent(){return Parent;};
             Bone* GetChild(){return Child;};

@@ -18,13 +18,12 @@
 namespace Bloom{
     class Sprite{
         public:
-            
             Sprite(){};
-            Sprite(const char* texture_path,float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5,0.5),glm::vec2 size = glm::vec2(1,1),glm::vec2 textureUVScale = glm::vec2(1,1),glm::vec2 textureUVOffset = glm::vec2(0,0));
-            Sprite(const char* texture_path, float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, Bloom::Shader* shader, glm::vec2 origin = glm::vec2(0.5, 0.5), glm::vec2 size = glm::vec2(1, 1), glm::vec2 textureUVScale = glm::vec2(1, 1), glm::vec2 textureUVOffset = glm::vec2(0, 0));
+            Sprite(const char* texture_path,float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4* pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5,0.5),glm::vec2 size = glm::vec2(1,1),glm::vec2 textureUVScale = glm::vec2(1,1),glm::vec2 textureUVOffset = glm::vec2(0,0));
+            Sprite(const char* texture_path, float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4* pixel_projection_matrix, Bloom::Shader* shader, glm::vec2 origin = glm::vec2(0.5, 0.5), glm::vec2 size = glm::vec2(1, 1), glm::vec2 textureUVScale = glm::vec2(1, 1), glm::vec2 textureUVOffset = glm::vec2(0, 0));
             ~Sprite();
             void Draw(float depth = 0.99, bool shader_bound = false);
-            void DrawInstanced(int amount, float depth = 0.99);
+            void DrawInstanced(int amount, bool bind_texture = true, float depth = 0.99);
             void DrawInstanced(int amount, std::vector<GLuint> buffers_to_bind, float depth = 0.99);
 
             void SetLocation(glm::vec2 location){transformation[0] = location[0];transformation[1] = location[1];UpdateLocation();};
@@ -49,13 +48,13 @@ namespace Bloom{
 
             void SetUVOffset(glm::vec2 offset);
 
-            void SetInstanced(glm::mat4 projection_matrix);
+            void SetInstanced(glm::mat4* projection_matrix);
 
             Bloom::Texture2D* GetTexture(){return texture;};
             Bloom::Shader* GetShader(){return shader;};
             glm::mat4 GetModelMatrix(){return model_matrix;};
 
-            void SetShader(Bloom::Shader* new_shader, glm::mat4 projection_matrix) {
+            void SetShader(Bloom::Shader* new_shader, glm::mat4* projection_matrix) {
                 this->shader = new_shader; original_shader = false;
 
                 shader->use();
@@ -66,7 +65,7 @@ namespace Bloom{
                 this->depth_uid = shader->getUniformId("custom_depth");
 
                 shader->uniformMat4(view_uid, *view_matrix);
-                shader->uniformMat4(shader->getUniformId("projection"), projection_matrix);
+                shader->uniformMat4(shader->getUniformId("projection"), *projection_matrix);
             };
 
             void SetTexture(Bloom::Texture2D& new_texture) { delete this->texture; this->texture = new Bloom::Texture2D(new_texture); }
@@ -74,7 +73,7 @@ namespace Bloom{
             auto GetVAO(){return this->vao;}
 
         private:
-            void Init(const char* texture_path, float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5, 0.5), glm::vec2 size = glm::vec2(1, 1), glm::vec2 textureUVScale = glm::vec2(1, 1), glm::vec2 textureUVOffset = glm::vec2(0, 0));
+            void Init(const char* texture_path, float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4* pixel_projection_matrix, glm::vec2 origin = glm::vec2(0.5, 0.5), glm::vec2 size = glm::vec2(1, 1), glm::vec2 textureUVScale = glm::vec2(1, 1), glm::vec2 textureUVOffset = glm::vec2(0, 0));
             void UpdateLocation();
 
             glm::vec2 UVoffset;
@@ -101,6 +100,7 @@ namespace Bloom{
             Bloom::Texture2D* texture;
             glm::mat4 model_matrix;
             glm::mat4* view_matrix;
+            glm::mat4* projection_matrix;
 
             bool original_shader;
             float uColorUni;
@@ -108,6 +108,7 @@ namespace Bloom{
 
             uint8_t model_uid;
             uint8_t view_uid;
+            uint8_t projection_uid;
             uint8_t depth_uid;
     };
 }

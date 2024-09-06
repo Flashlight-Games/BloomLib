@@ -64,47 +64,67 @@ Bloom::Framebuffer::~Framebuffer()
     if (fbTexture != nullptr) {
         delete this->fbTexture;
     }
+
     glDeleteVertexArrays(1, &fbVao);
     glDeleteBuffers(1, &fbVbo);
     glDeleteFramebuffers(1, &fbo);
     glDeleteRenderbuffers(1, &rbo);
 }
 
-void Framebuffer::use(bool clear){
+void Framebuffer::use(bool clear, glm::vec2 offset, float zoom, int target_texture_id , Bloom::Texture2D* target_texture ) {
+    float newWidth = this->width * (zoom);  // Divide by (zoom * 2) to account for doubled resolution
+    float newHeight = this->height * (zoom);
 
-    // DISABLE glViewport for faster performance
-    glViewport(0, 0, this->width, this->height); // Change viewport size for correct texture
+    float newOffsetX = offset.x + (this->width - newWidth) / 2;
+    float newOffsetY = offset.y + (this->height - newHeight) / 2;
 
-    glBindFramebuffer(GL_FRAMEBUFFER,fbo);
-    glActiveTexture(GL_TEXTURE0);
-    fbTexture->bind();
+    glViewport(newOffsetX, newOffsetY, newWidth, newHeight);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glActiveTexture(GL_TEXTURE0 + target_texture_id);
+    if (!target_texture)
+        fbTexture->bind();
+    else
+        target_texture->bind();
+    
     fbShader.use();
 
     if (clear) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 };
-void Framebuffer::draw(float depth){
+void Framebuffer::draw(float depth, std::vector<Bloom::Texture2D*> extra_textures){
     fbShader.use();
     fbShader.uniformMat4(offset_uid, (glm::translate(glm::mat4(1.0), glm::vec3(this->offset.x, this->offset.y, 0.0f))));
     fbShader.uniformFloat(depth_uid, depth);
 
     glActiveTexture(GL_TEXTURE0);
     fbTexture->bind();
+
+    for (int i = 0; i < extra_textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i + 1);
+        extra_textures.at(i)->bind();
+    }
+
     glBindVertexArray(fbVao);
     glDrawArrays(GL_TRIANGLES,0,6);
-};
+}
+void Bloom::Framebuffer::drawToDefault(glm::vec2 window_size, bool clear, glm::vec2 offset, float zoom, float depth)
+{
+    drawToDefault(window_size, clear, offset, zoom, {}, depth);
+}
 
-void Framebuffer::drawToDefault(glm::vec2 window_size, bool clear,glm::vec2 offset, float zoom, float depth) {
-    bindDefaultFramebuffer(clear, window_size.x, window_size.y,offset,zoom); draw(depth);
+void Framebuffer::drawToDefault(glm::vec2 window_size, bool clear,glm::vec2 offset, float zoom, std::vector<Bloom::Texture2D*> extra_textures, float depth) {
+    bindDefaultFramebuffer(clear, window_size.x, window_size.y,offset,zoom); draw(depth, extra_textures);
 }
 
 void Framebuffer::setShader(const char* fragment_source){
     fbShader = Shader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_vertex.glsl",fragment_source);
 };
 
-void Framebuffer::setTextureUniform(const char* uniform){
-    fbShader.uniformInt(fbShader.getUniformId(uniform),getTexture()->GetID());
+void Framebuffer::setTextureUniform(const char* uniform, int id){
+    fbShader.uniformInt(fbShader.getUniformId(uniform), id);
 }
 
 void Bloom::Framebuffer::SetLocationOffset(glm::vec2 offset)

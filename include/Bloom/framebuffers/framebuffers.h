@@ -17,9 +17,10 @@ namespace Bloom{
         // Framebuffer(){};
         
         Shader fbShader = Shader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_vertex.glsl","include/Bloom/res/engine/shaders/framebuffer/framebuffer_fragment_alpha.glsl");
-        void use(bool clear);
-        virtual void draw(float depth = 0.99);
-        virtual void drawToDefault(glm::vec2 window_size,bool clear = true,glm::vec2 offset = glm::vec2(0),float zoom=1.0, float depth = 0.99);
+        void use(bool clear, glm::vec2 offset = glm::vec2(0), float zoom = 1.0f, int target_texture_id = 0, Bloom::Texture2D* target_texture = nullptr);
+        virtual void draw(float depth = 0.99, std::vector<Bloom::Texture2D*> extra_textures = {});
+        virtual void drawToDefault(glm::vec2 window_size, bool clear = true, glm::vec2 offset = glm::vec2(0), float zoom = 1.0, float depth = 0.99);
+        virtual void drawToDefault(glm::vec2 window_size, bool clear = true, glm::vec2 offset = glm::vec2(0), float zoom = 1.0, std::vector<Bloom::Texture2D*> extra_textures = {}, float depth = 0.99);
 
         uint16_t getWidth(){return width;};
         uint16_t getHeight(){return height;};
@@ -38,7 +39,7 @@ namespace Bloom{
         Bloom::Shader GetShader() { return fbShader; };
 
         void setShader(const char* fragment_source);
-        void setTextureUniform(const char* uniform);
+        void setTextureUniform(const char* uniform, int id = 0);
 
         void SetLocationOffset(glm::vec2 offset);
 

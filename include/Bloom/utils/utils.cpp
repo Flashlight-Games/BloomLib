@@ -1,4 +1,13 @@
+#include <Windows.h>
 #include "utils.h"
+
+glm::vec2 Utils::Corp(glm::vec2 A, glm::vec2 B, float speed)
+{
+    glm::vec2 delta = B - A;
+    if (glm::length(delta) < speed)
+        return B;
+    return A + glm::normalize(delta) * speed;
+}
 
 float Utils::Distance2D(glm::vec2 A, glm::vec2 B)
 {
@@ -37,12 +46,16 @@ void Utils::CopyFramebuffer(Bloom::Framebuffer* source, Bloom::Framebuffer* dest
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 }
 
+float Utils::Noise_White(glm::vec2 position, int seed)
+{
+    FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::White>();
+    return noise->GenSingle2D(position.x, position.y, seed);
+}
+
 float Utils::Noise_Simplex(glm::vec2 position,int seed)
 {
     FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::Simplex>();
-    std::vector<float> output(3*3);
-    noise->GenUniformGrid2D(output.data(), position.x, position.y, 3, 3, 1, seed);
-    return output.at(0);
+    return noise->GenSingle2D(position.x, position.y, seed);
 }
 
 std::vector<float> Utils::Noise_Simplex(glm::vec2 position, glm::vec2 size, int seed)
@@ -56,9 +69,7 @@ std::vector<float> Utils::Noise_Simplex(glm::vec2 position, glm::vec2 size, int 
 float Utils::Noise_Value(glm::vec2 position, int seed)
 {
     FastNoise::SmartNode<> noise = FastNoise::New<FastNoise::Value>();
-    std::vector<float> output(5 * 5);
-    noise->GenUniformGrid2D(output.data(), position.x, position.y, 5, 5, 1, seed);
-    return output.at(0);
+    return noise->GenSingle2D(position.x, position.y, seed);
 }
 
 std::vector<float> Utils::Noise_Value(glm::vec2 position, glm::vec2 size, int seed)
@@ -182,6 +193,10 @@ std::string Utils::Default(bool background)
     return !background ? "\x1b[39m" : "\x1b[39m";
 }
 
+void Utils::Error(std::string message) {
+    throw std::runtime_error(Utils::Red() + message + Utils::Default());
+}
+
 glm::vec2 Utils::rotateVector(glm::vec2 vector,  float degrees, glm::vec2 axis)
 {
     float distance = Distance2D(axis, vector);
@@ -289,3 +304,86 @@ void Utils::printBits(unsigned int value) {
     std::cout << std::endl;
 }
 
+bool Utils::CopyToClipboard(std::string text)
+{
+    if (text != "") {
+        if (!OpenClipboard(NULL)) {
+            return false;
+        }
+        EmptyClipboard();
+
+        const char* textToCopy = text.c_str();
+        size_t textSize = strlen(textToCopy) + 1;
+        HGLOBAL hText = GlobalAlloc(GMEM_MOVEABLE, textSize);
+        if (hText == NULL) {
+            CloseClipboard();
+            return false;
+        }
+
+        LPVOID pText = GlobalLock(hText);
+        memcpy(pText, textToCopy, textSize);
+
+        GlobalUnlock(hText);
+        SetClipboardData(CF_TEXT, hText);
+        CloseClipboard();
+
+        return true;
+    }
+    return true;
+}
+
+std::string Utils::GetClipboard()
+{
+    if (!OpenClipboard(NULL)) {
+        return "";
+    }
+
+    HANDLE hClipboardData = GetClipboardData(CF_TEXT);
+    if (hClipboardData == NULL) {
+        std::cerr << "Error getting clipboard data" << std::endl;
+        CloseClipboard();
+        return "";
+    }
+
+    LPSTR pClipboardText = static_cast<LPSTR>(GlobalLock(hClipboardData));
+    if (pClipboardText == NULL) {
+        std::cerr << "Error locking clipboard memory" << std::endl;
+        CloseClipboard();
+        return "";
+    }
+    std::string clipboardString(pClipboardText);
+
+    GlobalUnlock(hClipboardData);
+    CloseClipboard();
+
+    return clipboardString;
+}
+
+double Utils::sinWithPhaseShift(double x, double phaseShiftDegrees)
+{
+    double phaseShiftRadians = phaseShiftDegrees * M_PI / 180.0;
+    return sin(x + phaseShiftRadians);
+}
+
+double Utils::cosWithPhaseShift(double x, double phaseShiftDegrees)
+{
+    double phaseShiftRadians = phaseShiftDegrees * M_PI / 180.0;
+    return cos(x + phaseShiftRadians);
+}
+
+glm::vec2 Utils::CalculateWalkCycleOffset(float time, float max_move_speed, glm::vec2 step_size, float phase_shift_degrees, glm::vec2 direction, bool inverted)
+{
+    float angle = atan2(direction.y, direction.x);
+    float steps_per_second = (max_move_speed / step_size.x);
+    float invert_direction = inverted ? -1 : 1;
+
+    return glm::vec2(
+        Utils::cosWithPhaseShift(time * invert_direction * steps_per_second, phase_shift_degrees) * step_size.x * cos(angle) -
+        Utils::sinWithPhaseShift(time * invert_direction * steps_per_second, phase_shift_degrees) * step_size.y * sin(angle),
+        Utils::sinWithPhaseShift(time * invert_direction * steps_per_second, phase_shift_degrees) * step_size.y * cos(angle) +
+        Utils::cosWithPhaseShift(time * invert_direction * steps_per_second, phase_shift_degrees) * step_size.x * sin(angle));
+}
+
+float Utils::roundToNearest(float value, float interval) {
+    return std::round(value / interval) * interval;
+}

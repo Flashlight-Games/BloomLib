@@ -9,14 +9,17 @@ void Game::ResizeLoop(GLFWwindow* window, int width, int height){
 }
 
 // BACKEND
-void Engine::Prep_InputLoop(){
+int Engine::Prep_InputLoop(){
     try {
         InputLoop();
     }
     catch (const std::exception& ex) {
-        std::cerr << "Encountered Bloom Exception during InputLoop : " << ex.what() << std::endl;
-        CloseGame();
+        #ifdef DEBUG
+            std::cerr << "Encountered Bloom Exception during InputLoop : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
+            return -1;
+        #endif
     }
+    return 0;
 }
 
 static void error_callback(int error, const char* description)
@@ -34,6 +37,8 @@ int Engine::Init(){
         this->windowHeight = engine_config.resolution_window_size.y;
         this->pixel_windowWidth = engine_config.resolution_pixels_size.x;
         this->pixel_windowHeight = engine_config.resolution_pixels_size.y;
+        pixel_ratio = glm::vec2(pixel_windowWidth / (float)windowWidth, pixel_windowHeight / (float)windowHeight);
+
 
         // INITIALIZATION
         glfwInit(); 
@@ -54,17 +59,31 @@ int Engine::Init(){
         glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, engine_config.glfw_transparent);
         glfwWindowHint(GLFW_DEPTH_BITS,              24);
     
-        window = glfwCreateWindow(windowWidth, windowHeight, engine_config.window_name.c_str(), NULL, NULL);
+        if (engine_config.glfw_maximized && engine_config.glfw_full_screen) {
+            const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+            windowWidth = mode->width;
+            windowHeight = mode->height;
+        }
+
+        GLFWmonitor* target_monitor = (engine_config.glfw_full_screen ? glfwGetPrimaryMonitor() : NULL);
+        window = glfwCreateWindow(windowWidth, windowHeight, engine_config.window_name.c_str(), target_monitor, NULL);
         if (window == NULL)
         {
             throw std::runtime_error("Failed to create GLFW window");
             return -1;
         }
+        int width, height;
+        glfwGetWindowSize(window, &width, &height);
+        windowWidth = width; windowHeight = height;
+
         glfwSetFramebufferSizeCallback(window, ResizeLoop);  
         glfwMakeContextCurrent(window);
 
         if (!engine_config.glfw_show_cursor) {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // HIDE CURSOR
+            if (glfwRawMouseMotionSupported())
+                glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
             auto center = GetWindowSize() / 2.0f;
             glfwSetCursorPos(GetWindow(), center.x, center.y);
         }
@@ -140,9 +159,10 @@ int Engine::Init(){
         glClearColor(0.1, 0.1, 0.1, 1.0); // THIS IS RESET BY THE SPLASH SCREEN
     }
     catch (const std::exception& ex) {
-        std::cerr << "Encountered Bloom Exception during Initialization : " << ex.what() << std::endl;
-        CloseGame();
-        return -1;
+        #ifdef DEBUG
+            std::cerr << "Encountered Bloom Exception during Initialization : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
+            return -1;
+        #endif // DEBUG
     }
     return 0;
 }
@@ -154,9 +174,10 @@ int Engine::Prep_Begin(){
         Begin();
     }
     catch (const std::exception& ex) {
-            std::cerr << "Encountered Bloom Exception during Beginning : " << ex.what() << std::endl;
-            CloseGame();
+        #ifdef DEBUG
+            std::cerr << "Encountered Bloom Exception during Beginning : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
             return -1;
+        #endif
     }
     return 0;
 }
@@ -171,7 +192,10 @@ int Engine::Prep_GameLoop(){
 
         // PREPARE LOOP
         SteamTools::SteamManager::ProcessCallbacks();
-        fps = 1000 / GetDeltaTime();
+        double delta_time = GetDeltaTime();
+        if (delta_time > 0) {
+            fps = 1000 / delta_time;
+        }
 
         if (glfwGetTime() >= last_fps_time + 1) {
             this->last_fps_time = glfwGetTime();
@@ -190,7 +214,8 @@ int Engine::Prep_GameLoop(){
         double temp_cursor_position_x;
         double temp_cursor_position_y;
         glfwGetCursorPos(window, &temp_cursor_position_x, &temp_cursor_position_y);
-        cursor_position = glm::vec2(temp_cursor_position_x / (windowWidth / (float)pixel_windowWidth), pixel_windowHeight - temp_cursor_position_y / (windowHeight / (float)pixel_windowHeight) );
+        cursor_position = glm::floor(glm::vec2(temp_cursor_position_x / (windowWidth / (float)pixel_windowWidth), pixel_windowHeight - temp_cursor_position_y / (windowHeight / (float)pixel_windowHeight) ));
+        cursor_position_window = glm::vec2(temp_cursor_position_x, windowHeight - temp_cursor_position_y);
 
         // BINDING AND CLEARING PIXEL FRAMEBUFFER
         bindDefaultFramebuffer(true);
@@ -201,20 +226,22 @@ int Engine::Prep_GameLoop(){
                     this->font_pressstart->Print(GetWindowSize() / 2.0f, "BLOOM", 3, GetWindowSize(), glm::vec4(Utils::HSVtoRGB(glm::vec3(sin(GetTime() / splash_screen_time) * 360, 25, 100)), GetTime() < splash_screen_time ? 1 : 1 - (GetTime() - splash_screen_time)), true);
                     this->font_pressstart->Print(GetWindowSize() / 2.0f - glm::vec2(0, 100), "ENGINE", 0.5, GetWindowSize(), glm::vec4(glm::vec3(0.9), GetTime() < splash_screen_time ? 1 : 1 - (GetTime() - splash_screen_time)), true);
                 } else {
+                    glClearColor(0.0, 0.0, 0.0, 0.0);
                     loaded = true;
                 }
             #else
+                glClearColor(0.0, 0.0, 0.0, 0.0);
                 loaded = true;
             #endif // DEBUG
-            glClearColor(0.0, 0.0, 0.0, 0.0);
         } else {
             GameLoop(); // ACTUAL GAME CODE
         }
     }
     catch (const std::exception& ex) {
-            std::cerr << "Encountered Bloom Exception during GameLoop : " << ex.what() << std::endl;
-            CloseGame();
+        #ifdef DEBUG
+            std::cerr << "Encountered Bloom Exception during GameLoop : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
             return -1;
+        #endif
     }
     return 0;
 }
@@ -226,12 +253,15 @@ int Engine::Prep_UILoop(){
         ImGuiIO& io = ImGui::GetIO();
         io.MousePos = ImVec2(ImGui_Cursor_Position.x, ImGui_Cursor_Position.y);
         ImGui::NewFrame();
-        UILoop();
+        if (loaded) {
+            UILoop();
+        }
     }
     catch (const std::exception& ex) {
-        std::cerr << "Encountered Bloom Exception during UILoop : " << ex.what() << std::endl;
-        CloseGame();
-        return -1;
+        #ifdef DEBUG
+            std::cerr << "Encountered Bloom Exception during UILoop : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
+            return -1;
+        #endif
     }
     return 0;
 }
@@ -249,9 +279,10 @@ int Engine::EndLoop(){
         }
     }
     catch (const std::exception& ex) {
-        std::cerr << "Encountered Bloom Exception during EndLoop : " << ex.what() << std::endl;
-        CloseGame();
-        return -1;
+        #ifdef DEBUG
+            std::cerr << "Encountered Bloom Exception during EndLoop : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
+            return -1;
+        #endif
     }
     return 0;
 }
@@ -278,6 +309,22 @@ void Engine::UILoop() {
 void Engine::GameLoop() {
     std::string errmsg = "Please define application method 'GameLoop'";
     throw std::runtime_error(errmsg);
+}
+
+void Game::Engine::SetViewportSize(glm::vec2 size)
+{
+    if (glm::length(size) <= 1)
+        return;
+
+    glViewport(0, 0, size.x, size.y);
+    this->windowWidth = size.x;
+    this->windowHeight = size.y;
+    
+    this->pixel_windowWidth = this->windowWidth * pixel_ratio.x;
+    this->pixel_windowHeight = this->windowHeight * pixel_ratio.y;
+
+    pixel_projection_matrix = glm::ortho(0.0f, (float)pixel_windowWidth, 0.0f, (float)pixel_windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
+    window_projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
 }
 
 int Game::Engine::CloseGame()

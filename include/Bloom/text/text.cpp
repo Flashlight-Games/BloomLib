@@ -4,8 +4,8 @@
 
 using namespace Bloom; 
 
-Text::Text(const char* path, glm::mat4* view_matrix, glm::mat4 projection_matrix, float spacing, uint16_t resolution) {
-    this->path = path; this->resolution = resolution; this->spacing = 2 - spacing; this->view_matrix = view_matrix; this->projection_matrix = &projection_matrix; this->scale = (resolution / 128.0f);
+Text::Text(const char* path, glm::mat4* view_matrix, glm::mat4* projection_matrix, float spacing, uint16_t resolution) {
+    this->path = path; this->resolution = resolution; this->spacing = 2 - spacing; this->view_matrix = view_matrix; this->projection_matrix = projection_matrix; this->scale = (resolution / 128.0f);
     bitsize = 2048 * scale;
 
     unsigned char* temp_bitmap = new unsigned char[bitsize* bitsize];
@@ -55,6 +55,7 @@ Text::Text(const char* path, glm::mat4* view_matrix, glm::mat4 projection_matrix
 Bloom::Text::~Text()
 {
     delete texture;
+
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
@@ -120,6 +121,40 @@ void Text::Print(glm::vec2 position, std::string text, float size, glm::vec2 scr
         ++ctext;
     }
     
+}
+
+glm::vec2 Bloom::Text::GetPrintSize(std::string text, float size, glm::vec2 screen_size)
+{
+    float leastX = 0; float mostX = 0;
+    float leastY = 0; float mostY = 0;
+
+    const char* ctext = text.c_str();
+
+    float x = 0;
+    float y = 0;
+
+    while (*ctext) {
+        stbtt_aligned_quad q;
+        stbtt_GetBakedQuad(char_data, bitsize, bitsize, *ctext - 32, &x, &y, &q, 1);
+
+        float newVerts[24] = {
+            // POSITION                                                                                                                              Texture
+            (q.x1) / screen_size[0], ((y - q.y1)) / screen_size[1],                      q.s1,q.t1,
+            (q.x1) / screen_size[0], (q.y1 - q.y0 + (y - q.y1)) / screen_size[1],            q.s1,q.t0,
+            (q.x0) / screen_size[0], (q.y1 - q.y0 + (y - q.y1)) / screen_size[1],            q.s0,q.t0,
+            (q.x0) / screen_size[0], ((y - q.y1)) / screen_size[1],                      q.s0,q.t1,
+        };
+
+        ++ctext;
+
+        leastX = std::min(leastX, std::min(q.x0, q.x1));
+        leastY = std::min(leastY, std::min(q.y0, q.y1));
+
+        mostX = std::max(leastX, std::max(q.x0, q.x1));
+        mostY = std::max(leastY, std::max(q.y0, q.y1));
+    }
+
+    return glm::vec2(mostX - leastX, mostY - leastY) * (size / 2.0f);
 }
 
 glm::vec2 Text::GetCenterOffset(std::string text, float size, glm::vec2 screen_size) {

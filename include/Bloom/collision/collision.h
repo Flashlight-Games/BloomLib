@@ -5,6 +5,7 @@
 
 #include "Bloom/dependencies.h"
 #include "Bloom/sprite/sprite.h"
+#include "Bloom/sprite/spritesheet.h"
 #include "Bloom/utils/utils.h"
 #include <iostream>
 
@@ -15,6 +16,7 @@ namespace PhysX
         collisionBox(){};
         collisionBox(std::string channel,glm::vec2 location = glm::vec2(0,0), glm::vec2 scale = glm::vec2(1,1), uint16_t rotation = 0, glm::vec2 origin = glm::vec2(0.5,0.5));
         collisionBox(std::string channel, Bloom::Sprite* sprite);
+        collisionBox(std::string channel, Bloom::Spritesheet* sprite);
 
         bool check_SAT(collisionBox* other,glm::mat4 transformationMatrix,glm::mat4 otherTransformationMatrix);
         bool check_SAT(collisionBox* other);

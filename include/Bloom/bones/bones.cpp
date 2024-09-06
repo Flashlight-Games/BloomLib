@@ -6,6 +6,11 @@ Bloom::Bone::Bone(Bone* parent,float length){
         parent->SetChild(this);
 }
 
+void Bloom::Bone::SetInverted(bool inverted)
+{
+    SetLength(glm::abs(GetLength()) * (inverted ? -1 : 1));
+}
+
 glm::vec2 Bloom::Bone::GetEndLocation(){
     if (this->length == 0)
         return this->location;

@@ -2,7 +2,7 @@
 
 using namespace Bloom;
 
-Sprite::Sprite(const char* texture_path,float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin,glm::vec2 size,glm::vec2 textureUVScale,glm::vec2 textureUVOffset){
+Sprite::Sprite(const char* texture_path,float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4* pixel_projection_matrix, glm::vec2 origin,glm::vec2 size,glm::vec2 textureUVScale,glm::vec2 textureUVOffset){
     Init(texture_path, pixels_per_pixel, view_matrix, pixel_projection_matrix, origin, size, textureUVScale, textureUVOffset);
 
     SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/sprite/spriteshader_vertex.glsl", "include/Bloom/res/engine/shaders/sprite/spriteshader_fragment.glsl"),pixel_projection_matrix);
@@ -10,10 +10,11 @@ Sprite::Sprite(const char* texture_path,float pixels_per_pixel, glm::mat4* view_
 
     this->model_uid = shader->getUniformId("model");
     this->view_uid = shader->getUniformId("view");
+    this->projection_uid = shader->getUniformId("projection");
     this->depth_uid = shader->getUniformId("custom_depth");
 }
 
-Bloom::Sprite::Sprite(const char* texture_path, float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, Bloom::Shader* shader, glm::vec2 origin, glm::vec2 size, glm::vec2 textureUVScale, glm::vec2 textureUVOffset) {
+Bloom::Sprite::Sprite(const char* texture_path, float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4* pixel_projection_matrix, Bloom::Shader* shader, glm::vec2 origin, glm::vec2 size, glm::vec2 textureUVScale, glm::vec2 textureUVOffset) {
     Init(texture_path, pixels_per_pixel, view_matrix, pixel_projection_matrix, origin, size, textureUVScale, textureUVOffset);
 
     SetShader(shader, pixel_projection_matrix);
@@ -21,6 +22,7 @@ Bloom::Sprite::Sprite(const char* texture_path, float pixels_per_pixel, glm::mat
 
     this->model_uid = shader->getUniformId("model");
     this->view_uid = shader->getUniformId("view");
+    this->projection_uid = shader->getUniformId("projection");
     this->depth_uid = shader->getUniformId("custom_depth");
 }
 
@@ -37,9 +39,9 @@ Bloom::Sprite::~Sprite()
 }
 
 
-void Bloom::Sprite::Init(const char* texture_path, float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 origin, glm::vec2 size, glm::vec2 textureUVScale, glm::vec2 textureUVOffset)
+void Bloom::Sprite::Init(const char* texture_path, float pixels_per_pixel, glm::mat4* view_matrix, glm::mat4* pixel_projection_matrix, glm::vec2 origin, glm::vec2 size, glm::vec2 textureUVScale, glm::vec2 textureUVOffset)
 {
-    this->ppp = pixels_per_pixel; this->view_matrix = view_matrix;
+    this->ppp = pixels_per_pixel; this->view_matrix = view_matrix; this->projection_matrix = pixel_projection_matrix;
     this->UVoffset = textureUVOffset; this->UVscale = textureUVScale; this->Origin = origin;
 
     transformation[3] = size[0]; transformation[4] = size[1];
@@ -100,6 +102,7 @@ void Sprite::Draw(float depth, bool shader_bound){
     setTextureAtLocation(GL_TEXTURE0,this->texture->GetID()); shader->uniformInt(uTextureUni,0);
     shader->uniformMat4(model_uid,model_matrix);
     shader->uniformMat4(view_uid,(*(view_matrix)));
+    shader->uniformMat4(projection_uid, (*(projection_matrix)));
     shader->uniformFloat(depth_uid,depth);
 
     this->texture->bind();
@@ -107,16 +110,18 @@ void Sprite::Draw(float depth, bool shader_bound){
     glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]),GL_UNSIGNED_INT,0);
 }
 
-void Bloom::Sprite::DrawInstanced(int amount, float depth)
+void Bloom::Sprite::DrawInstanced(int amount, bool bind_texture, float depth)
 {
     shader->use();
-    setTextureAtLocation(GL_TEXTURE0, this->texture->GetID()); shader->uniformInt(uTextureUni, 0);
+    if(bind_texture){
+        this->texture->bind();
+        setTextureAtLocation(GL_TEXTURE0, this->texture->GetID()); shader->uniformInt(uTextureUni, 0);
+    }
     shader->uniformMat4(view_uid, *(view_matrix));
     shader->uniformFloat(depth_uid, depth);
 
     UpdateLocation();
 
-    this->texture->bind();
     glBindVertexArray(this->vao);
     glDrawElementsInstanced(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0,amount);
 }
@@ -153,7 +158,7 @@ void Sprite::SetUVOffset(glm::vec2 offset){
     glBufferData(GL_ARRAY_BUFFER,sizeof(verts),&verts,GL_STATIC_DRAW);
 }
 
-void Bloom::Sprite::SetInstanced(glm::mat4 projection_matrix)
+void Bloom::Sprite::SetInstanced(glm::mat4* projection_matrix)
 {
     SetShader(new Bloom::Shader("include/Bloom/res/engine/shaders/sprite/spriteshader_instanced_vertex.glsl", "include/Bloom/res/engine/shaders/sprite/spriteshader_instanced_fragment.glsl"),projection_matrix);
 }

@@ -16,6 +16,18 @@ namespace Bloom{
             void Stop(){ active = false; };
             float GetValue(float time);
 
+            void SetFrequency(float frequency) {
+                this->freq = frequency;
+            }
+
+            void SetAmplitude(float amplitude) {
+                this->ampl = amplitude;
+            }
+
+            void SetDuration(float duration) {
+                this->dura = duration;
+            }
+
         private:
             float time;
             float freq;

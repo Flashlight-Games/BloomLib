@@ -2,7 +2,7 @@
 
 using namespace Bloom;
 
-SubdividedSprite::SubdividedSprite(const char* texture_path, int pixels_per_pixel, glm::mat4* view_matrix, glm::mat4 pixel_projection_matrix, glm::vec2 subdivision, glm::vec2 origin) {
+SubdividedSprite::SubdividedSprite(const char* texture_path, int pixels_per_pixel, glm::mat4* view_matrix, glm::mat4* pixel_projection_matrix, glm::vec2 subdivision, glm::vec2 origin) {
     this->ppp = pixels_per_pixel; this->view_matrix = view_matrix; this->Subdivision = subdivision;
     this->UVoffset = glm::vec2(0, 0); this->UVscale = glm::vec2(1, 1); this->Origin = origin;
 
@@ -87,6 +87,7 @@ Bloom::SubdividedSprite::~SubdividedSprite()
     if (original_shader)
         delete shader;
     delete texture;
+
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
@@ -117,7 +118,7 @@ void Bloom::SubdividedSprite::SetVertexPositionOffsets(std::vector<glm::vec2> po
     glm::vec3 vertex_color = glm::vec3(1); std::vector<float> dynamic_vertices; int idx_x; int idx_y;
     for (int idx = 0; idx < positionOffsets.size(); idx++)
     {
-        idx_x = idx % ((int)Subdivision.x + 1); idx_y = idx / ((int)Subdivision.y + 1);
+        idx_x = idx % ((int)Subdivision.x + 1); idx_y = idx / ((int)Subdivision.x + 1);
         dynamic_vertices.push_back((0.5) * (Subdivision.x - (idx_x / Subdivision.x)) * xScale - (0.5 * Subdivision.x * xScale) + ((Origin[0] / 0.5) * 0.25) * xScale + positionOffsets.at(idx).x); dynamic_vertices.push_back((0.5) * (Subdivision.y - (idx_y / Subdivision.y)) * yScale - (0.5 * Subdivision.y * yScale) + ((Origin[1] / 0.5) * 0.25) * yScale + positionOffsets.at(idx).y);
         dynamic_vertices.push_back(vertex_color.r); dynamic_vertices.push_back(vertex_color.g); dynamic_vertices.push_back(vertex_color.b);
         dynamic_vertices.push_back(1 - (this->UVscale[0]) * (idx_x / Subdivision.x)); dynamic_vertices.push_back(1 - (this->UVscale[1]) * (idx_y / Subdivision.y));
@@ -135,15 +136,17 @@ void SubdividedSprite::UpdateLocation() {
     model_matrix = glm::scale(model_matrix, glm::vec3(this->transformation[3], this->transformation[4], 1.0f));
 }
 
-void SubdividedSprite::Draw(float depth) {
-    shader->use();
+void SubdividedSprite::Draw(float depth, bool shader_bound) {
+    UpdateLocation();
+    
+    if (!shader_bound) {
+        shader->use();
+    }
     shader->uniformFloat(uColorUni, 1);
     setTextureAtLocation(GL_TEXTURE0, this->texture->GetID()); shader->uniformInt(uTextureUni, 0);
     shader->uniformMat4(model_uid, model_matrix);
     shader->uniformMat4(view_uid, (*(view_matrix)));
     shader->uniformFloat(depth_uid, depth);
-
-    UpdateLocation();
 
     this->texture->bind();
     glBindVertexArray(this->vao);
