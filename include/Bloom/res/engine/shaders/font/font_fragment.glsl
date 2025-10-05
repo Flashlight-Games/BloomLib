@@ -10,26 +10,10 @@ uniform float custom_depth = 0.0;
 
 void main()
 {
-    gl_FragDepth = custom_depth;
-    vec2 texOffset = 1.0 / textureSize(uTexture, 0); // gets size of single texel
-    vec4 result = vec4(0.0);
+    gl_FragDepth = custom_depth;    
+    vec4 sampled = vec4(1.0, 1.0, 1.0, texture(uTexture, vTextureCoords).r);
+    color = uColor * sampled;
 
-    // averaging the surrounding pixels
-    result += texture(uTexture, vTextureCoords + texOffset * vec2(-1, -1));
-    result += texture(uTexture, vTextureCoords + texOffset * vec2( 0, -1));
-    result += texture(uTexture, vTextureCoords + texOffset * vec2( 1, -1));
-    result += texture(uTexture, vTextureCoords + texOffset * vec2(-1,  0));
-    result += texture(uTexture, vTextureCoords + texOffset * vec2( 0,  0));
-    result += texture(uTexture, vTextureCoords + texOffset * vec2( 1,  0));
-    result += texture(uTexture, vTextureCoords + texOffset * vec2(-1,  1));
-    result += texture(uTexture, vTextureCoords + texOffset * vec2( 0,  1));
-    result += texture(uTexture, vTextureCoords + texOffset * vec2( 1,  1));
-    result /= 9.0; // average the sample results
-
-    float value = result.x; // use the averaged value
-
-    if(value <= 0.3)
+    if(color.a <= 0.0)
         discard;
-
-    color = vec4(value,value,value,value) * uColor;
 }

@@ -20,13 +20,14 @@ namespace Bloom{
 
             glm::vec2 GetLocation(){return location;};
             int16_t GetLength(){return length;};
-            int16_t GetRotation(){int16_t offset = 0; if(this->Parent != NULL){offset = this->Parent->GetRotation();} return rotation + offset;};
+            int16_t GetRotation(){int16_t offset = 0; if(this->Parent != nullptr){offset = this->Parent->GetRotation();} return rotation + offset;};
             glm::mat4 GetTransform(){return transform;};
 
             void SetLocation(glm::vec2 location){this->location = location;};
             void SetRotation(int16_t rotation){this->rotation = rotation;};
             void SetLength(int16_t length){this->length = length;};
             void SetInverted(bool inverted);
+            void SetParent(Bone* parent);
 
             Bone* GetParent(){return Parent;};
             Bone* GetChild(){return Child;};

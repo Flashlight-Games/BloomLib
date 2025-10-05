@@ -1,7 +1,7 @@
 #include "App.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-    auto app = Utils::GetApp<Application::App>(window);
+    auto app = static_cast<Application::App*>(glfwGetWindowUserPointer(window));
     switch (key) {
     case GLFW_KEY_ESCAPE:
         if (action == GLFW_PRESS) {
@@ -12,19 +12,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 }
 
 void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
-    auto app = Utils::GetApp<Application::App>(window);
+    auto app = static_cast<Application::App*>(glfwGetWindowUserPointer(window));
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    auto app = Utils::GetApp<Application::App>(window);
+    auto app = static_cast<Application::App*>(glfwGetWindowUserPointer(window));
 }
 
 
 void Application::App::UILoop() {
-    auto pos = (GetCursorPosition() / GetPixelWindowSize()) * GetWindowSize();
-    pos = glm::vec2(pos.x, GetWindowSize().y - pos.y);
-    SetImGuiCursorPosition(pos);
-
     #ifdef DEBUG
         ImVec2 last_size;
         ImVec2 last_pos;
@@ -50,9 +46,8 @@ void Application::App::UILoop() {
 
 void Application::App::GameLoop() {
     // RENDER PIXEL BACKGROUND
-    EnablePixels();
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     this->test->Draw();
-    DrawPixelsToDefault(false, 0.0);
 }
 
 void Application::App::InputLoop() {
@@ -64,18 +59,69 @@ void Application::App::Begin() {
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
     glfwSetScrollCallback(GetWindow(), scroll_callback);
 
+    update_thread = new std::thread(&Application::App::Update, this);
+
     this->test = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
-    this->test->SetLocation(this->test->GetSize());
-
-    //SetGameSpeedMultiplier(0.1);    
+    this->test->SetLocation(glm::vec2(12));
 }
 
-void Application::App::Update() { // SUB-FRAME UPDATE
+void Application::App::Update() {
+    using namespace std::chrono;
+    using clock = steady_clock;
+    using duration = duration<double>;
 
+    constexpr double FIXED_TIMESTEP = 1.0 / 480.0; // 60 UPS for physics
+    constexpr auto MAX_FRAME_TIME = duration(1.0 / 20.0);
+
+    auto lastUpdateTime = clock::now();
+    double accumulator = 0.0;
+    int frameCount = 0;
+    auto upsTimer = clock::now();
+
+    while (!shouldClose) {
+        auto currentTime = clock::now();
+        auto frameTime = duration_cast<duration>(currentTime - lastUpdateTime);
+        lastUpdateTime = currentTime;
+
+        // Cap frame time
+        frameTime = std::min(frameTime, MAX_FRAME_TIME);
+        accumulator += frameTime.count();
+
+        // Fixed timestep for physics/game logic
+        while (accumulator >= FIXED_TIMESTEP) {
+            world.update(FIXED_TIMESTEP);
+            accumulator -= FIXED_TIMESTEP;
+            frameCount++;
+        }
+
+        // Update UPS every second
+        auto upsDuration = duration_cast<duration>(currentTime - upsTimer);
+        if (upsDuration.count() >= 1.0) {
+            this->UPS = frameCount / upsDuration.count();
+            frameCount = 0;
+            upsTimer = currentTime;
+        }
+
+        // Adaptive sleep
+        constexpr auto MIN_SLEEP_TIME = duration(0.001); // 1ms
+        auto targetTime = currentTime + duration(FIXED_TIMESTEP);
+        auto sleepTime = targetTime - clock::now();
+
+        if (sleepTime > MIN_SLEEP_TIME) {
+            std::this_thread::sleep_for(sleepTime - MIN_SLEEP_TIME);
+        }
+
+        // Yield remaining time
+        std::this_thread::yield();
+    }
 }
 
-Application::App::~App()
-{
+Application::App::~App() {
+    shouldClose = true;
+
+    update_thread->join();
+    delete update_thread;
+
     #ifdef DEBUG
         std::cout << Utils::Green() << "APP CLOSED SUCCESSFULY\n" << Utils::Default();
     #endif

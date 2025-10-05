@@ -11,6 +11,12 @@ void Bloom::Bone::SetInverted(bool inverted)
     SetLength(glm::abs(GetLength()) * (inverted ? -1 : 1));
 }
 
+void Bloom::Bone::SetParent(Bone* parent)
+{
+    this->Parent = parent;
+    parent->SetChild(this);
+}
+
 glm::vec2 Bloom::Bone::GetEndLocation(){
     if (this->length == 0)
         return this->location;

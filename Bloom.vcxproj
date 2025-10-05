@@ -48,6 +48,8 @@
     <None Include="include\Bloom\res\engine\shaders\particle\particleshader_vertex.glsl" />
     <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_fragment.glsl" />
     <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_fragment_UV.glsl" />
+    <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_instanced_fragment.glsl" />
+    <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_instanced_vertex.glsl" />
     <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_vertex.glsl" />
     <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_wfc_fragment.glsl" />
     <None Include="include\Bloom\res\engine\shaders\testing_framebuffers\framebufferMulti_fragment.glsl" />
@@ -212,27 +214,22 @@
     <ClCompile Include="Application\main.cpp" />
     <ClCompile Include="include\Bloom\boneKinematics\boneKinematics.cpp" />
     <ClCompile Include="include\Bloom\bones\bones.cpp" />
-    <ClCompile Include="include\Bloom\collision\collision.cpp" />
-    <ClCompile Include="include\Bloom\engine\engine.cpp" />
-    <ClCompile Include="include\Bloom\framebuffers\bloom.cpp" />
-    <ClCompile Include="include\Bloom\framebuffers\chromatic_aberration.cpp" />
-    <ClCompile Include="include\Bloom\framebuffers\framebuffers.cpp" />
-    <ClCompile Include="include\Bloom\glad.cpp" />
-    <ClCompile Include="include\Bloom\kinematicBody\KinematicBody.cpp" />
-    <ClCompile Include="include\Bloom\particles\particles.cpp" />
-    <ClCompile Include="include\Bloom\shaders\shaders.cpp" />
-    <ClCompile Include="include\Bloom\shake\shake.cpp" />
-    <ClCompile Include="include\Bloom\sprite\sprite.cpp" />
-    <ClCompile Include="include\Bloom\sprite\spritesheet.cpp" />
-    <ClCompile Include="include\Bloom\sprite\sprite_subdivided.cpp" />
+    <ClCompile Include="include\Bloom\collision\Collision.ixx" />
+    <ClCompile Include="include\Bloom\ECS\ECS.ixx" />
+    <ClCompile Include="include\Bloom\engine\Engine.ixx" />
+    <ClCompile Include="include\Bloom\framebuffers\Framebuffers.ixx" />
+    <ClCompile Include="include\Bloom\shaders\Shaders.ixx" />
+    <ClCompile Include="include\Bloom\sprite\Sprite.ixx" />
     <ClCompile Include="include\Bloom\SteamTools\steamtools.cpp" />
-    <ClCompile Include="include\Bloom\textures\textures.cpp" />
-    <ClCompile Include="include\Bloom\text\text.cpp" />
-    <ClCompile Include="include\Bloom\utils\utils.cpp" />
-    <ClCompile Include="include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp" />
+    <ClCompile Include="include\Bloom\textures\Textures.ixx" />
+    <ClCompile Include="include\Bloom\text\Text.ixx" />
+    <ClCompile Include="include\Bloom\utils\Utils.ixx" />
+    <ClCompile Include="include\glad\glad.cpp" />
     <ClCompile Include="include\soloud\dr_impl.cpp" />
     <ClCompile Include="include\soloud\soloud.cpp" />
     <ClCompile Include="include\soloud\soloud_audiosource.cpp" />
+    <ClCompile Include="include\soloud\soloud_bassboostfilter.cpp" />
+    <ClCompile Include="include\soloud\soloud_biquadresonantfilter.cpp" />
     <ClCompile Include="include\soloud\soloud_bus.cpp" />
     <ClCompile Include="include\soloud\soloud_core_3d.cpp" />
     <ClCompile Include="include\soloud\soloud_core_basicops.cpp" />
@@ -242,16 +239,24 @@
     <ClCompile Include="include\soloud\soloud_core_setters.cpp" />
     <ClCompile Include="include\soloud\soloud_core_voicegroup.cpp" />
     <ClCompile Include="include\soloud\soloud_core_voiceops.cpp" />
+    <ClCompile Include="include\soloud\soloud_dcremovalfilter.cpp" />
+    <ClCompile Include="include\soloud\soloud_echofilter.cpp" />
     <ClCompile Include="include\soloud\soloud_fader.cpp" />
     <ClCompile Include="include\soloud\soloud_fft.cpp" />
+    <ClCompile Include="include\soloud\soloud_fftfilter.cpp" />
     <ClCompile Include="include\soloud\soloud_fft_lut.cpp" />
     <ClCompile Include="include\soloud\soloud_file.cpp" />
     <ClCompile Include="include\soloud\soloud_filter.cpp" />
+    <ClCompile Include="include\soloud\soloud_flangerfilter.cpp" />
+    <ClCompile Include="include\soloud\soloud_freeverbfilter.cpp" />
+    <ClCompile Include="include\soloud\soloud_lofifilter.cpp" />
     <ClCompile Include="include\soloud\soloud_miniaudio.cpp" />
     <ClCompile Include="include\soloud\soloud_misc.cpp" />
     <ClCompile Include="include\soloud\soloud_queue.cpp" />
+    <ClCompile Include="include\soloud\soloud_robotizefilter.cpp" />
     <ClCompile Include="include\soloud\soloud_thread.cpp" />
     <ClCompile Include="include\soloud\soloud_wav.cpp" />
+    <ClCompile Include="include\soloud\soloud_waveshaperfilter.cpp" />
     <ClCompile Include="include\soloud\soloud_wavstream.cpp" />
     <ClCompile Include="include\soloud\stb_vorbis.c" />
     <ClCompile Include="include\dearImGui\imgui.cpp" />
@@ -267,24 +272,8 @@
     <ClInclude Include="Application\App.h" />
     <ClInclude Include="include\Bloom\boneKinematics\boneKinematics.h" />
     <ClInclude Include="include\Bloom\bones\bones.h" />
-    <ClInclude Include="include\Bloom\collision\collision.h" />
     <ClInclude Include="include\Bloom\dependencies.h" />
-    <ClInclude Include="include\Bloom\engine\engine.h" />
-    <ClInclude Include="include\Bloom\framebuffers\bloom.h" />
-    <ClInclude Include="include\Bloom\framebuffers\chromatic_aberration.h" />
-    <ClInclude Include="include\Bloom\framebuffers\framebuffers.h" />
-    <ClInclude Include="include\Bloom\kinematicBody\KinematicBody.h" />
-    <ClInclude Include="include\Bloom\particles\particles.h" />
-    <ClInclude Include="include\Bloom\shaders\shaders.h" />
-    <ClInclude Include="include\Bloom\shake\shake.h" />
-    <ClInclude Include="include\Bloom\sprite\sprite.h" />
-    <ClInclude Include="include\Bloom\sprite\spritesheet.h" />
-    <ClInclude Include="include\Bloom\sprite\sprite_subdivided.h" />
     <ClInclude Include="include\Bloom\SteamTools\steamtools.h" />
-    <ClInclude Include="include\Bloom\textures\textures.h" />
-    <ClInclude Include="include\Bloom\text\text.h" />
-    <ClInclude Include="include\Bloom\utils\utils.h" />
-    <ClInclude Include="include\Bloom\waveFunctionCollapse\waveFunctionCollapse.h" />
     <ClInclude Include="include\FastNoise\FastNoise.h" />
     <ClInclude Include="include\FastNoise\FastNoise_C.h" />
     <ClInclude Include="include\FastNoise\FastNoise_Config.h" />
@@ -308,6 +297,7 @@
     <ClInclude Include="include\FastSIMD\FunctionList.h" />
     <ClInclude Include="include\FastSIMD\InlInclude.h" />
     <ClInclude Include="include\FastSIMD\SIMDTypeList.h" />
+    <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\HTTP\HTTPRequest.hpp" />
     <ClInclude Include="include\JSON\json.hpp" />
     <ClInclude Include="include\soloud\dr_flac.h" />
@@ -350,11 +340,12 @@
     <ClInclude Include="include\soloud\soloud_waveshaperfilter.h" />
     <ClInclude Include="include\soloud\soloud_wavstream.h" />
     <ClInclude Include="include\soloud\stb_vorbis.h" />
-    <ClInclude Include="include\steam\isteamapplist.h" />
+    <ClInclude Include="include\STBI\stb_image_write.h" />
     <ClInclude Include="include\steam\isteamapps.h" />
     <ClInclude Include="include\steam\isteamappticket.h" />
     <ClInclude Include="include\steam\isteamclient.h" />
     <ClInclude Include="include\steam\isteamcontroller.h" />
+    <ClInclude Include="include\steam\isteamdualsense.h" />
     <ClInclude Include="include\steam\isteamfriends.h" />
     <ClInclude Include="include\steam\isteamgamecoordinator.h" />
     <ClInclude Include="include\steam\isteamgameserver.h" />
@@ -375,6 +366,7 @@
     <ClInclude Include="include\steam\isteamremoteplay.h" />
     <ClInclude Include="include\steam\isteamremotestorage.h" />
     <ClInclude Include="include\steam\isteamscreenshots.h" />
+    <ClInclude Include="include\steam\isteamtimeline.h" />
     <ClInclude Include="include\steam\isteamugc.h" />
     <ClInclude Include="include\steam\isteamuser.h" />
     <ClInclude Include="include\steam\isteamuserstats.h" />
@@ -404,7 +396,6 @@
     <ClInclude Include="include\dearImGui\imstb_textedit.h" />
     <ClInclude Include="include\dearImGui\imstb_truetype.h" />
     <ClInclude Include="include\glad\glad.h" />
-    <ClInclude Include="include\GLFW\glfw3.h" />
     <ClInclude Include="include\GLFW\glfw3native.h" />
     <ClInclude Include="include\GLM\common.hpp" />
     <ClInclude Include="include\GLM\detail\compute_common.hpp" />
@@ -696,10 +687,11 @@
     <Library Include="include\steam\lib\win32\sdkencryptedappticket.lib" />
     <Library Include="include\steam\lib\win64\sdkencryptedappticket64.lib" />
     <Library Include="lib\FastNoise.lib" />
+    <Library Include="lib\FastNoiseD.lib" />
     <Library Include="lib\glfw3.lib" />
     <Library Include="lib\glfw3dll.lib" />
     <Library Include="lib\glfw3_mt.lib" />
-    <Library Include="lib\steam_api.lib" />
+    <Library Include="lib\steam_api64.lib" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="steam_appid.txt">
@@ -710,6 +702,7 @@
     <Image Include="include\Bloom\res\engine\textures\2x8_SpritesheetTest.png" />
     <Image Include="include\Bloom\res\engine\textures\4x4_SpritesheetTest.png" />
     <Image Include="include\Bloom\res\engine\textures\8x2_SpritesheetTest.png" />
+    <Image Include="include\Bloom\res\engine\textures\BloomLogo.png" />
     <Image Include="include\Bloom\res\engine\textures\container.jpeg" />
     <Image Include="include\Bloom\res\engine\textures\detailTest16.png" />
     <Image Include="include\Bloom\res\engine\textures\detailTest16Border.png" />
@@ -743,7 +736,7 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{98eb38f7-c805-4430-abce-5f1c4434f517}</ProjectGuid>
+    <ProjectGuid>{8DA2BE09-2A34-4FCB-8BBE-7AF140D163E9}</ProjectGuid>
     <RootNamespace>Bloom</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
@@ -828,6 +821,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp23</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -859,6 +853,7 @@
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <LanguageStandard>stdcpp23</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -883,19 +878,22 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <ConformanceMode>Default</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+      <EnableModules>false</EnableModules>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libglfw3dll.a;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>50000000</StackReserveSize>
+      <AdditionalOptions>/ENTRY:"mainCRTStartup" %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -908,11 +906,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>DEBUG;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ConformanceMode>Default</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <Optimization>Disabled</Optimization>
+      <LanguageStandard>stdcpp23</LanguageStandard>
+      <EnableModules>false</EnableModules>
+      <CompileAs>CompileAsCppModule</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -920,7 +921,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libglfw3dll.a;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>50000000</StackReserveSize>
     </Link>
     <PostBuildEvent>

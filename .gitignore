@@ -43,3 +43,9 @@ Output/
 *.lastbuildstate
 *.recipe
 *.pdb
+/Bloom/Development
+/Bloom/x64
+/Development
+/Development
+imgui.ini
+/x64

@@ -454,6 +454,8 @@
     <None Include="include\Bloom\res\engine\shaders\compute\compute_shader.glsl" />
     <None Include="include\Bloom\res\engine\shaders\compute\multiplication_compute.glsl" />
     <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_wfc_fragment.glsl" />
+    <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_instanced_fragment.glsl" />
+    <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_instanced_vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\dearImGui\imgui.cpp">
@@ -564,58 +566,67 @@
     <ClCompile Include="include\Bloom\bones\bones.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Bloom\collision\collision.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bloom\engine\engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bloom\framebuffers\bloom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bloom\framebuffers\chromatic_aberration.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bloom\framebuffers\framebuffers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bloom\kinematicBody\KinematicBody.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bloom\particles\particles.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bloom\shaders\shaders.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bloom\shake\shake.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bloom\sprite\sprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bloom\sprite\spritesheet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="include\Bloom\SteamTools\steamtools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Bloom\text\text.cpp">
+    <ClCompile Include="include\Bloom\engine\Engine.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Bloom\textures\textures.cpp">
+    <ClCompile Include="include\Bloom\ECS\ECS.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Bloom\utils\utils.cpp">
+    <ClCompile Include="include\Bloom\collision\Collision.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Bloom\glad.cpp">
+    <ClCompile Include="include\Bloom\framebuffers\Framebuffers.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Bloom\sprite\sprite_subdivided.cpp">
+    <ClCompile Include="include\Bloom\shaders\Shaders.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\Bloom\waveFunctionCollapse\waveFunctionCollapse.cpp">
+    <ClCompile Include="include\Bloom\sprite\Sprite.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Bloom\text\Text.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Bloom\textures\Textures.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\Bloom\utils\Utils.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\glad\glad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_bassboostfilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_biquadresonantfilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_dcremovalfilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_echofilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_fftfilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_flangerfilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_freeverbfilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_lofifilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_robotizefilter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\soloud\soloud_waveshaperfilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -648,9 +659,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\glad\glad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GLFW\glfw3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GLFW\glfw3native.h">
@@ -1706,9 +1714,6 @@
     <ClInclude Include="include\steam\steamuniverse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\steam\isteamapplist.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\steam\isteamapps.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1844,61 +1849,25 @@
     <ClInclude Include="include\Bloom\bones\bones.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Bloom\collision\collision.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\engine\engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\framebuffers\bloom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\framebuffers\chromatic_aberration.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\framebuffers\framebuffers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\kinematicBody\KinematicBody.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\particles\particles.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\shaders\shaders.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\shake\shake.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\sprite\sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\sprite\spritesheet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Bloom\SteamTools\steamtools.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\text\text.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\textures\textures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bloom\utils\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Bloom\dependencies.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Bloom\sprite\sprite_subdivided.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\HTTP\HTTPRequest.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Bloom\waveFunctionCollapse\waveFunctionCollapse.h">
+    <ClInclude Include="include\STBI\stb_image_write.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\steam\isteamdualsense.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\steam\isteamtimeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GLFW\glfw3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1906,10 +1875,11 @@
     <Library Include="lib\FastNoise.lib" />
     <Library Include="include\steam\lib\win32\sdkencryptedappticket.lib" />
     <Library Include="include\steam\lib\win64\sdkencryptedappticket64.lib" />
-    <Library Include="lib\steam_api.lib" />
     <Library Include="lib\glfw3.lib" />
     <Library Include="lib\glfw3_mt.lib" />
     <Library Include="lib\glfw3dll.lib" />
+    <Library Include="lib\FastNoiseD.lib" />
+    <Library Include="lib\steam_api64.lib" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="steam_appid.txt" />
@@ -1961,6 +1931,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="include\Bloom\res\engine\textures\wfc_water.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="include\Bloom\res\engine\textures\BloomLogo.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -1,7 +1,11 @@
 #ifndef BLOOM_APP
 #define BLOOM_APP
 
-#include "Bloom/engine/engine.h"
+#include "Bloom/dependencies.h"
+
+import Bloom.Engine;
+import Bloom.ECS;
+import Bloom.Utils;
 
 namespace Application {
     class App : public Game::Engine {
@@ -15,7 +19,10 @@ namespace Application {
 
         ~App();
     private:
-        // HERE GO VARIABLES
+        bool shouldClose = false;
+        ECS::World world;
+        int UPS = 0; // world updates per second
+
         Bloom::Sprite* test;
     };
 }
