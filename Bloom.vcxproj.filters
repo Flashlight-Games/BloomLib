@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bloom.aps">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="include\GLM\detail\func_common.inl">
       <Filter>Header Files</Filter>
     </None>
@@ -456,6 +453,7 @@
     <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_wfc_fragment.glsl" />
     <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_instanced_fragment.glsl" />
     <None Include="include\Bloom\res\engine\shaders\sprite\spriteshader_instanced_vertex.glsl" />
+    <None Include="steam_api64.dll" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="include\dearImGui\imgui.cpp">

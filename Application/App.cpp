@@ -1,6 +1,6 @@
 #include "App.h"
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     auto app = static_cast<Application::App*>(glfwGetWindowUserPointer(window));
     switch (key) {
     case GLFW_KEY_ESCAPE:
@@ -11,11 +11,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
 }
 
-void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
+static void mouse_callback(GLFWwindow* window, int key, int action, int mods) {
     auto app = static_cast<Application::App*>(glfwGetWindowUserPointer(window));
 }
 
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
     auto app = static_cast<Application::App*>(glfwGetWindowUserPointer(window));
 }
 
@@ -70,7 +70,7 @@ void Application::App::Update() {
     using clock = steady_clock;
     using duration = duration<double>;
 
-    constexpr double FIXED_TIMESTEP = 1.0 / 480.0; // 60 UPS for physics
+    constexpr float FIXED_TIMESTEP = 1.0f / 480.0f; // 60 UPS for physics
     constexpr auto MAX_FRAME_TIME = duration(1.0 / 20.0);
 
     auto lastUpdateTime = clock::now();
@@ -97,7 +97,7 @@ void Application::App::Update() {
         // Update UPS every second
         auto upsDuration = duration_cast<duration>(currentTime - upsTimer);
         if (upsDuration.count() >= 1.0) {
-            this->UPS = frameCount / upsDuration.count();
+            this->UPS = (int)(frameCount / upsDuration.count());
             frameCount = 0;
             upsTimer = currentTime;
         }

@@ -1,4 +1,4 @@
-export module Bloom.ECS;
+module;
 
 #include <atomic>
 #include <vector>
@@ -11,6 +11,8 @@ export module Bloom.ECS;
 #include <mutex>
 #include <queue>
 #include <functional>
+
+export module Bloom.ECS;
 
 export namespace ECS {
     using EntityID = std::size_t;

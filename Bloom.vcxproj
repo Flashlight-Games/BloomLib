@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Bloom.aps" />
     <None Include="glfw3.dll">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">false</ExcludedFromBuild>
@@ -200,6 +199,7 @@
     <None Include="steam_api.dll">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <None Include="steam_api64.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Include\Bloom\res\**\*.*">
