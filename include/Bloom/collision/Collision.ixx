@@ -1,7 +1,7 @@
 #define PI 3.14159265358979323846   
 
-#include "Bloom/dependencies.h"
-#include <iostream>
+#include <GLM/glm.hpp>
+#include <GLM/ext/matrix_transform.hpp>
 
 export module Bloom.Collision;
 
@@ -68,7 +68,7 @@ export namespace Bloom {
             this->channel = channel;
         }
 
-        float oneDimensionalCheck(Bloom::collisionBox* A, Bloom::collisionBox* B, uint16_t lineAngle, glm::mat4 transformationMatrix, glm::mat4 otherTransformationMatrix) {
+        float oneDimensionalCheck(collisionBox* A, collisionBox* B, uint16_t lineAngle, glm::mat4 transformationMatrix, glm::mat4 otherTransformationMatrix) {
             float thisPointA = 0;
             float thisPointB = 0;
             float thisPointC = 0;
@@ -440,8 +440,8 @@ export namespace Bloom {
         glm::vec2 thisD;
     };
 
-    glm::vec2 LineTrace(std::string channel, collisionBox* other, glm::vec2 start, glm::vec2 end) {
-        if (other->getChannel() != channel)
+    glm::vec2 LineTrace(std::set<std::string> channels, collisionBox* other, glm::vec2 start, glm::vec2 end) {
+        if (!channels.contains(other->getChannel()))
             return glm::vec2(INFINITY);
 
         if (other->check_Point(start))

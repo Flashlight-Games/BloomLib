@@ -47,6 +47,7 @@ void Application::App::UILoop() {
 void Application::App::GameLoop() {
     // RENDER PIXEL BACKGROUND
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    this->test->SetRotation(std::sin(GetTime() / 3.0f) * 180.f);
     this->test->Draw();
 }
 
@@ -58,70 +59,15 @@ void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
     glfwSetScrollCallback(GetWindow(), scroll_callback);
-
-    update_thread = new std::thread(&Application::App::Update, this);
-
-    this->test = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
+    this->test = new Bloom::Sprite("Application/res/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
     this->test->SetLocation(glm::vec2(12));
 }
 
-void Application::App::Update() {
-    using namespace std::chrono;
-    using clock = steady_clock;
-    using duration = duration<double>;
-
-    constexpr float FIXED_TIMESTEP = 1.0f / 480.0f; // 60 UPS for physics
-    constexpr auto MAX_FRAME_TIME = duration(1.0 / 20.0);
-
-    auto lastUpdateTime = clock::now();
-    double accumulator = 0.0;
-    int frameCount = 0;
-    auto upsTimer = clock::now();
-
-    while (!shouldClose) {
-        auto currentTime = clock::now();
-        auto frameTime = duration_cast<duration>(currentTime - lastUpdateTime);
-        lastUpdateTime = currentTime;
-
-        // Cap frame time
-        frameTime = std::min(frameTime, MAX_FRAME_TIME);
-        accumulator += frameTime.count();
-
-        // Fixed timestep for physics/game logic
-        while (accumulator >= FIXED_TIMESTEP) {
-            world.update(FIXED_TIMESTEP);
-            accumulator -= FIXED_TIMESTEP;
-            frameCount++;
-        }
-
-        // Update UPS every second
-        auto upsDuration = duration_cast<duration>(currentTime - upsTimer);
-        if (upsDuration.count() >= 1.0) {
-            this->UPS = (int)(frameCount / upsDuration.count());
-            frameCount = 0;
-            upsTimer = currentTime;
-        }
-
-        // Adaptive sleep
-        constexpr auto MIN_SLEEP_TIME = duration(0.001); // 1ms
-        auto targetTime = currentTime + duration(FIXED_TIMESTEP);
-        auto sleepTime = targetTime - clock::now();
-
-        if (sleepTime > MIN_SLEEP_TIME) {
-            std::this_thread::sleep_for(sleepTime - MIN_SLEEP_TIME);
-        }
-
-        // Yield remaining time
-        std::this_thread::yield();
-    }
+void Application::App::Update(float deltaTime) {
+    world.update(deltaTime);
 }
 
 Application::App::~App() {
-    shouldClose = true;
-
-    update_thread->join();
-    delete update_thread;
-
     #ifdef DEBUG
         std::cout << Utils::Green() << "APP CLOSED SUCCESSFULY\n" << Utils::Default();
     #endif

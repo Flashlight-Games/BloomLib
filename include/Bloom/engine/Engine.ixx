@@ -1,5 +1,6 @@
 #include "STBI/stb_image.h"
 #include "Bloom/dependencies.h"
+#include <csignal>
 
 export module Bloom.Engine;
 
@@ -10,8 +11,7 @@ import Bloom.Sprite;
 import Bloom.Text;
 import Bloom.Framebuffers;
 
-static void error_callback(int error, const char* description)
-{
+static void error_callback(int error, const char* description) {
     fprintf(stderr, "GLFW Error: %s\n", description);
 }
 
@@ -36,41 +36,34 @@ export namespace Game {
         bool rendering_enable_vsync = true;
 
         bool feature_enable_steam = true;
-        bool feature_enable_parallel_loop = false;
+        bool feature_enable_parallel_loop = true;
 
         std::string window_name = "Bloom";
-        const char* icon_path = "include/Bloom/res/engine/textures/BloomLogo.png";
+        const char* icon_path = "Application/res/textures/BloomLogo.png";
     };
 
     class Engine {
     public:
-        Engine(configuration config) : engine_config(config) {};
-        int Run() {
+        Engine(configuration config) : engine_config(config) { 
             //feature_enable_steam
             bool should_init_engine = !engine_config.feature_enable_steam;
             if (engine_config.feature_enable_steam)
                 should_init_engine = SteamTools::SteamManager::Init();
-            if (should_init_engine) {
-                int retval = 0;
-                retval = Init();
-                retval = Prep_Begin();
+            if (!should_init_engine)
+                throw std::runtime_error("Failed to Initialize Steam!");
 
-                while (retval == 0 && running) {
-                    retval = Prep_GameLoop();
-                    if (retval != 0)
-                        return retval;
-                    retval = Prep_UILoop();
-                    if (retval != 0)
-                        return retval;
-                    retval = EndLoop();
-                }
-                if (retval != 0) {
-                    CloseGame();
-                }
-                return retval;
+            Init();
+        };
+        void Run() {
+            Prep_Begin();
+
+            while (running) {
+                Prep_GameLoop();
+                Prep_UILoop();
+                EndLoop();
             }
-
-            return false;
+            
+            CloseGame();
         };
 
         glm::mat4* GetWindowProjectionMatrix() { return &window_projection_matrix; };
@@ -84,6 +77,7 @@ export namespace Game {
 
 
         int GetFPS() const { return fps; };
+        int GetUPS() { return ups; };
         int GetAverageFPS() { return average_fps; };
         float GetTime() { return game_time * delta_multiplier; };
         GLFWwindow* GetWindow() { return window; };
@@ -101,7 +95,8 @@ export namespace Game {
         void DrawPixelsToDefault(bool clear = true, float depth = 0.99) { (*fb_pixels).drawToDefault(glm::vec2(viewportParams) + (glm::vec2(windowWidth / pixel_windowWidth, windowHeight / pixel_windowHeight) / -2.0f), glm::vec2(viewportParams.b, viewportParams.a), clear, zoom, depth); };
         void DrawPixels(float depth = 0.99) { (*fb_pixels).draw(depth); };
         void SetCameraLocation(glm::vec2 location) {
-            location = -location; view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(glm::round(location), -1));
+            location = -location;
+            view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location, -1));
             fb_pixels->SetLocationOffset((location - glm::round(location)) / GetPixelWindowSize() * 2.0f);
         }
         auto GetPixelBuffer() { return this->fb_pixels; };
@@ -110,14 +105,14 @@ export namespace Game {
         double GetDeltaTimeMS() { return frame_time * delta_multiplier / 1000.0f; };
         double GetGameSpeed() { return GetDeltaTime() / (1000.0 / 60.0); };
 
-        int PlaySound(SoLoud::Wav* sample) { return soloud.play(*sample); };
-        int PlaySound(SoLoud::Wav* sample, float pitch) { int id = soloud.play(*sample); soloud.setRelativePlaySpeed(id, pitch); return id; };
-        void StopSound(int id) { soloud.stop(id); };
+        int PlaySound(SoLoud::Wav* sample) { return soloud->play(*sample); };
+        int PlaySound(SoLoud::Wav* sample, float pitch) { int id = soloud->play(*sample); soloud->setRelativePlaySpeed(id, pitch); return id; };
+        void StopSound(int id) { soloud->stop(id); };
 
-        int PlaySoundBackground(SoLoud::Wav* sample, float volume, bool looping) { int id = soloud.playBackground(*sample, volume); soloud.setLooping(id, looping); return id; };
+        int PlaySoundBackground(SoLoud::Wav* sample, float volume, bool looping) { int id = soloud->playBackground(*sample, volume); soloud->setLooping(id, looping); return id; };
 
-        void FadeVolume(int id, int target, int duration) { soloud.fadeVolume(id, target, duration); };
-        SoLoud::Soloud* GetSound() { return &soloud; };
+        void FadeVolume(int id, int target, int duration) { soloud->fadeVolume(id, target, duration); };
+        SoLoud::Soloud* GetSound() { return soloud; };
 
         void SetGameSpeedMultiplier(float multiplier) { delta_multiplier = multiplier; };
         float GetGameSpeedMultiplier() { return delta_multiplier; };
@@ -182,10 +177,13 @@ export namespace Game {
         auto GetFontRoboto() { return this->font_roboto; };
         auto GetFontPressStart() { return this->font_pressstart; };
     protected:
-        virtual int CloseGame() {
+        virtual void CloseGame() {
+            if (!running)
+                return;
+
             running = false;
 
-            soloud.deinit();
+            soloud->deinit();
             SteamAPI_Shutdown();
             glfwDestroyWindow(GetWindow());
             glfwTerminate();
@@ -195,154 +193,135 @@ export namespace Game {
             delete debug_sprite;
 
             std::cout << Utils::Default() << Utils::Default(true);
-            return 0;
         }
 
     private:
         // EVENTS
-        int Init() {
-            try {
-                glfwSetErrorCallback(error_callback);
+        void Init() {
+            install_global_handlers();
 
-                // CONFIGURATION
-                this->windowWidth = engine_config.resolution_window_size.x;
-                this->windowHeight = engine_config.resolution_window_size.y;
-                this->pixel_windowWidth = engine_config.resolution_pixels_size.x;
-                this->pixel_windowHeight = engine_config.resolution_pixels_size.y;
-                pixel_ratio = glm::vec2(pixel_windowWidth / (float)windowWidth, pixel_windowHeight / (float)windowHeight);
+            glfwSetErrorCallback(error_callback);
 
-                // INITIALIZATION
-                glfwInit();
+            // CONFIGURATION
+            this->windowWidth = engine_config.resolution_window_size.x;
+            this->windowHeight = engine_config.resolution_window_size.y;
+            this->pixel_windowWidth = engine_config.resolution_pixels_size.x;
+            this->pixel_windowHeight = engine_config.resolution_pixels_size.y;
+            pixel_ratio = glm::vec2(pixel_windowWidth / (float)windowWidth, pixel_windowHeight / (float)windowHeight);
 
-                srand((unsigned)time(NULL));
+            // INITIALIZATION
+            glfwInit();
 
-                glfwWindowHint(GLFW_RESIZABLE, engine_config.glfw_resizeable);
-                glfwWindowHint(GLFW_DECORATED, engine_config.glfw_decorated);
-                glfwWindowHint(GLFW_FLOATING, engine_config.glfw_topmost);
-                glfwWindowHint(GLFW_MAXIMIZED, engine_config.glfw_maximized);
-                glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, engine_config.glfw_transparent);
-                glfwWindowHint(GLFW_DEPTH_BITS, 24);
-                glfwWindowHint(GLFW_SAMPLES, 4);
+            srand((unsigned)time(NULL));
 
-                if (engine_config.glfw_maximized && engine_config.glfw_full_screen) {
-                    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+            glfwWindowHint(GLFW_RESIZABLE, engine_config.glfw_resizeable);
+            glfwWindowHint(GLFW_DECORATED, engine_config.glfw_decorated);
+            glfwWindowHint(GLFW_FLOATING, engine_config.glfw_topmost);
+            glfwWindowHint(GLFW_MAXIMIZED, engine_config.glfw_maximized);
+            glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, engine_config.glfw_transparent);
+            glfwWindowHint(GLFW_DEPTH_BITS, 24);
+            glfwWindowHint(GLFW_SAMPLES, 4);
 
-                    windowWidth = mode->width;
-                    windowHeight = mode->height;
-                }
+            if (engine_config.glfw_maximized && engine_config.glfw_full_screen) {
+                const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-                GLFWmonitor* target_monitor = (engine_config.glfw_full_screen ? glfwGetPrimaryMonitor() : NULL);
-                window = glfwCreateWindow(windowWidth, windowHeight, engine_config.window_name.c_str(), target_monitor, NULL);
-                if (window == NULL)
-                {
-                    throw std::runtime_error("Failed to create GLFW window");
-                    return -1;
-                }
-                int width, height;
-                glfwGetWindowSize(window, &width, &height);
-                windowWidth = width; windowHeight = height;
-                OverrideRenderSize(glm::vec2(windowWidth, windowHeight));
-
-                glfwSetFramebufferSizeCallback(window, ResizeLoop);
-                glfwMakeContextCurrent(window);
-
-                if (!engine_config.glfw_show_cursor) {
-                    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // HIDE CURSOR
-                    if (glfwRawMouseMotionSupported())
-                        glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
-                    auto center = GetWindowSize() / 2.0f;
-                    glfwSetCursorPos(GetWindow(), center.x, center.y);
-                }
-
-                if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) // GLAD INIT, GL Context init
-                {
-                    throw std::runtime_error("Failed to initialize GLAD");
-                    return -1;
-                }
-
-                stbi_set_flip_vertically_on_load(true);
-
-                glEnable(GL_BLEND);
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-                if (engine_config.rendering_face_culling)
-                    glEnable(GL_CULL_FACE);            // Disable Double Sided Polygons
-                else
-                    glDisable(GL_CULL_FACE);           // Enable Double Sided Polygons
-
-                if (engine_config.rendering_anti_aliasing) {
-                    glEnable(GL_MULTISAMPLE);          // ENABLE ANTI-ALIASING
-                } else
-                    glDisable(GL_MULTISAMPLE);          // Disable ANTI-ALIASING
-
-                if (engine_config.glfw_use_depth)
-                    glEnable(GL_DEPTH_TEST);            // ENABLE DEPTH TESTING
-                else
-                    glDisable(GL_DEPTH_TEST);           // DISABLE DEPTH TESTING
-
-                glDepthFunc(GL_LESS);
-                glClearDepth(1.0);
-                glDepthMask(GL_TRUE);
-
-                glfwSwapInterval(engine_config.rendering_enable_vsync);    // Enble VSYNC
-
-                IMGUI_CHECKVERSION();
-                ImGui::CreateContext();
-                ImGuiIO& io = ImGui::GetIO();
-                io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
-
-                ImGui::StyleColorsDark();
-                ImGui_ImplGlfw_InitForOpenGL(window, true);
-                ImGui_ImplOpenGL3_Init("#version 430");
-
-                // CREATE PROJ MATRICES
-                pixel_projection_matrix = glm::ortho(0.0f, (float)pixel_windowWidth, 0.0f, (float)pixel_windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
-                window_projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
-                view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0));
-
-                fb_pixels = new Bloom::Framebuffer(GetPixelWindowSize(), false);
-
-                soloud.init();
-
-                glfwSetWindowUserPointer(GetWindow(), this);
-
-                GLFWimage images[1];
-                images[0].pixels = stbi_load(engine_config.icon_path, &images[0].width, &images[0].height, 0, 4); //rgba channels 
-                glfwSetWindowIcon(window, 1, images);
-                stbi_image_free(images[0].pixels);
-
-                steam_manager = new SteamTools::SteamManager();
-                debug_sprite = new Bloom::Sprite("include/Bloom/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetWindowProjectionMatrix());
-
-                this->font_alagard = new Bloom::Text("include/Bloom/res/engine/fonts/Alagard/alagard.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
-                this->font_roboto = new Bloom::Text("include/Bloom/res/engine/fonts/Roboto/Roboto-Black.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
-                this->font_pressstart = new Bloom::Text("include/Bloom/res/engine/fonts/PressStart/PressStart.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
-
-                glViewport(0, 0, windowWidth, windowHeight);
-                viewportParams = glm::vec4(0, 0, windowWidth, windowHeight);
-                glClearColor(0.1, 0.1, 0.1, 1.0); // THIS IS RESET BY THE SPLASH SCREEN
+                windowWidth = mode->width;
+                windowHeight = mode->height;
             }
-            catch (const std::exception& ex) {
-            #ifdef DEBUG
-                std::cerr << "Encountered Bloom Exception during Initialization : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
-                return -1;
-            #endif // DEBUG
+
+            GLFWmonitor* target_monitor = (engine_config.glfw_full_screen ? glfwGetPrimaryMonitor() : NULL);
+            window = glfwCreateWindow(windowWidth, windowHeight, engine_config.window_name.c_str(), target_monitor, NULL);
+            if (window == NULL) {
+                throw std::runtime_error("Failed to create GLFW window");
             }
-            return 0;
+            int width, height;
+            glfwGetWindowSize(window, &width, &height);
+            windowWidth = width; windowHeight = height;
+            OverrideRenderSize(glm::vec2(windowWidth, windowHeight));
+
+            glfwSetFramebufferSizeCallback(window, ResizeLoop);
+            glfwMakeContextCurrent(window);
+
+            if (!engine_config.glfw_show_cursor) {
+                glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // HIDE CURSOR
+                if (glfwRawMouseMotionSupported())
+                    glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+                auto center = GetWindowSize() / 2.0f;
+                glfwSetCursorPos(GetWindow(), center.x, center.y);
+            }
+
+            if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {// GLAD INIT, GL Context init 
+                throw std::runtime_error("Failed to initialize GLAD");
+            }
+
+            stbi_set_flip_vertically_on_load(true);
+
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            if (engine_config.rendering_face_culling)
+                glEnable(GL_CULL_FACE);            // Disable Double Sided Polygons
+            else
+                glDisable(GL_CULL_FACE);           // Enable Double Sided Polygons
+
+            if (engine_config.rendering_anti_aliasing) {
+                glEnable(GL_MULTISAMPLE);          // ENABLE ANTI-ALIASING
+            } else
+                glDisable(GL_MULTISAMPLE);          // Disable ANTI-ALIASING
+
+            if (engine_config.glfw_use_depth)
+                glEnable(GL_DEPTH_TEST);            // ENABLE DEPTH TESTING
+            else
+                glDisable(GL_DEPTH_TEST);           // DISABLE DEPTH TESTING
+
+            glDepthFunc(GL_LESS);
+            glClearDepth(1.0);
+            glDepthMask(GL_TRUE);
+
+            glfwSwapInterval(engine_config.rendering_enable_vsync);    // Enble VSYNC
+
+            IMGUI_CHECKVERSION();
+            ImGui::CreateContext();
+            ImGuiIO& io = ImGui::GetIO();
+            io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+
+            ImGui::StyleColorsDark();
+            ImGui_ImplGlfw_InitForOpenGL(window, true);
+            ImGui_ImplOpenGL3_Init("#version 430");
+
+            // CREATE PROJ MATRICES
+            pixel_projection_matrix = glm::ortho(0.0f, (float)pixel_windowWidth, 0.0f, (float)pixel_windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
+            window_projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
+            view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, -1, 0));
+
+            fb_pixels = new Bloom::Framebuffer(GetPixelWindowSize(), false);
+
+            soloud = new SoLoud::Soloud();
+            soloud->init();
+
+            glfwSetWindowUserPointer(GetWindow(), this);
+
+            GLFWimage images[1];
+            images[0].pixels = stbi_load(engine_config.icon_path, &images[0].width, &images[0].height, 0, 4); //rgba channels 
+            glfwSetWindowIcon(window, 1, images);
+            stbi_image_free(images[0].pixels);
+
+            steam_manager = new SteamTools::SteamManager();
+            debug_sprite = new Bloom::Sprite("Application/res/textures/rect16.png", 1, GetViewMatrix(), GetWindowProjectionMatrix());
+
+            this->font_alagard = new Bloom::Text("Application/res/fonts/Alagard/alagard.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
+            this->font_roboto = new Bloom::Text("Application/res/fonts/Roboto/Roboto-Black.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
+            this->font_pressstart = new Bloom::Text("Application/res/fonts/PressStart/PressStart.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
+
+            glViewport(0, 0, windowWidth, windowHeight);
+            viewportParams = glm::vec4(0, 0, windowWidth, windowHeight);
+            glClearColor(0.1, 0.1, 0.1, 1.0); // THIS IS RESET BY THE SPLASH SCREEN
+            
         }
-        int Prep_Begin() {
-            try {
-                if (engine_config.feature_enable_parallel_loop)
-                    update_thread = new std::thread(&Engine::UpdateLoop, this);
-                Begin();
-            }
-            catch (const std::exception& ex) {
-            #ifdef DEBUG
-                std::cerr << "Encountered Bloom Exception during Beginning : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
-                return -1;
-            #endif
-            }
-            return 0;
+        void Prep_Begin() {
+            if (engine_config.feature_enable_parallel_loop)
+                update_thread = new std::thread(&Engine::UpdateLoop, this);
+            Begin();
         }
 
         virtual void Begin() {
@@ -350,101 +329,75 @@ export namespace Game {
             throw std::runtime_error(errmsg);
         }
 
-
-
         // LOOPS
-        int Prep_GameLoop() {
-            try {
-                if (!window_init_ready) {
-                    window_init_ready = true;
-                    glfwSetTime(0.0);
-                    return 0;
-                }
-
-                // PREPARE LOOP
-                SteamTools::SteamManager::ProcessCallbacks();
-                double delta_time = GetDeltaTime();
-                if (delta_time > 0) {
-                    fps = 1000 / delta_time;
-                }
-
-                if (glfwGetTime() >= last_fps_time + 1) {
-                    this->last_fps_time = glfwGetTime();
-                    this->average_fps = (fps + prev_fps) / 2.0;
-                    this->prev_fps = fps;
-                }
-
-                glfwPollEvents();
-                Prep_InputLoop();
-                if (!isLocked)
-                    game_time = glfwGetTime();
-
-                frame_time = std::chrono::duration<double>(GetHighResTime() - last_time).count() * 1000;
-                last_time = GetHighResTime();
-
-                double temp_cursor_position_x;
-                double temp_cursor_position_y;
-                glfwGetCursorPos(window, &temp_cursor_position_x, &temp_cursor_position_y);
-                cursor_position = glm::vec2(temp_cursor_position_x, renderSize.y - temp_cursor_position_y) - mouseOffset;
-                cursor_position_window = cursor_position / renderSize * engine_config.resolution_window_size;
-
-                // BINDING AND CLEARING PIXEL FRAMEBUFFER
-                bindDefaultFramebuffer(true);
-
-                if (!loaded) {
-                    glClearColor(0.0, 0.0, 0.0, 0.0);
-                    loaded = true;
-                }
-                else {
-                    GameLoop(); // ACTUAL GAME CODE
-                }
+        void Prep_GameLoop() {
+            if (!window_init_ready) {
+                window_init_ready = true;
+                glfwSetTime(0.0);
+                return;
             }
-            catch (const std::exception& ex) {
-            #ifdef DEBUG
-                std::cerr << "Encountered Bloom Exception during GameLoop : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
-                return -1;
-            #endif
+
+            // PREPARE LOOP
+            SteamTools::SteamManager::ProcessCallbacks();
+            double delta_time = GetDeltaTime();
+            if (delta_time > 0) {
+                fps = 1000 / delta_time;
             }
-            return 0;
+
+            if (glfwGetTime() >= last_fps_time + 1) {
+                this->last_fps_time = glfwGetTime();
+                this->average_fps = (fps + prev_fps) / 2.0;
+                this->prev_fps = fps;
+            }
+
+            glfwPollEvents();
+            Prep_InputLoop();
+            if (!isLocked)
+                game_time = glfwGetTime();
+
+            frame_time = std::chrono::duration<double>(GetHighResTime() - last_time).count() * 1000;
+            last_time = GetHighResTime();
+
+            double temp_cursor_position_x;
+            double temp_cursor_position_y;
+            glfwGetCursorPos(window, &temp_cursor_position_x, &temp_cursor_position_y);
+            cursor_position = glm::vec2(temp_cursor_position_x, renderSize.y - temp_cursor_position_y) - mouseOffset;
+            if (!engine_config.glfw_show_cursor) {
+                cursor_position = glm::clamp(cursor_position, glm::vec2(0), renderSize);
+            }
+            cursor_position_window = cursor_position / renderSize * engine_config.resolution_window_size;
+
+            // BINDING AND CLEARING PIXEL FRAMEBUFFER
+            bindDefaultFramebuffer(true);
+
+            if (!loaded) {
+                glClearColor(0.0, 0.0, 0.0, 0.0);
+                loaded = true;
+            }
+            else {
+                return GameLoop(); // ACTUAL GAME CODE
+            }
         }
         virtual void GameLoop() {
             std::string errmsg = "Please define application method 'GameLoop'";
             throw std::runtime_error(errmsg);
         }
 
-        int Prep_UILoop() {
-            try {
-                ImGui_ImplOpenGL3_NewFrame();
-                ImGui_ImplGlfw_NewFrame();
-                ImGuiIO& io = ImGui::GetIO();
-                ImGui::NewFrame();
-                if (loaded) {
-                    UILoop();
-                }
+        void Prep_UILoop() {
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGuiIO& io = ImGui::GetIO();
+            ImGui::NewFrame();
+            if (loaded) {
+                return UILoop();
             }
-            catch (const std::exception& ex) {
-            #ifdef DEBUG
-                std::cerr << "Encountered Bloom Exception during UILoop : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
-                return -1;
-            #endif
-            }
-            return 0;
         }
         virtual void UILoop() {
             std::string errmsg = "Please define application method 'UILoop'";
             throw std::runtime_error(errmsg);
         }
-        int Prep_InputLoop() {
-            try {
-                InputLoop();
-            }
-            catch (const std::exception& ex) {
-            #ifdef DEBUG
-                std::cerr << "Encountered Bloom Exception during InputLoop : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
-                return -1;
-            #endif
-            }
-            return 0;
+        void Prep_InputLoop() {
+            return InputLoop();
         }
 
         virtual void InputLoop() {
@@ -452,36 +405,77 @@ export namespace Game {
                 glfwSetWindowShouldClose(window, true);*/
         }
         // BACK
-        int EndLoop() {
-            try {
-                ImGui::Render();
-                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        void EndLoop() {
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-                // Rendering pipeline end
-                glfwSwapBuffers(window); // Render buffer to screen
+            // Rendering pipeline end
+            glfwSwapBuffers(window); // Render buffer to screen
 
-                if (glfwWindowShouldClose(GetWindow()) && running) { // END IF SHOULD CLOSE
-                    return CloseGame();
-                }
+            if (glfwWindowShouldClose(GetWindow()) && running) { // END IF SHOULD CLOSE
+                return CloseGame();
             }
-            catch (const std::exception& ex) {
-            #ifdef DEBUG
-                std::cerr << "Encountered Bloom Exception during EndLoop : " << ex.what() << " in " << __FILE__ << ", line " << __LINE__ << std::endl;
-                return -1;
-            #endif
-            }
-            return 0;
         }
 
         void UpdateLoop() {
+            install_global_handlers();
+
+            using namespace std::chrono;
+            using clock = steady_clock;
+            using duration = duration<double>;
+
+            constexpr double FIXED_TIMESTEP = 1.0 / 480.0;
+            constexpr auto MAX_FRAME_TIME = duration(1.0 / 20.0);
+
+            auto lastUpdateTime = clock::now();
+            double accumulator = 0.0;
+            int frameCount = 0;
+            auto upsTimer = clock::now();
+
             while (!glfwWindowShouldClose(GetWindow())) {
-                Update();
+                auto currentTime = clock::now();
+                auto frameTime = duration_cast<duration>(currentTime - lastUpdateTime);
+                lastUpdateTime = currentTime;
+
+                // Cap frame time
+                frameTime = std::min(frameTime, MAX_FRAME_TIME);
+                accumulator += frameTime.count();
+
+                // Fixed timestep for physics/game logic
+                while (accumulator >= FIXED_TIMESTEP) {
+                    Update(static_cast<float>(FIXED_TIMESTEP));
+                    accumulator -= FIXED_TIMESTEP;
+                    frameCount++;
+                }
+
+                // Update UPS every second
+                auto upsDuration = duration_cast<duration>(currentTime - upsTimer);
+                if (upsDuration.count() >= 1.0) {
+                    this->ups = frameCount / static_cast<int>(upsDuration.count());
+                    frameCount = 0;
+                    upsTimer = currentTime;
+                }
+
+                // Adaptive sleep
+                constexpr auto MIN_SLEEP_TIME = duration(0.001); // 1ms
+                auto targetTime = currentTime + duration(FIXED_TIMESTEP);
+                auto sleepTime = targetTime - clock::now();
+
+                if (sleepTime > MIN_SLEEP_TIME) {
+                    std::this_thread::sleep_for(sleepTime - MIN_SLEEP_TIME);
+                }
+
+                // Yield remaining time
+                std::this_thread::yield();
             }
+
             update_thread->detach();
             delete update_thread;
         }
 
-        virtual void Update() {};
+        virtual void Update(float deltaTime) {};
+
+        void install_global_handlers();
 
         glm::mat4 window_projection_matrix;                                 // PROJECTION MATRIX FOR WINDOW
         glm::mat4 pixel_projection_matrix;                                  // PROJECTION MATRIX FOR PIXELS
@@ -495,12 +489,13 @@ export namespace Game {
         
         glm::vec2 mouseOffset = glm::vec2(0);
 
-        SoLoud::Soloud soloud;                                              // AUDIO MANAGER
+        SoLoud::Soloud* soloud;                                             // AUDIO MANAGER
 
 
         Bloom::Framebuffer* fb_pixels;                                      // PIXEL FRAMEBUFFER
         GLFWwindow* window;                                                 // APPLICATION WINDOW
         float fps = 0;                                                      // FRAMES PER SECOND
+        float ups = 0;                                                      // UPDATES PER SECOND (PARALLEL LOOP)
         float prev_fps = 0;                                                 // PREVIOUS FRAMES PER SECOND
         float average_fps = 0;                                              // AVERAGE FRAMES PER SECOND
         float last_fps_time = 0;                                            // LAST TIME AVERAGE FPS WAS RECORDED
@@ -508,7 +503,7 @@ export namespace Game {
         bool isLocked = false;                                              // TIME IS LOCKED
         bool window_init_ready = false;                                     // PROTECTION FOR WINDOW STARTUP TIME
 
-        glm::vec2 cursor_position_window = glm::vec2(0, 0);                        // CURSOR POSITION
+        glm::vec2 cursor_position_window = glm::vec2(0, 0);                 // CURSOR POSITION
         glm::vec2 cursor_position = glm::vec2(0, 0);                        // CURSOR POSITION IN PIXEL
 
         std::chrono::steady_clock::time_point last_time = GetHighResTime(); // TIME AT LAST FRAME
@@ -533,6 +528,98 @@ export namespace Game {
 
         float splash_screen_time = 1.0;                                     // SPLASH SCREEN DURATION
     };
+
+    void fancyStacktrace(int skip) {
+        // reset signal catchers if caught an exception, then those aren't necessary
+        std::signal(SIGSEGV, SIG_DFL);
+        std::signal(SIGABRT, SIG_DFL);
+        
+        std::cerr << "\x1b[1;39;41m";
+        auto trace = std::stacktrace::current(skip);
+        std::vector<int> numbers;
+        std::vector<std::string> lines;
+        std::vector<std::string> functionNames;
+        int cutLocation = -1;
+        int longest = 0;
+        int maxnum = 0;
+
+        for (int i = 0; i < trace.size(); i++) {
+            auto entry = trace[i];
+            auto file = entry.source_file();
+            auto description = entry.description();
+            if (file.contains("Dungeon") && !description.contains("install_global_handlers")) {
+                auto funcStart = description.find("!");
+                auto funcEnd = description.find("+");
+                auto funcName = description.substr(funcStart + 1, funcEnd - funcStart - 1);
+                numbers.push_back(i);
+                maxnum = std::max(maxnum, i);
+                functionNames.push_back(funcName);
+                if (!lines.empty()) {
+                    auto firstLine = lines[0];
+
+                    for (int j = 0; j < cutLocation; j++) {
+                        if (file[j] != firstLine[j])
+                            cutLocation = j;
+                    }
+                }
+                auto line = file + ":" + std::to_string(entry.source_line());
+                lines.push_back(line);
+                longest = std::max(longest, (int)line.length());
+                if (cutLocation == -1) {
+                    cutLocation = functionNames[0].length();
+                }
+            }
+        }
+
+        for (int i = 0; i < lines.size(); i++) {
+            auto number = numbers[i];
+            auto line = lines[i];
+            auto functionName = functionNames[i];
+
+            if (i == 1)
+                std::cerr << "\x1b[1;39;101m";
+
+            std::cerr << "  " << number; 
+            int numdiff = maxnum / 10 - number / 10;
+            for (int j = 0; j < numdiff; j++) {
+                std::cout << " ";
+            }
+            std::cout << " - " << line.substr(cutLocation);
+            for (int k = line.length(); k < longest + 2; k++) {
+                std::cout << " ";
+            }
+            std::cout << functionName << "\n";
+        }
+
+        std::cerr << Utils::Default(true);
+    }
+
+    void signal_handler(int sig) {
+        std::cerr << "\x1b[1;39;41m" << "\nCaught signal " << sig << " — dumping stack:\n";
+        fancyStacktrace(2);
+        std::abort();
+    }
+
+    void Engine::install_global_handlers() {
+        std::set_terminate([] {
+            try {
+                if (auto e = std::current_exception())
+                    std::rethrow_exception(e);
+            }
+            catch (const std::exception& e) {
+                std::cerr << "\x1b[1;39;41m" << "\nUnhandled exception: " << e.what() << '\n';
+            }
+            fancyStacktrace(1);
+            //std::abort();
+            });
+
+        // Basic POSIX / signal fallback
+        std::signal(SIGSEGV, signal_handler);
+        std::signal(SIGABRT, signal_handler);
+        std::signal(SIGILL, signal_handler);
+        std::signal(SIGFPE, signal_handler);
+        std::signal(SIGTERM, signal_handler);
+    }
 }
 
 void ResizeLoop(GLFWwindow* window, int width, int height) {  // GLFW RESIZING
@@ -557,4 +644,4 @@ void ResizeLoop(GLFWwindow* window, int width, int height) {  // GLFW RESIZING
     engine->SetViewportParams(viewportParams);
     engine->OverrideRenderSize(renderArea);
     engine->SetMouseOffset(diff / 2.0f);
-}
+}////////////////

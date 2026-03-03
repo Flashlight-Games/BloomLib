@@ -2,8 +2,6 @@
 #include <GLM/glm.hpp>
 #include <GLFW/glfw3.h>
 #include <FastNoise/FastNoise.h>
-#define NOMINMAX
-#include <windows.h>
 
 export module Bloom.Utils;
 
@@ -274,7 +272,7 @@ export namespace Utils {
         std::cout << std::endl;
     }
 
-    bool CopyToClipboard(std::string text) {
+    /*bool CopyToClipboard(std::string text) {
         if (text != "") {
             if (!OpenClipboard(NULL)) {
                 return false;
@@ -324,7 +322,7 @@ export namespace Utils {
         CloseClipboard();
 
         return clipboardString;
-    }
+    }*/
 
     int GCD(int a, int b) { // greatest common denominator
         while (b != 0) {
@@ -357,5 +355,12 @@ export namespace Utils {
 
     bool isPowerOfTwo(int x) {
         return x > 0 && (x & (x - 1)) == 0;
+    }
+
+    void GetFilesInFolder(const std::filesystem::path& directory_path, std::vector<std::string>& found_files) {
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(directory_path)) {
+            if (std::filesystem::is_regular_file(entry.path()))
+                found_files.push_back(entry.path().string());
+        }
     }
 }

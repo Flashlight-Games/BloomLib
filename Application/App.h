@@ -15,13 +15,11 @@ namespace Application {
         void GameLoop();
         void UILoop();
         void InputLoop();
-        void Update();
+        void Update(float deltaTime) override;
 
         ~App();
     private:
-        bool shouldClose = false;
         ECS::World world;
-        int UPS = 0; // world updates per second
 
         Bloom::Sprite* test;
     };

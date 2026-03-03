@@ -11,5 +11,5 @@ int main()
     settings.feature_enable_steam = false;
 
     Application::App App = Application::App(settings);
-    return App.Run();
+    App.Run();
 }

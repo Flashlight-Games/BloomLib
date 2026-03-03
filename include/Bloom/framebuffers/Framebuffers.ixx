@@ -38,15 +38,10 @@ export namespace Bloom {
 
             if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
                 throw std::runtime_error("GL_FRAMEBUFFER NOT COMPLETE!");
-
-            fbShader.use();
-            this->offset_uid = fbShader.getUniformId("offset");
-            this->depth_uid = fbShader.getUniformId("custom_depth");
         }
         Framebuffer(glm::vec2 size, bool linear_scaling) : size(size) {
             initFramebuffer();
-            fbTexture = new Texture2D(NULL, size, linear_scaling, GL_RGBA);
-            AddTextureComponent(fbTexture);
+            AddTextureComponent(new Texture2D(NULL, size, linear_scaling, GL_RGBA));
 
             if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
                 throw std::runtime_error("GL_FRAMEBUFFER NOT COMPLETE!");
@@ -95,8 +90,7 @@ export namespace Bloom {
             const GLfloat clearColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
             const GLfloat clearDepth = 1.0f;
 
-            for (int i = 0; i < clear_idx.size(); i++)
-            {
+            for (int i = 0; i < clear_idx.size(); i++) {
                 glClearBufferfv(GL_COLOR, clear_idx.at(i), clearColor);
                 glClearBufferfv(GL_DEPTH, clear_idx.at(i), &clearDepth);
             }
@@ -121,7 +115,9 @@ export namespace Bloom {
             glDrawArrays(GL_TRIANGLES, 0, 6);
         }
         virtual void drawToDefault(glm::vec2 offset = glm::vec2(0), glm::vec2 window_size = glm::vec2(0), bool clear = true, float zoom = 1.0, std::vector<Bloom::Texture2D*> extra_textures = {}, float depth = 0.99) {
-            bindDefaultFramebuffer(clear, window_size.x, window_size.y, offset, zoom); draw(depth, extra_textures);
+            bindDefaultFramebuffer(clear, window_size.x, window_size.y, offset, zoom); 
+            draw(depth, extra_textures);
+
         }
         virtual void drawToDefault(glm::vec2 offset = glm::vec2(0), glm::vec2 viewport_size = glm::vec2(0), bool clear = true, float zoom = 1.0, float depth = 0.99) {
             drawToDefault(offset, viewport_size, clear, zoom, {}, depth);
@@ -145,7 +141,7 @@ export namespace Bloom {
         Bloom::Shader* GetShader() { return &fbShader; };
 
         void setShader(const char* fragment_source) {
-            fbShader = Shader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_vertex.glsl", fragment_source);
+            fbShader = Shader("Application/res/shaders/framebuffer/framebuffer_vertex.glsl", fragment_source);
         };
         void setTextureUniform(const char* uniform, int id = 0) {
             fbShader.use(); fbShader.uniformInt(fbShader.getUniformId(uniform), id);
@@ -166,8 +162,8 @@ export namespace Bloom {
 
             if (fbTexture == nullptr)
                 fbTexture = texture;
-            else
-                attached_textures.push_back(texture);
+            
+            attached_textures.push_back(texture);
 
             attached_buffers.push_back(GL_COLOR_ATTACHMENT0 + color_attachments);
             color_attachments++;
@@ -199,6 +195,10 @@ export namespace Bloom {
             glEnableVertexAttribArray(1);
 
             glGenFramebuffers(1, &fbo);
+
+            fbShader.use();
+            this->offset_uid = fbShader.getUniformId("offset");
+            this->depth_uid = fbShader.getUniformId("custom_depth");
         }
         void AddDepthStencilComponent() {
             glGenRenderbuffers(1, &rbo);
@@ -217,7 +217,7 @@ export namespace Bloom {
         Texture2D* fbTexture = nullptr;
         uint32_t rbo;
 
-        Shader fbShader = Shader("include/Bloom/res/engine/shaders/framebuffer/framebuffer_vertex.glsl", "include/Bloom/res/engine/shaders/framebuffer/framebuffer_fragment_alpha.glsl");
+        Shader fbShader = Shader("Application/res/shaders/framebuffer/framebuffer_vertex.glsl", "Application/res/shaders/framebuffer/framebuffer_fragment_alpha.glsl");
 
         glm::vec2 offset = glm::vec2(0);
         uint8_t offset_uid;
