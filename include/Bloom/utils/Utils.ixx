@@ -163,7 +163,7 @@ export namespace Utils {
     }
 
     glm::vec2 PixelateResolution(glm::vec2 resolution, int new_height) {
-        return glm::vec2(resolution.x / (resolution.y / new_height), new_height);
+        return glm::vec2(std::round(resolution.x / (resolution.y / new_height)), new_height);
     }
 
     std::string Black(bool background = false) {
@@ -362,5 +362,12 @@ export namespace Utils {
             if (std::filesystem::is_regular_file(entry.path()))
                 found_files.push_back(entry.path().string());
         }
+    }
+
+    glm::vec2 CalculateWalkCycleOffset(float phase, glm::vec2 step_size, glm::vec2 direction, bool inverted) {
+        float invert = inverted ? -1.f : 1.f;
+
+        return glm::sin(phase * invert) * step_size.x * direction
+            + glm::max(glm::cos(phase * invert) * step_size.y + step_size.y / 3.f, 0.f) * glm::vec2(0, 1);
     }
 }

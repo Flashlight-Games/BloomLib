@@ -17800,10 +17800,11 @@ ma_result ma_device_init__jack(ma_context* pContext, const ma_device_config* pCo
         /* We need a period to act as a buffer for cases where the playback and capture device's end up desyncing. */
         {
             ma_uint32 marginSizeInFrames = rbSizeInFrames / pDevice->capture.internalPeriods;
-            void* pMarginData;
+            void* pMarginData = nullptr;
             ma_pcm_rb_acquire_write(&pDevice->jack.duplexRB, &marginSizeInFrames, &pMarginData);
             {
-                ma_zero_memory(pMarginData, marginSizeInFrames * ma_get_bytes_per_frame(pDevice->capture.format, pDevice->capture.channels));
+				if (pMarginData != nullptr)
+                    ma_zero_memory(pMarginData, marginSizeInFrames * ma_get_bytes_per_frame(pDevice->capture.format, pDevice->capture.channels));
             }
             ma_pcm_rb_commit_write(&pDevice->jack.duplexRB, marginSizeInFrames, pMarginData);
         }

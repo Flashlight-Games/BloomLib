@@ -29,7 +29,7 @@ export namespace Bloom {
                 original_shader = false;
             }
             else
-                SetShader(new Bloom::Shader("Application/res/shaders/sprite/spriteshader_vertex.glsl", "Application/res/shaders/sprite/spriteshader_fragment.glsl"), pixel_projection_matrix);
+                SetShader(new Bloom::Shader("Application/res/engine/shaders/sprite/spriteshader_vertex.glsl", "Application/res/engine/shaders/sprite/spriteshader_fragment.glsl"), pixel_projection_matrix);
 
             this->model_uid = this->shader->getUniformId("model");
             this->view_uid = this->shader->getUniformId("view");
@@ -130,7 +130,7 @@ export namespace Bloom {
         }
 
         void SetInstanced(glm::mat4* projection_matrix) {
-            SetShader(new Bloom::Shader("Application/res/shaders/sprite/spriteshader_instanced_vertex.glsl", "Application/res/shaders/sprite/spriteshader_instanced_fragment.glsl"), projection_matrix);
+            SetShader(new Bloom::Shader("Application/res/engine/shaders/sprite/spriteshader_instanced_vertex.glsl", "Application/res/engine/shaders/sprite/spriteshader_instanced_fragment.glsl"), projection_matrix);
         }
 
 

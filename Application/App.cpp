@@ -47,7 +47,6 @@ void Application::App::UILoop() {
 void Application::App::GameLoop() {
     // RENDER PIXEL BACKGROUND
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    this->test->SetRotation(std::sin(GetTime() / 3.0f) * 180.f);
     this->test->Draw();
 }
 
@@ -59,7 +58,8 @@ void Application::App::Begin() {
     glfwSetKeyCallback(GetWindow(), key_callback);
     glfwSetMouseButtonCallback(GetWindow(), mouse_callback);
     glfwSetScrollCallback(GetWindow(), scroll_callback);
-    this->test = new Bloom::Sprite("Application/res/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
+
+    this->test = new Bloom::Sprite("Application/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetPixelProjectionMatrix());
     this->test->SetLocation(glm::vec2(12));
 }
 

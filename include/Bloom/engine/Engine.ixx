@@ -39,7 +39,7 @@ export namespace Game {
         bool feature_enable_parallel_loop = true;
 
         std::string window_name = "Bloom";
-        const char* icon_path = "Application/res/textures/BloomLogo.png";
+        const char* icon_path = "Application/res/engine/textures/BloomLogo.png";
     };
 
     class Engine {
@@ -88,6 +88,10 @@ export namespace Game {
         glm::vec2 GetCursorWindowPosition() { return this->cursor_position_window; };
         glm::vec2 GetScale() { return GetWindowSize() / GetPixelWindowSize(); };
 
+        constexpr glm::vec2 GetPixelRatio() {
+            return glm::vec2(engine_config.resolution_pixels_size.x / (float)engine_config.resolution_window_size.x, engine_config.resolution_pixels_size.y / (float)engine_config.resolution_window_size.y);
+        }
+
         void SetMouseOffset(glm::vec2 offset) { this->mouseOffset = offset; }
 
         void EnablePixels(bool clear = true) { (*fb_pixels).use(clear); };
@@ -95,9 +99,17 @@ export namespace Game {
         void DrawPixelsToDefault(bool clear = true, float depth = 0.99) { (*fb_pixels).drawToDefault(glm::vec2(viewportParams) + (glm::vec2(windowWidth / pixel_windowWidth, windowHeight / pixel_windowHeight) / -2.0f), glm::vec2(viewportParams.b, viewportParams.a), clear, zoom, depth); };
         void DrawPixels(float depth = 0.99) { (*fb_pixels).draw(depth); };
         void SetCameraLocation(glm::vec2 location) {
-            location = -location;
-            view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(location, -1));
-            fb_pixels->SetLocationOffset((location - glm::round(location)) / GetPixelWindowSize() * 2.0f);
+            const float base_ratio = (1.f / GetPixelRatio().x);
+            float current_scale = base_ratio * GetCameraZoom();
+            glm::vec2 screen_pixel_pos = location * current_scale;
+            glm::vec2 snapped_screen_pos = glm::round(screen_pixel_pos);
+
+            glm::vec2 final_location = snapped_screen_pos / current_scale;
+
+            final_location = -final_location;
+            view_matrix = glm::translate(glm::mat4(1.0f), glm::vec3(final_location, -1.0f));
+            
+            //fb_pixels->SetLocationOffset((location - glm::round(location)) / GetPixelWindowSize() * 2.0f);
         }
         auto GetPixelBuffer() { return this->fb_pixels; };
 
@@ -167,15 +179,15 @@ export namespace Game {
         }
 
         void SetCameraZoom(float zoom) { this->zoom = zoom; };
-        auto GetCameraZoom() { return this->zoom; };
+        float GetCameraZoom() { return this->zoom; };
 
         void ExitGame() {
             glfwSetWindowShouldClose(GetWindow(), GLFW_TRUE);
         }
 
-        auto GetFontAlagard() { return this->font_alagard; };
-        auto GetFontRoboto() { return this->font_roboto; };
-        auto GetFontPressStart() { return this->font_pressstart; };
+        Bloom::Text* GetFontAlagard() { return this->font_alagard; };
+        Bloom::Text* GetFontRoboto() { return this->font_roboto; };
+        Bloom::Text* GetFontPressStart() { return this->font_pressstart; };
     protected:
         virtual void CloseGame() {
             if (!running)
@@ -207,7 +219,6 @@ export namespace Game {
             this->windowHeight = engine_config.resolution_window_size.y;
             this->pixel_windowWidth = engine_config.resolution_pixels_size.x;
             this->pixel_windowHeight = engine_config.resolution_pixels_size.y;
-            pixel_ratio = glm::vec2(pixel_windowWidth / (float)windowWidth, pixel_windowHeight / (float)windowHeight);
 
             // INITIALIZATION
             glfwInit();
@@ -282,13 +293,14 @@ export namespace Game {
 
             IMGUI_CHECKVERSION();
             ImGui::CreateContext();
-            ImGuiIO& io = ImGui::GetIO();
-            io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
 
             ImGui::StyleColorsDark();
             ImGui_ImplGlfw_InitForOpenGL(window, true);
             ImGui_ImplOpenGL3_Init("#version 430");
 
+            //auto& io = ImGui::GetIO();
+            //io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+            
             // CREATE PROJ MATRICES
             pixel_projection_matrix = glm::ortho(0.0f, (float)pixel_windowWidth, 0.0f, (float)pixel_windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
             window_projection_matrix = glm::ortho(0.0f, (float)windowWidth, 0.0f, (float)windowHeight, (float)-1000, (float)1000); // ORTHO PROJECTION, window size you want to render at
@@ -307,11 +319,11 @@ export namespace Game {
             stbi_image_free(images[0].pixels);
 
             steam_manager = new SteamTools::SteamManager();
-            debug_sprite = new Bloom::Sprite("Application/res/textures/rect16.png", 1, GetViewMatrix(), GetWindowProjectionMatrix());
+            debug_sprite = new Bloom::Sprite("Application/res/engine/textures/rect16.png", 1, GetViewMatrix(), GetWindowProjectionMatrix());
 
-            this->font_alagard = new Bloom::Text("Application/res/fonts/Alagard/alagard.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
-            this->font_roboto = new Bloom::Text("Application/res/fonts/Roboto/Roboto-Black.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
-            this->font_pressstart = new Bloom::Text("Application/res/fonts/PressStart/PressStart.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
+            this->font_alagard = new Bloom::Text("Application/res/engine/fonts/Alagard/alagard.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
+            this->font_roboto = new Bloom::Text("Application/res/engine/fonts/Roboto/Roboto-Black.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
+            this->font_pressstart = new Bloom::Text("Application/res/engine/fonts/PressStart/PressStart.ttf", GetViewMatrix(), GetWindowProjectionMatrix(), -0.5f, 256);
 
             glViewport(0, 0, windowWidth, windowHeight);
             viewportParams = glm::vec4(0, 0, windowWidth, windowHeight);
@@ -361,9 +373,12 @@ export namespace Game {
             double temp_cursor_position_x;
             double temp_cursor_position_y;
             glfwGetCursorPos(window, &temp_cursor_position_x, &temp_cursor_position_y);
-            cursor_position = glm::vec2(temp_cursor_position_x, renderSize.y - temp_cursor_position_y) - mouseOffset;
+            auto new_raw = glm::vec2(-temp_cursor_position_x, temp_cursor_position_y);
+            auto delta = cursor_position_raw - new_raw;
+            cursor_position_raw = new_raw;
+            
             if (!engine_config.glfw_show_cursor) {
-                cursor_position = glm::clamp(cursor_position, glm::vec2(0), renderSize);
+                cursor_position = glm::clamp(cursor_position + delta, glm::vec2(0), renderSize);
             }
             cursor_position_window = cursor_position / renderSize * engine_config.resolution_window_size;
 
@@ -386,8 +401,12 @@ export namespace Game {
         void Prep_UILoop() {
             ImGui_ImplOpenGL3_NewFrame();
             ImGui_ImplGlfw_NewFrame();
-            ImGuiIO& io = ImGui::GetIO();
+
+            auto& io = ImGui::GetIO();
+            io.MousePos = ImVec2(cursor_position.x, GetWindowSize().y - cursor_position.y);
+            
             ImGui::NewFrame();
+
             if (loaded) {
                 return UILoop();
             }
@@ -483,14 +502,12 @@ export namespace Game {
 
         uint16_t windowWidth = 960; uint16_t windowHeight = 960;            // WINDOW SIZE (IN RENDER PIXELS)
         uint16_t pixel_windowWidth = 64 * 3; uint16_t pixel_windowHeight = 64 * 3;  // PIXEL SIZE
-        glm::vec2 pixel_ratio = glm::vec2(pixel_windowWidth / (float)windowWidth, pixel_windowHeight / (float)windowHeight);
         glm::vec2 renderSize = glm::vec2(windowWidth, windowHeight);        // ACTUAL WINDOW SIZE
         glm::vec4 viewportParams;                                           // LAST USED VIEWPORT PARAMS
         
         glm::vec2 mouseOffset = glm::vec2(0);
 
         SoLoud::Soloud* soloud;                                             // AUDIO MANAGER
-
 
         Bloom::Framebuffer* fb_pixels;                                      // PIXEL FRAMEBUFFER
         GLFWwindow* window;                                                 // APPLICATION WINDOW
@@ -505,12 +522,13 @@ export namespace Game {
 
         glm::vec2 cursor_position_window = glm::vec2(0, 0);                 // CURSOR POSITION
         glm::vec2 cursor_position = glm::vec2(0, 0);                        // CURSOR POSITION IN PIXEL
+        glm::vec2 cursor_position_raw = glm::vec2(0, 0);                        // CURSOR POSITION IN PIXEL
 
         std::chrono::steady_clock::time_point last_time = GetHighResTime(); // TIME AT LAST FRAME
         double frame_time = 0.0;                                            // DELTA TIME BETWEEN FRAMES IN MS
         float delta_multiplier = 1.0;                                       // DELTA SPEED MULTIPLIER
 
-        configuration engine_config;                                        // ENGINE CONFIGURATION
+        const configuration engine_config;                                        // ENGINE CONFIGURATION
         SteamTools::SteamManager* steam_manager;                            // STEAM MANAGER
 
         Bloom::Sprite* debug_sprite;                                        // DEBUG SPRITE
@@ -610,7 +628,7 @@ export namespace Game {
                 std::cerr << "\x1b[1;39;41m" << "\nUnhandled exception: " << e.what() << '\n';
             }
             fancyStacktrace(1);
-            //std::abort();
+            std::abort();
             });
 
         // Basic POSIX / signal fallback

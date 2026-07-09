@@ -11,10 +11,10 @@ namespace Application {
     class App : public Game::Engine {
         using Game::Engine::Engine;
     public:
-        void Begin();
-        void GameLoop();
-        void UILoop();
-        void InputLoop();
+        void Begin() override;
+        void InputLoop() override;
+        void GameLoop() override;
+        void UILoop() override;
         void Update(float deltaTime) override;
 
         ~App();

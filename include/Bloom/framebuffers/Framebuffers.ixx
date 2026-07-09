@@ -42,6 +42,7 @@ export namespace Bloom {
         Framebuffer(glm::vec2 size, bool linear_scaling) : size(size) {
             initFramebuffer();
             AddTextureComponent(new Texture2D(NULL, size, linear_scaling, GL_RGBA));
+            AddDepthStencilComponent();
 
             if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
                 throw std::runtime_error("GL_FRAMEBUFFER NOT COMPLETE!");
@@ -141,7 +142,7 @@ export namespace Bloom {
         Bloom::Shader* GetShader() { return &fbShader; };
 
         void setShader(const char* fragment_source) {
-            fbShader = Shader("Application/res/shaders/framebuffer/framebuffer_vertex.glsl", fragment_source);
+            fbShader = Shader("Application/res/engine/shaders/framebuffer/framebuffer_vertex.glsl", fragment_source);
         };
         void setTextureUniform(const char* uniform, int id = 0) {
             fbShader.use(); fbShader.uniformInt(fbShader.getUniformId(uniform), id);
@@ -217,7 +218,7 @@ export namespace Bloom {
         Texture2D* fbTexture = nullptr;
         uint32_t rbo;
 
-        Shader fbShader = Shader("Application/res/shaders/framebuffer/framebuffer_vertex.glsl", "Application/res/shaders/framebuffer/framebuffer_fragment_alpha.glsl");
+        Shader fbShader = Shader("Application/res/engine/shaders/framebuffer/framebuffer_vertex.glsl", "Application/res/engine/shaders/framebuffer/framebuffer_fragment_alpha.glsl");
 
         glm::vec2 offset = glm::vec2(0);
         uint8_t offset_uid;

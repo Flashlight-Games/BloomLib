@@ -18,9 +18,12 @@ export namespace Bloom {
             int channels;
             const char* source = path;
             unsigned char* image = stbi_load(source, &size.x, &size.y, &channels, 0);
-
             int format = 0;
             int internal_format = 0;
+
+            if (size.x == 0 && size.y == 0) {
+                throw std::runtime_error(std::string("Failed to open texture file from: ") + path);
+            }
 
             switch (channels) {
             case 4:
@@ -51,7 +54,7 @@ export namespace Bloom {
 
         const glm::vec2 GetSize() { return size; }
         GLuint GetID() { return this->id; }
-        auto GetPath() { return path; }
+        const char* GetPath() { return path; }
     private:
         void Initialize(const void* data, glm::ivec2 size, bool linear_scaling, int format, int internal_format, int type) {
             glGenTextures(1, &id);
@@ -69,7 +72,7 @@ export namespace Bloom {
             }
 
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);   
         }
 
         const char* path;
